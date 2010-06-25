@@ -4,7 +4,7 @@
 
 #if LINK_TO_MOGRE
 	#ifdef _DEBUG
-		#pragma comment(lib, "Mogre_d.lib")
+		#pragma comment(lib, "Mogre.lib")
 	#else
 		#pragma comment(lib, "Mogre.lib")
 	#endif
