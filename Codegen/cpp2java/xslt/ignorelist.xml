@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ignorelist>
+	<!-- ### global enumerations ### -->
+	<!-- ### global functions ### -->
+	<!-- ### global variables ### -->
+	<!-- ### global typedefs ### -->
+	<ignore>DLL_CREATECONFIGDIALOG</ignore>
+	<ignore>DLL_CREATEERRORDIALOG</ignore>
+	<ignore>DLL_CREATEINPUTREADER</ignore>
+	<ignore>ATTRIBUTE_PARSER</ignore>
+	<ignore>DLL_CREATETIMER</ignore>
+	<ignore>DLL_DESTROYCONFIGDIALOG</ignore>
+	<ignore>DLL_DESTROYERRORDIALOG</ignore>
+	<ignore>DLL_DESTROYINPUTREADER</ignore>
+	<ignore>DLL_DESTROYTIMER</ignore>
+	<ignore>DLL_CREATERENDERWINDOW</ignore>
+	<ignore>DLL_CREATECONFIGDIALOG</ignore>
+	<ignore>DLL_MESSAGEPUMP</ignore>
+	<!-- ### structs ### -->
+	<!-- function pointer ATTRIBUTE_PARSER -->
+	<ignore>ATTRIBUTE_PARSER</ignore>
+	<!-- ResourceGroup private varialbe -->
+	<ignore>loadResourceOrderMap</ignore>
+	<!-- ### classes ### -->
+	<!-- internal use only -->
+	<ignore>_StringBase</ignore>
+	<ignore>_StringHash</ignore>
+	<ignore>VertexBoneAssignment</ignore>
+	<ignore>VertexBoneAssignment_s</ignore>
+	<!-- template functions -->
+	<ignore>Any</ignore>
+	<ignore>AnyNumeric</ignore>
+	<!-- template parameterised templates -->
+	<ignore>ConstMapIterator</ignore>	
+	<ignore>MapIterator</ignore>
+	<ignore>VectorIterator</ignore>
+	<ignore>ConstVectorIterator</ignore>
+	<!-- ### inner classes ### -->
+	<!-- ### inner structs ### -->
+	<!-- function pointer MSC_Action -->
+	<ignore>MSC_Action</ignore>
+	<!-- ### inner typedefs ### -->
+	<ignore>Rect</ignore>
+<!--	<ignore>Box</ignore>-->
+	<!-- iterator on private typedef MovableObjectFactoryMap -->
+	<!-- <ignore>MovableObjectFactoryIterator</ignore> -->
+	<!-- ### local enums ### -->
+</ignorelist>

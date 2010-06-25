@@ -1,0 +1,173 @@
+Index: OgreMain/scripts/OgreMain_vc9.vcproj
+===================================================================
+--- OgreMain/scripts/OgreMain_vc9.vcproj	(revision 8525)
++++ OgreMain/scripts/OgreMain_vc9.vcproj	(working copy)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="Windows-1252"?>
+ <VisualStudioProject
+ 	ProjectType="Visual C++"
+-	Version="9.00"
++	Version="9,00"
+ 	Name="OgreMain"
+ 	ProjectGUID="{35AFBABB-DF05-43DE-91A7-BB828A874015}"
+ 	RootNamespace="OgreMain"
+@@ -71,12 +71,12 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="kernel32.lib user32.lib zziplibd.lib zlibd.lib freetype235_D.lib freeimaged.lib"
++				AdditionalDependencies="kernel32.lib user32.lib zziplibd.lib zlibd.lib freetype235_D.lib freeimaged.lib Mogre_d.lib"
+ 				OutputFile="$(OutDir)/OgreMain_d.dll"
+ 				Version="0.99"
+ 				LinkIncremental="2"
+ 				SuppressStartupBanner="true"
+-				AdditionalLibraryDirectories="..\..\Dependencies\lib\$(ConfigurationName)"
++				AdditionalLibraryDirectories="&quot;..\..\Dependencies\lib\$(ConfigurationName)&quot;;..\..\lib"
+ 				IgnoreAllDefaultLibraries="false"
+ 				IgnoreDefaultLibraryNames="LIBCD;LIBCMTD"
+ 				GenerateDebugInformation="true"
+@@ -170,12 +170,12 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="kernel32.lib user32.lib zziplib.lib zlib.lib freetype235.lib freeimage.lib"
++				AdditionalDependencies="kernel32.lib user32.lib zziplib.lib zlib.lib freetype235.lib freeimage.lib Mogre.lib"
+ 				OutputFile="$(OutDir)/OgreMain.dll"
+ 				Version="0.99"
+ 				LinkIncremental="1"
+ 				SuppressStartupBanner="true"
+-				AdditionalLibraryDirectories="..\..\Dependencies\lib\$(ConfigurationName)"
++				AdditionalLibraryDirectories="&quot;..\..\Dependencies\lib\$(ConfigurationName)&quot;;..\..\lib"
+ 				IgnoreAllDefaultLibraries="false"
+ 				IgnoreDefaultLibraryNames=""
+ 				GenerateDebugInformation="true"
+@@ -377,6 +377,50 @@
+ 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+ 			>
+ 			<File
++				RelativePath="..\..\..\Mogre\Ogre\CLRHandle.cpp"
++				>
++				<FileConfiguration
++					Name="Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						AdditionalUsingDirectories=""
++						UsePrecompiledHeader="0"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						AdditionalUsingDirectories=""
++						UsePrecompiledHeader="0"
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\..\Mogre\Ogre\CLRObject.cpp"
++				>
++				<FileConfiguration
++					Name="Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						AdditionalUsingDirectories=""
++						UsePrecompiledHeader="0"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						AdditionalUsingDirectories=""
++						UsePrecompiledHeader="0"
++					/>
++				</FileConfiguration>
++			</File>
++			<File
+ 				RelativePath="..\src\OgreAlignedAllocator.cpp"
+ 				>
+ 			</File>
+@@ -1146,6 +1190,78 @@
+ 				>
+ 			</File>
+ 			<File
++				RelativePath="..\..\..\Mogre\Ogre\CLRConfig.h"
++				>
++				<FileConfiguration
++					Name="Debug|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include"
++						AdditionalDependencies="$(InputPath)"
++						Outputs="..\include\$(InputFileName)"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="Release|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include"
++						AdditionalDependencies="$(InputPath)"
++						Outputs="..\include\$(InputFileName)"
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\..\Mogre\Ogre\CLRHandle.h"
++				>
++				<FileConfiguration
++					Name="Debug|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include"
++						AdditionalDependencies="$(InputPath)"
++						Outputs="..\include\$(InputFileName)"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="Release|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include"
++						AdditionalDependencies="$(InputPath)"
++						Outputs="..\include\$(InputFileName)"
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\..\Mogre\Ogre\CLRObject.h"
++				>
++				<FileConfiguration
++					Name="Debug|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include&#x0D;&#x0A;copy ..\..\..\Mogre\include\auto\CLRObjects.inc ..\include"
++						AdditionalDependencies="$(InputPath);..\..\..\Mogre\include\auto\CLRObjects.inc"
++						Outputs="..\include\$(InputFileName);..\include\CLRObjects.inc"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="Release|Win32"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++						CommandLine="copy $(InputPath) ..\include&#x0D;&#x0A;copy ..\..\..\Mogre\include\auto\CLRObjects.inc ..\include&#x0D;&#x0A;"
++						AdditionalDependencies="$(InputPath);..\..\..\Mogre\include\auto\CLRObjects.inc"
++						Outputs="..\include\$(InputFileName);..\include\CLRObjects.inc"
++					/>
++				</FileConfiguration>
++			</File>
++			<File
+ 				RelativePath="..\include\Ogre.h"
+ 				>
+ 			</File>

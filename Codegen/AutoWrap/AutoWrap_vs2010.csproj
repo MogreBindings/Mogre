@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{22E11F06-1C1E-41D1-B2E9-5D6B2372DE35}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AutoWrap</RootNamespace>
+    <AssemblyName>AutoWrap</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <StartupObject>
+    </StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Meta\AttributeHolder.cs" />
+    <Compile Include="Meta\ClassProducer.cs" />
+    <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
+    <Compile Include="Meta\Globals.cs" />
+    <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
+    <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
+    <Compile Include="Meta\IncCLRHandleClassProducer.cs" />
+    <Compile Include="Meta\Mogre17.cs" />
+    <Compile Include="Meta\NativeProtectedTypesProxy.cs" />
+    <Compile Include="Meta\CppNativeProtectedTypesProxy.cs" />
+    <Compile Include="Meta\CppOverridableClassProducer.cs" />
+    <Compile Include="Meta\IncNativeProtectedTypesProxy.cs" />
+    <Compile Include="Meta\IncOverridableClassProducer.cs" />
+    <Compile Include="Meta\CppNativePtrValueClassProducer.cs" />
+    <Compile Include="Meta\IncNativePtrValueClassProducer.cs" />
+    <Compile Include="Meta\IncValueClassProducer.cs" />
+    <Compile Include="Meta\CppNativeDirectorClassProducer.cs" />
+    <Compile Include="Meta\CppSingletonClassProducer.cs" />
+    <Compile Include="Meta\DefExplicitTypes.cs" />
+    <Compile Include="Meta\IncReadOnlyStructClassProducer.cs" />
+    <Compile Include="Meta\IncSingletonClassProducer.cs" />
+    <Compile Include="Meta\CppClassProducer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Meta\CppNonOverridableClassProducer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Meta\DefMember.cs" />
+    <Compile Include="Meta\DefNameSpace.cs" />
+    <Compile Include="Meta\DefType.cs" />
+    <Compile Include="Meta\IncClassProducer.cs" />
+    <Compile Include="Meta\IncInterfaceClassProducer.cs" />
+    <Compile Include="Meta\IncNativeDirectorClassProducer.cs" />
+    <Compile Include="Meta\IncNonOverridableClassProducer.cs" />
+    <Compile Include="Meta\MetaDefinition.cs" />
+    <Compile Include="Meta\Producer.cs" />
+    <Compile Include="Meta\NativeProxyClassProducer.cs" />
+    <Compile Include="Meta\Wrapper.cs" />
+    <Compile Include="Meta\Attributes.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Attributes.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

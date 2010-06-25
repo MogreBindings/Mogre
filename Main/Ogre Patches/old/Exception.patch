@@ -1,0 +1,79 @@
+Index: OgreMain/include/OgreException.h
+===================================================================
+--- OgreMain/include/OgreException.h	(revision 9761)
++++ OgreMain/include/OgreException.h	(working copy)
+@@ -151,7 +151,7 @@
+ 
+         /** Gets the error code.
+         */
+-        virtual int getNumber(void) const throw();
++        virtual ExceptionCodes getNumber(void) const throw();
+ 
+         /** Gets the source function.
+         */
+@@ -173,6 +173,12 @@
+ 
+ 		/// Override std::exception::what
+ 		const char* what() const throw() { return getFullDescription().c_str(); }
++		
++				//Additions for Mogre
++		/** Retrieves a pointer to the last exception created.
++        */
++        static Exception* getLastException() throw();
++        static void clearLastException() throw();
+         
+     };
+ 
+Index: OgreMain/src/OgreException.cpp
+===================================================================
+--- OgreMain/src/OgreException.cpp	(revision 9761)
++++ OgreMain/src/OgreException.cpp	(working copy)
+@@ -37,12 +37,28 @@
+ 
+ namespace Ogre {
+ 
++	  //Additions for Mogre
++    Exception LastExceptionThrown(-1, "", "");
++
++    Exception* Exception::getLastException(void) throw()
++	{
++		if (LastExceptionThrown.getNumber() == -1)
++		  return 0;
++		return &LastExceptionThrown;
++	}
++
++	void Exception::clearLastException() throw()
++	{
++		LastExceptionThrown = Exception(-1, "", "");
++    }
++
+     Exception::Exception(int num, const String& desc, const String& src) :
+         line( 0 ),
+         number( num ),
+         description( desc ),
+         source( src )
+     {
++		LastExceptionThrown = *this;
+         // Log this error - not any more, allow catchers to do it
+         //LogManager::getSingleton().logMessage(this->getFullDescription());
+     }
+@@ -56,6 +72,7 @@
+         source( src ),
+         file( fil )
+     {
++		 LastExceptionThrown = *this;
+         // Log this error, mask it from debug though since it may be caught and ignored
+         if(LogManager::getSingletonPtr())
+ 		{
+@@ -108,9 +125,9 @@
+ 		return fullDesc;
+     }
+ 
+-    int Exception::getNumber(void) const throw()
++    Exception::ExceptionCodes Exception::getNumber(void) const throw()
+     {
+-        return number;
++        return (Exception::ExceptionCodes)number;
+     }
+ 
+ }
