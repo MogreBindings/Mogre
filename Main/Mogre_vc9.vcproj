@@ -203,6 +203,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\include\auto\MogreDefaultHardwareBufferManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Custom\ManagedDataStream.cpp"
 				>
 			</File>
