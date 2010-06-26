@@ -99,6 +99,17 @@ public:
     <class name="Mesh">
       <!-- parameter 'const Matrix4* const* blendMatrices' is not handled properly at the moment -->
       <function name="softwareVertexBlend" Ignore=""/>
+      <function name="softwareVertexPoseBlend">
+        <_CustomCppDeclaration>
+        void Mesh::SoftwareVertexPoseBlend( Mogre::Real weight, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ vertexOffsetMap, Mogre::VertexData^ targetVertexData )
+        {
+            Ogre::map&lt;size_t,Ogre::Vector3>::type o_vertexOffsetMap;
+            FillMapFromSortedList&lt;Ogre::map&lt;size_t,Ogre::Vector3>::type, size_t, Mogre::Vector3>(o_vertexOffsetMap, vertexOffsetMap);
+
+            Ogre::Mesh::softwareVertexPoseBlend( weight, o_vertexOffsetMap, targetVertexData );
+        }
+        </_CustomCppDeclaration>
+      </function>
     </class>
 
     <class name="DriverVersion" WrapType="ValueType" SequentialLayout="">
@@ -196,9 +207,9 @@ public:
     <class name="ScriptLoader" Ignore=""/>
     <class name="DefaultHardwareVertexBuffer" Ignore=""/>
     <class name="DefaultHardwareIndexBuffer" Ignore=""/>
-    <class name="DefaultHardwareBufferManager" Ignore=""/>
-    <class name="HardwareBufferManagerBase" Ignore="" />
-    <class name="DefaultHardwareBufferManagerBase" Ignore="" />
+    <!--class name="DefaultHardwareBufferManager" Ignore=""/-->
+    <!--class name="HardwareBufferManagerBase" Ignore="" /-->
+    <!--class name="DefaultHardwareBufferManagerBase" Ignore="" /-->
     <class name="ControllerManager" Ignore=""/>
     <class name="ControllerValueRealPtr" Ignore=""/>
     <class name="ControllerFunctionRealPtr" Ignore=""/>
@@ -333,6 +344,28 @@ public:
     <class name="HardwareBufferManager">
       <function name="_forceReleaseBufferCopies" Ignore=""/>
       <function name="HardwareBufferManager" Ignore=""/>
+      <_CustomIncDeclaration>
+        private protected:
+            static HardwareBufferManager^ _singleton;
+        public:
+		static property HardwareBufferManager^ Singleton
+		{
+			HardwareBufferManager^ get()
+			{
+				Ogre::HardwareBufferManager* ptr = Ogre::HardwareBufferManager::getSingletonPtr();
+				if (_singleton == CLR_NULL || _singleton->_native != ptr)
+				{
+					if (_singleton != CLR_NULL)
+					{
+						_singleton->_native = 0;
+						_singleton = nullptr;
+					}
+					if ( ptr ) _singleton = gcnew HardwareBufferManager( ptr );
+				}
+				return _singleton;
+			}
+		}            
+      </_CustomIncDeclaration>
     </class>
     <class name="CompositorInstance">
       <class name="RenderSystemOperation" Ignore=""/>
@@ -616,9 +649,9 @@ public:
         <_CustomCppDeclaration>
           void Camera::ForwardIntersect(Mogre::Plane worldPlane, array&lt;Mogre::Vector4>^% intersect3d)
           {
-          std::vector&lt;Ogre::Vector4> vec;
+          Ogre::vector&lt;Ogre::Vector4>::type vec;
           static_cast&lt;Ogre::Camera*>(_native)->forwardIntersect( worldPlane, &amp;vec);
-          intersect3d = GetArrayFromVector&lt;Mogre::Vector4, std::vector&lt;Ogre::Vector4> >(vec);
+          intersect3d = GetArrayFromVector&lt;Mogre::Vector4, Ogre::vector&lt;Ogre::Vector4>::type >(vec);
           }
         </_CustomCppDeclaration>
       </function>

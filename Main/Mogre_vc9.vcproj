@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP3"
 				Optimization="0"
-				AdditionalIncludeDirectories="include;include\auto;OgreSrc\Ogre\OgreMain\include;OgreSrc\Ogre;OgreSrc\build\include;&quot;$(BOOST_INCLUDE_DIRECTORY)&quot;;Ogre"
+				AdditionalIncludeDirectories="include;include\auto;OgreSrc\Ogre\OgreMain\include;OgreSrc\Ogre;OgreSrc\build\include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -63,9 +63,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="OgreMain_d.lib"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="OgreSrc\build\lib\Debug;&quot;$(BOOST_LIBRARY_DIRECTORY)&quot;"
+				AdditionalLibraryDirectories="OgreSrc\build\lib\Debug"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -120,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP3"
-				AdditionalIncludeDirectories="include;include\auto;OgreSrc\Ogre\OgreMain\include;OgreSrc\Ogre;OgreSrc\build\include;&quot;$(BOOST_INCLUDE_DIRECTORY)&quot;;Ogre"
+				AdditionalIncludeDirectories="include;include\auto;OgreSrc\Ogre\OgreMain\include;OgreSrc\Ogre;OgreSrc\build\include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -141,7 +140,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="OgreMain.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="OgreSrc\build\lib\Release;&quot;$(BOOST_LIBRARY_DIRECTORY)&quot;"
+				AdditionalLibraryDirectories="OgreSrc\build\lib\Release"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -332,6 +331,10 @@
 			</File>
 			<File
 				RelativePath=".\src\auto\MogreDDSCodec.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\auto\MogreDefaultHardwareBufferManager.cpp"
 				>
 			</File>
 			<File
