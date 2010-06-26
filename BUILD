@@ -1,18 +1,23 @@
 
-Step by step instructions to build Mogre/Ogre 1.7.1 with Visual Studio 2010:
-============================================================================
+Step by step instructions to build Mogre/Ogre 1.7.1 with Visual Studio:
+=======================================================================
 
 - Clone Mogre: "hg clone http://bitbucket.org/mogre/mogre -u Mogre17 Mogre".
 - Clone Ogre 1.7: "hg clone http://bitbucket.org/sinbad/ogre -u 58266f25ccd2 Mogre\Main\OgreSrc\ogre".
 - Apply "Mogre\Main\Ogre Patches\58266f25ccd2.patch" to "Mogre\Main\OgreSrc\ogre".
 - Download "http://surfnet.dl.sourceforge.net/project/ogre/ogre-dependencies-vc%2B%2B/1.7/OgreDependencies_MSVC_20100501.zip".
 - Unpack "OgreDependencies_MSVC_20100501.zip" into "Mogre\Main\OgreSrc\ogre", it will create a folder "Dependencies".
-- Open the dependencies solution file "Mogre\Main\OgreSrc\ogre\Dependencies\src\OgreDependencies.VS2010.sln" in Visual Studio.
+- For VS2008, open the dependencies solution file "Mogre\Main\OgreSrc\ogre\Dependencies\src\OgreDependencies.VS2008.sln" in Visual Studio.
+- For VS2010, open the dependencies solution file "Mogre\Main\OgreSrc\ogre\Dependencies\src\OgreDependencies.VS2010.sln" in Visual Studio.
 - Use batch build to rebuild all 32bit projects in the solution. Do NOT compile the x64 configurations!
-- Start CMake to generate Ogre build files. Make sure you have OGRE_CONFIG_ENABLE_PVRTC switched ON and 
-  OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR switched OFF. Target Main/OgreSrc/build as output directory.
+- Start CMake to generate Ogre build files. Select either "Visual Studio 9 2008" or "Visual Studio 10" as cmake project type.
+- Use "Mogre\Main\OgreSrc\ogre" as source directory.
+- Target "Mogre\Main\OgreSrc\build" as output directory for cmake.
+- Make sure you have OGRE_CONFIG_ENABLE_PVRTC switched ON and OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR switched OFF.
+- Then press "configure" again in cmake and if no more errors occur, press "generate".
 - Go to folder "Mogre\Codegen\cpp2java" and execute "build.bat" in this folder.
-- Open solution "Mogre\Codegen\AutoWrap\AutoWrap_vs2010.sln" in Visual Studio and compile the Debug version.
+- For VS2008, open solution "Mogre\Codegen\AutoWrap\AutoWrap.sln" in Visual Studio and compile the Debug version.
+- For VS2010, open solution "Mogre\Codegen\AutoWrap\AutoWrap_vs2010.sln" in Visual Studio and compile the Debug version.
 - Execute "AutoWrap.exe" in folder "Mogre\Codegen\AutoWrap\bin\Debug" and press button "Produce".
 - Go to folder "Mogre\Main\Ogre" and execute "copy_to_ogre.bat" in this folder.
 - Copy "Mogre\Main\include\auto\CLRObjects.inc" to folder "Mogre\Main\OgreSrc\build\include".
@@ -39,7 +44,8 @@ Step by step instructions to build Mogre/Ogre 1.7.1 with Visual Studio 2010:
 - Rebuild all selected projects.
 - If there are linker errors for "_ITERATOR_DEBUG_LEVEL" mismatch, check "http://www.ogre3d.org/forums/viewtopic.php?f=1&t=54533&start=100#p388654",
   I could fix the errors by compiling debug version of dependencies first, then compiling release versions of dependencies separately.
-- Open soultion "Mogre\Main\Mogre_vs2010.sln" in Visual Studio.
+- For VS2008, open soultion "Mogre\Main\Mogre_vc9.sln" in Visual Studio.
+- For VS2010, open soultion "Mogre\Main\Mogre_vs2010.sln" in Visual Studio.
 - Use batch build to rebuild all projects.
 - Open solution "Mogre\Main\OgreSrc\build\OGRE.sln" again.
 - Open "CLRConfig.h" in Visual Studio and change "#define LINK_TO_MOGRE 0" back to "#define LINK_TO_MOGRE 1".

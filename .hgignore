@@ -11,3 +11,4 @@ glob:Main/lib
 glob:Main/obj
 glob:Main/include/auto
 glob:Main/src/auto
+glob:*.ncb
