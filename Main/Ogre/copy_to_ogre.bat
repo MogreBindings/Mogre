@@ -1,2 +1,2 @@
-copy /Y *.h ..\OgreSrc\ogre\OgreMain\include
-copy /Y *.cpp ..\OgreSrc\ogre\OgreMain\src
+copy /Y CLR*.h ..\OgreSrc\ogre\OgreMain\include
+copy /Y CLR*.cpp ..\OgreSrc\ogre\OgreMain\src

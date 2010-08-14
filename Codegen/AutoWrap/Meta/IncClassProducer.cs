@@ -274,6 +274,19 @@ namespace AutoWrap.Meta
             base.AddPublicDeclarations();
         }
 
+        protected override void AddPreNestedTypes()
+        {
+          base.AddPreNestedTypes();
+
+          if( _t.HasAttribute<CustomIncPreDeclarationAttribute>() )
+          {
+            string txt = _t.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
+            txt = ReplaceCustomVariables( txt );
+            _sb.AppendLine( txt );
+            _sb.AppendLine();
+          }
+        }
+
         protected override void AddPostNestedTypes()
         {
             base.AddPostNestedTypes();

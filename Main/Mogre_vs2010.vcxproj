@@ -51,7 +51,7 @@
     <ClCompile>
       <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -60,7 +60,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OgrePaging_d.lib;OgreTerrain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>OgreSrc\build\lib\Debug;$(BOOST_LIBRARY_DIRECTORY);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -74,7 +74,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -83,7 +83,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;OgrePaging.lib;OgreTerrain.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>OgreSrc\build\lib\Release;$(BOOST_LIBRARY_DIRECTORY);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
@@ -100,15 +100,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssemblyInfo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\auto\MogreDefaultHardwareBufferManager.cpp" />
-    <ClCompile Include="src\Custom\ManagedDataStream.cpp" />
-    <ClCompile Include="src\Marshalling.cpp" />
     <ClCompile Include="src\auto\Mogre-WIN32_OgreTimerImp.cpp" />
     <ClCompile Include="src\auto\MogreAnimable.cpp" />
     <ClCompile Include="src\auto\MogreAnimation.cpp" />
@@ -123,10 +114,8 @@
     <ClCompile Include="src\auto\MogreBlendMode.cpp" />
     <ClCompile Include="src\auto\MogreBone.cpp" />
     <ClCompile Include="src\auto\MogreBorderPanelOverlayElement.cpp" />
-    <ClCompile Include="src\Custom\MogreBox.cpp" />
     <ClCompile Include="src\auto\MogreCamera.cpp" />
     <ClCompile Include="src\auto\MogreCodec.cpp" />
-    <ClCompile Include="src\Custom\MogreColourValue.cpp" />
     <ClCompile Include="src\auto\MogreCommon.cpp" />
     <ClCompile Include="src\auto\MogreCompositionPass.cpp" />
     <ClCompile Include="src\auto\MogreCompositionTargetPass.cpp" />
@@ -137,9 +126,9 @@
     <ClCompile Include="src\auto\MogreCompositorManager.cpp" />
     <ClCompile Include="src\auto\MogreConfigFile.cpp" />
     <ClCompile Include="src\auto\MogreConfigOptionMap.cpp" />
-    <ClCompile Include="src\Custom\MogreCustomPlane.cpp" />
     <ClCompile Include="src\auto\MogreDataStream.cpp" />
     <ClCompile Include="src\auto\MogreDDSCodec.cpp" />
+    <ClCompile Include="src\auto\MogreDefaultHardwareBufferManager.cpp" />
     <ClCompile Include="src\auto\MogreDistanceLodStrategy.cpp" />
     <ClCompile Include="src\auto\MogreEdgeListBuilder.cpp" />
     <ClCompile Include="src\auto\MogreEntity.cpp" />
@@ -154,6 +143,7 @@
     <ClCompile Include="src\auto\MogreGpuProgram.cpp" />
     <ClCompile Include="src\auto\MogreGpuProgramManager.cpp" />
     <ClCompile Include="src\auto\MogreGpuProgramParams.cpp" />
+    <ClCompile Include="src\auto\MogreGrid2DPageStrategy.cpp" />
     <ClCompile Include="src\auto\MogreHardwareBuffer.cpp" />
     <ClCompile Include="src\auto\MogreHardwareBufferManager.cpp" />
     <ClCompile Include="src\auto\MogreHardwareIndexBuffer.cpp" />
@@ -176,9 +166,6 @@
     <ClCompile Include="src\auto\MogreMaterial.cpp" />
     <ClCompile Include="src\auto\MogreMaterialManager.cpp" />
     <ClCompile Include="src\auto\MogreMaterialSerializer.cpp" />
-    <ClCompile Include="src\Custom\MogreMath.cpp" />
-    <ClCompile Include="src\Custom\MogreMatrix3.cpp" />
-    <ClCompile Include="src\Custom\MogreMatrix4.cpp" />
     <ClCompile Include="src\auto\MogreMesh.cpp" />
     <ClCompile Include="src\auto\MogreMeshManager.cpp" />
     <ClCompile Include="src\auto\MogreMeshSerializer.cpp" />
@@ -190,8 +177,16 @@
     <ClCompile Include="src\auto\MogreOverlayElement.cpp" />
     <ClCompile Include="src\auto\MogreOverlayElementFactory.cpp" />
     <ClCompile Include="src\auto\MogreOverlayManager.cpp" />
+    <ClCompile Include="src\auto\MogrePage.cpp" />
+    <ClCompile Include="src\auto\MogrePageContent.cpp" />
+    <ClCompile Include="src\auto\MogrePageContentCollection.cpp" />
+    <ClCompile Include="src\auto\MogrePageContentCollectionFactory.cpp" />
+    <ClCompile Include="src\auto\MogrePageContentFactory.cpp" />
+    <ClCompile Include="src\auto\MogrePagedWorld.cpp" />
+    <ClCompile Include="src\auto\MogrePagedWorldSection.cpp" />
+    <ClCompile Include="src\auto\MogrePageManager.cpp" />
+    <ClCompile Include="src\auto\MogrePageStrategy.cpp" />
     <ClCompile Include="src\auto\MogrePanelOverlayElement.cpp" />
-    <ClCompile Include="src\Custom\MogreParamCommand.cpp" />
     <ClCompile Include="src\auto\MogreParticle.cpp" />
     <ClCompile Include="src\auto\MogreParticleAffector.cpp" />
     <ClCompile Include="src\auto\MogreParticleAffectorFactory.cpp" />
@@ -210,14 +205,9 @@
     <ClCompile Include="src\auto\MogrePlaneBoundedVolume.cpp" />
     <ClCompile Include="src\auto\MogrePlugin.cpp" />
     <ClCompile Include="src\auto\MogrePose.cpp" />
-    <ClCompile Include="src\MogrePrecompiledHeaders.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="src\auto\MogreProfiler.cpp" />
     <ClCompile Include="src\auto\MogreProgressiveMesh.cpp" />
     <ClCompile Include="src\auto\MogrePVRTCCodec.cpp" />
-    <ClCompile Include="src\Custom\MogreQuaternion.cpp" />
     <ClCompile Include="src\auto\MogreRectangle2D.cpp" />
     <ClCompile Include="src\auto\MogreRenderable.cpp" />
     <ClCompile Include="src\auto\MogreRenderObjectListener.cpp" />
@@ -253,6 +243,7 @@
     <ClCompile Include="src\auto\MogreShadowCameraSetupPSSM.cpp" />
     <ClCompile Include="src\auto\MogreShadowCaster.cpp" />
     <ClCompile Include="src\auto\MogreShadowTextureManager.cpp" />
+    <ClCompile Include="src\auto\MogreSimplePageContentCollection.cpp" />
     <ClCompile Include="src\auto\MogreSimpleRenderable.cpp" />
     <ClCompile Include="src\auto\MogreSimpleSpline.cpp" />
     <ClCompile Include="src\auto\MogreSkeleton.cpp" />
@@ -260,6 +251,7 @@
     <ClCompile Include="src\auto\MogreSkeletonManager.cpp" />
     <ClCompile Include="src\auto\MogreSkeletonSerializer.cpp" />
     <ClCompile Include="src\auto\MogreStaticGeometry.cpp" />
+    <ClCompile Include="src\auto\MogreStreamSerialiser.cpp" />
     <ClCompile Include="src\auto\MogreStringConverter.cpp" />
     <ClCompile Include="src\auto\MogreStringInterface.cpp" />
     <ClCompile Include="src\auto\MogreStringVector.cpp" />
@@ -267,32 +259,47 @@
     <ClCompile Include="src\auto\MogreSubMesh.cpp" />
     <ClCompile Include="src\auto\MogreTagPoint.cpp" />
     <ClCompile Include="src\auto\MogreTechnique.cpp" />
+    <ClCompile Include="src\auto\MogreTerrain.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainGroup.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainLayerBlendMap.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainMaterialGenerator.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainMaterialGeneratorA.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainPagedWorldSection.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainPaging.cpp" />
+    <ClCompile Include="src\auto\MogreTerrainQuadTreeNode.cpp" />
     <ClCompile Include="src\auto\MogreTextAreaOverlayElement.cpp" />
     <ClCompile Include="src\auto\MogreTexture.cpp" />
     <ClCompile Include="src\auto\MogreTextureManager.cpp" />
     <ClCompile Include="src\auto\MogreTextureUnitState.cpp" />
     <ClCompile Include="src\auto\MogreUnifiedHighLevelGpuProgram.cpp" />
     <ClCompile Include="src\auto\MogreUserObjectBindings.cpp" />
-    <ClCompile Include="src\Custom\MogreVector3.cpp" />
-    <ClCompile Include="src\Custom\MogreVertexElement.cpp" />
     <ClCompile Include="src\auto\MogreVertexIndexData.cpp" />
     <ClCompile Include="src\auto\MogreViewport.cpp" />
     <ClCompile Include="src\auto\MogreWindowEventUtilities.cpp" />
     <ClCompile Include="src\auto\MogreWireBoundingBox.cpp" />
+    <ClCompile Include="src\auto\MogreWorkQueue.cpp" />
     <ClCompile Include="src\auto\MogreZip.cpp" />
-    <ClCompile Include="src\SubclassingManager.cpp" />
-    <ClCompile Include="src\Wrapper.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
+    <ClCompile Include="src\Custom\ManagedDataStream.cpp" />
+    <ClCompile Include="src\Custom\MogreBox.cpp" />
+    <ClCompile Include="src\Custom\MogreColourValue.cpp" />
+    <ClCompile Include="src\Custom\MogreCustomPlane.cpp" />
+    <ClCompile Include="src\Custom\MogreMath.cpp" />
+    <ClCompile Include="src\Custom\MogreMatrix3.cpp" />
+    <ClCompile Include="src\Custom\MogreMatrix4.cpp" />
+    <ClCompile Include="src\Custom\MogreParamCommand.cpp" />
+    <ClCompile Include="src\Custom\MogreQuaternion.cpp" />
+    <ClCompile Include="src\Custom\MogreVector3.cpp" />
+    <ClCompile Include="src\Custom\MogreVertexElement.cpp" />
+    <ClCompile Include="src\Marshalling.cpp" />
+    <ClCompile Include="src\MogrePrecompiledHeaders.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\SubclassingManager.cpp" />
+    <ClCompile Include="src\Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CLRHelp.h" />
     <ClInclude Include="include\auto\MakePublicDeclarations.h" />
-    <ClInclude Include="include\Custom\ManagedDataStream.h" />
-    <ClInclude Include="include\Marshalling.h" />
     <ClInclude Include="include\auto\Mogre-WIN32_OgreTimerImp.h" />
     <ClInclude Include="include\auto\MogreAnimable.h" />
     <ClInclude Include="include\auto\MogreAnimation.h" />
@@ -300,7 +307,6 @@
     <ClInclude Include="include\auto\MogreAnimationTrack.h" />
     <ClInclude Include="include\auto\MogreArchive.h" />
     <ClInclude Include="include\auto\MogreArchiveManager.h" />
-    <ClInclude Include="include\Custom\MogreAxisAlignedBox.h" />
     <ClInclude Include="include\auto\MogreBillboard.h" />
     <ClInclude Include="include\auto\MogreBillboardChain.h" />
     <ClInclude Include="include\auto\MogreBillboardParticleRenderer.h" />
@@ -308,11 +314,9 @@
     <ClInclude Include="include\auto\MogreBlendMode.h" />
     <ClInclude Include="include\auto\MogreBone.h" />
     <ClInclude Include="include\auto\MogreBorderPanelOverlayElement.h" />
-    <ClInclude Include="include\Custom\MogreBox.h" />
     <ClInclude Include="include\auto\MogreCamera.h" />
     <ClInclude Include="include\auto\MogreCodec.h" />
     <ClInclude Include="include\auto\MogreColourValue.h" />
-    <ClInclude Include="include\Custom\MogreColourValue.h" />
     <ClInclude Include="include\auto\MogreCommon.h" />
     <ClInclude Include="include\auto\MogreCompositionPass.h" />
     <ClInclude Include="include\auto\MogreCompositionTargetPass.h" />
@@ -340,6 +344,7 @@
     <ClInclude Include="include\auto\MogreGpuProgram.h" />
     <ClInclude Include="include\auto\MogreGpuProgramManager.h" />
     <ClInclude Include="include\auto\MogreGpuProgramParams.h" />
+    <ClInclude Include="include\auto\MogreGrid2DPageStrategy.h" />
     <ClInclude Include="include\auto\MogreHardwareBuffer.h" />
     <ClInclude Include="include\auto\MogreHardwareBufferManager.h" />
     <ClInclude Include="include\auto\MogreHardwareIndexBuffer.h" />
@@ -351,7 +356,6 @@
     <ClInclude Include="include\auto\MogreImage.h" />
     <ClInclude Include="include\auto\MogreImageCodec.h" />
     <ClInclude Include="include\auto\MogreInstancedGeometry.h" />
-    <ClInclude Include="include\Custom\MogreIteratorWrapper.h" />
     <ClInclude Include="include\auto\MogreKeyFrame.h" />
     <ClInclude Include="include\auto\MogreLight.h" />
     <ClInclude Include="include\auto\MogreLodListener.h" />
@@ -363,9 +367,6 @@
     <ClInclude Include="include\auto\MogreMaterial.h" />
     <ClInclude Include="include\auto\MogreMaterialManager.h" />
     <ClInclude Include="include\auto\MogreMaterialSerializer.h" />
-    <ClInclude Include="include\Custom\MogreMath.h" />
-    <ClInclude Include="include\Custom\MogreMatrix3.h" />
-    <ClInclude Include="include\Custom\MogreMatrix4.h" />
     <ClInclude Include="include\auto\MogreMesh.h" />
     <ClInclude Include="include\auto\MogreMeshManager.h" />
     <ClInclude Include="include\auto\MogreMeshSerializer.h" />
@@ -378,9 +379,17 @@
     <ClInclude Include="include\auto\MogreOverlayElement.h" />
     <ClInclude Include="include\auto\MogreOverlayElementFactory.h" />
     <ClInclude Include="include\auto\MogreOverlayManager.h" />
-    <ClInclude Include="include\Custom\MogrePair.h" />
+    <ClInclude Include="include\auto\MogrePage.h" />
+    <ClInclude Include="include\auto\MogrePageContent.h" />
+    <ClInclude Include="include\auto\MogrePageContentCollection.h" />
+    <ClInclude Include="include\auto\MogrePageContentCollectionFactory.h" />
+    <ClInclude Include="include\auto\MogrePageContentFactory.h" />
+    <ClInclude Include="include\auto\MogrePagedWorld.h" />
+    <ClInclude Include="include\auto\MogrePagedWorldSection.h" />
+    <ClInclude Include="include\auto\MogrePageManager.h" />
+    <ClInclude Include="include\auto\MogrePageStrategy.h" />
+    <ClInclude Include="include\auto\MogrePagingPrerequisites.h" />
     <ClInclude Include="include\auto\MogrePanelOverlayElement.h" />
-    <ClInclude Include="include\Custom\MogreParamCommand.h" />
     <ClInclude Include="include\auto\MogreParticle.h" />
     <ClInclude Include="include\auto\MogreParticleAffector.h" />
     <ClInclude Include="include\auto\MogreParticleAffectorFactory.h" />
@@ -396,7 +405,6 @@
     <ClInclude Include="include\auto\MogrePixelCountLodStrategy.h" />
     <ClInclude Include="include\auto\MogrePixelFormat.h" />
     <ClInclude Include="include\auto\MogrePlane.h" />
-    <ClInclude Include="include\Custom\MogrePlane.h" />
     <ClInclude Include="include\auto\MogrePlaneBoundedVolume.h" />
     <ClInclude Include="include\auto\MogrePlatform.h" />
     <ClInclude Include="include\auto\MogrePlugin.h" />
@@ -405,10 +413,6 @@
     <ClInclude Include="include\auto\MogreProfiler.h" />
     <ClInclude Include="include\auto\MogreProgressiveMesh.h" />
     <ClInclude Include="include\auto\MogrePVRTCCodec.h" />
-    <ClInclude Include="include\Custom\MogreQuaternion.h" />
-    <ClInclude Include="include\Custom\MogreRay.h" />
-    <ClInclude Include="include\Custom\MogreRect.h" />
-    <ClInclude Include="include\Custom\MogreRectangle.h" />
     <ClInclude Include="include\auto\MogreRectangle2D.h" />
     <ClInclude Include="include\auto\MogreRenderable.h" />
     <ClInclude Include="include\auto\MogreRenderObjectListener.h" />
@@ -444,15 +448,15 @@
     <ClInclude Include="include\auto\MogreShadowCameraSetupPSSM.h" />
     <ClInclude Include="include\auto\MogreShadowCaster.h" />
     <ClInclude Include="include\auto\MogreShadowTextureManager.h" />
+    <ClInclude Include="include\auto\MogreSimplePageContentCollection.h" />
     <ClInclude Include="include\auto\MogreSimpleRenderable.h" />
     <ClInclude Include="include\auto\MogreSimpleSpline.h" />
     <ClInclude Include="include\auto\MogreSkeleton.h" />
     <ClInclude Include="include\auto\MogreSkeletonInstance.h" />
     <ClInclude Include="include\auto\MogreSkeletonManager.h" />
     <ClInclude Include="include\auto\MogreSkeletonSerializer.h" />
-    <ClInclude Include="include\Custom\MogreSphere.h" />
-    <ClInclude Include="include\MogreStableHeaders.h" />
     <ClInclude Include="include\auto\MogreStaticGeometry.h" />
+    <ClInclude Include="include\auto\MogreStreamSerialiser.h" />
     <ClInclude Include="include\auto\MogreString.h" />
     <ClInclude Include="include\auto\MogreStringConverter.h" />
     <ClInclude Include="include\auto\MogreStringInterface.h" />
@@ -461,24 +465,53 @@
     <ClInclude Include="include\auto\MogreSubMesh.h" />
     <ClInclude Include="include\auto\MogreTagPoint.h" />
     <ClInclude Include="include\auto\MogreTechnique.h" />
+    <ClInclude Include="include\auto\MogreTerrain.h" />
+    <ClInclude Include="include\auto\MogreTerrainGroup.h" />
+    <ClInclude Include="include\auto\MogreTerrainLayerBlendMap.h" />
+    <ClInclude Include="include\auto\MogreTerrainMaterialGenerator.h" />
+    <ClInclude Include="include\auto\MogreTerrainMaterialGeneratorA.h" />
+    <ClInclude Include="include\auto\MogreTerrainPagedWorldSection.h" />
+    <ClInclude Include="include\auto\MogreTerrainPaging.h" />
+    <ClInclude Include="include\auto\MogreTerrainQuadTreeNode.h" />
     <ClInclude Include="include\auto\MogreTextAreaOverlayElement.h" />
     <ClInclude Include="include\auto\MogreTexture.h" />
     <ClInclude Include="include\auto\MogreTextureManager.h" />
     <ClInclude Include="include\auto\MogreTextureUnitState.h" />
     <ClInclude Include="include\auto\MogreUnifiedHighLevelGpuProgram.h" />
     <ClInclude Include="include\auto\MogreUserObjectBindings.h" />
-    <ClInclude Include="include\Custom\MogreVector2.h" />
-    <ClInclude Include="include\Custom\MogreVector3.h" />
-    <ClInclude Include="include\Custom\MogreVector4.h" />
     <ClInclude Include="include\auto\MogreVertexBoneAssignment.h" />
     <ClInclude Include="include\auto\MogreVertexIndexData.h" />
     <ClInclude Include="include\auto\MogreViewport.h" />
     <ClInclude Include="include\auto\MogreWindowEventUtilities.h" />
     <ClInclude Include="include\auto\MogreWireBoundingBox.h" />
+    <ClInclude Include="include\auto\MogreWorkQueue.h" />
     <ClInclude Include="include\auto\MogreZip.h" />
+    <ClInclude Include="include\auto\PreDeclarations.h" />
+    <ClInclude Include="include\CLRHelp.h" />
+    <ClInclude Include="include\Custom\ManagedDataStream.h" />
+    <ClInclude Include="include\Custom\MogreAxisAlignedBox.h" />
+    <ClInclude Include="include\Custom\MogreBox.h" />
+    <ClInclude Include="include\Custom\MogreColourValue.h" />
+    <ClInclude Include="include\Custom\MogreIteratorWrapper.h" />
+    <ClInclude Include="include\Custom\MogreMath.h" />
+    <ClInclude Include="include\Custom\MogreMatrix3.h" />
+    <ClInclude Include="include\Custom\MogreMatrix4.h" />
+    <ClInclude Include="include\Custom\MogrePair.h" />
+    <ClInclude Include="include\Custom\MogreParamCommand.h" />
+    <ClInclude Include="include\Custom\MogrePlane.h" />
+    <ClInclude Include="include\Custom\MogreQuaternion.h" />
+    <ClInclude Include="include\Custom\MogreRay.h" />
+    <ClInclude Include="include\Custom\MogreRect.h" />
+    <ClInclude Include="include\Custom\MogreRectangle.h" />
+    <ClInclude Include="include\Custom\MogreSphere.h" />
+    <ClInclude Include="include\Custom\MogreVector2.h" />
+    <ClInclude Include="include\Custom\MogreVector3.h" />
+    <ClInclude Include="include\Custom\MogreVector4.h" />
+    <ClInclude Include="include\Custom\MogreVertexElement.h" />
+    <ClInclude Include="include\Marshalling.h" />
+    <ClInclude Include="include\MogreStableHeaders.h" />
     <ClInclude Include="include\NativeArrayWrappers.h" />
     <ClInclude Include="include\PortedClasses.h" />
-    <ClInclude Include="include\auto\PreDeclarations.h" />
     <ClInclude Include="include\Prerequisites.h" />
     <ClInclude Include="include\STLContainerWrappers.h" />
     <ClInclude Include="include\STLDeque.h" />
@@ -495,6 +528,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="include\auto\CLRObjects.inc" />
+    <None Include="include\Custom\MogreVertexElement.i" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

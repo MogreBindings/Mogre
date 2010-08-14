@@ -81,9 +81,12 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "../../Main/OgreSrc/ogre/OgreMain/include" \
-			"../../Main/OgreSrc/ogre/OgreMain/include/WIN32" \
-                        "../../Main/Ogre"
+INPUT                  = "../../Main/OgreSrc/ogre/Components/Terrain/include" \
+                         "../../Main/OgreSrc/ogre/Components/Paging/include" \
+                         "../../Main/OgreSrc/ogre/OgreMain/include" \
+                         "../../Main/OgreSrc/ogre/OgreMain/include/WIN32" \
+                         "../../Main/Ogre"
+                        
 FILE_PATTERNS          = *.h
 RECURSIVE              = NO
 EXCLUDE                = 
@@ -195,7 +198,9 @@ PREDEFINED             = WIN32 \
                          NDEBUG \
                          _USRDLL \
                          _MT \
-                         OGRE_NONCLIENT_BUILD
+                         OGRE_NONCLIENT_BUILD \
+                         _OgrePagingExport \
+                         _OgreTerrainExport
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

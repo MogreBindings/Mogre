@@ -67,7 +67,7 @@
 				<!-- PIPAAAAAA-->
 				<xsl:attribute name="protection" select="@prot"/>
 				<!--<xsl:attribute name="includeFile" select="includes"/>-->
-        <xsl:attribute name="includeFile" select="substring-after(location/@file,'/OgreMain/include/')"/>
+        <xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
 
         <!-- template attributes -->
 				<xsl:if test="templateparamlist">
@@ -297,7 +297,7 @@
 
 					<!-- PIPAAAAA-->
 					<xsl:attribute name="protection" select="@prot"/>
-					<xsl:attribute name="includeFile" select="substring-after(location/@file,'/OgreMain/include/')"/>
+					<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
 
 					<xsl:for-each select="enumvalue">
 						<xsl:element name="enum">
@@ -317,7 +317,7 @@
 				<xsl:attribute name="protection" select="@prot"/>
 
 				<!-- PIPAAAAA-->
-				<xsl:attribute name="includeFile" select="substring-after(location/@file,'/OgreMain/include/')"/>
+				<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
 
 				<xsl:choose>
 					<xsl:when test="contains(type,'std::') or contains(type,',') or contains(type,'::type') or contains(type, 'HashedVector')">
