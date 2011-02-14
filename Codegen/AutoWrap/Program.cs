@@ -30,9 +30,35 @@ namespace AutoWrap
 
             Wrapper wrapper = new Wrapper(meta, @"..\..\..\..\Main\include\auto", @"..\..\..\..\Main\src\auto", "Mogre", "Ogre");
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(wrapper));
+            if (args.Length > 0)
+            {
+                // Command line mode - parse arguments.
+                if (args.Length == 1 && args[0] == "produce")
+                {
+                    wrapper.IncludeFileWrapped += delegate(object sender, IncludeFileWrapEventArgs e)
+                    {
+                        Console.WriteLine(e.IncludeFile);
+                    };
+                    wrapper.ProduceCodeFiles();
+                }
+                else
+                {
+                    Console.Write(
+                        "Invalid command\n\n" +
+                        "Usage: AutoWrap.exe <command>\n\n" +
+                        "Supported Commands\n" +
+                        "==================\n\n" +
+                        "    produce    Produces Mogre auto-generated files (equivalent to pressing the \"Produce\" button in the GUI).\n" +
+                        "\n"
+                    );
+                }
+            }
+            else
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1(wrapper));
+            }
         }
     }
 }
