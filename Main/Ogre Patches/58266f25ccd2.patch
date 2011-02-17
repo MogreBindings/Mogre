@@ -864,27 +864,20 @@ Index: OgreMain/include/OgreImageCodec.h
 ===================================================================
 --- OgreMain/include/OgreImageCodec.h
 +++ OgreMain/include/OgreImageCodec.h
-@@ -47,9 +47,11 @@
+@@ -47,12 +47,16 @@
      class _OgreExport ImageCodec : public Codec
      {
      public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec);
-+		 
++
          virtual ~ImageCodec();
          /** Codec return class for images. Has information about the size and the
              pixel format of the image. */
          class _OgrePrivate ImageData : public Codec::CodecData
          {
          public:
-@@ -50,9 +52,11 @@
-         virtual ~ImageCodec();
-         /** Codec return class for images. Has information about the size and the
-             pixel format of the image. */
-         class _OgrePrivate ImageData : public Codec::CodecData
-         {
-         public:
-+			 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec_ImageData);
-+		
++			DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec_ImageData);
++
  			ImageData():
  				height(0), width(0), depth(1), size(0),
  				num_mipmaps(0), flags(0), format(PF_UNKNOWN)
@@ -2547,7 +2540,7 @@ Index: OgreMain/src/OgreException.cpp
 ===================================================================
 --- OgreMain/src/OgreException.cpp
 +++ OgreMain/src/OgreException.cpp
-@@ -37,9 +37,24 @@
+@@ -37,12 +37,28 @@
  
  namespace Ogre {
  
@@ -2572,13 +2565,6 @@ Index: OgreMain/src/OgreException.cpp
          description( desc ),
          source( src )
      {
-@@ -40,9 +55,10 @@
-     Exception::Exception(int num, const String& desc, const String& src) :
-         line( 0 ),
-         number( num ),
-         description( desc ),
-         source( src )
-     {
 +		LastExceptionThrown = *this;
          // Log this error - not any more, allow catchers to do it
          //LogManager::getSingleton().logMessage(this->getFullDescription());
@@ -2591,14 +2577,12 @@ Index: OgreMain/src/OgreException.cpp
          // Log this error, mask it from debug though since it may be caught and ignored
          if(LogManager::getSingletonPtr())
  		{
-@@ -108,5 +125,5 @@
+@@ -108,9 +125,9 @@
  		return fullDesc;
      }
  
 -    int Exception::getNumber(void) const throw()
 +    Exception::ExceptionCodes Exception::getNumber(void) const throw()
-     {
-@@ -112,5 +129,5 @@
      {
 -        return number;
 +        return (Exception::ExceptionCodes)number;
