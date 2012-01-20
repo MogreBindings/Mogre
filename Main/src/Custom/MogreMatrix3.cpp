@@ -917,7 +917,7 @@ namespace Mogre
 
         Real fTrace = m00 + m11 + m22;
         Real fCos = 0.5*(fTrace-1.0);
-        rfRadians = System::Math::Acos(fCos);  // in [0,PI]
+        rfRadians = Mogre::Math::ACos(fCos);  // in [0,PI]
 
         if ( rfRadians > Radian(0.0) )
         {
@@ -1021,7 +1021,7 @@ namespace Mogre
         //        cz*sx*sy+cx*sz  cx*cz-sx*sy*sz -cy*sx
         //       -cx*cz*sy+sx*sz  cz*sx+cx*sy*sz  cx*cy
 
-        rfPAngle = Radian(System::Math::Asin(m02));
+        rfPAngle = Radian(Mogre::Math::ASin(m02));
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
@@ -1056,7 +1056,7 @@ namespace Mogre
         //        sx*sy+cx*cy*sz  cx*cz          -cy*sx+cx*sy*sz
         //       -cx*sy+cy*sx*sz  cz*sx           cx*cy+sx*sy*sz
 
-        rfPAngle = System::Math::Asin(-m01);
+        rfPAngle = Mogre::Math::ASin(-m01);
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
@@ -1091,7 +1091,7 @@ namespace Mogre
         //        cx*sz           cx*cz          -sx
         //       -cz*sy+cy*sx*sz  cy*cz*sx+sy*sz  cx*cy
 
-        rfPAngle = System::Math::Asin(-m12);
+        rfPAngle = Mogre::Math::ASin(-m12);
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
@@ -1126,7 +1126,7 @@ namespace Mogre
         //        sz              cx*cz          -cz*sx
         //       -cz*sy           cy*sx+cx*sy*sz  cx*cy-sx*sy*sz
 
-        rfPAngle = System::Math::Asin(m10);
+        rfPAngle = Mogre::Math::ASin(m10);
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
@@ -1161,7 +1161,7 @@ namespace Mogre
         //        cz*sx*sy+cy*sz  cx*cz          -cy*cz*sx+sy*sz
         //       -cx*sy           sx              cx*cy
 
-        rfPAngle = System::Math::Asin(m21);
+        rfPAngle = Mogre::Math::ASin(m21);
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
@@ -1196,7 +1196,7 @@ namespace Mogre
         //        cy*sz           cx*cz+sx*sy*sz -cz*sx+cx*sy*sz
         //       -sy              cy*sx           cx*cy
 
-        rfPAngle = System::Math::Asin(-m20);
+        rfPAngle = Mogre::Math::ASin(-m20);
         if ( rfPAngle < Radian(Math::HALF_PI) )
         {
             if ( rfPAngle > Radian(-Math::HALF_PI) )
