@@ -140,7 +140,7 @@ namespace Mogre {
         Real fSqrLength = x*x+y*y+z*z;
         if ( fSqrLength > 0.0 )
         {
-            rfAngle = 2.0*System::Math::Acos(w);
+            rfAngle = 2.0*Mogre::Math::ACos(w);
             Real fInvLength = Math::InvSqrt(fSqrLength);
             rkAxis.x = x*fInvLength;
             rkAxis.y = y*fInvLength;
@@ -378,7 +378,7 @@ namespace Mogre {
 
         if ( Math::Abs(w) < 1.0 )
         {
-            Radian fAngle ( System::Math::Acos(w) );
+            Radian fAngle ( Mogre::Math::ACos(w) );
             Real fSin = Math::Sin(fAngle);
             if ( Math::Abs(fSin) >= ms_fEpsilon )
             {
@@ -414,7 +414,7 @@ namespace Mogre {
 	bool Quaternion::Equals(Quaternion rhs, Radian tolerance)
 	{
         Real fCos = Dot(rhs);
-        Radian angle = System::Math::Acos(fCos);
+        Radian angle = Mogre::Math::ACos(fCos);
 
 		return (System::Math::Abs(angle.ValueRadians) <= tolerance.ValueRadians)
             || Math::RealEqual(angle.ValueRadians, Math::PI, tolerance.ValueRadians);
@@ -468,7 +468,7 @@ namespace Mogre {
         Quaternion rkP, Quaternion rkQ, int iExtraSpins)
     {
         Real fCos = rkP.Dot(rkQ);
-        Radian fAngle ( System::Math::Acos(fCos) );
+        Radian fAngle ( Mogre::Math::ACos(fCos) );
 
         if ( Math::Abs(fAngle.ValueRadians) < ms_fEpsilon )
             return rkP;
@@ -528,7 +528,7 @@ namespace Mogre {
     //-----------------------------------------------------------------------
 	Radian Quaternion::Yaw::get()
 	{
-		return Radian(System::Math::Asin(-2*(x*z - w*y)));
+		return Radian(Mogre::Math::ASin(-2*(x*z - w*y)));
 	}
     //-----------------------------------------------------------------------
     Quaternion Quaternion::Nlerp(Real fT, Quaternion rkP,

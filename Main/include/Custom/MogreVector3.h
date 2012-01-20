@@ -522,7 +522,7 @@ namespace Mogre
 		inline bool DirectionEquals(Vector3 rhs, Radian tolerance)
 		{
 			Real dot = DotProduct(rhs);
-			Radian angle = System::Math::Acos(dot);
+			Radian angle = Mogre::Math::ACos(dot);
 
 			return Math::Abs(angle.ValueRadians) <= tolerance.ValueRadians;
 		}
