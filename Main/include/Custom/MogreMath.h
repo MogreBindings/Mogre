@@ -241,7 +241,7 @@ namespace Mogre
 		static inline Radian ATan2 (Real fY, Real fX) { return Radian(System::Math::Atan2(fY,fX)); }
 		static inline Real Ceil (Real fValue) { return Real(System::Math::Ceiling(fValue)); }
 
-        /** Cosine function.
+        /** Cosine function. IMPORTANT: Create an instance of the Math class before you use tables.
             @param
                 fValue Angle in radians
             @param
@@ -254,7 +254,7 @@ namespace Mogre
         static inline Real Cos (Radian fValue) {
 			return Real(System::Math::Cos(fValue.ValueRadians));
 		}
-        /** Cosine function.
+        /** Cosine function. IMPORTANT: Create an instance of the Math class before you use tables.
             @param
                 fValue Angle in radians
             @param
@@ -278,7 +278,7 @@ namespace Mogre
 			return Degree(Sign(dValue.ValueDegrees));
 		}
 
-        /** Sine function.
+        /** Sine function. IMPORTANT: Create an instance of the Math class before you use tables.
             @param
                 fValue Angle in radians
             @param
@@ -291,7 +291,7 @@ namespace Mogre
         static inline Real Sin (Radian fValue) {
 			return Real(System::Math::Sin(fValue.ValueRadians));
 		}
-        /** Sine function.
+        /** Sine function. IMPORTANT: Create an instance of the Math class before you use tables.
             @param
                 fValue Angle in radians
             @param
