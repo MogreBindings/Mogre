@@ -293,21 +293,19 @@ Index: OgreMain/include/OgreCodec.h
 ===================================================================
 --- OgreMain/include/OgreCodec.h
 +++ OgreMain/include/OgreCodec.h
-@@ -52,5 +52,5 @@
+@@ -52,8 +52,10 @@
              The codec concept is a pretty generic one - you can easily understand
              how it can be used for images, sounds, archives, even compressed data.
      */
 -	class _OgreExport Codec : public CodecAlloc
 +	class _OgreExport Codec : public CodecAlloc, public CLRObject
      {
-@@ -56,4 +56,6 @@
-     {
 +	public:
-+		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec);
++		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec);
      protected:
          typedef map< String, Codec* >::type CodecList; 
          /** A map that contains all the registered codecs.
-@@ -61,6 +63,6 @@
+@@ -61,9 +63,10 @@
          static CodecList ms_mapCodecs;
  
      public:
@@ -315,12 +313,8 @@ Index: OgreMain/include/OgreCodec.h
 +        class _OgrePrivate CodecData : public CodecAlloc, public CLRObject
          {
          public:
-@@ -65,5 +67,7 @@
-         {
-         public:
 +			DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec_CodecData);
-+			
-             virtual ~CodecData() {};
+             virtual ~CodecData() {}
  
              /** Returns the type of the data.
 Index: OgreMain/include/OgreCommon.h
