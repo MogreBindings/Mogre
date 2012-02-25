@@ -1,7 +1,9 @@
 #pragma once
 
 #include <gcroot.h>
+#pragma managed(push, off)
 #include "OgreStringInterface.h"
+#pragma managed(pop)
 
 namespace Mogre
 {

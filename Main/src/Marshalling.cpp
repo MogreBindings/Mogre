@@ -1,7 +1,9 @@
 #include "MogreStableHeaders.h"
 #include "Marshalling.h"
+#pragma managed(push, off)
 #include <iostream>
 #include <stdio.h>
+#pragma managed(pop)
 
 
 namespace Mogre

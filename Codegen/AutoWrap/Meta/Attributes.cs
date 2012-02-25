@@ -204,6 +204,20 @@ namespace AutoWrap.Meta
         }
     }
 
+      public class CustomIncPreDeclarationAttribute : AutoWrapAttribute
+    {
+        public string DeclarationText;
+
+        public CustomIncPreDeclarationAttribute(string decl)
+        {
+            this.DeclarationText = decl;
+        }
+        public static CustomIncPreDeclarationAttribute FromElement(XmlElement elem)
+        {
+            return new CustomIncPreDeclarationAttribute(elem.InnerText);
+        }
+    }
+
     public class CustomCppDeclarationAttribute : AutoWrapAttribute
     {
         public string DeclarationText;

@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreVector4.h"
+#pragma managed(pop)
 #include "Custom\MogreVector3.h"
 
 namespace Mogre

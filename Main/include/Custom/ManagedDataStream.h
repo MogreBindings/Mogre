@@ -1,7 +1,9 @@
 #pragma once
 
 #include <gcroot.h>
+#pragma managed(push, off)
 #include "OgreDataStream.h"
+#pragma managed(pop)
 #include "MogreDataStream.h"
 
 namespace Mogre

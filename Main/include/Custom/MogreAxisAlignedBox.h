@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreAxisAlignedBox.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreVector3.h"
 #include "Custom\MogreMatrix4.h"

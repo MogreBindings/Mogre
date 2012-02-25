@@ -37,7 +37,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 // http://www.geometrictools.com/License/WildMagic3License.pdf
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreQuaternion.h"
+#pragma managed(pop)
 #include "Marshalling.h"
 #include "Prerequisites.h"
 #include "Custom\MogreMath.h"

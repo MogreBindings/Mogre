@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreVector3.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreMath.h"
 

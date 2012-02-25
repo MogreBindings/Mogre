@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreVector2.h"
+#pragma managed(pop)
 #include "Custom\MogreMath.h"
 
 namespace Mogre

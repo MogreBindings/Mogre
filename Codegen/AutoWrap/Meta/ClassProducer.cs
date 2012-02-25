@@ -765,11 +765,13 @@ namespace AutoWrap.Meta
                 {
                     if (f.Name.EndsWith("=="))
                     {
-                        AddPredefinedMethods(PredefinedMethods.Equals);
+                      if( !f.IsIgnored )
+                        AddPredefinedMethods( PredefinedMethods.Equals );
                         _sb.AppendLine();
                     }
                     else if (f.Name.EndsWith("="))
                     {
+                      if(!f.IsIgnored)
                         AddPredefinedMethods(PredefinedMethods.CopyTo);
                         _sb.AppendLine();
                     }

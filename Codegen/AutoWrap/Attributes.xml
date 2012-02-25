@@ -831,5 +831,87 @@ public:
         }
       </_CustomIncDeclaration>
     </class>
+
+    <class name="Terrain">
+      <function name="calculateNormals" Ignore=""/>
+      <function name="calculateLightmap" Ignore=""/>
+      <function name="widenRectByVector" Ignore=""/>
+      <function name="preFindVisibleObjects" Ignore=""/>
+      <class name="LayerInstance" WrapType="PlainWrapper"/>
+      <class name="ImportData" WrapType="PlainWrapper">
+        <variable name="inputFloat" Ignore=""/>
+      </class>
+      <class name="DefaultGpuBufferAllocator" Ignore="" />
+      <function name="canHandleRequest" Ignore=""/>
+      <function name="handleRequest" Ignore=""/>
+      <function name="canHandleResponse" Ignore=""/>
+      <function name="handleResponse" Ignore=""/>
+    </class>
+    
+    <class name="TerrainGroup">
+      <class name="TerrainSlotDefinition" WrapType="PlainWrapper"/>
+      <class name="TerrainSlot" WrapType="PlainWrapper"/>
+      <class name="RayResult" WrapType="PlainWrapper"/>
+      <function name="canHandleRequest" Ignore=""/>
+      <function name="handleRequest" Ignore=""/>
+      <function name="canHandleResponse" Ignore=""/>
+      <function name="handleResponse" Ignore=""/>
+    </class>
+
+    <class name="TerrainLayerBlendMap" WrapType="PlainWrapper">
+      <_CustomIncDeclaration>
+        #ifdef LoadImage
+          #undef LoadImage
+        #endif
+      </_CustomIncDeclaration>
+      <_CustomCppDeclaration>
+        #ifdef LoadImage
+          #undef LoadImage
+        #endif
+      </_CustomCppDeclaration>
+    </class>
+
+    <class name="TerrainLayerSamplerElement" WrapType="PlainWrapper"/>
+    <class name="TerrainLayerSampler" WrapType="PlainWrapper"/>
+    <class name="TerrainLayerDeclaration" WrapType="PlainWrapper"/>
+
+    <class name="TerrainPaging" WrapType="PlainWrapper"/>
+
+    <class name="TerrainQuadTreeNode">
+      <class name="LodLevel" WrapType="PlainWrapper"/>
+    </class>
+
+    <class name="Page">
+      <function name="canHandleRequest" Ignore=""/>
+      <function name="handleRequest" Ignore=""/>
+      <function name="canHandleResponse" Ignore=""/>
+      <function name="handleResponse" Ignore=""/>
+    </class>
+    
+    <class name="StreamSerialiser">
+      <function name="read" Ignore=""/>
+      <function name="write" Ignore=""/>
+      <class name="Chunk" WrapType="PlainWrapper"/>
+    </class>
+
+    <class name="WorkQueue">
+      <_CustomIncPreDeclaration>
+        public: typedef Ogre::WorkQueue::RequestID RequestID;
+      </_CustomIncPreDeclaration>
+      <typedef name="RequestID" Ignore="" />
+      <function name="addRequest" Ignore="" />
+      <class name="Request" WrapType="PlainWrapper">
+        <function name="Request" Ignore="" />
+      </class>
+      <class name="Response" WrapType="PlainWrapper">
+        <function name="Response" Ignore="" />
+      </class>
+      <class name="RequestHandler" WrapType="Interface">
+      </class>
+      <class name="ResponseHandler" WrapType="Interface">
+      </class>
+    </class>
+    <class name="DefaultWorkQueueBase" Ignore="" />
+   
   </namespace>
 </meta>

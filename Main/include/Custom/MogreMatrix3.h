@@ -42,7 +42,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreMatrix3.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreVector3.h"
 

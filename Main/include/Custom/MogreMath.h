@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreMath.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 #include "MogrePair.h"
 
@@ -139,7 +141,7 @@ namespace Mogre
 		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Degree )
 	};
 
-    /** Wrapper class which identifies a value as the currently default angle 
+    /** Wrapper class which identifies a value as the currently default angle
         type, as defined by Math::setAngleUnit.
     @remarks
         Angle values will be automatically converted between radians and degrees,
@@ -327,7 +329,7 @@ namespace Mogre
 		static inline Real DegreesToRadians(Real degrees) { return degrees * fDeg2Rad; }
         static inline Real RadiansToDegrees(Real radians) { return radians * fRad2Deg; }
 
-       /** These functions used to set the assumed angle units (radians or degrees) 
+       /** These functions used to set the assumed angle units (radians or degrees)
             expected when using the Angle type.
        @par
             You can set this directly after creating a new Root, and also before/after resource creation,
@@ -367,7 +369,7 @@ namespace Mogre
                 If the point is outside the triangle, <b>false</b> is
                 returned.
         */
-        static bool PointInTri2D(Vector2 p, Vector2 a, 
+        static bool PointInTri2D(Vector2 p, Vector2 a,
 			Vector2 b, Vector2 c);
 
        /** Checks whether a given 3D point is inside a triangle.
@@ -384,7 +386,7 @@ namespace Mogre
             b The triangle's second vertex.
         @param
             c The triangle's third vertex.
-		@param 
+		@param
 			normal The triangle plane's normal (passed in rather than calculated
 				on demand since the callermay already have it)
         @returns
@@ -394,16 +396,16 @@ namespace Mogre
             If the point is outside the triangle, <b>false</b> is
             returned.
         */
-        static bool PointInTri3D(Vector3 p, Vector3 a, 
+        static bool PointInTri3D(Vector3 p, Vector3 a,
 			Vector3 b, Vector3 c, Vector3 normal);
         /** Ray / plane intersection, returns boolean result and distance. */
         static Pair<bool, Real> Intersects(Ray ray, Plane plane);
 
         /** Ray / sphere intersection, returns boolean result and distance. */
-        static Pair<bool, Real> Intersects(Ray ray, Sphere sphere, 
+        static Pair<bool, Real> Intersects(Ray ray, Sphere sphere,
             bool discardInside);
         static Pair<bool, Real> Intersects(Ray ray, Sphere sphere);
-        
+
         /** Ray / box intersection, returns boolean result and distance. */
         static Pair<bool, Real> Intersects(Ray ray, AxisAlignedBox^ box);
 
@@ -441,7 +443,7 @@ namespace Mogre
             b The triangle's second vertex.
         @param
             c The triangle's third vertex.
-		@param 
+		@param
 			normal The triangle plane's normal (passed in rather than calculated
 				on demand since the callermay already have it), doesn't need
                 normalised since we don't care.
@@ -504,24 +506,24 @@ namespace Mogre
         /** Plane / box intersection test. */
         static bool Intersects(Plane plane, AxisAlignedBox^ box);
 
-        /** Ray / convex plane list intersection test. 
+        /** Ray / convex plane list intersection test.
         @param ray The ray to test with
         @param plaeList List of planes which form a convex volume
         @param normalIsOutside Does the normal point outside the volume
         */
         static Pair<bool, Real> Intersects(
-			Ray ray, Collections::Generic::List<Plane>^ planeList, 
+			Ray ray, Collections::Generic::List<Plane>^ planeList,
             bool normalIsOutside);
-        /** Ray / convex plane list intersection test. 
+        /** Ray / convex plane list intersection test.
         @param ray The ray to test with
         @param plaeList List of planes which form a convex volume
         @param normalIsOutside Does the normal point outside the volume
         */
         static Pair<bool, Real> Intersects(
-            Ray ray, Collections::Generic::IEnumerable<Plane>^ planeList, 
+            Ray ray, Collections::Generic::IEnumerable<Plane>^ planeList,
             bool normalIsOutside);
 
-        /** Sphere / plane intersection test. 
+        /** Sphere / plane intersection test.
         @remarks NB just do a plane.getDistance(sphere.getCenter()) for more detail!
         */
         static bool Intersects(Sphere sphere, Plane plane);

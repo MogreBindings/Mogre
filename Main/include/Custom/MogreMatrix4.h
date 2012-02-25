@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreMatrix4.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreMatrix3.h"
 #include "Custom\MogreQuaternion.h"

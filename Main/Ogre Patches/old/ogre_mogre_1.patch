@@ -1,8 +1,395 @@
-Index: OgreMain/include/OgreAnimable.h
-===================================================================
---- OgreMain/include/OgreAnimable.h
-+++ OgreMain/include/OgreAnimable.h
-@@ -68,6 +68,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgreGrid2DPageStrategy.h
+--- a/Components/Paging/include/OgreGrid2DPageStrategy.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgreGrid2DPageStrategy.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -141,6 +141,8 @@
+ 		void updateDerivedMetrics();
+ 
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Grid2DPageStrategyData);
++
+ 		static const uint32 CHUNK_ID;
+ 		static const uint16 CHUNK_VERSION;
+ 
+@@ -230,6 +232,8 @@
+ 	class _OgrePagingExport Grid2DPageStrategy : public PageStrategy
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Grid2DPageStrategy);
++
+ 		Grid2DPageStrategy(PageManager* manager);
+ 
+ 		~Grid2DPageStrategy();
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePage.h
+--- a/Components/Paging/include/OgrePage.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePage.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,9 +46,11 @@
+ 	/** Page class
+ 	*/
+ 	class _OgrePagingExport Page : public WorkQueue::RequestHandler, 
+-		public WorkQueue::ResponseHandler, public PageAlloc
++    public WorkQueue::ResponseHandler, public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Page);
++
+ 		typedef vector<PageContentCollection*>::type ContentCollectionList;
+ 	protected:
+ 		PageID mID;
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageContent.h
+--- a/Components/Paging/include/OgrePageContent.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageContent.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,12 +46,14 @@
+ 
+ 	/** Interface definition for a unit of content within a page. 
+ 	*/
+-	class _OgrePagingExport PageContent : public PageAlloc
++  class _OgrePagingExport PageContent : public PageAlloc, public CLRObject
+ 	{
+ 	protected:
+ 		PageContentFactory* mCreator;
+ 		PageContentCollection* mParent;
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageContent);
++
+ 		PageContent(PageContentFactory* creator);
+ 		virtual ~PageContent();
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageContentCollection.h
+--- a/Components/Paging/include/OgrePageContentCollection.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageContentCollection.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -52,12 +52,14 @@
+ 		if required. For example, potentially you might want to define Page-level LOD
+ 		in which different collections of PageContent are loaded at different times.
+ 	*/
+-	class _OgrePagingExport PageContentCollection : public PageAlloc
++  class _OgrePagingExport PageContentCollection : public PageAlloc, public CLRObject
+ 	{
+ 	protected:
+ 		PageContentCollectionFactory* mCreator;
+ 		Page* mParent;
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageContentCollection);
++
+ 		static const uint32 CHUNK_ID;
+ 		static const uint16 CHUNK_VERSION;
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageContentCollectionFactory.h
+--- a/Components/Paging/include/OgrePageContentCollectionFactory.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageContentCollectionFactory.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -44,9 +44,11 @@
+ 	/** Define the interface to a factory class that will create subclasses
+ 		of PageContentCollection. 
+ 	*/
+-	class PageContentCollectionFactory : public PageAlloc
++  class PageContentCollectionFactory : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageContentCollectionFactory);
++
+ 		PageContentCollectionFactory() {}
+ 		virtual ~PageContentCollectionFactory() {}
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageContentFactory.h
+--- a/Components/Paging/include/OgrePageContentFactory.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageContentFactory.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -47,9 +47,10 @@
+ 	/** Define the interface to a factory class that will create subclasses
+ 	of PageContent. 
+ 	*/
+-	class PageContentFactory : public PageAlloc
++  class PageContentFactory : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageContentFactory);
+ 		PageContentFactory() {}
+ 		virtual ~PageContentFactory() {}
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageManager.h
+--- a/Components/Paging/include/OgrePageManager.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageManager.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -55,9 +55,11 @@
+ 	@note
+ 		All of the methods in this class can be called in a background, non-render thread. 		
+ 	*/
+-	class PageProvider
++  class PageProvider : public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageProvider);
++
+ 		PageProvider() {}
+ 		virtual ~PageProvider() {}
+ 
+@@ -132,9 +134,11 @@
+ 		To get started, the minimum you need is a PagedWorld with at least one PagedWorldSection
+ 		within it, and at least one Camera being tracked (see addCamera). 
+ 	*/
+-	class _OgrePagingExport PageManager : public PageAlloc
++  class _OgrePagingExport PageManager : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageManager);
++
+ 		PageManager();
+ 		virtual ~PageManager();
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePageStrategy.h
+--- a/Components/Paging/include/OgrePageStrategy.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePageStrategy.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,9 +46,11 @@
+ 	/** Abstract marker class representing the data held against the PagedWorldSection
+ 	which is specifically used by the PageStrategy.
+ 	*/
+-	class _OgrePagingExport PageStrategyData : public PageAlloc
++  class _OgrePagingExport PageStrategyData : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageStrategyData);
++
+ 		PageStrategyData() {}
+ 		virtual ~PageStrategyData() {}
+ 
+@@ -70,12 +72,14 @@
+ 		to the events raised on it and to call methods on other classes (such as
+ 		requesting new pages). 
+ 	*/
+-	class _OgrePagingExport PageStrategy : public PageAlloc
++  class _OgrePagingExport PageStrategy : public PageAlloc, public CLRObject
+ 	{
+ 	protected:
+ 		String mName;
+ 		PageManager* mManager;
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageStrategy);
++
+ 		PageStrategy(const String& name, PageManager* manager)
+ 			: mName(name), mManager(manager)
+ 		{
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePagedWorld.h
+--- a/Components/Paging/include/OgrePagedWorld.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePagedWorld.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -53,7 +53,7 @@
+ 		world and knows how to find out about the contents of it. It does not, 
+ 		by design, contain all elements of the world, in memory, at once. 
+ 	*/
+-	class _OgrePagingExport PagedWorld : public PageAlloc
++  class _OgrePagingExport PagedWorld : public PageAlloc, public CLRObject
+ 	{
+ 	protected:
+ 		String mName;
+@@ -61,6 +61,8 @@
+ 		PageProvider* mPageProvider;
+ 
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PagedWorld);
++
+ 		static const uint32 CHUNK_ID;
+ 		static const uint16 CHUNK_VERSION;
+ 		static const uint32 CHUNK_SECTIONDECLARATION_ID;
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgrePagedWorldSection.h
+--- a/Components/Paging/include/OgrePagedWorldSection.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgrePagedWorldSection.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -66,9 +66,11 @@
+ 		instance name are saved and that SceneManager is looked up on loading, or
+ 		created if it didn't exist. 
+ 	*/
+-	class _OgrePagingExport PagedWorldSection : public PageAlloc
++  class _OgrePagingExport PagedWorldSection : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PagedWorldSection);
++
+ 		typedef map<PageID, Page*>::type PageMap;
+ 	protected:
+ 		String mName;
+@@ -298,9 +300,11 @@
+ 
+ 	/** A factory class for creating types of world section.
+ 	*/
+-	class _OgrePagingExport PagedWorldSectionFactory : public PageAlloc
++  class _OgrePagingExport PagedWorldSectionFactory : public PageAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(PageContentCollectionFactory);
++
+ 		virtual ~PagedWorldSectionFactory() {}
+ 		virtual const String& getName() const = 0;
+ 		virtual PagedWorldSection* createInstance(const String& name, PagedWorld* parent, SceneManager* sm) = 0;
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Paging/include/OgreSimplePageContentCollection.h
+--- a/Components/Paging/include/OgreSimplePageContentCollection.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Paging/include/OgreSimplePageContentCollection.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -66,6 +66,8 @@
+ 	class _OgrePagingExport SimplePageContentCollection : public PageContentCollection
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SimplePageContentCollection);
++
+ 		typedef vector<PageContent*>::type ContentList;
+ 		static const uint32 SUBCLASS_CHUNK_ID;
+ 		static const uint16 SUBCLASS_CHUNK_VERSION;
+@@ -111,6 +113,8 @@
+ 	class _OgrePagingExport SimplePageContentCollectionFactory : public PageContentCollectionFactory
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SimplePageContentCollectionFactory);
++
+ 		static String FACTORY_NAME;
+ 
+ 		SimplePageContentCollectionFactory() {}
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrain.h
+--- a/Components/Terrain/include/OgreTerrain.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrain.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -259,9 +259,11 @@
+ 	</table>
+ 	*/
+ 	class _OgreTerrainExport Terrain : public SceneManager::Listener, 
+-		public WorkQueue::RequestHandler, public WorkQueue::ResponseHandler, public TerrainAlloc
++		public WorkQueue::RequestHandler, public WorkQueue::ResponseHandler, public TerrainAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Terrain);
++
+ 		/** Constructor.
+ 		@param sm The SceneManager to use.
+ 		*/
+@@ -524,9 +526,11 @@
+ 		@remarks This class exists to make it easier to re-use buffers between
+ 			multiple instances of terrain.
+ 		*/
+-		class _OgreTerrainExport GpuBufferAllocator : public TerrainAlloc
++    class _OgreTerrainExport GpuBufferAllocator : public TerrainAlloc, public CLRObject
+ 		{
+ 		public:
++      DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Terrain_GpuBufferAllocator);
++
+ 			GpuBufferAllocator() {}
+ 			virtual ~GpuBufferAllocator() {}
+ 
+@@ -1810,7 +1814,7 @@
+ 		You should construct a single instance of this class per application and
+ 		do so before you start working with any other terrain classes.
+ 	*/
+-	class _OgreTerrainExport TerrainGlobalOptions : public TerrainAlloc, public Singleton<TerrainGlobalOptions>
++	class _OgreTerrainExport TerrainGlobalOptions : public TerrainAlloc, public Singleton<TerrainGlobalOptions>, public CLRObject
+ 	{
+ 	protected:
+ 
+@@ -1834,6 +1838,8 @@
+ 		String mResourceGroup;
+ 
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainGlobalOptions);
++
+ 		TerrainGlobalOptions();
+ 		virtual ~TerrainGlobalOptions() {}
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrainGroup.h
+--- a/Components/Terrain/include/OgreTerrainGroup.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrainGroup.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -67,9 +67,11 @@
+ 		component. 
+ 	*/
+ 	class _OgreTerrainExport TerrainGroup : public WorkQueue::RequestHandler, 
+-		public WorkQueue::ResponseHandler, public TerrainAlloc
++    public WorkQueue::ResponseHandler, public TerrainAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainGroup);
++
+ 		/** Constructor.
+ 		@param sm The SceneManager which will parent the terrain instances. 
+ 		@param align The alignment that all terrain instances will use
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrainMaterialGenerator.h
+--- a/Components/Terrain/include/OgreTerrainMaterialGenerator.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrainMaterialGenerator.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -152,19 +152,23 @@
+ 		should be able to select the profile they wish to use (provided hardware
+ 		support is available). 
+ 	*/
+-	class _OgreTerrainExport TerrainMaterialGenerator : public TerrainAlloc
++  class _OgreTerrainExport TerrainMaterialGenerator : public TerrainAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainMaterialGenerator);
++
+ 		/** Inner class which should also be subclassed to provide profile-specific 
+ 			material generation.
+ 		*/
+-		class _OgreTerrainExport Profile : public TerrainAlloc
++    class _OgreTerrainExport Profile : public TerrainAlloc, public CLRObject
+ 		{
+ 		protected:
+ 			TerrainMaterialGenerator* mParent;
+ 			String mName;
+ 			String mDesc;
+ 		public:
++      DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainMaterialGenerator_Profile);
++
+ 			Profile(TerrainMaterialGenerator* parent, const String& name, const String& desc)
+ 				: mParent(parent), mName(name), mDesc(desc) {}
+ 			Profile(const Profile& prof) 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrainMaterialGeneratorA.h
+--- a/Components/Terrain/include/OgreTerrainMaterialGeneratorA.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrainMaterialGeneratorA.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -53,6 +53,8 @@
+ 	class _OgreTerrainExport TerrainMaterialGeneratorA : public TerrainMaterialGenerator
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainMaterialGeneratorA);
++
+ 		TerrainMaterialGeneratorA();
+ 		~TerrainMaterialGeneratorA();
+ 
+@@ -61,6 +63,8 @@
+ 		class _OgreTerrainExport SM2Profile : public TerrainMaterialGenerator::Profile
+ 		{
+ 		public:
++      DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainMaterialGeneratorA_SM2Profile);
++
+ 			SM2Profile(TerrainMaterialGenerator* parent, const String& name, const String& desc);
+ 			~SM2Profile();
+ 			MaterialPtr generate(const Terrain* terrain);
+@@ -156,7 +160,7 @@
+ 			void addTechnique(const MaterialPtr& mat, const Terrain* terrain, TechniqueType tt);
+ 
+ 			/// Interface definition for helper class to generate shaders
+-			class _OgreTerrainExport ShaderHelper : public TerrainAlloc
++      class _OgreTerrainExport ShaderHelper : public TerrainAlloc
+ 			{
+ 			public:
+ 				ShaderHelper() {}
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrainPagedWorldSection.h
+--- a/Components/Terrain/include/OgreTerrainPagedWorldSection.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrainPagedWorldSection.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -80,6 +80,8 @@
+ 	class _OgreTerrainExport TerrainPagedWorldSection : public PagedWorldSection
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainPagedWorldSection);
++
+ 		/** Constructor.
+ 		@param name The name of the section
+ 		@param parent The parent world
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 Components/Terrain/include/OgreTerrainQuadTreeNode.h
+--- a/Components/Terrain/include/OgreTerrainQuadTreeNode.h	Wed May 26 01:01:07 2010 +0800
++++ b/Components/Terrain/include/OgreTerrainQuadTreeNode.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -82,9 +82,11 @@
+ 		the same (relative) LOD index no matter where you are in the tree, therefore
+ 		buffers can potentially be reused more easily.
+ 	*/
+-	class _OgreTerrainExport TerrainQuadTreeNode : public TerrainAlloc
++  class _OgreTerrainExport TerrainQuadTreeNode : public TerrainAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(TerrainQuadTreeNode);
++
+ 		/** Constructor.
+ 		@param terrain The ultimate parent terrain
+ 		@param parent Optional parent node (in which case xoff, yoff are 0 and size must be entire terrain)
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreAnimable.h
+--- a/OgreMain/include/OgreAnimable.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreAnimable.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -68,9 +68,11 @@
  		are often comprised of multiple properties it helps to be able to deal
  		with all values through a single class.
  	*/
@@ -10,19 +397,15 @@ Index: OgreMain/include/OgreAnimable.h
 +	class _OgreExport AnimableValue : public AnimableAlloc, public CLRObject
  	{
  	public:
-@@ -72,5 +72,7 @@
- 	{
- 	public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(AnimableValue);
 +		 
  		/// The type of the value being animated
  		enum ValueType
  		{
-Index: OgreMain/include/OgreAnimation.h
-===================================================================
---- OgreMain/include/OgreAnimation.h
-+++ OgreMain/include/OgreAnimation.h
-@@ -55,7 +55,7 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreAnimation.h
+--- a/OgreMain/include/OgreAnimation.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreAnimation.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -55,10 +55,12 @@
          You should not create these animations directly. They will be created via a parent
          object which owns the animation, e.g. Skeleton.
      */
@@ -31,20 +414,15 @@ Index: OgreMain/include/OgreAnimation.h
      {
  
      public:
-@@ -59,6 +59,8 @@
-     {
- 
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Animation);
 +	 
          /** The types of animation interpolation available. */
          enum InterpolationMode
          {
-Index: OgreMain/include/OgreAnimationState.h
-===================================================================
---- OgreMain/include/OgreAnimationState.h
-+++ OgreMain/include/OgreAnimationState.h
-@@ -49,6 +49,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreAnimationState.h
+--- a/OgreMain/include/OgreAnimationState.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreAnimationState.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -49,13 +49,13 @@
          Other classes can hold instances of this class to store the state of any animations
          they are using.
      */
@@ -52,15 +430,9 @@ Index: OgreMain/include/OgreAnimationState.h
 +	class _OgreExport AnimationState : public AnimationAlloc, public CLRObject
      {
      public:
-@@ -53,5 +53,6 @@
-     {
-     public:
 -
 +	   DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(AnimationState);
 +		
-       /// typedef for an array of float values used as a bone blend mask
-       typedef vector<float>::type BoneBlendMask;
-@@ -56,6 +57,5 @@
        /// typedef for an array of float values used as a bone blend mask
        typedef vector<float>::type BoneBlendMask;
 -
@@ -75,10 +447,9 @@ Index: OgreMain/include/OgreAnimationState.h
  		/// Mutex, public for external locking if needed
  		OGRE_AUTO_MUTEX
  		/// Create a blank animation state set
-Index: OgreMain/include/OgreAnimationTrack.h
-===================================================================
---- OgreMain/include/OgreAnimationTrack.h
-+++ OgreMain/include/OgreAnimationTrack.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreAnimationTrack.h
+--- a/OgreMain/include/OgreAnimationTrack.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreAnimationTrack.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -48,6 +48,9 @@
      */
      class _OgreExport TimeIndex
@@ -89,15 +460,12 @@ Index: OgreMain/include/OgreAnimationTrack.h
      protected:
          /** The time position (in relation to the whole animation sequence)
          */
-@@ -118,6 +121,6 @@
+@@ -118,10 +121,11 @@
  		It is possible to change this behaviour using
  		setUseShortestRotationPath() method.
      */
 -	class _OgreExport AnimationTrack : public AnimationAlloc
 +	class _OgreExport AnimationTrack : public AnimationAlloc, public CLRObject
-     {
-     public:
-@@ -122,6 +125,7 @@
      {
      public:
 -
@@ -131,18 +499,15 @@ Index: OgreMain/include/OgreAnimationTrack.h
  		/** The target animation mode */
  		enum TargetMode
  		{
-Index: OgreMain/include/OgreArchive.h
-===================================================================
---- OgreMain/include/OgreArchive.h
-+++ OgreMain/include/OgreArchive.h
-@@ -84,5 +84,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreArchive.h
+--- a/OgreMain/include/OgreArchive.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreArchive.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -84,8 +84,11 @@
          to benefit from OGRE's automatic searching of multiple file locations 
          for the resources you are looking for.
      */
 -	class _OgreExport Archive : public ArchiveAlloc
 +	class _OgreExport Archive : public ArchiveAlloc, public CLRObject
-     {
-@@ -88,4 +88,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Archive);
@@ -159,10 +524,9 @@ Index: OgreMain/include/OgreArchive.h
          /** Constructor - don't call direct, used by ArchiveFactory.
          */
          Archive( const String& name, const String& archType )
-Index: OgreMain/include/OgreBillboard.h
-===================================================================
---- OgreMain/include/OgreBillboard.h
-+++ OgreMain/include/OgreBillboard.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBillboard.h
+--- a/OgreMain/include/OgreBillboard.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBillboard.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -65,6 +65,9 @@
  
  	class _OgreExport Billboard : public FXAlloc
@@ -173,10 +537,9 @@ Index: OgreMain/include/OgreBillboard.h
          friend class BillboardSet;
          friend class BillboardParticleRenderer;
      protected:
-Index: OgreMain/include/OgreBillboardChain.h
-===================================================================
---- OgreMain/include/OgreBillboardChain.h
-+++ OgreMain/include/OgreBillboardChain.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBillboardChain.h
+--- a/OgreMain/include/OgreBillboardChain.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBillboardChain.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -77,7 +77,8 @@
  	{
  
@@ -197,10 +560,9 @@ Index: OgreMain/include/OgreBillboardChain.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreBillboardParticleRenderer.h
-===================================================================
---- OgreMain/include/OgreBillboardParticleRenderer.h
-+++ OgreMain/include/OgreBillboardParticleRenderer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBillboardParticleRenderer.h
+--- a/OgreMain/include/OgreBillboardParticleRenderer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBillboardParticleRenderer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -50,6 +50,9 @@
      */
      class _OgreExport BillboardParticleRenderer : public ParticleSystemRenderer
@@ -211,10 +573,9 @@ Index: OgreMain/include/OgreBillboardParticleRenderer.h
      protected:
          /// The billboard set that's doing the rendering
          BillboardSet* mBillboardSet;
-Index: OgreMain/include/OgreBillboardSet.h
-===================================================================
---- OgreMain/include/OgreBillboardSet.h
-+++ OgreMain/include/OgreBillboardSet.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBillboardSet.h
+--- a/OgreMain/include/OgreBillboardSet.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBillboardSet.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -108,6 +108,9 @@
      */
      class _OgreExport BillboardSet : public MovableObject, public Renderable
@@ -235,10 +596,9 @@ Index: OgreMain/include/OgreBillboardSet.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreBone.h
-===================================================================
---- OgreMain/include/OgreBone.h
-+++ OgreMain/include/OgreBone.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBone.h
+--- a/OgreMain/include/OgreBone.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBone.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -51,6 +51,8 @@
      class _OgreExport Bone : public Node
      {
@@ -248,10 +608,9 @@ Index: OgreMain/include/OgreBone.h
          /** Constructor, not to be used directly (use Bone::createChild or Skeleton::createBone) */
          Bone(unsigned short handle, Skeleton* creator);
          /** Constructor, not to be used directly (use Bone::createChild or Skeleton::createBone) */
-Index: OgreMain/include/OgreBorderPanelOverlayElement.h
-===================================================================
---- OgreMain/include/OgreBorderPanelOverlayElement.h
-+++ OgreMain/include/OgreBorderPanelOverlayElement.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreBorderPanelOverlayElement.h
+--- a/OgreMain/include/OgreBorderPanelOverlayElement.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreBorderPanelOverlayElement.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -56,6 +56,9 @@
      */
      class _OgreExport BorderPanelOverlayElement : public PanelOverlayElement
@@ -262,24 +621,21 @@ Index: OgreMain/include/OgreBorderPanelOverlayElement.h
          friend class BorderRenderable;
      public:
          /** Constructor */
-@@ -317,5 +320,5 @@
+@@ -317,8 +320,10 @@
          We need this because we have to render twice, once with the inner panel's repeating
          material (handled by superclass) and once for the border's separate material. 
      */
 -    class _OgreExport BorderRenderable : public Renderable, public OverlayAlloc
 +    class _OgreExport BorderRenderable : public Renderable, public OverlayAlloc, public CLRObject
      {
-@@ -321,4 +324,6 @@
-     {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(BorderRenderable);
      protected:
          BorderPanelOverlayElement* mParent;
      public:
-Index: OgreMain/include/OgreCamera.h
-===================================================================
---- OgreMain/include/OgreCamera.h
-+++ OgreMain/include/OgreCamera.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCamera.h
+--- a/OgreMain/include/OgreCamera.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCamera.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -85,6 +85,8 @@
      class _OgreExport Camera : public Frustum
      {
@@ -289,10 +645,9 @@ Index: OgreMain/include/OgreCamera.h
  		/** Listener interface so you can be notified of Camera events. 
  		*/
  		class _OgreExport Listener 
-Index: OgreMain/include/OgreCodec.h
-===================================================================
---- OgreMain/include/OgreCodec.h
-+++ OgreMain/include/OgreCodec.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCodec.h
+--- a/OgreMain/include/OgreCodec.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCodec.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -52,8 +52,10 @@
              The codec concept is a pretty generic one - you can easily understand
              how it can be used for images, sounds, archives, even compressed data.
@@ -301,11 +656,11 @@ Index: OgreMain/include/OgreCodec.h
 +	class _OgreExport Codec : public CodecAlloc, public CLRObject
      {
 +	public:
-+		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec);
++		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec);
      protected:
          typedef map< String, Codec* >::type CodecList; 
          /** A map that contains all the registered codecs.
-@@ -61,9 +63,10 @@
+@@ -61,9 +63,11 @@
          static CodecList ms_mapCodecs;
  
      public:
@@ -314,13 +669,13 @@ Index: OgreMain/include/OgreCodec.h
          {
          public:
 +			DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Codec_CodecData);
-             virtual ~CodecData() {}
++			
+             virtual ~CodecData() {};
  
              /** Returns the type of the data.
-Index: OgreMain/include/OgreCommon.h
-===================================================================
---- OgreMain/include/OgreCommon.h
-+++ OgreMain/include/OgreCommon.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCommon.h
+--- a/OgreMain/include/OgreCommon.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCommon.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -379,7 +379,7 @@
  		{ 
  			// we have to assume that hash needs recalculating on non-const
@@ -349,10 +704,9 @@ Index: OgreMain/include/OgreCommon.h
  
  		bool operator==(const HashedVector<T>& b)
  		{ return mListHash == b.mListHash; }
-Index: OgreMain/include/OgreCompositionPass.h
-===================================================================
---- OgreMain/include/OgreCompositionPass.h
-+++ OgreMain/include/OgreCompositionPass.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositionPass.h
+--- a/OgreMain/include/OgreCompositionPass.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositionPass.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -46,6 +46,8 @@
  	class _OgreExport CompositionPass : public CompositorInstAlloc
      {
@@ -371,10 +725,9 @@ Index: OgreMain/include/OgreCompositionPass.h
  			/// Name (local) of the input texture (empty == no input)
  			String name;
  			/// MRT surface index if applicable
-Index: OgreMain/include/OgreCompositionTargetPass.h
-===================================================================
---- OgreMain/include/OgreCompositionTargetPass.h
-+++ OgreMain/include/OgreCompositionTargetPass.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositionTargetPass.h
+--- a/OgreMain/include/OgreCompositionTargetPass.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositionTargetPass.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -44,6 +44,8 @@
  	class _OgreExport CompositionTargetPass : public CompositorInstAlloc
      {
@@ -384,11 +737,10 @@ Index: OgreMain/include/OgreCompositionTargetPass.h
          CompositionTargetPass(CompositionTechnique *parent);
          ~CompositionTargetPass();
          
-Index: OgreMain/include/OgreCompositionTechnique.h
-===================================================================
---- OgreMain/include/OgreCompositionTechnique.h
-+++ OgreMain/include/OgreCompositionTechnique.h
-@@ -41,6 +41,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositionTechnique.h
+--- a/OgreMain/include/OgreCompositionTechnique.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositionTechnique.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -41,9 +41,11 @@
  	*/
  	/** Base composition technique, can be subclassed in plugins.
       */
@@ -396,18 +748,14 @@ Index: OgreMain/include/OgreCompositionTechnique.h
 +	class _OgreExport CompositionTechnique : public CompositorInstAlloc, public CLRObject
      {
      public:
-@@ -45,5 +45,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(CompositionTechnique);
 +	
          CompositionTechnique(Compositor *parent);
          virtual ~CompositionTechnique();
      
-Index: OgreMain/include/OgreCompositor.h
-===================================================================
---- OgreMain/include/OgreCompositor.h
-+++ OgreMain/include/OgreCompositor.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositor.h
+--- a/OgreMain/include/OgreCompositor.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositor.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -49,6 +49,8 @@
      class _OgreExport Compositor: public Resource
      {
@@ -417,11 +765,10 @@ Index: OgreMain/include/OgreCompositor.h
          Compositor(ResourceManager* creator, const String& name, ResourceHandle handle,
              const String& group, bool isManual = false, ManualResourceLoader* loader = 0);
          ~Compositor();
-Index: OgreMain/include/OgreCompositorChain.h
-===================================================================
---- OgreMain/include/OgreCompositorChain.h
-+++ OgreMain/include/OgreCompositorChain.h
-@@ -43,6 +43,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositorChain.h
+--- a/OgreMain/include/OgreCompositorChain.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositorChain.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -43,9 +43,11 @@
  	*/
  	/** Chain of compositor effects applying to one viewport.
       */
@@ -429,19 +776,15 @@ Index: OgreMain/include/OgreCompositorChain.h
 +    class _OgreExport CompositorChain: public RenderTargetListener, public CompositorInstAlloc, public CLRObject
      {
      public:
-@@ -47,5 +47,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(CompositorChain);
 +	
          CompositorChain(Viewport *vp);
          /** Another gcc warning here, which is no problem because RenderTargetListener is never used
              to delete an object.
-Index: OgreMain/include/OgreCompositorInstance.h
-===================================================================
---- OgreMain/include/OgreCompositorInstance.h
-+++ OgreMain/include/OgreCompositorInstance.h
-@@ -46,6 +46,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreCompositorInstance.h
+--- a/OgreMain/include/OgreCompositorInstance.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreCompositorInstance.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,9 +46,11 @@
      /** An instance of a Compositor object for one Viewport. It is part of the CompositorChain
  		for a Viewport.
       */
@@ -449,18 +792,14 @@ Index: OgreMain/include/OgreCompositorInstance.h
 +	class _OgreExport CompositorInstance : public CompositorInstAlloc, public CLRObject
      {
      public:
-@@ -50,5 +50,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(CompositorInstance);
 +	
          CompositorInstance(CompositionTechnique *technique, CompositorChain *chain);
          virtual ~CompositorInstance();
  		/** Provides an interface to "listen in" to to render system operations executed by this 
-Index: OgreMain/include/OgreConfig.h
-===================================================================
---- OgreMain/include/OgreConfig.h
-+++ OgreMain/include/OgreConfig.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreConfig.h
+--- a/OgreMain/include/OgreConfig.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreConfig.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -92,18 +92,6 @@
  #  define OGRE_MEMORY_ALLOCATOR OGRE_MEMORY_ALLOCATOR_NEDPOOLING
  #endif
@@ -480,10 +819,9 @@ Index: OgreMain/include/OgreConfig.h
  // enable or disable the memory tracker, recording the memory allocations & tracking leaks
  // default is to disable since it's expensive, but you can enable if needed per build target
  
-Index: OgreMain/include/OgreDefaultHardwareBufferManager.h
-===================================================================
---- OgreMain/include/OgreDefaultHardwareBufferManager.h
-+++ OgreMain/include/OgreDefaultHardwareBufferManager.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreDefaultHardwareBufferManager.h
+--- a/OgreMain/include/OgreDefaultHardwareBufferManager.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreDefaultHardwareBufferManager.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -102,6 +102,8 @@
  	class _OgreExport DefaultHardwareBufferManagerBase : public HardwareBufferManagerBase
  	{
@@ -493,10 +831,9 @@ Index: OgreMain/include/OgreDefaultHardwareBufferManager.h
          DefaultHardwareBufferManagerBase();
          ~DefaultHardwareBufferManagerBase();
          /// Creates a vertex buffer
-Index: OgreMain/include/OgreDistanceLodStrategy.h
-===================================================================
---- OgreMain/include/OgreDistanceLodStrategy.h
-+++ OgreMain/include/OgreDistanceLodStrategy.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreDistanceLodStrategy.h
+--- a/OgreMain/include/OgreDistanceLodStrategy.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreDistanceLodStrategy.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -45,6 +45,8 @@
      /** Level of detail strategy based on distance from camera. */
      class _OgreExport DistanceLodStrategy : public LodStrategy, public Singleton<DistanceLodStrategy>
@@ -506,10 +843,9 @@ Index: OgreMain/include/OgreDistanceLodStrategy.h
      protected:
          /// @copydoc LodStrategy::getValueImpl
          virtual Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
-Index: OgreMain/include/OgreEdgeListBuilder.h
-===================================================================
---- OgreMain/include/OgreEdgeListBuilder.h
-+++ OgreMain/include/OgreEdgeListBuilder.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreEdgeListBuilder.h
+--- a/OgreMain/include/OgreEdgeListBuilder.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreEdgeListBuilder.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -51,6 +51,8 @@
  	class _OgreExport EdgeData : public EdgeDataAlloc
      {
@@ -519,10 +855,9 @@ Index: OgreMain/include/OgreEdgeListBuilder.h
          /** Basic triangle structure. */
          struct Triangle {
              /** The set of indexes this triangle came from (NB it is possible that the triangles on 
-Index: OgreMain/include/OgreEntity.h
-===================================================================
---- OgreMain/include/OgreEntity.h
-+++ OgreMain/include/OgreEntity.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreEntity.h
+--- a/OgreMain/include/OgreEntity.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreEntity.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -80,6 +80,9 @@
  	*/
  	class _OgreExport Entity: public MovableObject, public Resource::Listener
@@ -543,10 +878,9 @@ Index: OgreMain/include/OgreEntity.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreException.h
-===================================================================
---- OgreMain/include/OgreException.h
-+++ OgreMain/include/OgreException.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreException.h
+--- a/OgreMain/include/OgreException.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreException.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -151,7 +151,7 @@
  
          /** Gets the error code.
@@ -569,11 +903,10 @@ Index: OgreMain/include/OgreException.h
          
      };
  
-Index: OgreMain/include/OgreExternalTextureSource.h
-===================================================================
---- OgreMain/include/OgreExternalTextureSource.h
-+++ OgreMain/include/OgreExternalTextureSource.h
-@@ -70,6 +70,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreExternalTextureSource.h
+--- a/OgreMain/include/OgreExternalTextureSource.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreExternalTextureSource.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -70,9 +70,11 @@
  	before calling create defined texture... or it will fail, though, it 
  	is up to the plugin to report errors to the log file, or raise an 
  	exception if need be. */
@@ -581,18 +914,14 @@ Index: OgreMain/include/OgreExternalTextureSource.h
 +	class _OgreExport ExternalTextureSource : public StringInterface, public CLRObject
  	{
  	public:
-@@ -74,5 +74,7 @@
- 	{
- 	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ExternalTextureSource);
 +	
  		/** Constructor */
  		ExternalTextureSource();
  		/** Virtual destructor */
-Index: OgreMain/include/OgreFileSystem.h
-===================================================================
---- OgreMain/include/OgreFileSystem.h
-+++ OgreMain/include/OgreFileSystem.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreFileSystem.h
+--- a/OgreMain/include/OgreFileSystem.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreFileSystem.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -46,6 +46,9 @@
      */
      class _OgreExport FileSystemArchive : public Archive 
@@ -603,10 +932,9 @@ Index: OgreMain/include/OgreFileSystem.h
      protected:
          /** Utility method to retrieve all files in a directory matching pattern.
          @param pattern File pattern
-Index: OgreMain/include/OgreFont.h
-===================================================================
---- OgreMain/include/OgreFont.h
-+++ OgreMain/include/OgreFont.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreFont.h
+--- a/OgreMain/include/OgreFont.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreFont.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -66,6 +66,9 @@
      */
  	class _OgreExport Font : public Resource, public ManualResourceLoader
@@ -617,10 +945,9 @@ Index: OgreMain/include/OgreFont.h
      protected:
  		/// Command object for Font - see ParamCommand 
  		class _OgreExport CmdType : public ParamCommand
-Index: OgreMain/include/OgreFrustum.h
-===================================================================
---- OgreMain/include/OgreFrustum.h
-+++ OgreMain/include/OgreFrustum.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreFrustum.h
+--- a/OgreMain/include/OgreFrustum.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreFrustum.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -83,6 +83,9 @@
      */
      class _OgreExport Frustum : public MovableObject, public Renderable
@@ -631,10 +958,9 @@ Index: OgreMain/include/OgreFrustum.h
      protected:
          /// Orthographic or perspective?
          ProjectionType mProjType;
-Index: OgreMain/include/OgreGpuProgram.h
-===================================================================
---- OgreMain/include/OgreGpuProgram.h
-+++ OgreMain/include/OgreGpuProgram.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreGpuProgram.h
+--- a/OgreMain/include/OgreGpuProgram.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreGpuProgram.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -68,6 +68,9 @@
  	*/
  	class _OgreExport GpuProgram : public Resource
@@ -645,10 +971,9 @@ Index: OgreMain/include/OgreGpuProgram.h
  	protected:
  		/// Command object - see ParamCommand 
  		class _OgreExport CmdType : public ParamCommand
-Index: OgreMain/include/OgreGpuProgramParams.h
-===================================================================
---- OgreMain/include/OgreGpuProgramParams.h
-+++ OgreMain/include/OgreGpuProgramParams.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreGpuProgramParams.h
+--- a/OgreMain/include/OgreGpuProgramParams.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreGpuProgramParams.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -386,6 +386,9 @@
  	*/
  	class _OgreExport GpuSharedParameters : public GpuParamsAlloc
@@ -678,11 +1003,10 @@ Index: OgreMain/include/OgreGpuProgramParams.h
  		/** Defines the types of automatically updated values that may be bound to GpuProgram
  		parameters, or used to modify parameters on a per-object basis.
  		*/
-Index: OgreMain/include/OgreHardwareBuffer.h
-===================================================================
---- OgreMain/include/OgreHardwareBuffer.h
-+++ OgreMain/include/OgreHardwareBuffer.h
-@@ -70,7 +70,7 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwareBuffer.h
+--- a/OgreMain/include/OgreHardwareBuffer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwareBuffer.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -70,10 +70,12 @@
  		You should look for the 'useShadowBuffer' parameter on the creation methods used to create
  		the buffer of the type you require (see HardwareBufferManager) to enable this feature.
      */
@@ -691,27 +1015,20 @@ Index: OgreMain/include/OgreHardwareBuffer.h
      {
  
  	    public:
-@@ -74,6 +74,8 @@
-     {
- 
- 	    public:
 +			 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(HardwareBuffer);
 +		
  		    /// Enums describing buffer usage; not mutually exclusive
  		    enum Usage 
  		    {
-Index: OgreMain/include/OgreHardwareBufferManager.h
-===================================================================
---- OgreMain/include/OgreHardwareBufferManager.h
-+++ OgreMain/include/OgreHardwareBufferManager.h
-@@ -106,5 +106,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwareBufferManager.h
+--- a/OgreMain/include/OgreHardwareBufferManager.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwareBufferManager.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -106,8 +106,11 @@
  		and passes it to the HardwareBufferManager superclass as a delegate. 
  		This subclass must also delete the implementation instance it creates.
  	*/
 -	class _OgreExport HardwareBufferManagerBase : public BufferAlloc
 +	class _OgreExport HardwareBufferManagerBase : public BufferAlloc, public CLRObject
- 	{
-@@ -110,4 +110,7 @@
  	{
 +    public:
 +        DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(HardwareBufferManagerBase);
@@ -729,10 +1046,9 @@ Index: OgreMain/include/OgreHardwareBufferManager.h
          friend class HardwareVertexBufferSharedPtr;
          friend class HardwareIndexBufferSharedPtr;
      protected:
-Index: OgreMain/include/OgreHardwareIndexBuffer.h
-===================================================================
---- OgreMain/include/OgreHardwareIndexBuffer.h
-+++ OgreMain/include/OgreHardwareIndexBuffer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwareIndexBuffer.h
+--- a/OgreMain/include/OgreHardwareIndexBuffer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwareIndexBuffer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -46,6 +46,8 @@
      class _OgreExport HardwareIndexBuffer : public HardwareBuffer
      {
@@ -742,11 +1058,10 @@ Index: OgreMain/include/OgreHardwareIndexBuffer.h
  		    enum IndexType {
  			    IT_16BIT,
  			    IT_32BIT
-Index: OgreMain/include/OgreHardwareOcclusionQuery.h
-===================================================================
---- OgreMain/include/OgreHardwareOcclusionQuery.h
-+++ OgreMain/include/OgreHardwareOcclusionQuery.h
-@@ -48,9 +48,9 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwareOcclusionQuery.h
+--- a/OgreMain/include/OgreHardwareOcclusionQuery.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwareOcclusionQuery.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -48,12 +48,13 @@
    * @author Lee Sandberg
    * Updated on 13/8/2005 by Tuan Kuranes email: tuan.kuranes@free.fr
    */
@@ -757,20 +1072,13 @@ Index: OgreMain/include/OgreHardwareOcclusionQuery.h
  // Public methods
  //--
  public:
-@@ -52,8 +52,9 @@
- {
- //----------------------------------------------------------------------
- // Public methods
- //--
- public:
 +	DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(HardwareOcclusionQuery);
  	/**
  	  * Object public member functions
  	  */
-Index: OgreMain/include/OgreHardwarePixelBuffer.h
-===================================================================
---- OgreMain/include/OgreHardwarePixelBuffer.h
-+++ OgreMain/include/OgreHardwarePixelBuffer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwarePixelBuffer.h
+--- a/OgreMain/include/OgreHardwarePixelBuffer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwarePixelBuffer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -51,6 +51,9 @@
      */
      class _OgreExport HardwarePixelBuffer : public HardwareBuffer
@@ -781,10 +1089,9 @@ Index: OgreMain/include/OgreHardwarePixelBuffer.h
      protected: 
          // Extents
          size_t mWidth, mHeight, mDepth;
-Index: OgreMain/include/OgreHardwareVertexBuffer.h
-===================================================================
---- OgreMain/include/OgreHardwareVertexBuffer.h
-+++ OgreMain/include/OgreHardwareVertexBuffer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHardwareVertexBuffer.h
+--- a/OgreMain/include/OgreHardwareVertexBuffer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHardwareVertexBuffer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -46,6 +46,9 @@
  	/** Specialisation of HardwareBuffer for a vertex buffer. */
      class _OgreExport HardwareVertexBuffer : public HardwareBuffer
@@ -795,7 +1102,7 @@ Index: OgreMain/include/OgreHardwareVertexBuffer.h
  	    protected:
  
  			HardwareBufferManagerBase* mMgr;
-@@ -302,6 +305,6 @@
+@@ -302,9 +305,11 @@
  	Like the other classes in this functional area, these declarations should be created and
  	destroyed using the HardwareBufferManager.
      */
@@ -803,15 +1110,12 @@ Index: OgreMain/include/OgreHardwareVertexBuffer.h
 +	class _OgreExport VertexDeclaration : public VertexDataAlloc, public CLRObject
      {
      public:
-@@ -306,5 +309,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(VertexDeclaration);
 +		
  		/// Defines the list of vertex elements that makes up this declaration
          typedef list<VertexElement>::type VertexElementList;
          /// Sort routine for vertex elements
-@@ -480,6 +485,6 @@
+@@ -480,9 +485,11 @@
  		Like the other classes in this functional area, these binding maps should be created and
  		destroyed using the HardwareBufferManager.
  	*/
@@ -819,18 +1123,14 @@ Index: OgreMain/include/OgreHardwareVertexBuffer.h
 +	class _OgreExport VertexBufferBinding : public VertexDataAlloc, public CLRObject
  	{
  	public:
-@@ -484,5 +489,7 @@
- 	{
- 	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(VertexBufferBinding);
 +		
  		/// Defines the vertex buffer bindings used as source for vertex declarations
  		typedef map<unsigned short, HardwareVertexBufferSharedPtr>::type VertexBufferBindingMap;
  	protected:
-Index: OgreMain/include/OgreHighLevelGpuProgram.h
-===================================================================
---- OgreMain/include/OgreHighLevelGpuProgram.h
-+++ OgreMain/include/OgreHighLevelGpuProgram.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreHighLevelGpuProgram.h
+--- a/OgreMain/include/OgreHighLevelGpuProgram.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreHighLevelGpuProgram.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -62,6 +62,9 @@
      */
      class _OgreExport HighLevelGpuProgram : public GpuProgram
@@ -841,10 +1141,9 @@ Index: OgreMain/include/OgreHighLevelGpuProgram.h
      protected:
          /// Whether the high-level program (and it's parameter defs) is loaded
          bool mHighLevelLoaded;
-Index: OgreMain/include/OgreImage.h
-===================================================================
---- OgreMain/include/OgreImage.h
-+++ OgreMain/include/OgreImage.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreImage.h
+--- a/OgreMain/include/OgreImage.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreImage.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -61,6 +61,8 @@
  	class _OgreExport Image : public ImageAlloc
      {
@@ -854,40 +1153,35 @@ Index: OgreMain/include/OgreImage.h
      	typedef Ogre::Box Box;
      	typedef Ogre::Rect Rect;
      public:
-Index: OgreMain/include/OgreImageCodec.h
-===================================================================
---- OgreMain/include/OgreImageCodec.h
-+++ OgreMain/include/OgreImageCodec.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreImageCodec.h
+--- a/OgreMain/include/OgreImageCodec.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreImageCodec.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -47,12 +47,16 @@
      class _OgreExport ImageCodec : public Codec
      {
      public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec);
-+
++		 
          virtual ~ImageCodec();
          /** Codec return class for images. Has information about the size and the
              pixel format of the image. */
          class _OgrePrivate ImageData : public Codec::CodecData
          {
          public:
-+			DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec_ImageData);
-+
++			 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ImageCodec_ImageData);
++		
  			ImageData():
  				height(0), width(0), depth(1), size(0),
  				num_mipmaps(0), flags(0), format(PF_UNKNOWN)
-Index: OgreMain/include/OgreInstancedGeometry.h
-===================================================================
---- OgreMain/include/OgreInstancedGeometry.h
-+++ OgreMain/include/OgreInstancedGeometry.h
-@@ -101,6 +101,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreInstancedGeometry.h
+--- a/OgreMain/include/OgreInstancedGeometry.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreInstancedGeometry.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -101,9 +101,11 @@
      @note
  		Warning: this class only works with indexed triangle lists at the moment,		do not pass it triangle strips, fans or lines / points, or unindexed geometry.
  	*/
 -	class _OgreExport  InstancedGeometry : public BatchedGeometryAlloc
 +	class _OgreExport  InstancedGeometry : public BatchedGeometryAlloc, public CLRObject
- 	{
- 	public:
-@@ -105,5 +105,7 @@
  	{
  	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(InstancedGeometry);
@@ -905,19 +1199,24 @@ Index: OgreMain/include/OgreInstancedGeometry.h
  			friend class GeometryBucket;
  		public:
  			 enum TransformSpace
-Index: OgreMain/include/OgreKeyFrame.h
-===================================================================
---- OgreMain/include/OgreKeyFrame.h
-+++ OgreMain/include/OgreKeyFrame.h
-@@ -52,6 +52,6 @@
+@@ -427,7 +432,7 @@
+ 		{
+             friend class MaterialBucket;
+ 			public:
+-		
++		    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(InstancedGeometry_BatchInstance);
+ 
+ 			/// list of LOD Buckets in this BatchInstance
+ 			typedef vector<LODBucket*>::type LODBucketList;
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreKeyFrame.h
+--- a/OgreMain/include/OgreKeyFrame.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreKeyFrame.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -52,9 +52,10 @@
          animation sequence, with the exact state of the animation being an 
          interpolation between these key frames. 
      */
 -	class _OgreExport KeyFrame : public AnimationAlloc
 +	class _OgreExport KeyFrame : public AnimationAlloc, public CLRObject
-     {
-     public:
-@@ -56,5 +56,6 @@
      {
      public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(KeyFrame);
@@ -960,10 +1259,9 @@ Index: OgreMain/include/OgreKeyFrame.h
  		/** Default constructor, you should not call this but use AnimationTrack::createKeyFrame instead. */
  		VertexPoseKeyFrame(const AnimationTrack* parent, Real time);
  		~VertexPoseKeyFrame() {}
-Index: OgreMain/include/OgreLight.h
-===================================================================
---- OgreMain/include/OgreLight.h
-+++ OgreMain/include/OgreLight.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreLight.h
+--- a/OgreMain/include/OgreLight.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreLight.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -72,6 +72,8 @@
      class _OgreExport Light : public MovableObject
      {
@@ -983,19 +1281,15 @@ Index: OgreMain/include/OgreLight.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreLodListener.h
-===================================================================
---- OgreMain/include/OgreLodListener.h
-+++ OgreMain/include/OgreLodListener.h
-@@ -114,6 +114,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreLodListener.h
+--- a/OgreMain/include/OgreLodListener.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreLodListener.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -114,10 +114,12 @@
              also be called.  The postqueue method is invoked at an appropriate
              time after rendering and scene changes may be safely made there.
      */
 -    class _OgreExport LodListener
 +    class _OgreExport LodListener : public CLRObject
-     {
-     public:
-@@ -118,6 +118,8 @@
      {
      public:
 -
@@ -1005,28 +1299,24 @@ Index: OgreMain/include/OgreLodListener.h
          virtual ~LodListener() {}
  
          /**
-Index: OgreMain/include/OgreLodStrategy.h
-===================================================================
---- OgreMain/include/OgreLodStrategy.h
-+++ OgreMain/include/OgreLodStrategy.h
-@@ -50,5 +50,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreLodStrategy.h
+--- a/OgreMain/include/OgreLodStrategy.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreLodStrategy.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -50,8 +50,10 @@
          getIndex, sort, and isSorted.
          In addition, transformUserValue may be overridden.
      */
 -	class _OgreExport LodStrategy : public LodAlloc
 +	class _OgreExport LodStrategy : public LodAlloc, public CLRObject
      {
-@@ -54,4 +54,6 @@
-     {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(LodStrategy);
      protected:
          /** Name of this strategy. */
          String mName;
-Index: OgreMain/include/OgreLog.h
-===================================================================
---- OgreMain/include/OgreLog.h
-+++ OgreMain/include/OgreLog.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreLog.h
+--- a/OgreMain/include/OgreLog.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreLog.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -91,6 +91,9 @@
      */
  	class _OgreExport Log : public LogAlloc
@@ -1047,10 +1337,9 @@ Index: OgreMain/include/OgreLog.h
  		protected:
  			Log* mTarget;
  			LogMessageLevel mLevel;
-Index: OgreMain/include/OgreManualObject.h
-===================================================================
---- OgreMain/include/OgreManualObject.h
-+++ OgreMain/include/OgreManualObject.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreManualObject.h
+--- a/OgreMain/include/OgreManualObject.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreManualObject.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -106,6 +106,8 @@
  	class _OgreExport ManualObject : public MovableObject
  	{
@@ -1060,14 +1349,12 @@ Index: OgreMain/include/OgreManualObject.h
  		ManualObject(const String& name);
  		virtual ~ManualObject();
  
-@@ -393,5 +395,5 @@
+@@ -393,8 +395,11 @@
  
  
  		/// Built, renderable section of geometry
 -		class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc
 +		class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc, public CLRObject
- 		{
-@@ -397,4 +399,7 @@
  		{
 +		public:
 +			DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ManualObject_ManualObjectSection);
@@ -1095,10 +1382,9 @@ Index: OgreMain/include/OgreManualObject.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreMaterial.h
-===================================================================
---- OgreMain/include/OgreMaterial.h
-+++ OgreMain/include/OgreMaterial.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreMaterial.h
+--- a/OgreMain/include/OgreMaterial.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreMaterial.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -87,6 +87,9 @@
      */
      class _OgreExport Material : public Resource
@@ -1109,10 +1395,9 @@ Index: OgreMain/include/OgreMaterial.h
          friend class SceneManager;
          friend class MaterialManager;
  
-Index: OgreMain/include/OgreMesh.h
-===================================================================
---- OgreMain/include/OgreMesh.h
-+++ OgreMain/include/OgreMesh.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreMesh.h
+--- a/OgreMain/include/OgreMesh.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreMesh.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -90,6 +90,9 @@
  
      class _OgreExport Mesh: public Resource
@@ -1123,10 +1408,9 @@ Index: OgreMain/include/OgreMesh.h
          friend class SubMesh;
          friend class MeshSerializerImpl;
          friend class MeshSerializerImpl_v1_4;
-Index: OgreMain/include/OgreMeshSerializer.h
-===================================================================
---- OgreMain/include/OgreMeshSerializer.h
-+++ OgreMain/include/OgreMeshSerializer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreMeshSerializer.h
+--- a/OgreMain/include/OgreMeshSerializer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreMeshSerializer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -69,6 +69,8 @@
      class _OgreExport MeshSerializer : public Serializer
      {
@@ -1136,10 +1420,9 @@ Index: OgreMain/include/OgreMeshSerializer.h
          MeshSerializer();
          virtual ~MeshSerializer();
  
-Index: OgreMain/include/OgreMovableObject.h
-===================================================================
---- OgreMain/include/OgreMovableObject.h
-+++ OgreMain/include/OgreMovableObject.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreMovableObject.h
+--- a/OgreMain/include/OgreMovableObject.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreMovableObject.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -59,6 +59,8 @@
      class _OgreExport MovableObject : public ShadowCaster, public AnimableObject, public MovableAlloc
      {
@@ -1149,14 +1432,12 @@ Index: OgreMain/include/OgreMovableObject.h
          /** Listener which gets called back on MovableObject events.
          */
          class _OgreExport Listener
-@@ -556,5 +558,5 @@
+@@ -556,8 +558,11 @@
  		to allow all clients to produce new instances of this object, integrated
  		with the standard Ogre processing.
  	*/
 -	class _OgreExport MovableObjectFactory : public MovableAlloc
 +	class _OgreExport MovableObjectFactory : public MovableAlloc, public CLRObject
- 	{
-@@ -560,4 +562,7 @@
  	{
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(MovableObjectFactory);
@@ -1164,10 +1445,9 @@ Index: OgreMain/include/OgreMovableObject.h
  	protected:
  		/// Type flag, allocated if requested
  		unsigned long mTypeFlag;
-Index: OgreMain/include/OgreMovablePlane.h
-===================================================================
---- OgreMain/include/OgreMovablePlane.h
-+++ OgreMain/include/OgreMovablePlane.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreMovablePlane.h
+--- a/OgreMain/include/OgreMovablePlane.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreMovablePlane.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -52,6 +52,9 @@
      */
      class _OgreExport MovablePlane : public Plane, public MovableObject
@@ -1178,11 +1458,10 @@ Index: OgreMain/include/OgreMovablePlane.h
      protected:
          mutable Plane mDerivedPlane;
          mutable Vector3 mLastTranslate;
-Index: OgreMain/include/OgreNode.h
-===================================================================
---- OgreMain/include/OgreNode.h
-+++ OgreMain/include/OgreNode.h
-@@ -59,6 +59,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreNode.h
+--- a/OgreMain/include/OgreNode.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreNode.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -59,9 +59,11 @@
              This is an abstract class - concrete classes are based on this for specific purposes,
              e.g. SceneNode, Bone
      */
@@ -1190,19 +1469,15 @@ Index: OgreMain/include/OgreNode.h
 +    class _OgreExport Node : public NodeAlloc, public CLRObject
      {
      public:
-@@ -63,5 +63,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Node);
 +		
          /** Enumeration denoting the spaces which a transform can be relative to.
          */
          enum TransformSpace
-Index: OgreMain/include/OgreOverlay.h
-===================================================================
---- OgreMain/include/OgreOverlay.h
-+++ OgreMain/include/OgreOverlay.h
-@@ -67,7 +67,7 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreOverlay.h
+--- a/OgreMain/include/OgreOverlay.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreOverlay.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -67,10 +67,12 @@
          don't want the overlay displayed in the smaller viewports. You turn this off for 
          a specific viewport by calling the Viewport::setDisplayOverlays method.
      */
@@ -1211,19 +1486,14 @@ Index: OgreMain/include/OgreOverlay.h
      {
  
      public:
-@@ -71,6 +71,8 @@
-     {
- 
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Overlay);
 +		
                typedef list<OverlayContainer*>::type OverlayContainerList;
      protected:
          String mName;
-Index: OgreMain/include/OgreOverlayContainer.h
-===================================================================
---- OgreMain/include/OgreOverlayContainer.h
-+++ OgreMain/include/OgreOverlayContainer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreOverlayContainer.h
+--- a/OgreMain/include/OgreOverlayContainer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreOverlayContainer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -56,6 +56,8 @@
      class _OgreExport OverlayContainer : public OverlayElement
      {
@@ -1233,11 +1503,10 @@ Index: OgreMain/include/OgreOverlayContainer.h
          typedef map<String, OverlayElement*>::type ChildMap;
          typedef MapIterator<ChildMap> ChildIterator;
          typedef map<String, OverlayContainer*>::type ChildContainerMap;
-Index: OgreMain/include/OgreOverlayElement.h
-===================================================================
---- OgreMain/include/OgreOverlayElement.h
-+++ OgreMain/include/OgreOverlayElement.h
-@@ -106,6 +106,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreOverlayElement.h
+--- a/OgreMain/include/OgreOverlayElement.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreOverlayElement.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -106,9 +106,10 @@
      Because this class is designed to be extensible, it subclasses from StringInterface
      so its parameters can be set in a generic way.
      */
@@ -1245,26 +1514,19 @@ Index: OgreMain/include/OgreOverlayElement.h
 +    class _OgreExport OverlayElement : public StringInterface, public Renderable, public OverlayAlloc, public CLRObject
      {
      public:
-@@ -110,5 +110,6 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(OverlayElement);
  
      protected:
          // Command object for setting / getting parameters
-Index: OgreMain/include/OgreOverlayElementFactory.h
-===================================================================
---- OgreMain/include/OgreOverlayElementFactory.h
-+++ OgreMain/include/OgreOverlayElementFactory.h
-@@ -54,6 +54,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreOverlayElementFactory.h
+--- a/OgreMain/include/OgreOverlayElementFactory.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreOverlayElementFactory.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -54,9 +54,11 @@
          Each OverlayElementFactory creates a single type of OverlayElement, 
          identified by a 'type name' which must be unique.
      */
 -	class _OgreExport OverlayElementFactory : public OverlayAlloc
 +	class _OgreExport OverlayElementFactory : public OverlayAlloc, public CLRObject
-     {
-     public:
-@@ -58,5 +58,7 @@
      {
      public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(OverlayElementFactory);
@@ -1299,10 +1561,9 @@ Index: OgreMain/include/OgreOverlayElementFactory.h
          /** See OverlayElementFactory */
          OverlayElement* createOverlayElement(const String& instanceName)
          {
-Index: OgreMain/include/OgrePanelOverlayElement.h
-===================================================================
---- OgreMain/include/OgrePanelOverlayElement.h
-+++ OgreMain/include/OgrePanelOverlayElement.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePanelOverlayElement.h
+--- a/OgreMain/include/OgrePanelOverlayElement.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePanelOverlayElement.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -58,6 +58,8 @@
      class _OgreExport PanelOverlayElement : public OverlayContainer
      {
@@ -1312,10 +1573,9 @@ Index: OgreMain/include/OgrePanelOverlayElement.h
          /** Constructor. */
          PanelOverlayElement(const String& name);
          virtual ~PanelOverlayElement();
-Index: OgreMain/include/OgreParticle.h
-===================================================================
---- OgreMain/include/OgreParticle.h
-+++ OgreMain/include/OgreParticle.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticle.h
+--- a/OgreMain/include/OgreParticle.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticle.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -59,6 +59,9 @@
  	/** Class representing a single particle instance. */
  	class _OgreExport Particle : public FXAlloc
@@ -1326,18 +1586,15 @@ Index: OgreMain/include/OgreParticle.h
      protected:
          /// Parent ParticleSystem
          ParticleSystem* mParentSystem;
-Index: OgreMain/include/OgreParticleAffector.h
-===================================================================
---- OgreMain/include/OgreParticleAffector.h
-+++ OgreMain/include/OgreParticleAffector.h
-@@ -60,5 +60,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleAffector.h
+--- a/OgreMain/include/OgreParticleAffector.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleAffector.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -60,8 +60,11 @@
          with literally infinite combinations of affector and affector types, and parameters within those
          types.
      */
 -    class _OgreExport ParticleAffector : public StringInterface, public FXAlloc
 +    class _OgreExport ParticleAffector : public StringInterface, public FXAlloc, public CLRObject
-     {
-@@ -64,4 +64,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ParticleAffector);
@@ -1345,18 +1602,15 @@ Index: OgreMain/include/OgreParticleAffector.h
      protected:
          /// Name of the type of affector, MUST be initialised by subclasses
          String mType;
-Index: OgreMain/include/OgreParticleAffectorFactory.h
-===================================================================
---- OgreMain/include/OgreParticleAffectorFactory.h
-+++ OgreMain/include/OgreParticleAffectorFactory.h
-@@ -51,5 +51,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleAffectorFactory.h
+--- a/OgreMain/include/OgreParticleAffectorFactory.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleAffectorFactory.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -51,8 +51,11 @@
          a name which identifies them, examples might be 'force_vector', 'attractor', or 'fader', and these can be 
          also be used from particle system scripts.
      */
 -	class _OgreExport ParticleAffectorFactory : public FXAlloc
 +	class _OgreExport ParticleAffectorFactory : public FXAlloc, public CLRObject
-     {
-@@ -55,4 +55,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ParticleAffectorFactory);
@@ -1364,18 +1618,15 @@ Index: OgreMain/include/OgreParticleAffectorFactory.h
      protected:
          vector<ParticleAffector*>::type mAffectors;
      public:
-Index: OgreMain/include/OgreParticleEmitter.h
-===================================================================
---- OgreMain/include/OgreParticleEmitter.h
-+++ OgreMain/include/OgreParticleEmitter.h
-@@ -68,5 +68,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleEmitter.h
+--- a/OgreMain/include/OgreParticleEmitter.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleEmitter.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -68,8 +68,11 @@
          with literally infinite combinations of emitter and affector types, and paramters within those
          types.
      */
 -    class _OgreExport ParticleEmitter : public StringInterface, public Particle
 +    class _OgreExport ParticleEmitter : public StringInterface, public Particle, public CLRObject
-     {
-@@ -72,4 +72,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ParticleEmitter);
@@ -1383,18 +1634,15 @@ Index: OgreMain/include/OgreParticleEmitter.h
      protected:
  
          // Command object for setting / getting parameters
-Index: OgreMain/include/OgreParticleEmitterFactory.h
-===================================================================
---- OgreMain/include/OgreParticleEmitterFactory.h
-+++ OgreMain/include/OgreParticleEmitterFactory.h
-@@ -52,5 +52,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleEmitterFactory.h
+--- a/OgreMain/include/OgreParticleEmitterFactory.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleEmitterFactory.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -52,8 +52,11 @@
          a name which identifies them, examples might be 'point', 'cone', or 'box', and these can be 
          also be used from particle system scripts.
      */
 -	class _OgreExport ParticleEmitterFactory : public FXAlloc
 +	class _OgreExport ParticleEmitterFactory : public FXAlloc, public CLRObject
-     {
-@@ -56,4 +56,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ParticleEmitterFactory);
@@ -1402,10 +1650,9 @@ Index: OgreMain/include/OgreParticleEmitterFactory.h
      protected:
          vector<ParticleEmitter*>::type mEmitters;
      public:
-Index: OgreMain/include/OgreParticleSystem.h
-===================================================================
---- OgreMain/include/OgreParticleSystem.h
-+++ OgreMain/include/OgreParticleSystem.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleSystem.h
+--- a/OgreMain/include/OgreParticleSystem.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleSystem.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -66,7 +66,8 @@
      class _OgreExport ParticleSystem : public StringInterface, public MovableObject
      {
@@ -1416,10 +1663,9 @@ Index: OgreMain/include/OgreParticleSystem.h
          /** Command object for quota (see ParamCommand).*/
          class _OgrePrivate CmdQuota : public ParamCommand
          {
-Index: OgreMain/include/OgreParticleSystemManager.h
-===================================================================
---- OgreMain/include/OgreParticleSystemManager.h
-+++ OgreMain/include/OgreParticleSystemManager.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleSystemManager.h
+--- a/OgreMain/include/OgreParticleSystemManager.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleSystemManager.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -385,6 +385,9 @@
  	/** Factory object for creating ParticleSystem instances */
  	class _OgreExport ParticleSystemFactory : public MovableObjectFactory
@@ -1430,11 +1676,10 @@ Index: OgreMain/include/OgreParticleSystemManager.h
  	protected:
  		MovableObject* createInstanceImpl(const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreParticleSystemRenderer.h
-===================================================================
---- OgreMain/include/OgreParticleSystemRenderer.h
-+++ OgreMain/include/OgreParticleSystemRenderer.h
-@@ -46,6 +46,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreParticleSystemRenderer.h
+--- a/OgreMain/include/OgreParticleSystemRenderer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreParticleSystemRenderer.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,9 +46,11 @@
  	/** Abstract class defining the interface required to be implemented
          by classes which provide rendering capability to ParticleSystem instances.
      */
@@ -1442,18 +1687,14 @@ Index: OgreMain/include/OgreParticleSystemRenderer.h
 +    class _OgreExport ParticleSystemRenderer : public StringInterface, public FXAlloc, public CLRObject
      {
      public:
-@@ -50,5 +50,7 @@
-     {
-     public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ParticleSystemRenderer);
 +		 
          /// Constructor
          ParticleSystemRenderer() {}
          /// Destructor
-Index: OgreMain/include/OgrePass.h
-===================================================================
---- OgreMain/include/OgrePass.h
-+++ OgreMain/include/OgrePass.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePass.h
+--- a/OgreMain/include/OgrePass.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePass.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -80,6 +80,8 @@
  	class _OgreExport Pass : public PassAlloc
      {
@@ -1463,10 +1704,9 @@ Index: OgreMain/include/OgrePass.h
  		/** Definition of a functor for calculating the hashcode of a Pass.
  		@remarks
  			The hashcode of a Pass is used to sort Passes for rendering, in order
-Index: OgreMain/include/OgrePatchMesh.h
-===================================================================
---- OgreMain/include/OgrePatchMesh.h
-+++ OgreMain/include/OgrePatchMesh.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePatchMesh.h
+--- a/OgreMain/include/OgrePatchMesh.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePatchMesh.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -46,6 +46,9 @@
      */
      class _OgreExport PatchMesh : public Mesh
@@ -1477,10 +1717,9 @@ Index: OgreMain/include/OgrePatchMesh.h
      protected:
          /// Internal surface definition
          PatchSurface mSurface;
-Index: OgreMain/include/OgrePatchSurface.h
-===================================================================
---- OgreMain/include/OgrePatchSurface.h
-+++ OgreMain/include/OgrePatchSurface.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePatchSurface.h
+--- a/OgreMain/include/OgrePatchSurface.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePatchSurface.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -52,6 +52,8 @@
  	class _OgreExport PatchSurface : public PatchAlloc
      {
@@ -1490,10 +1729,9 @@ Index: OgreMain/include/OgrePatchSurface.h
          PatchSurface();
          ~PatchSurface();
  
-Index: OgreMain/include/OgrePixelCountLodStrategy.h
-===================================================================
---- OgreMain/include/OgrePixelCountLodStrategy.h
-+++ OgreMain/include/OgrePixelCountLodStrategy.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePixelCountLodStrategy.h
+--- a/OgreMain/include/OgrePixelCountLodStrategy.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePixelCountLodStrategy.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -45,6 +45,8 @@
  	/** Level of detail strategy based on pixel count approximation from bounding sphere projection. */
      class _OgreExport PixelCountLodStrategy : public LodStrategy, public Singleton<PixelCountLodStrategy>
@@ -1503,10 +1741,9 @@ Index: OgreMain/include/OgrePixelCountLodStrategy.h
      protected:
          /// @copydoc LodStrategy::getValueImpl
          virtual Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
-Index: OgreMain/include/OgrePlaneBoundedVolume.h
-===================================================================
---- OgreMain/include/OgrePlaneBoundedVolume.h
-+++ OgreMain/include/OgrePlaneBoundedVolume.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePlaneBoundedVolume.h
+--- a/OgreMain/include/OgrePlaneBoundedVolume.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePlaneBoundedVolume.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -48,6 +48,8 @@
      class _OgreExport PlaneBoundedVolume
      {
@@ -1516,11 +1753,10 @@ Index: OgreMain/include/OgrePlaneBoundedVolume.h
          typedef vector<Plane>::type PlaneList;
          /// Publicly accessible plane list, you can modify this direct
          PlaneList planes;
-Index: OgreMain/include/OgrePose.h
-===================================================================
---- OgreMain/include/OgrePose.h
-+++ OgreMain/include/OgrePose.h
-@@ -51,6 +51,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePose.h
+--- a/OgreMain/include/OgrePose.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePose.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -51,9 +51,11 @@
  		Pose instances can be referred to by keyframes in VertexAnimationTrack in
  		order to animate based on blending poses together.
  	*/
@@ -1528,18 +1764,14 @@ Index: OgreMain/include/OgrePose.h
 +	class _OgreExport Pose : public AnimationAlloc, public CLRObject
  	{
  	public:
-@@ -55,5 +55,7 @@
- 	{
- 	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Pose);
 +		
  		/** Constructor
  			@param target The target vertexdata index (0 for shared, 1+ for 
  				dedicated at the submesh index + 1)
-Index: OgreMain/include/OgrePrerequisites.h
-===================================================================
---- OgreMain/include/OgrePrerequisites.h
-+++ OgreMain/include/OgrePrerequisites.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgrePrerequisites.h
+--- a/OgreMain/include/OgrePrerequisites.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgrePrerequisites.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -315,6 +315,9 @@
  #include "OgreStdHeaders.h"
  #include "OgreMemoryAllocatorConfig.h"
@@ -1550,33 +1782,27 @@ Index: OgreMain/include/OgrePrerequisites.h
  
  namespace Ogre
  {
-@@ -437,5 +440,5 @@
+@@ -437,9 +440,9 @@
  	#endif
  
  	#if OGRE_WCHAR_T_STRINGS
 -		typedef std::basic_stringstream<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > _StringStreamBase;
 +		typedef std::wstringstream _StringStreamBase;
  	#else
-@@ -441,5 +444,5 @@
- 	#else
 -		typedef std::basic_stringstream<char,std::char_traits<char>,std::allocator<char> > _StringStreamBase;
 +		typedef std::stringstream _StringStreamBase;
  	#endif
  
  #endif
-Index: OgreMain/include/OgreProgressiveMesh.h
-===================================================================
---- OgreMain/include/OgreProgressiveMesh.h
-+++ OgreMain/include/OgreProgressiveMesh.h
-@@ -61,6 +61,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreProgressiveMesh.h
+--- a/OgreMain/include/OgreProgressiveMesh.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreProgressiveMesh.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -61,10 +61,11 @@
          NB the interface of this class will certainly change when compiled vertex buffers are
          supported.
      */
 -	class _OgreExport ProgressiveMesh : public ProgMeshAlloc
 +	class _OgreExport ProgressiveMesh : public ProgMeshAlloc, public CLRObject
-     {
-     public:
-@@ -65,6 +65,7 @@
      {
      public:
 -
@@ -1585,10 +1811,9 @@ Index: OgreMain/include/OgreProgressiveMesh.h
  		/** The way to derive the quota of vertices which are reduced at each LOD. */
          enum VertexReductionQuota
  		{
-Index: OgreMain/include/OgreRectangle2D.h
-===================================================================
---- OgreMain/include/OgreRectangle2D.h
-+++ OgreMain/include/OgreRectangle2D.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRectangle2D.h
+--- a/OgreMain/include/OgreRectangle2D.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRectangle2D.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -48,6 +48,9 @@
      */
      class _OgreExport Rectangle2D : public SimpleRenderable
@@ -1599,11 +1824,10 @@ Index: OgreMain/include/OgreRectangle2D.h
      protected:
          /** Override this method to prevent parent transforms (rotation,translation,scale)
          */
-Index: OgreMain/include/OgreRenderObjectListener.h
-===================================================================
---- OgreMain/include/OgreRenderObjectListener.h
-+++ OgreMain/include/OgreRenderObjectListener.h
-@@ -40,6 +40,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderObjectListener.h
+--- a/OgreMain/include/OgreRenderObjectListener.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderObjectListener.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -40,9 +40,11 @@
      /** Abstract interface which classes must implement if they wish to receive
          events from the scene manager when single object is about to be rendered. 
      */
@@ -1611,18 +1835,14 @@ Index: OgreMain/include/OgreRenderObjectListener.h
 +	class _OgreExport RenderObjectListener : public CLRObject
  	{
  	public:
-@@ -44,5 +44,7 @@
- 	{
- 	public:
 +       DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderObjectListener);
 +	public:
  		virtual ~RenderObjectListener() {}
  		/** Event raised when render single object started.
  		@remarks
-Index: OgreMain/include/OgreRenderOperation.h
-===================================================================
---- OgreMain/include/OgreRenderOperation.h
-+++ OgreMain/include/OgreRenderOperation.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderOperation.h
+--- a/OgreMain/include/OgreRenderOperation.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderOperation.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -43,6 +43,8 @@
  	/** 'New' rendering operation using vertex buffers. */
  	class _OgrePrivate RenderOperation {
@@ -1632,11 +1852,10 @@ Index: OgreMain/include/OgreRenderOperation.h
  		/// The rendering operation type to perform
  		enum OperationType {
  			/// A list of points, 1 vertex per point
-Index: OgreMain/include/OgreRenderQueue.h
-===================================================================
---- OgreMain/include/OgreRenderQueue.h
-+++ OgreMain/include/OgreRenderQueue.h
-@@ -89,6 +89,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderQueue.h
+--- a/OgreMain/include/OgreRenderQueue.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderQueue.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -89,9 +89,11 @@
              backgrounds and overlays, and also could be used in the future for more
              complex multipass routines like stenciling.
      */
@@ -1644,26 +1863,20 @@ Index: OgreMain/include/OgreRenderQueue.h
 +    class _OgreExport RenderQueue : public RenderQueueAlloc, public CLRObject
      {
      public:
-@@ -93,5 +93,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderQueue);
 +		
          typedef map< uint8, RenderQueueGroup* >::type RenderQueueGroupMap;
          /// Iterator over queue groups
          typedef MapIterator<RenderQueueGroupMap> QueueGroupIterator;
-Index: OgreMain/include/OgreRenderQueueInvocation.h
-===================================================================
---- OgreMain/include/OgreRenderQueueInvocation.h
-+++ OgreMain/include/OgreRenderQueueInvocation.h
-@@ -63,5 +63,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderQueueInvocation.h
+--- a/OgreMain/include/OgreRenderQueueInvocation.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderQueueInvocation.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -63,8 +63,11 @@
  		them being rendered - for example special-case render queues and
  		render queue listeners that dictate this.
  	*/
 -	class _OgreExport RenderQueueInvocation : public RenderQueueAlloc
 +	class _OgreExport RenderQueueInvocation : public RenderQueueAlloc, public CLRObject
- 	{
-@@ -67,4 +67,7 @@
  	{
 +	public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderQueueInvocation);
@@ -1671,14 +1884,12 @@ Index: OgreMain/include/OgreRenderQueueInvocation.h
  	protected:
  		/// Target queue group
  		uint8 mRenderQueueGroupID;
-@@ -170,5 +173,5 @@
+@@ -170,8 +173,11 @@
  		that any invocation instances you give to this class will be deleted
  		by it when it is cleared / destroyed.
  	*/
 -	class _OgreExport RenderQueueInvocationSequence : public RenderQueueAlloc
 +	class _OgreExport RenderQueueInvocationSequence : public RenderQueueAlloc, public CLRObject
- 	{
-@@ -174,4 +177,7 @@
  	{
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderQueueInvocationSequence);
@@ -1686,10 +1897,9 @@ Index: OgreMain/include/OgreRenderQueueInvocation.h
  	protected:
  		String mName;
  		RenderQueueInvocationList mInvocations;
-Index: OgreMain/include/OgreRenderQueueSortingGrouping.h
-===================================================================
---- OgreMain/include/OgreRenderQueueSortingGrouping.h
-+++ OgreMain/include/OgreRenderQueueSortingGrouping.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderQueueSortingGrouping.h
+--- a/OgreMain/include/OgreRenderQueueSortingGrouping.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderQueueSortingGrouping.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -322,6 +322,9 @@
      */
      class _OgreExport RenderPriorityGroup : public RenderQueueAlloc
@@ -1709,11 +1919,10 @@ Index: OgreMain/include/OgreRenderQueueSortingGrouping.h
          typedef map<ushort, RenderPriorityGroup*, std::less<ushort> >::type PriorityMap;
          typedef MapIterator<PriorityMap> PriorityMapIterator;
          typedef ConstMapIterator<PriorityMap> ConstPriorityMapIterator;
-Index: OgreMain/include/OgreRenderSystem.h
-===================================================================
---- OgreMain/include/OgreRenderSystem.h
-+++ OgreMain/include/OgreRenderSystem.h
-@@ -118,6 +118,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderSystem.h
+--- a/OgreMain/include/OgreRenderSystem.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderSystem.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -118,9 +118,11 @@
  	@version
  	1.0
  	*/
@@ -1721,18 +1930,14 @@ Index: OgreMain/include/OgreRenderSystem.h
 +	class _OgreExport RenderSystem : public RenderSysAlloc, public CLRObject
  	{
  	public:
-@@ -122,5 +122,7 @@
- 	{
- 	public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderSystem);
 +		 
  		/** Default Constructor.
  		*/
  		RenderSystem();
-Index: OgreMain/include/OgreRenderSystemCapabilities.h
-===================================================================
---- OgreMain/include/OgreRenderSystemCapabilities.h
-+++ OgreMain/include/OgreRenderSystemCapabilities.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderSystemCapabilities.h
+--- a/OgreMain/include/OgreRenderSystemCapabilities.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderSystemCapabilities.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -235,7 +235,8 @@
  	{
  
@@ -1743,11 +1948,10 @@ Index: OgreMain/include/OgreRenderSystemCapabilities.h
  		typedef set<String>::type ShaderProfiles;
  	private:
  		/// This is used to build a database of RSC's
-Index: OgreMain/include/OgreRenderTarget.h
-===================================================================
---- OgreMain/include/OgreRenderTarget.h
-+++ OgreMain/include/OgreRenderTarget.h
-@@ -61,6 +61,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderTarget.h
+--- a/OgreMain/include/OgreRenderTarget.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderTarget.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -61,9 +61,11 @@
          @version
              1.0
       */
@@ -1755,18 +1959,14 @@ Index: OgreMain/include/OgreRenderTarget.h
 +    class _OgreExport RenderTarget : public RenderSysAlloc, public CLRObject
      {
      public:
-@@ -65,5 +65,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderTarget);
 +		
          enum StatFlags
          {
              SF_NONE           = 0,
-Index: OgreMain/include/OgreRenderTexture.h
-===================================================================
---- OgreMain/include/OgreRenderTexture.h
-+++ OgreMain/include/OgreRenderTexture.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderTexture.h
+--- a/OgreMain/include/OgreRenderTexture.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderTexture.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -48,6 +48,8 @@
      class _OgreExport RenderTexture: public RenderTarget
      {
@@ -1785,11 +1985,10 @@ Index: OgreMain/include/OgreRenderTexture.h
  		MultiRenderTarget(const String &name);
  
  		/** Bind a surface to a certain attachment point.
-Index: OgreMain/include/OgreRenderToVertexBuffer.h
-===================================================================
---- OgreMain/include/OgreRenderToVertexBuffer.h
-+++ OgreMain/include/OgreRenderToVertexBuffer.h
-@@ -48,6 +48,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderToVertexBuffer.h
+--- a/OgreMain/include/OgreRenderToVertexBuffer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderToVertexBuffer.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -48,9 +48,11 @@
          that run on previous results of those shaders, creating stateful 
          shaders.
      */
@@ -1797,18 +1996,14 @@ Index: OgreMain/include/OgreRenderToVertexBuffer.h
 +    class _OgreExport RenderToVertexBuffer : public CLRObject
      {    
      public:
-@@ -52,5 +52,7 @@
-     {    
-     public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(RenderToVertexBuffer);
 +		 
  		/** C'tor */
  		RenderToVertexBuffer();
  		/** D'tor */
-Index: OgreMain/include/OgreRenderWindow.h
-===================================================================
---- OgreMain/include/OgreRenderWindow.h
-+++ OgreMain/include/OgreRenderWindow.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRenderWindow.h
+--- a/OgreMain/include/OgreRenderWindow.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRenderWindow.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -63,6 +63,8 @@
      {
  
@@ -1818,11 +2013,10 @@ Index: OgreMain/include/OgreRenderWindow.h
          /** Default constructor.
          */
          RenderWindow();
-Index: OgreMain/include/OgreResource.h
-===================================================================
---- OgreMain/include/OgreResource.h
-+++ OgreMain/include/OgreResource.h
-@@ -74,6 +74,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreResource.h
+--- a/OgreMain/include/OgreResource.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreResource.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -74,9 +74,11 @@
  				through a generic interface.</li>
  			</ol>
      */
@@ -1830,18 +2024,14 @@ Index: OgreMain/include/OgreResource.h
 +	class _OgreExport Resource : public StringInterface, public ResourceAlloc, public CLRObject
      {
  	public:
-@@ -78,5 +78,7 @@
-     {
- 	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Resource);
 +		 
  		OGRE_AUTO_MUTEX // public to allow external locking
  		class Listener
  		{
-Index: OgreMain/include/OgreResourceBackgroundQueue.h
-===================================================================
---- OgreMain/include/OgreResourceBackgroundQueue.h
-+++ OgreMain/include/OgreResourceBackgroundQueue.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreResourceBackgroundQueue.h
+--- a/OgreMain/include/OgreResourceBackgroundQueue.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreResourceBackgroundQueue.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -49,6 +49,8 @@
  	/** Encapsulates the result of a background queue request */
  	struct BackgroundProcessResult
@@ -1851,10 +2041,9 @@ Index: OgreMain/include/OgreResourceBackgroundQueue.h
  		/// Whether an error occurred
  		bool error;
  		/// Any messages from the process
-Index: OgreMain/include/OgreRibbonTrail.h
-===================================================================
---- OgreMain/include/OgreRibbonTrail.h
-+++ OgreMain/include/OgreRibbonTrail.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRibbonTrail.h
+--- a/OgreMain/include/OgreRibbonTrail.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRibbonTrail.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -70,6 +70,8 @@
  	class _OgreExport RibbonTrail : public BillboardChain, public Node::Listener
  	{
@@ -1874,10 +2063,9 @@ Index: OgreMain/include/OgreRibbonTrail.h
  	protected:
  		MovableObject* createInstanceImpl( const String& name, const NameValuePairList* params);
  	public:
-Index: OgreMain/include/OgreRotationalSpline.h
-===================================================================
---- OgreMain/include/OgreRotationalSpline.h
-+++ OgreMain/include/OgreRotationalSpline.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreRotationalSpline.h
+--- a/OgreMain/include/OgreRotationalSpline.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreRotationalSpline.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -57,6 +57,8 @@
  	class _OgreExport RotationalSpline
      {
@@ -1887,11 +2075,10 @@ Index: OgreMain/include/OgreRotationalSpline.h
          RotationalSpline();
          ~RotationalSpline();
  
-Index: OgreMain/include/OgreSceneManager.h
-===================================================================
---- OgreMain/include/OgreSceneManager.h
-+++ OgreMain/include/OgreSceneManager.h
-@@ -136,6 +136,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSceneManager.h
+--- a/OgreMain/include/OgreSceneManager.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSceneManager.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -136,9 +136,11 @@
  		dependent on the Camera, which will always call back the SceneManager
  		which created it to render the scene. 
       */
@@ -1899,22 +2086,17 @@ Index: OgreMain/include/OgreSceneManager.h
 +	class _OgreExport SceneManager : public SceneMgtAlloc, public CLRObject
      {
      public:
-@@ -140,5 +140,7 @@
-     {
-     public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SceneManager);
 +		 
          /// Query type mask which will be used for world geometry @see SceneQuery
          static uint32 WORLD_GEOMETRY_TYPE_MASK;
  		/// Query type mask which will be used for entities @see SceneQuery
-@@ -3465,5 +3467,5 @@
+@@ -3465,8 +3467,11 @@
  
  
  	/** Class which will create instances of a given SceneManager. */
 -	class _OgreExport SceneManagerFactory : public SceneMgtAlloc
 +	class _OgreExport SceneManagerFactory : public SceneMgtAlloc, public CLRObject
- 	{
-@@ -3469,4 +3471,7 @@
  	{
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SceneManagerFactory);
@@ -1922,10 +2104,9 @@ Index: OgreMain/include/OgreSceneManager.h
  	protected:
  		mutable SceneManagerMetaData mMetaData;
  		mutable bool mMetaDataInit;
-Index: OgreMain/include/OgreSceneManagerEnumerator.h
-===================================================================
---- OgreMain/include/OgreSceneManagerEnumerator.h
-+++ OgreMain/include/OgreSceneManagerEnumerator.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSceneManagerEnumerator.h
+--- a/OgreMain/include/OgreSceneManagerEnumerator.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSceneManagerEnumerator.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -45,6 +45,9 @@
  	/// Factory for default scene manager
  	class _OgreExport DefaultSceneManagerFactory : public SceneManagerFactory
@@ -1936,10 +2117,9 @@ Index: OgreMain/include/OgreSceneManagerEnumerator.h
  	protected:
  		void initMetaData(void) const;
  	public:
-Index: OgreMain/include/OgreSceneNode.h
-===================================================================
---- OgreMain/include/OgreSceneNode.h
-+++ OgreMain/include/OgreSceneNode.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSceneNode.h
+--- a/OgreMain/include/OgreSceneNode.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSceneNode.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -57,6 +57,8 @@
      class _OgreExport SceneNode : public Node
      {
@@ -1949,19 +2129,15 @@ Index: OgreMain/include/OgreSceneNode.h
          typedef HashMap<String, MovableObject*> ObjectMap;
          typedef MapIterator<ObjectMap> ObjectIterator;
  		typedef ConstMapIterator<ObjectMap> ConstObjectIterator;
-Index: OgreMain/include/OgreSceneQuery.h
-===================================================================
---- OgreMain/include/OgreSceneQuery.h
-+++ OgreMain/include/OgreSceneQuery.h
-@@ -70,6 +70,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSceneQuery.h
+--- a/OgreMain/include/OgreSceneQuery.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSceneQuery.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -70,9 +70,11 @@
          using the SceneManager interfaces for the type of query required, e.g.
          SceneManager::createSphereSceneQuery.
      */
 -	class _OgreExport SceneQuery : public SceneMgtAlloc
 +	class _OgreExport SceneQuery : public SceneMgtAlloc, public CLRObject
-     {
-     public:
-@@ -74,5 +74,7 @@
      {
      public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SceneQuery);
@@ -2029,11 +2205,10 @@ Index: OgreMain/include/OgreSceneQuery.h
      protected:
          IntersectionSceneQueryResult* mLastResult;
      public:
-Index: OgreMain/include/OgreSerializer.h
-===================================================================
---- OgreMain/include/OgreSerializer.h
-+++ OgreMain/include/OgreSerializer.h
-@@ -46,6 +46,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSerializer.h
+--- a/OgreMain/include/OgreSerializer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSerializer.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -46,9 +46,11 @@
          This class provides a number of useful methods for exporting / importing data
          from stream-oriented binary files (e.g. .mesh and .skeleton).
      */
@@ -2041,27 +2216,20 @@ Index: OgreMain/include/OgreSerializer.h
 +	class _OgreExport Serializer : public SerializerAlloc, public CLRObject
      {
      public:
-@@ -50,5 +50,7 @@
-     {
-     public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(Serializer);
 +		
          Serializer();
          virtual ~Serializer();
  
-Index: OgreMain/include/OgreShadowCameraSetup.h
-===================================================================
---- OgreMain/include/OgreShadowCameraSetup.h
-+++ OgreMain/include/OgreShadowCameraSetup.h
-@@ -65,6 +65,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreShadowCameraSetup.h
+--- a/OgreMain/include/OgreShadowCameraSetup.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreShadowCameraSetup.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -65,9 +65,11 @@
  		degrees of freedom.  This class is meant to allow custom methods for 
  		handling optimization.
      */
 -	class _OgreExport ShadowCameraSetup : public ShadowDataAlloc
 +	class _OgreExport ShadowCameraSetup : public ShadowDataAlloc, public CLRObject
- 	{
- 	public:
-@@ -69,5 +69,7 @@
  	{
  	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ShadowCameraSetup);
@@ -2078,10 +2246,9 @@ Index: OgreMain/include/OgreShadowCameraSetup.h
  		/// Default constructor
  		DefaultShadowCameraSetup();
  		/// Destructor
-Index: OgreMain/include/OgreShadowCameraSetupFocused.h
-===================================================================
---- OgreMain/include/OgreShadowCameraSetupFocused.h
-+++ OgreMain/include/OgreShadowCameraSetupFocused.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreShadowCameraSetupFocused.h
+--- a/OgreMain/include/OgreShadowCameraSetupFocused.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreShadowCameraSetupFocused.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -56,6 +56,9 @@
  	*/
  	class _OgreExport FocusedShadowCameraSetup : public ShadowCameraSetup
@@ -2092,10 +2259,9 @@ Index: OgreMain/include/OgreShadowCameraSetupFocused.h
  	protected:
  		/** Transform to or from light space as defined by Wimmer et al.
  		@remarks
-Index: OgreMain/include/OgreShadowCameraSetupLiSPSM.h
-===================================================================
---- OgreMain/include/OgreShadowCameraSetupLiSPSM.h
-+++ OgreMain/include/OgreShadowCameraSetupLiSPSM.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreShadowCameraSetupLiSPSM.h
+--- a/OgreMain/include/OgreShadowCameraSetupLiSPSM.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreShadowCameraSetupLiSPSM.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -97,6 +97,9 @@
  	*/
  	class _OgreExport LiSPSMShadowCameraSetup : public FocusedShadowCameraSetup
@@ -2106,10 +2272,9 @@ Index: OgreMain/include/OgreShadowCameraSetupLiSPSM.h
  	protected:
  		/// Warp factor adjustment
  		Real mOptAdjustFactor;
-Index: OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h
-===================================================================
---- OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h
-+++ OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h
+--- a/OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -60,6 +60,9 @@
      */
  	class _OgreExport PlaneOptimalShadowCameraSetup : public ShadowCameraSetup
@@ -2120,18 +2285,15 @@ Index: OgreMain/include/OgreShadowCameraSetupPlaneOptimal.h
  	private:
  		MovablePlane* m_plane;	///< pointer to plane of interest
  	private:
-Index: OgreMain/include/OgreShadowCaster.h
-===================================================================
---- OgreMain/include/OgreShadowCaster.h
-+++ OgreMain/include/OgreShadowCaster.h
-@@ -49,5 +49,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreShadowCaster.h
+--- a/OgreMain/include/OgreShadowCaster.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreShadowCaster.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -49,8 +49,11 @@
          vertex buffers (not necessarily one buffer, but the positions for the entire geometry 
          should come from one buffer if possible)
      */
 -    class _OgreExport ShadowRenderable : public Renderable, public ShadowDataAlloc
 +    class _OgreExport ShadowRenderable : public Renderable, public ShadowDataAlloc, public CLRObject
-     {
-@@ -53,4 +53,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ShadowRenderable);
@@ -2139,7 +2301,7 @@ Index: OgreMain/include/OgreShadowCaster.h
      protected:
          MaterialPtr mMaterial;
          RenderOperation mRenderOp;
-@@ -106,6 +109,6 @@
+@@ -106,9 +109,11 @@
  
      /** This class defines the interface that must be implemented by shadow casters.
      */
@@ -2147,18 +2309,14 @@ Index: OgreMain/include/OgreShadowCaster.h
 +    class _OgreExport ShadowCaster : public CLRObject
      {
      public:
-@@ -110,5 +113,7 @@
-     {
-     public:
 +		 DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(ShadowCaster);
 +		 
          virtual ~ShadowCaster() { }
          /** Returns whether or not this object currently casts a shadow. */
          virtual bool getCastShadows(void) const = 0;
-Index: OgreMain/include/OgreSimpleRenderable.h
-===================================================================
---- OgreMain/include/OgreSimpleRenderable.h
-+++ OgreMain/include/OgreSimpleRenderable.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSimpleRenderable.h
+--- a/OgreMain/include/OgreSimpleRenderable.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSimpleRenderable.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -48,6 +48,9 @@
  	*/
  	class _OgreExport SimpleRenderable : public MovableObject, public Renderable
@@ -2169,10 +2327,9 @@ Index: OgreMain/include/OgreSimpleRenderable.h
      protected:
          RenderOperation mRenderOp;
  
-Index: OgreMain/include/OgreSimpleSpline.h
-===================================================================
---- OgreMain/include/OgreSimpleSpline.h
-+++ OgreMain/include/OgreSimpleSpline.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSimpleSpline.h
+--- a/OgreMain/include/OgreSimpleSpline.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSimpleSpline.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -56,6 +56,8 @@
  	class _OgreExport SimpleSpline
      {
@@ -2182,10 +2339,9 @@ Index: OgreMain/include/OgreSimpleSpline.h
          SimpleSpline();
          ~SimpleSpline();
  
-Index: OgreMain/include/OgreSkeleton.h
-===================================================================
---- OgreMain/include/OgreSkeleton.h
-+++ OgreMain/include/OgreSkeleton.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSkeleton.h
+--- a/OgreMain/include/OgreSkeleton.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSkeleton.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -84,6 +84,9 @@
      */
      class _OgreExport Skeleton : public Resource
@@ -2196,10 +2352,9 @@ Index: OgreMain/include/OgreSkeleton.h
  		friend class SkeletonInstance;
  	protected:
  		/// Internal constructor for use by SkeletonInstance only
-Index: OgreMain/include/OgreSkeletonInstance.h
-===================================================================
---- OgreMain/include/OgreSkeletonInstance.h
-+++ OgreMain/include/OgreSkeletonInstance.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSkeletonInstance.h
+--- a/OgreMain/include/OgreSkeletonInstance.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSkeletonInstance.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -52,6 +52,8 @@
      class _OgreExport SkeletonInstance : public Skeleton
      {
@@ -2209,10 +2364,9 @@ Index: OgreMain/include/OgreSkeletonInstance.h
          /** Constructor, don't call directly, this will be created automatically
          when you create an Entity based on a skeletally animated Mesh.
          */
-Index: OgreMain/include/OgreSkeletonSerializer.h
-===================================================================
---- OgreMain/include/OgreSkeletonSerializer.h
-+++ OgreMain/include/OgreSkeletonSerializer.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSkeletonSerializer.h
+--- a/OgreMain/include/OgreSkeletonSerializer.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSkeletonSerializer.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -56,6 +56,8 @@
      class _OgreExport SkeletonSerializer : public Serializer
      {
@@ -2222,19 +2376,15 @@ Index: OgreMain/include/OgreSkeletonSerializer.h
          SkeletonSerializer();
          virtual ~SkeletonSerializer();
  
-Index: OgreMain/include/OgreStaticGeometry.h
-===================================================================
---- OgreMain/include/OgreStaticGeometry.h
-+++ OgreMain/include/OgreStaticGeometry.h
-@@ -117,6 +117,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreStaticGeometry.h
+--- a/OgreMain/include/OgreStaticGeometry.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreStaticGeometry.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -117,9 +117,11 @@
  		Warning: this class only works with indexed triangle lists at the moment,
  		do not pass it triangle strips, fans or lines / points, or unindexed geometry.
  	*/
 -	class _OgreExport StaticGeometry : public BatchedGeometryAlloc
 +	class _OgreExport StaticGeometry : public BatchedGeometryAlloc, public CLRObject
- 	{
- 	public:
-@@ -121,5 +121,7 @@
  	{
  	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(StaticGeometry);
@@ -2260,7 +2410,7 @@ Index: OgreMain/include/OgreStaticGeometry.h
  			/// Lookup of Material Buckets in this region
  			typedef map<String, MaterialBucket*>::type MaterialBucketMap;
  		protected:
-@@ -388,5 +394,8 @@
+@@ -388,9 +394,11 @@
  		*/
  		class _OgreExport Region : public MovableObject
  		{
@@ -2269,25 +2419,35 @@ Index: OgreMain/include/OgreStaticGeometry.h
 +			
              friend class MaterialBucket;
              friend class GeometryBucket;
-@@ -391,6 +400,5 @@
-             friend class MaterialBucket;
-             friend class GeometryBucket;
 -		public:
  			/// list of LOD Buckets in this region
  			typedef vector<LODBucket*>::type LODBucketList;
  		protected:
-Index: OgreMain/include/OgreSubEntity.h
-===================================================================
---- OgreMain/include/OgreSubEntity.h
-+++ OgreMain/include/OgreSubEntity.h
-@@ -59,5 +59,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreStreamSerialiser.h
+--- a/OgreMain/include/OgreStreamSerialiser.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreStreamSerialiser.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -63,9 +63,11 @@
+ 		The 'Chunk data' section will contain chunk-specific data, which may include
+ 		other nested chunks.
+ 	*/
+-	class _OgreExport StreamSerialiser : public StreamAlloc
++	class _OgreExport StreamSerialiser : public StreamAlloc, public CLRObject
+ 	{
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(StreamSerialiser);
++
+ 		/// The endianness of files
+ 		enum Endian
+ 		{
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSubEntity.h
+--- a/OgreMain/include/OgreSubEntity.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSubEntity.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -59,8 +59,11 @@
              the same time as their parent Entity by the SceneManager method
              createEntity.
      */
 -    class _OgreExport SubEntity: public Renderable, public SubEntityAlloc
 +    class _OgreExport SubEntity: public Renderable, public SubEntityAlloc, public CLRObject
-     {
-@@ -63,4 +63,7 @@
      {
 +	public:
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(SubEntity);
@@ -2295,10 +2455,9 @@ Index: OgreMain/include/OgreSubEntity.h
          // Note no virtual functions for efficiency
          friend class Entity;
          friend class SceneManager;
-Index: OgreMain/include/OgreSubMesh.h
-===================================================================
---- OgreMain/include/OgreSubMesh.h
-+++ OgreMain/include/OgreSubMesh.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreSubMesh.h
+--- a/OgreMain/include/OgreSubMesh.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreSubMesh.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -61,6 +61,9 @@
      */
  	class _OgreExport SubMesh : public SubMeshAlloc
@@ -2319,10 +2478,9 @@ Index: OgreMain/include/OgreSubMesh.h
  
          /// Reference to parent Mesh (not a smart pointer so child does not keep parent alive).
          Mesh* parent;
-Index: OgreMain/include/OgreTagPoint.h
-===================================================================
---- OgreMain/include/OgreTagPoint.h
-+++ OgreMain/include/OgreTagPoint.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreTagPoint.h
+--- a/OgreMain/include/OgreTagPoint.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreTagPoint.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -61,6 +61,8 @@
  	{
  
@@ -2332,10 +2490,9 @@ Index: OgreMain/include/OgreTagPoint.h
  		TagPoint(unsigned short handle, Skeleton* creator);
  		virtual ~TagPoint();
  
-Index: OgreMain/include/OgreTechnique.h
-===================================================================
---- OgreMain/include/OgreTechnique.h
-+++ OgreMain/include/OgreTechnique.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreTechnique.h
+--- a/OgreMain/include/OgreTechnique.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreTechnique.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -52,6 +52,9 @@
      */
  	class _OgreExport Technique : public TechniqueAlloc
@@ -2364,10 +2521,9 @@ Index: OgreMain/include/OgreTechnique.h
  			String devicePattern;
  			IncludeOrExclude includeOrExclude;
  			bool caseSensitive;
-Index: OgreMain/include/OgreTextAreaOverlayElement.h
-===================================================================
---- OgreMain/include/OgreTextAreaOverlayElement.h
-+++ OgreMain/include/OgreTextAreaOverlayElement.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreTextAreaOverlayElement.h
+--- a/OgreMain/include/OgreTextAreaOverlayElement.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreTextAreaOverlayElement.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -43,6 +43,8 @@
      class _OgreExport TextAreaOverlayElement : public OverlayElement
      {
@@ -2377,10 +2533,9 @@ Index: OgreMain/include/OgreTextAreaOverlayElement.h
          enum Alignment
          {
              Left,
-Index: OgreMain/include/OgreTexture.h
-===================================================================
---- OgreMain/include/OgreTexture.h
-+++ OgreMain/include/OgreTexture.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreTexture.h
+--- a/OgreMain/include/OgreTexture.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreTexture.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -101,6 +101,8 @@
      class _OgreExport Texture : public Resource
      {
@@ -2390,10 +2545,9 @@ Index: OgreMain/include/OgreTexture.h
          Texture(ResourceManager* creator, const String& name, ResourceHandle handle,
              const String& group, bool isManual = false, ManualResourceLoader* loader = 0);
  
-Index: OgreMain/include/OgreTextureUnitState.h
-===================================================================
---- OgreMain/include/OgreTextureUnitState.h
-+++ OgreMain/include/OgreTextureUnitState.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreTextureUnitState.h
+--- a/OgreMain/include/OgreTextureUnitState.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreTextureUnitState.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -62,6 +62,9 @@
      {
          friend class RenderSystem;
@@ -2416,10 +2570,9 @@ Index: OgreMain/include/OgreTextureUnitState.h
          //-----------------------------------------------------------------------------
  
          //-----------------------------------------------------------------------------
-Index: OgreMain/include/OgreUnifiedHighLevelGpuProgram.h
-===================================================================
---- OgreMain/include/OgreUnifiedHighLevelGpuProgram.h
-+++ OgreMain/include/OgreUnifiedHighLevelGpuProgram.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreUnifiedHighLevelGpuProgram.h
+--- a/OgreMain/include/OgreUnifiedHighLevelGpuProgram.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreUnifiedHighLevelGpuProgram.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -60,6 +60,8 @@
  	class _OgreExport UnifiedHighLevelGpuProgram : public HighLevelGpuProgram
  	{
@@ -2429,11 +2582,10 @@ Index: OgreMain/include/OgreUnifiedHighLevelGpuProgram.h
  		/// Command object for setting delegate (can set more than once)
  		class CmdDelegate : public ParamCommand
  		{
-Index: OgreMain/include/OgreUserObjectBindings.h
-===================================================================
---- OgreMain/include/OgreUserObjectBindings.h
-+++ OgreMain/include/OgreUserObjectBindings.h
-@@ -45,6 +45,6 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreUserObjectBindings.h
+--- a/OgreMain/include/OgreUserObjectBindings.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreUserObjectBindings.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -45,9 +45,11 @@
  	Any instance of Ogre class that will derive from this class could be associated with custom 
  	application object using this class interface.
  	*/
@@ -2441,18 +2593,14 @@ Index: OgreMain/include/OgreUserObjectBindings.h
 +	class _OgreExport UserObjectBindings : public GeneralAllocatedObject, public CLRObject
  	{
  	public:	
-@@ -49,5 +49,7 @@
- 	{
- 	public:	
 +		DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(UserObjectBindings);
 +		
  		/** Class constructor. */
  		UserObjectBindings();
  
-Index: OgreMain/include/OgreVertexIndexData.h
-===================================================================
---- OgreMain/include/OgreVertexIndexData.h
-+++ OgreMain/include/OgreVertexIndexData.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreVertexIndexData.h
+--- a/OgreMain/include/OgreVertexIndexData.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreVertexIndexData.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -47,6 +47,9 @@
  	/** Summary class collecting together vertex source information. */
  	class _OgreExport VertexData : public VertexDataAlloc
@@ -2473,18 +2621,15 @@ Index: OgreMain/include/OgreVertexIndexData.h
      protected:
          /// Protected copy constructor, to prevent misuse
          IndexData(const IndexData& rhs); /* do nothing, should not use */
-Index: OgreMain/include/OgreViewport.h
-===================================================================
---- OgreMain/include/OgreViewport.h
-+++ OgreMain/include/OgreViewport.h
-@@ -53,5 +53,5 @@
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreViewport.h
+--- a/OgreMain/include/OgreViewport.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreViewport.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -53,9 +53,11 @@
              viewport on a single render target and they overlap, one must
              obscure the other in some predetermined way.
      */
 -	class _OgreExport Viewport : public ViewportAlloc
 +	class _OgreExport Viewport : public ViewportAlloc, public CLRObject
-     {
-@@ -57,5 +57,7 @@
      {
 -    public:       
 +    public:  
@@ -2493,10 +2638,9 @@ Index: OgreMain/include/OgreViewport.h
          /** The usual constructor.
              @param
                  cam Pointer to a camera to be the source for the image.
-Index: OgreMain/include/OgreWireBoundingBox.h
-===================================================================
---- OgreMain/include/OgreWireBoundingBox.h
-+++ OgreMain/include/OgreWireBoundingBox.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreWireBoundingBox.h
+--- a/OgreMain/include/OgreWireBoundingBox.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreWireBoundingBox.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -47,6 +47,9 @@
      */
  	class _OgreExport WireBoundingBox : public SimpleRenderable
@@ -2507,10 +2651,30 @@ Index: OgreMain/include/OgreWireBoundingBox.h
      protected:
          /** Override this method to prevent parent transforms (rotation,translation,scale)
          */
-Index: OgreMain/include/OgreZip.h
-===================================================================
---- OgreMain/include/OgreZip.h
-+++ OgreMain/include/OgreZip.h
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreWorkQueue.h
+--- a/OgreMain/include/OgreWorkQueue.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreWorkQueue.h	Sat Aug 14 16:01:15 2010 +0200
+@@ -66,7 +66,7 @@
+ 		in their own subsystems. We also provide a default implementation in the
+ 		form of DefaultWorkQueue.
+ 	*/
+-	class _OgreExport WorkQueue : public UtilityAlloc
++	class _OgreExport WorkQueue : public UtilityAlloc, public CLRObject
+ 	{
+ 	protected:
+ 		typedef std::map<String, uint16> ChannelMap;
+@@ -74,6 +74,8 @@
+ 		uint16 mNextChannel;
+ 		OGRE_MUTEX(mChannelMapMutex)
+ 	public:
++    DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE(WorkQueue);
++
+ 		/// Numeric identifier for a request
+ 		typedef unsigned long long int RequestID;
+ 
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/include/OgreZip.h
+--- a/OgreMain/include/OgreZip.h	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/include/OgreZip.h	Sat Aug 14 16:01:15 2010 +0200
 @@ -53,6 +53,9 @@
      */
      class _OgreExport ZipArchive : public Archive 
@@ -2521,10 +2685,9 @@ Index: OgreMain/include/OgreZip.h
      protected:
          /// Handle to root zip file
          ZZIP_DIR* mZzipDir;
-Index: OgreMain/src/OgreException.cpp
-===================================================================
---- OgreMain/src/OgreException.cpp
-+++ OgreMain/src/OgreException.cpp
+diff -r 58266f25ccd2 -r 85ce5f8c2af5 OgreMain/src/OgreException.cpp
+--- a/OgreMain/src/OgreException.cpp	Wed May 26 01:01:07 2010 +0800
++++ b/OgreMain/src/OgreException.cpp	Sat Aug 14 16:01:15 2010 +0200
 @@ -37,12 +37,28 @@
  
  namespace Ogre {

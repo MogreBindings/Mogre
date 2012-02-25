@@ -1,3 +1,4 @@
+#include "MogreStableHeaders.h"
 #include "Wrapper.h"
 
 typedef System::Runtime::InteropServices::GCHandle GCHandle;

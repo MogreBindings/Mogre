@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>Mogre</ProjectName>
+    <ProjectName>Mogre (x86)</ProjectName>
     <ProjectGuid>{838A5695-BEC6-48D9-B6B4-E622336D2CBD}</ProjectGuid>
     <RootNamespace>Mogre_vc9</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
@@ -21,7 +21,6 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>true</CLRSupport>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -40,28 +39,33 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lib\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bin\x86\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\x86\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lib\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bin\x86\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\x86\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Mogre</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Mogre</TargetName>
+    <LinkKeyFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:\Nuclex.snk</LinkKeyFile>
+    <LinkKeyFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\Nuclex.snk</LinkKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\Build\msvc-2010\;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;..\..\boost-1.47.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MOGRE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;OgrePaging_d.lib;OgreTerrain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>OgreSrc\build\lib\Debug;$(BOOST_LIBRARY_DIRECTORY);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain.lib;OgrePaging.lib;OgreTerrain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>OgreSrc\ogre\Build\msvc-2010\bin\OgreMain\x86\$(Configuration);OgreSrc\ogre\Build\msvc-2010\bin\OgrePaging\x86\$(Configuration);OgreSrc\ogre\Build\msvc-2010\bin\OgreTerrain\x86\$(Configuration);..\..\boost-1.47.0\stage\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
@@ -74,17 +78,24 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\Build\msvc-2010\;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;..\..\boost-1.47.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MOGRE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgrePaging.lib;OgreTerrain.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>OgreSrc\build\lib\Release;$(BOOST_LIBRARY_DIRECTORY);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>OgreSrc\ogre\Build\msvc-2010\bin\OgreMain\x86\$(Configuration);OgreSrc\ogre\Build\msvc-2010\bin\OgrePaging\x86\$(Configuration);OgreSrc\ogre\Build\msvc-2010\bin\OgreTerrain\x86\$(Configuration);..\..\boost-1.47.0\stage\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -100,6 +111,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="src\auto\Mogre-WIN32_OgreTimerImp.cpp" />
     <ClCompile Include="src\auto\MogreAnimable.cpp" />
     <ClCompile Include="src\auto\MogreAnimation.cpp" />

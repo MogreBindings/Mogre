@@ -290,6 +290,10 @@ namespace AutoWrap.Meta
                 {
                     write.Write(Copyright);
                     write.Write(CreateIncludeCodeForIncludeFile(include));
+                    if (include == "OgrePrerequisites.h")
+                    {
+                      write.Write("#include \"MogrePagingPrerequisites.h\"");
+                    }
                     write.Flush();
                     WriteToFile(write.BaseStream as MemoryStream, incFile);
                 }

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vcclr.h>
+#pragma managed(push, off)
 #include "OgrePrerequisites.h"
 #include "OgreUTFString.h"
+#pragma managed(pop)
 #include "Custom\MogrePair.h"
 
 namespace Mogre

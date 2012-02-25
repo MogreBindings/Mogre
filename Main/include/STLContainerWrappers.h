@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma managed(push, off)
 #include <string>
 #include <vector>
 #include <deque>
@@ -7,6 +8,7 @@
 #include <list>
 #include <map>
 #include <hash_map>
+#pragma managed(pop)
 
 #include "Marshalling.h"
 #include "Custom\MogrePair.h"

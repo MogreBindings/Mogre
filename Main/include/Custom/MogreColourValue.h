@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreColourValue.h"
+#pragma managed(pop)
 #include "Prerequisites.h"
 
 namespace Mogre

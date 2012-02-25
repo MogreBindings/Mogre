@@ -1,6 +1,8 @@
 #pragma once
 
+#pragma managed(push, off)
 #include "OgreCommon.h"
+#pragma managed(pop)
 
 namespace Mogre
 {
