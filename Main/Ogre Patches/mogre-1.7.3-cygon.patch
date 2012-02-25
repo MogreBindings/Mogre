@@ -1,0 +1,2495 @@
+diff -r -u -N -w Main\include\auto\Mogre-WIN32_OgreTimerImp.h Main\include\auto\Mogre-WIN32_OgreTimerImp.h
+--- Main\include\auto\Mogre-WIN32_OgreTimerImp.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\Mogre-WIN32_OgreTimerImp.h	Fri Aug 05 01:02:28 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "WIN32/OgreTimerImp.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreAnimable.h Main\include\auto\MogreAnimable.h
+--- Main\include\auto\MogreAnimable.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreAnimable.h	Fri Aug 05 01:02:36 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreAnimable.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreAnimation.h Main\include\auto\MogreAnimation.h
+--- Main\include\auto\MogreAnimation.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreAnimation.h	Fri Aug 05 01:02:47 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreAnimation.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreAnimationTrack.h"
+ #include "MogreAnimationState.h"
+diff -r -u -N -w Main\include\auto\MogreAnimationState.h Main\include\auto\MogreAnimationState.h
+--- Main\include\auto\MogreAnimationState.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreAnimationState.h	Fri Aug 05 01:02:54 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreAnimationState.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreAnimationTrack.h Main\include\auto\MogreAnimationTrack.h
+--- Main\include\auto\MogreAnimationTrack.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreAnimationTrack.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreAnimationTrack.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePose.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreArchive.h Main\include\auto\MogreArchive.h
+--- Main\include\auto\MogreArchive.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreArchive.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreArchive.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreArchiveManager.h Main\include\auto\MogreArchiveManager.h
+--- Main\include\auto\MogreArchiveManager.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreArchiveManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreArchiveManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreBillboard.h Main\include\auto\MogreBillboard.h
+--- Main\include\auto\MogreBillboard.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBillboard.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBillboard.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreBillboardChain.h Main\include\auto\MogreBillboardChain.h
+--- Main\include\auto\MogreBillboardChain.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBillboardChain.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBillboardChain.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreBillboardParticleRenderer.h Main\include\auto\MogreBillboardParticleRenderer.h
+--- Main\include\auto\MogreBillboardParticleRenderer.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBillboardParticleRenderer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBillboardParticleRenderer.h"
++#pragma managed(pop)
+ #include "MogreParticleSystemRenderer.h"
+ #include "MogreBillboardSet.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreBillboardSet.h Main\include\auto\MogreBillboardSet.h
+--- Main\include\auto\MogreBillboardSet.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBillboardSet.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBillboardSet.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreBlendMode.h Main\include\auto\MogreBlendMode.h
+--- Main\include\auto\MogreBlendMode.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBlendMode.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBlendMode.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreBone.h Main\include\auto\MogreBone.h
+--- Main\include\auto\MogreBone.h	Sat Aug 06 12:02:12 2011
++++ Main\include\auto\MogreBone.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBone.h"
++#pragma managed(pop)
+ #include "MogreNode.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreBorderPanelOverlayElement.h Main\include\auto\MogreBorderPanelOverlayElement.h
+--- Main\include\auto\MogreBorderPanelOverlayElement.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreBorderPanelOverlayElement.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreBorderPanelOverlayElement.h"
++#pragma managed(pop)
+ #include "MogrePanelOverlayElement.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreOverlayElement.h"
+diff -r -u -N -w Main\include\auto\MogreCamera.h Main\include\auto\MogreCamera.h
+--- Main\include\auto\MogreCamera.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCamera.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCamera.h"
++#pragma managed(pop)
+ #include "MogreFrustum.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreCodec.h Main\include\auto\MogreCodec.h
+--- Main\include\auto\MogreCodec.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCodec.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCodec.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreColourValue.h Main\include\auto\MogreColourValue.h
+--- Main\include\auto\MogreColourValue.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreColourValue.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreColourValue.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreCommon.h Main\include\auto\MogreCommon.h
+--- Main\include\auto\MogreCommon.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCommon.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCommon.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreCompositionPass.h Main\include\auto\MogreCompositionPass.h
+--- Main\include\auto\MogreCompositionPass.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositionPass.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositionPass.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ #include "MogreRenderSystem.h"
+diff -r -u -N -w Main\include\auto\MogreCompositionTargetPass.h Main\include\auto\MogreCompositionTargetPass.h
+--- Main\include\auto\MogreCompositionTargetPass.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositionTargetPass.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositionTargetPass.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreCompositionTechnique.h Main\include\auto\MogreCompositionTechnique.h
+--- Main\include\auto\MogreCompositionTechnique.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositionTechnique.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositionTechnique.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreCompositor.h Main\include\auto\MogreCompositor.h
+--- Main\include\auto\MogreCompositor.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositor.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositor.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreCompositorChain.h Main\include\auto\MogreCompositorChain.h
+--- Main\include\auto\MogreCompositorChain.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositorChain.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositorChain.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreRenderTargetListener.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreCompositorInstance.h Main\include\auto\MogreCompositorInstance.h
+--- Main\include\auto\MogreCompositorInstance.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositorInstance.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositorInstance.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreCompositorManager.h Main\include\auto\MogreCompositorManager.h
+--- Main\include\auto\MogreCompositorManager.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreCompositorManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreCompositorManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+diff -r -u -N -w Main\include\auto\MogreConfigFile.h Main\include\auto\MogreConfigFile.h
+--- Main\include\auto\MogreConfigFile.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreConfigFile.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreConfigFile.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreConfigOptionMap.h Main\include\auto\MogreConfigOptionMap.h
+--- Main\include\auto\MogreConfigOptionMap.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreConfigOptionMap.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreConfigOptionMap.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreDataStream.h Main\include\auto\MogreDataStream.h
+--- Main\include\auto\MogreDataStream.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreDataStream.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreDataStream.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreDDSCodec.h Main\include\auto\MogreDDSCodec.h
+--- Main\include\auto\MogreDDSCodec.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreDDSCodec.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreDDSCodec.h"
++#pragma managed(pop)
+ #include "MogreImageCodec.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCodec.h"
+diff -r -u -N -w Main\include\auto\MogreDefaultHardwareBufferManager.h Main\include\auto\MogreDefaultHardwareBufferManager.h
+--- Main\include\auto\MogreDefaultHardwareBufferManager.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreDefaultHardwareBufferManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreDefaultHardwareBufferManager.h"
++#pragma managed(pop)
+ #include "MogreHardwareBufferManager.h"
+ #include "MogreHardwareBuffer.h"
+ #include "MogreHardwareIndexBuffer.h"
+diff -r -u -N -w Main\include\auto\MogreDistanceLodStrategy.h Main\include\auto\MogreDistanceLodStrategy.h
+--- Main\include\auto\MogreDistanceLodStrategy.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreDistanceLodStrategy.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreDistanceLodStrategy.h"
++#pragma managed(pop)
+ #include "MogreLodStrategy.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreMesh.h"
+diff -r -u -N -w Main\include\auto\MogreEdgeListBuilder.h Main\include\auto\MogreEdgeListBuilder.h
+--- Main\include\auto\MogreEdgeListBuilder.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreEdgeListBuilder.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreEdgeListBuilder.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreEntity.h Main\include\auto\MogreEntity.h
+--- Main\include\auto\MogreEntity.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreEntity.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreEntity.h"
++#pragma managed(pop)
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreException.h Main\include\auto\MogreException.h
+--- Main\include\auto\MogreException.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreException.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreException.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreExternalTextureSource.h Main\include\auto\MogreExternalTextureSource.h
+--- Main\include\auto\MogreExternalTextureSource.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreExternalTextureSource.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreExternalTextureSource.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreExternalTextureSourceManager.h Main\include\auto\MogreExternalTextureSourceManager.h
+--- Main\include\auto\MogreExternalTextureSourceManager.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreExternalTextureSourceManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreExternalTextureSourceManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreFileSystem.h Main\include\auto\MogreFileSystem.h
+--- Main\include\auto\MogreFileSystem.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreFileSystem.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreFileSystem.h"
++#pragma managed(pop)
+ #include "MogreArchive.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreFont.h Main\include\auto\MogreFont.h
+--- Main\include\auto\MogreFont.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreFont.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreFont.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreFontManager.h Main\include\auto\MogreFontManager.h
+--- Main\include\auto\MogreFontManager.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreFontManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreFontManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreFrameListener.h Main\include\auto\MogreFrameListener.h
+--- Main\include\auto\MogreFrameListener.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreFrameListener.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreFrameListener.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreFrustum.h Main\include\auto\MogreFrustum.h
+--- Main\include\auto\MogreFrustum.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreFrustum.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreFrustum.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreGpuProgram.h Main\include\auto\MogreGpuProgram.h
+--- Main\include\auto\MogreGpuProgram.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreGpuProgram.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreGpuProgram.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreGpuProgramManager.h Main\include\auto\MogreGpuProgramManager.h
+--- Main\include\auto\MogreGpuProgramManager.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreGpuProgramManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreGpuProgramManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreGpuProgram.h"
+diff -r -u -N -w Main\include\auto\MogreGpuProgramParams.h Main\include\auto\MogreGpuProgramParams.h
+--- Main\include\auto\MogreGpuProgramParams.h	Sat Aug 06 12:02:13 2011
++++ Main\include\auto\MogreGpuProgramParams.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreGpuProgramParams.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreSerializer.h"
+diff -r -u -N -w Main\include\auto\MogreGrid2DPageStrategy.h Main\include\auto\MogreGrid2DPageStrategy.h
+--- Main\include\auto\MogreGrid2DPageStrategy.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreGrid2DPageStrategy.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreGrid2DPageStrategy.h"
++#pragma managed(pop)
+ #include "MogrePageStrategy.h"
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreHardwareBuffer.h Main\include\auto\MogreHardwareBuffer.h
+--- Main\include\auto\MogreHardwareBuffer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwareBuffer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwareBuffer.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreHardwareBufferManager.h Main\include\auto\MogreHardwareBufferManager.h
+--- Main\include\auto\MogreHardwareBufferManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwareBufferManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwareBufferManager.h"
++#pragma managed(pop)
+ #include "MogreHardwareBuffer.h"
+ #include "MogreHardwareIndexBuffer.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreHardwareIndexBuffer.h Main\include\auto\MogreHardwareIndexBuffer.h
+--- Main\include\auto\MogreHardwareIndexBuffer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwareIndexBuffer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwareIndexBuffer.h"
++#pragma managed(pop)
+ #include "MogreHardwareBuffer.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreHardwareOcclusionQuery.h Main\include\auto\MogreHardwareOcclusionQuery.h
+--- Main\include\auto\MogreHardwareOcclusionQuery.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwareOcclusionQuery.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwareOcclusionQuery.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreHardwarePixelBuffer.h Main\include\auto\MogreHardwarePixelBuffer.h
+--- Main\include\auto\MogreHardwarePixelBuffer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwarePixelBuffer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwarePixelBuffer.h"
++#pragma managed(pop)
+ #include "MogreHardwareBuffer.h"
+ #include "MogrePixelFormat.h"
+ #include "MogreImage.h"
+diff -r -u -N -w Main\include\auto\MogreHardwareVertexBuffer.h Main\include\auto\MogreHardwareVertexBuffer.h
+--- Main\include\auto\MogreHardwareVertexBuffer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHardwareVertexBuffer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHardwareVertexBuffer.h"
++#pragma managed(pop)
+ #include "MogreHardwareBuffer.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgram.h Main\include\auto\MogreHighLevelGpuProgram.h
+--- Main\include\auto\MogreHighLevelGpuProgram.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHighLevelGpuProgram.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHighLevelGpuProgram.h"
++#pragma managed(pop)
+ #include "MogreGpuProgram.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgramManager.h Main\include\auto\MogreHighLevelGpuProgramManager.h
+--- Main\include\auto\MogreHighLevelGpuProgramManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreHighLevelGpuProgramManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreHighLevelGpuProgramManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreGpuProgram.h"
+diff -r -u -N -w Main\include\auto\MogreImage.h Main\include\auto\MogreImage.h
+--- Main\include\auto\MogreImage.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreImage.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreImage.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreImageCodec.h Main\include\auto\MogreImageCodec.h
+--- Main\include\auto\MogreImageCodec.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreImageCodec.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreImageCodec.h"
++#pragma managed(pop)
+ #include "MogreCodec.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+diff -r -u -N -w Main\include\auto\MogreInstancedGeometry.h Main\include\auto\MogreInstancedGeometry.h
+--- Main\include\auto\MogreInstancedGeometry.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreInstancedGeometry.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreInstancedGeometry.h"
++#pragma managed(pop)
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreKeyFrame.h Main\include\auto\MogreKeyFrame.h
+--- Main\include\auto\MogreKeyFrame.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreKeyFrame.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreKeyFrame.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreLight.h Main\include\auto\MogreLight.h
+--- Main\include\auto\MogreLight.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLight.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLight.h"
++#pragma managed(pop)
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreLodListener.h Main\include\auto\MogreLodListener.h
+--- Main\include\auto\MogreLodListener.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLodListener.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLodListener.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreLodStrategy.h Main\include\auto\MogreLodStrategy.h
+--- Main\include\auto\MogreLodStrategy.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLodStrategy.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLodStrategy.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreMesh.h"
+ #include "MogreMaterial.h"
+diff -r -u -N -w Main\include\auto\MogreLodStrategyManager.h Main\include\auto\MogreLodStrategyManager.h
+--- Main\include\auto\MogreLodStrategyManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLodStrategyManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLodStrategyManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreLog.h Main\include\auto\MogreLog.h
+--- Main\include\auto\MogreLog.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLog.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLog.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreLogManager.h Main\include\auto\MogreLogManager.h
+--- Main\include\auto\MogreLogManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreLogManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreLogManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreLog.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreManualObject.h Main\include\auto\MogreManualObject.h
+--- Main\include\auto\MogreManualObject.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreManualObject.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreManualObject.h"
++#pragma managed(pop)
+ #include "MogreMovableObject.h"
+ #include "MogreRenderable.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreMaterial.h Main\include\auto\MogreMaterial.h
+--- Main\include\auto\MogreMaterial.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMaterial.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMaterial.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreMaterialManager.h Main\include\auto\MogreMaterialManager.h
+--- Main\include\auto\MogreMaterialManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMaterialManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMaterialManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreMaterialSerializer.h Main\include\auto\MogreMaterialSerializer.h
+--- Main\include\auto\MogreMaterialSerializer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMaterialSerializer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMaterialSerializer.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreMesh.h Main\include\auto\MogreMesh.h
+--- Main\include\auto\MogreMesh.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMesh.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMesh.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreVertexBoneAssignment.h"
+diff -r -u -N -w Main\include\auto\MogreMeshManager.h Main\include\auto\MogreMeshManager.h
+--- Main\include\auto\MogreMeshManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMeshManager.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMeshManager.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreMeshSerializer.h Main\include\auto\MogreMeshSerializer.h
+--- Main\include\auto\MogreMeshSerializer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMeshSerializer.h	Fri Aug 05 01:13:57 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMeshSerializer.h"
++#pragma managed(pop)
+ #include "MogreSerializer.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreMovableObject.h Main\include\auto\MogreMovableObject.h
+--- Main\include\auto\MogreMovableObject.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMovableObject.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMovableObject.h"
++#pragma managed(pop)
+ #include "MogreAnimable.h"
+ #include "MogreShadowCaster.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreMovablePlane.h Main\include\auto\MogreMovablePlane.h
+--- Main\include\auto\MogreMovablePlane.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreMovablePlane.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreMovablePlane.h"
++#pragma managed(pop)
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreNode.h Main\include\auto\MogreNode.h
+--- Main\include\auto\MogreNode.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreNode.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreNode.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreNumerics.h Main\include\auto\MogreNumerics.h
+--- Main\include\auto\MogreNumerics.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreNumerics.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreNumerics.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreOverlay.h Main\include\auto\MogreOverlay.h
+--- Main\include\auto\MogreOverlay.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreOverlay.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreOverlay.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreOverlayContainer.h Main\include\auto\MogreOverlayContainer.h
+--- Main\include\auto\MogreOverlayContainer.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreOverlayContainer.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreOverlayContainer.h"
++#pragma managed(pop)
+ #include "MogreOverlayElement.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreOverlayElement.h Main\include\auto\MogreOverlayElement.h
+--- Main\include\auto\MogreOverlayElement.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreOverlayElement.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreOverlayElement.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogreRenderable.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreOverlayElementFactory.h Main\include\auto\MogreOverlayElementFactory.h
+--- Main\include\auto\MogreOverlayElementFactory.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreOverlayElementFactory.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreOverlayElementFactory.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreOverlayManager.h Main\include\auto\MogreOverlayManager.h
+--- Main\include\auto\MogreOverlayManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogreOverlayManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreOverlayManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreFrustum.h"
+ #include "MogreStringVector.h"
+diff -r -u -N -w Main\include\auto\MogrePage.h Main\include\auto\MogrePage.h
+--- Main\include\auto\MogrePage.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePage.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePage.h"
++#pragma managed(pop)
+ #include "MogreWorkQueue.h"
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogrePageContent.h Main\include\auto\MogrePageContent.h
+--- Main\include\auto\MogrePageContent.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePageContent.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageContent.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePageContentCollection.h Main\include\auto\MogrePageContentCollection.h
+--- Main\include\auto\MogrePageContentCollection.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePageContentCollection.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageContentCollection.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePageContentCollectionFactory.h Main\include\auto\MogrePageContentCollectionFactory.h
+--- Main\include\auto\MogrePageContentCollectionFactory.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePageContentCollectionFactory.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageContentCollectionFactory.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePageContentFactory.h Main\include\auto\MogrePageContentFactory.h
+--- Main\include\auto\MogrePageContentFactory.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePageContentFactory.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageContentFactory.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePagedWorld.h Main\include\auto\MogrePagedWorld.h
+--- Main\include\auto\MogrePagedWorld.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePagedWorld.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePagedWorld.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePagedWorldSection.h Main\include\auto\MogrePagedWorldSection.h
+--- Main\include\auto\MogrePagedWorldSection.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePagedWorldSection.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePagedWorldSection.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePageManager.h Main\include\auto\MogrePageManager.h
+--- Main\include\auto\MogrePageManager.h	Sat Aug 06 12:02:14 2011
++++ Main\include\auto\MogrePageManager.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePageStrategy.h Main\include\auto\MogrePageStrategy.h
+--- Main\include\auto\MogrePageStrategy.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePageStrategy.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePageStrategy.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePagingPrerequisites.h Main\include\auto\MogrePagingPrerequisites.h
+--- Main\include\auto\MogrePagingPrerequisites.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePagingPrerequisites.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePagingPrerequisites.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogrePanelOverlayElement.h Main\include\auto\MogrePanelOverlayElement.h
+--- Main\include\auto\MogrePanelOverlayElement.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePanelOverlayElement.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePanelOverlayElement.h"
++#pragma managed(pop)
+ #include "MogreOverlayContainer.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreParticle.h Main\include\auto\MogreParticle.h
+--- Main\include\auto\MogreParticle.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticle.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticle.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreParticleAffector.h Main\include\auto\MogreParticleAffector.h
+--- Main\include\auto\MogreParticleAffector.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleAffector.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleAffector.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreParticleAffectorFactory.h Main\include\auto\MogreParticleAffectorFactory.h
+--- Main\include\auto\MogreParticleAffectorFactory.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleAffectorFactory.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleAffectorFactory.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreParticleEmitter.h Main\include\auto\MogreParticleEmitter.h
+--- Main\include\auto\MogreParticleEmitter.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleEmitter.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleEmitter.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreParticleEmitterFactory.h Main\include\auto\MogreParticleEmitterFactory.h
+--- Main\include\auto\MogreParticleEmitterFactory.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleEmitterFactory.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleEmitterFactory.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreParticleIterator.h Main\include\auto\MogreParticleIterator.h
+--- Main\include\auto\MogreParticleIterator.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleIterator.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleIterator.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreParticleSystem.h Main\include\auto\MogreParticleSystem.h
+--- Main\include\auto\MogreParticleSystem.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleSystem.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleSystem.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreParticleSystemManager.h Main\include\auto\MogreParticleSystemManager.h
+--- Main\include\auto\MogreParticleSystemManager.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleSystemManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleSystemManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ #include "MogreMovableObject.h"
+diff -r -u -N -w Main\include\auto\MogreParticleSystemRenderer.h Main\include\auto\MogreParticleSystemRenderer.h
+--- Main\include\auto\MogreParticleSystemRenderer.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreParticleSystemRenderer.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreParticleSystemRenderer.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogrePass.h Main\include\auto\MogrePass.h
+--- Main\include\auto\MogrePass.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePass.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePass.h"
++#pragma managed(pop)
+ #include "MogreCommon.h"
+ #include "MogreBlendMode.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogrePatchMesh.h Main\include\auto\MogrePatchMesh.h
+--- Main\include\auto\MogrePatchMesh.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePatchMesh.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePatchMesh.h"
++#pragma managed(pop)
+ #include "MogreMesh.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreResource.h"
+diff -r -u -N -w Main\include\auto\MogrePatchSurface.h Main\include\auto\MogrePatchSurface.h
+--- Main\include\auto\MogrePatchSurface.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePatchSurface.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePatchSurface.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePixelCountLodStrategy.h Main\include\auto\MogrePixelCountLodStrategy.h
+--- Main\include\auto\MogrePixelCountLodStrategy.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePixelCountLodStrategy.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePixelCountLodStrategy.h"
++#pragma managed(pop)
+ #include "MogreLodStrategy.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreMesh.h"
+diff -r -u -N -w Main\include\auto\MogrePixelFormat.h Main\include\auto\MogrePixelFormat.h
+--- Main\include\auto\MogrePixelFormat.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePixelFormat.h	Fri Aug 05 01:00:04 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePixelFormat.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogrePlane.h Main\include\auto\MogrePlane.h
+--- Main\include\auto\MogrePlane.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePlane.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlane.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogrePlaneBoundedVolume.h Main\include\auto\MogrePlaneBoundedVolume.h
+--- Main\include\auto\MogrePlaneBoundedVolume.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePlaneBoundedVolume.h	Fri Aug 05 01:01:15 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlaneBoundedVolume.h"
++#pragma managed(pop)
+ #include "MogrePlane.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePlatform.h Main\include\auto\MogrePlatform.h
+--- Main\include\auto\MogrePlatform.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePlatform.h	Fri Aug 05 00:59:39 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlatform.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogrePlugin.h Main\include\auto\MogrePlugin.h
+--- Main\include\auto\MogrePlugin.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePlugin.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlugin.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePose.h Main\include\auto\MogrePose.h
+--- Main\include\auto\MogrePose.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePose.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePose.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePrerequisites.h Main\include\auto\MogrePrerequisites.h
+--- Main\include\auto\MogrePrerequisites.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePrerequisites.h	Fri Aug 05 00:59:28 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePrerequisites.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreProfiler.h Main\include\auto\MogreProfiler.h
+--- Main\include\auto\MogreProfiler.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreProfiler.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreProfiler.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreProgressiveMesh.h Main\include\auto\MogreProgressiveMesh.h
+--- Main\include\auto\MogreProgressiveMesh.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreProgressiveMesh.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreProgressiveMesh.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogrePVRTCCodec.h Main\include\auto\MogrePVRTCCodec.h
+--- Main\include\auto\MogrePVRTCCodec.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogrePVRTCCodec.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePVRTCCodec.h"
++#pragma managed(pop)
+ #include "MogreImageCodec.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCodec.h"
+diff -r -u -N -w Main\include\auto\MogreRectangle2D.h Main\include\auto\MogreRectangle2D.h
+--- Main\include\auto\MogreRectangle2D.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRectangle2D.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRectangle2D.h"
++#pragma managed(pop)
+ #include "MogreSimpleRenderable.h"
+ #include "MogreHardwareBuffer.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreRenderable.h Main\include\auto\MogreRenderable.h
+--- Main\include\auto\MogreRenderable.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderable.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderable.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreGpuProgramParams.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreRenderObjectListener.h Main\include\auto\MogreRenderObjectListener.h
+--- Main\include\auto\MogreRenderObjectListener.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderObjectListener.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderObjectListener.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreRenderOperation.h Main\include\auto\MogreRenderOperation.h
+--- Main\include\auto\MogreRenderOperation.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderOperation.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderOperation.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreRenderQueue.h Main\include\auto\MogreRenderQueue.h
+--- Main\include\auto\MogreRenderQueue.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderQueue.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderQueue.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreSceneManager.h"
+diff -r -u -N -w Main\include\auto\MogreRenderQueueInvocation.h Main\include\auto\MogreRenderQueueInvocation.h
+--- Main\include\auto\MogreRenderQueueInvocation.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderQueueInvocation.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderQueueInvocation.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreRenderQueueSortingGrouping.h"
+diff -r -u -N -w Main\include\auto\MogreRenderQueueListener.h Main\include\auto\MogreRenderQueueListener.h
+--- Main\include\auto\MogreRenderQueueListener.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderQueueListener.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderQueueListener.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreRenderQueueSortingGrouping.h Main\include\auto\MogreRenderQueueSortingGrouping.h
+--- Main\include\auto\MogreRenderQueueSortingGrouping.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderQueueSortingGrouping.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderQueueSortingGrouping.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreRenderSystem.h Main\include\auto\MogreRenderSystem.h
+--- Main\include\auto\MogreRenderSystem.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderSystem.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderSystem.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+ #include "MogreHardwareVertexBuffer.h"
+diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilities.h Main\include\auto\MogreRenderSystemCapabilities.h
+--- Main\include\auto\MogreRenderSystemCapabilities.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderSystemCapabilities.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderSystemCapabilities.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilitiesManager.h Main\include\auto\MogreRenderSystemCapabilitiesManager.h
+--- Main\include\auto\MogreRenderSystemCapabilitiesManager.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderSystemCapabilitiesManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderSystemCapabilitiesManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreRenderTarget.h Main\include\auto\MogreRenderTarget.h
+--- Main\include\auto\MogreRenderTarget.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderTarget.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderTarget.h"
++#pragma managed(pop)
+ #include "MogreRenderTargetListener.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+diff -r -u -N -w Main\include\auto\MogreRenderTargetListener.h Main\include\auto\MogreRenderTargetListener.h
+--- Main\include\auto\MogreRenderTargetListener.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderTargetListener.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderTargetListener.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreRenderTexture.h Main\include\auto\MogreRenderTexture.h
+--- Main\include\auto\MogreRenderTexture.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderTexture.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderTexture.h"
++#pragma managed(pop)
+ #include "MogreRenderTarget.h"
+ #include "MogrePixelFormat.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreRenderToVertexBuffer.h Main\include\auto\MogreRenderToVertexBuffer.h
+--- Main\include\auto\MogreRenderToVertexBuffer.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderToVertexBuffer.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderToVertexBuffer.h"
++#pragma managed(pop)
+ #include "MogreRenderOperation.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreRenderWindow.h Main\include\auto\MogreRenderWindow.h
+--- Main\include\auto\MogreRenderWindow.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRenderWindow.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRenderWindow.h"
++#pragma managed(pop)
+ #include "MogreRenderTarget.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreResource.h Main\include\auto\MogreResource.h
+--- Main\include\auto\MogreResource.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreResource.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreResource.h"
++#pragma managed(pop)
+ #include "MogreStringInterface.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreResourceBackgroundQueue.h Main\include\auto\MogreResourceBackgroundQueue.h
+--- Main\include\auto\MogreResourceBackgroundQueue.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreResourceBackgroundQueue.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreResourceBackgroundQueue.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreResourceGroupManager.h Main\include\auto\MogreResourceGroupManager.h
+--- Main\include\auto\MogreResourceGroupManager.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreResourceGroupManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreResourceGroupManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+ #include "MogreStringVector.h"
+diff -r -u -N -w Main\include\auto\MogreResourceManager.h Main\include\auto\MogreResourceManager.h
+--- Main\include\auto\MogreResourceManager.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreResourceManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreResourceManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreResource.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreRibbonTrail.h Main\include\auto\MogreRibbonTrail.h
+--- Main\include\auto\MogreRibbonTrail.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRibbonTrail.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRibbonTrail.h"
++#pragma managed(pop)
+ #include "MogreNode.h"
+ #include "MogreBillboardChain.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreRoot.h Main\include\auto\MogreRoot.h
+--- Main\include\auto\MogreRoot.h	Sat Aug 06 12:02:15 2011
++++ Main\include\auto\MogreRoot.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRoot.h"
++#pragma managed(pop)
+ #include "MogreFrameListener.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreSceneManager.h"
+@@ -51,12 +53,9 @@
+ 		{
+ 		}
+ 	
++    // Destructor - this runs in the main thread -- if the user calls Dispose()	
+ 		~Root()
+ 		{
+-			this->!Root();
+-		}
+-		!Root()
+-		{
+ 			_native = Ogre::Root::getSingletonPtr();
+ 			
+ 			        // Collect all SharedPtr objects that are waiting for finalization
+@@ -73,6 +72,10 @@
+ 			_singleton = nullptr;
+ 		}
+ 	
++    // Finalizer - this runs in the garbage collector thread.
++		!Root()
++		{
++		}
+ 	
+ 		//Public Declarations
+ 	public:
+diff -r -u -N -w Main\include\auto\MogreRotationalSpline.h Main\include\auto\MogreRotationalSpline.h
+--- Main\include\auto\MogreRotationalSpline.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreRotationalSpline.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreRotationalSpline.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreSceneManager.h Main\include\auto\MogreSceneManager.h
+--- Main\include\auto\MogreSceneManager.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSceneManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSceneManager.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreRenderQueueListener.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreSceneManagerEnumerator.h Main\include\auto\MogreSceneManagerEnumerator.h
+--- Main\include\auto\MogreSceneManagerEnumerator.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSceneManagerEnumerator.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSceneManagerEnumerator.h"
++#pragma managed(pop)
+ #include "MogreSceneManager.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreSceneNode.h Main\include\auto\MogreSceneNode.h
+--- Main\include\auto\MogreSceneNode.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSceneNode.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSceneNode.h"
++#pragma managed(pop)
+ #include "MogreNode.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreSceneManager.h"
+diff -r -u -N -w Main\include\auto\MogreSceneQuery.h Main\include\auto\MogreSceneQuery.h
+--- Main\include\auto\MogreSceneQuery.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSceneQuery.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSceneQuery.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePlaneBoundedVolume.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreSerializer.h Main\include\auto\MogreSerializer.h
+--- Main\include\auto\MogreSerializer.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSerializer.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSerializer.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreShadowCameraSetup.h Main\include\auto\MogreShadowCameraSetup.h
+--- Main\include\auto\MogreShadowCameraSetup.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCameraSetup.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCameraSetup.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupFocused.h Main\include\auto\MogreShadowCameraSetupFocused.h
+--- Main\include\auto\MogreShadowCameraSetupFocused.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCameraSetupFocused.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCameraSetupFocused.h"
++#pragma managed(pop)
+ #include "MogreShadowCameraSetup.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupLiSPSM.h Main\include\auto\MogreShadowCameraSetupLiSPSM.h
+--- Main\include\auto\MogreShadowCameraSetupLiSPSM.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCameraSetupLiSPSM.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCameraSetupLiSPSM.h"
++#pragma managed(pop)
+ #include "MogreShadowCameraSetupFocused.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h
+--- Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCameraSetupPlaneOptimal.h"
++#pragma managed(pop)
+ #include "MogreShadowCameraSetup.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPSSM.h Main\include\auto\MogreShadowCameraSetupPSSM.h
+--- Main\include\auto\MogreShadowCameraSetupPSSM.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCameraSetupPSSM.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCameraSetupPSSM.h"
++#pragma managed(pop)
+ #include "MogreShadowCameraSetupLiSPSM.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreShadowCaster.h Main\include\auto\MogreShadowCaster.h
+--- Main\include\auto\MogreShadowCaster.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowCaster.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowCaster.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreGpuProgramParams.h"
+diff -r -u -N -w Main\include\auto\MogreShadowTextureManager.h Main\include\auto\MogreShadowTextureManager.h
+--- Main\include\auto\MogreShadowTextureManager.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreShadowTextureManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreShadowTextureManager.h"
++#pragma managed(pop)
+ #include "MogrePixelFormat.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreSimplePageContentCollection.h Main\include\auto\MogreSimplePageContentCollection.h
+--- Main\include\auto\MogreSimplePageContentCollection.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSimplePageContentCollection.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSimplePageContentCollection.h"
++#pragma managed(pop)
+ #include "MogrePageContentCollection.h"
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreSimpleRenderable.h Main\include\auto\MogreSimpleRenderable.h
+--- Main\include\auto\MogreSimpleRenderable.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSimpleRenderable.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSimpleRenderable.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogreMovableObject.h"
+ #include "MogrePrerequisites.h"
+diff -r -u -N -w Main\include\auto\MogreSimpleSpline.h Main\include\auto\MogreSimpleSpline.h
+--- Main\include\auto\MogreSimpleSpline.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSimpleSpline.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSimpleSpline.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreSkeleton.h Main\include\auto\MogreSkeleton.h
+--- Main\include\auto\MogreSkeleton.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSkeleton.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSkeleton.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreResource.h"
+ #include "MogreStringVector.h"
+diff -r -u -N -w Main\include\auto\MogreSkeletonInstance.h Main\include\auto\MogreSkeletonInstance.h
+--- Main\include\auto\MogreSkeletonInstance.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSkeletonInstance.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSkeletonInstance.h"
++#pragma managed(pop)
+ #include "MogreSkeleton.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreResource.h"
+diff -r -u -N -w Main\include\auto\MogreSkeletonManager.h Main\include\auto\MogreSkeletonManager.h
+--- Main\include\auto\MogreSkeletonManager.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSkeletonManager.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSkeletonManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreSkeletonSerializer.h Main\include\auto\MogreSkeletonSerializer.h
+--- Main\include\auto\MogreSkeletonSerializer.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSkeletonSerializer.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSkeletonSerializer.h"
++#pragma managed(pop)
+ #include "MogreSerializer.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreStaticGeometry.h Main\include\auto\MogreStaticGeometry.h
+--- Main\include\auto\MogreStaticGeometry.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreStaticGeometry.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreStaticGeometry.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ #include "MogreShadowCaster.h"
+diff -r -u -N -w Main\include\auto\MogreStreamSerialiser.h Main\include\auto\MogreStreamSerialiser.h
+--- Main\include\auto\MogreStreamSerialiser.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreStreamSerialiser.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreStreamSerialiser.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreString.h Main\include\auto\MogreString.h
+--- Main\include\auto\MogreString.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreString.h	Fri Aug 05 01:14:17 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreString.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreStringConverter.h Main\include\auto\MogreStringConverter.h
+--- Main\include\auto\MogreStringConverter.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreStringConverter.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreStringConverter.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreStringVector.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreStringInterface.h Main\include\auto\MogreStringInterface.h
+--- Main\include\auto\MogreStringInterface.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreStringInterface.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreStringInterface.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreStringVector.h Main\include\auto\MogreStringVector.h
+--- Main\include\auto\MogreStringVector.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreStringVector.h	Fri Aug 05 01:13:56 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreStringVector.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreSubEntity.h Main\include\auto\MogreSubEntity.h
+--- Main\include\auto\MogreSubEntity.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSubEntity.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSubEntity.h"
++#pragma managed(pop)
+ #include "MogreRenderable.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreGpuProgramParams.h"
+diff -r -u -N -w Main\include\auto\MogreSubMesh.h Main\include\auto\MogreSubMesh.h
+--- Main\include\auto\MogreSubMesh.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreSubMesh.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreSubMesh.h"
++#pragma managed(pop)
+ #include "MogreVertexBoneAssignment.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreRenderOperation.h"
+diff -r -u -N -w Main\include\auto\MogreTagPoint.h Main\include\auto\MogreTagPoint.h
+--- Main\include\auto\MogreTagPoint.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTagPoint.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTagPoint.h"
++#pragma managed(pop)
+ #include "MogreBone.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreTechnique.h Main\include\auto\MogreTechnique.h
+--- Main\include\auto\MogreTechnique.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTechnique.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTechnique.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreRenderSystemCapabilities.h"
+ #include "MogrePass.h"
+diff -r -u -N -w Main\include\auto\MogreTerrain.h Main\include\auto\MogreTerrain.h
+--- Main\include\auto\MogreTerrain.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTerrain.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrain.h"
++#pragma managed(pop)
+ #include "MogreSceneManager.h"
+ #include "MogreWorkQueue.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreTerrainGroup.h Main\include\auto\MogreTerrainGroup.h
+--- Main\include\auto\MogreTerrainGroup.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTerrainGroup.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainGroup.h"
++#pragma managed(pop)
+ #include "MogreWorkQueue.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreTerrain.h"
+diff -r -u -N -w Main\include\auto\MogreTerrainLayerBlendMap.h Main\include\auto\MogreTerrainLayerBlendMap.h
+--- Main\include\auto\MogreTerrainLayerBlendMap.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTerrainLayerBlendMap.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainLayerBlendMap.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGenerator.h Main\include\auto\MogreTerrainMaterialGenerator.h
+--- Main\include\auto\MogreTerrainMaterialGenerator.h	Sat Aug 06 12:02:16 2011
++++ Main\include\auto\MogreTerrainMaterialGenerator.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainMaterialGenerator.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGeneratorA.h Main\include\auto\MogreTerrainMaterialGeneratorA.h
+--- Main\include\auto\MogreTerrainMaterialGeneratorA.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTerrainMaterialGeneratorA.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainMaterialGeneratorA.h"
++#pragma managed(pop)
+ #include "MogreTerrainMaterialGenerator.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreTerrainPagedWorldSection.h Main\include\auto\MogreTerrainPagedWorldSection.h
+--- Main\include\auto\MogreTerrainPagedWorldSection.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTerrainPagedWorldSection.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainPagedWorldSection.h"
++#pragma managed(pop)
+ #include "MogrePagedWorldSection.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreTerrainPaging.h Main\include\auto\MogreTerrainPaging.h
+--- Main\include\auto\MogreTerrainPaging.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTerrainPaging.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainPaging.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogrePlatform.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreTerrainQuadTreeNode.h Main\include\auto\MogreTerrainQuadTreeNode.h
+--- Main\include\auto\MogreTerrainQuadTreeNode.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTerrainQuadTreeNode.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTerrainQuadTreeNode.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreTextAreaOverlayElement.h Main\include\auto\MogreTextAreaOverlayElement.h
+--- Main\include\auto\MogreTextAreaOverlayElement.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTextAreaOverlayElement.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTextAreaOverlayElement.h"
++#pragma managed(pop)
+ #include "MogreOverlayElement.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreTexture.h Main\include\auto\MogreTexture.h
+--- Main\include\auto\MogreTexture.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTexture.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTexture.h"
++#pragma managed(pop)
+ #include "MogreResource.h"
+ #include "MogrePrerequisites.h"
+ #include "MogrePixelFormat.h"
+diff -r -u -N -w Main\include\auto\MogreTextureManager.h Main\include\auto\MogreTextureManager.h
+--- Main\include\auto\MogreTextureManager.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTextureManager.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTextureManager.h"
++#pragma managed(pop)
+ #include "MogreResourceManager.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+diff -r -u -N -w Main\include\auto\MogreTextureUnitState.h Main\include\auto\MogreTextureUnitState.h
+--- Main\include\auto\MogreTextureUnitState.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreTextureUnitState.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreTextureUnitState.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreCommon.h"
+ #include "MogreBlendMode.h"
+diff -r -u -N -w Main\include\auto\MogreUnifiedHighLevelGpuProgram.h Main\include\auto\MogreUnifiedHighLevelGpuProgram.h
+--- Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreUnifiedHighLevelGpuProgram.h"
++#pragma managed(pop)
+ #include "MogreHighLevelGpuProgram.h"
+ #include "MogrePrerequisites.h"
+ #include "MogreResource.h"
+diff -r -u -N -w Main\include\auto\MogreUserObjectBindings.h Main\include\auto\MogreUserObjectBindings.h
+--- Main\include\auto\MogreUserObjectBindings.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreUserObjectBindings.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreUserObjectBindings.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ 
+ namespace Mogre
+diff -r -u -N -w Main\include\auto\MogreVertexBoneAssignment.h Main\include\auto\MogreVertexBoneAssignment.h
+--- Main\include\auto\MogreVertexBoneAssignment.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreVertexBoneAssignment.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreVertexBoneAssignment.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreVertexIndexData.h Main\include\auto\MogreVertexIndexData.h
+--- Main\include\auto\MogreVertexIndexData.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreVertexIndexData.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreVertexIndexData.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreHardwareVertexBuffer.h"
+ #include "MogreHardwareBuffer.h"
+diff -r -u -N -w Main\include\auto\MogreViewport.h Main\include\auto\MogreViewport.h
+--- Main\include\auto\MogreViewport.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreViewport.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreViewport.h"
++#pragma managed(pop)
+ #include "MogrePrerequisites.h"
+ #include "MogreFrustum.h"
+ #include "MogrePlatform.h"
+diff -r -u -N -w Main\include\auto\MogreWindowEventUtilities.h Main\include\auto\MogreWindowEventUtilities.h
+--- Main\include\auto\MogreWindowEventUtilities.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreWindowEventUtilities.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreWindowEventUtilities.h"
++#pragma managed(pop)
+ 
+ namespace Mogre
+ {
+diff -r -u -N -w Main\include\auto\MogreWireBoundingBox.h Main\include\auto\MogreWireBoundingBox.h
+--- Main\include\auto\MogreWireBoundingBox.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreWireBoundingBox.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreWireBoundingBox.h"
++#pragma managed(pop)
+ #include "MogreSimpleRenderable.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreWorkQueue.h Main\include\auto\MogreWorkQueue.h
+--- Main\include\auto\MogreWorkQueue.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreWorkQueue.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreWorkQueue.h"
++#pragma managed(pop)
+ #include "MogrePlatform.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\include\auto\MogreZip.h Main\include\auto\MogreZip.h
+--- Main\include\auto\MogreZip.h	Sat Aug 06 12:02:17 2011
++++ Main\include\auto\MogreZip.h	Fri Aug 05 01:13:55 2011
+@@ -3,7 +3,9 @@
+ 
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgreZip.h"
++#pragma managed(pop)
+ #include "MogreArchive.h"
+ #include "MogrePrerequisites.h"
+ 
+diff -r -u -N -w Main\OgreSrc\ogre\OgreMain\include\CLRHandle.h Main\OgreSrc\ogre\OgreMain\include\CLRHandle.h
+--- Main\OgreSrc\ogre\OgreMain\include\CLRHandle.h	Thu Feb 17 02:48:13 2011
++++ Main\OgreSrc\ogre\OgreMain\include\CLRHandle.h	Thu Aug 04 16:45:28 2011
+@@ -1,8 +1,14 @@
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlatform.h"
++#pragma managed(pop)
+ #include "CLRObject.h"
+ 
++#if defined( __cplusplus_cli )
++#pragma managed(push, on)
++#endif
++
+ #define DECLARE_CLRHANDLE CLRHandle _CLRHandle;
+ 
+ // Free the handle in a separate function in managed context. CLRHandle's destructor
+@@ -70,3 +76,7 @@
+ #endif
+ 
+ };
++
++#if defined( __cplusplus_cli )
++#pragma managed(pop)
++#endif
+\ No newline at end of file
+diff -r -u -N -w Main\OgreSrc\ogre\OgreMain\include\CLRObject.h Main\OgreSrc\ogre\OgreMain\include\CLRObject.h
+--- Main\OgreSrc\ogre\OgreMain\include\CLRObject.h	Thu Feb 17 02:48:13 2011
++++ Main\OgreSrc\ogre\OgreMain\include\CLRObject.h	Thu Aug 04 16:45:28 2011
+@@ -1,6 +1,12 @@
+ #pragma once
+ 
++#pragma managed(push, off)
+ #include "OgrePlatform.h"
++#pragma managed(pop)
++
++#if defined( __cplusplus_cli )
++#pragma managed(push, on)
++#endif
+ 
+ class CLRObject;
+ 
+@@ -89,3 +95,7 @@
+ #endif
+ 
+ };
++
++#if defined( __cplusplus_cli )
++#pragma managed(pop)
++#endif
+\ No newline at end of file
