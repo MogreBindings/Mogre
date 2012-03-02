@@ -100,6 +100,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="src\auto\Mogre-WIN32_OgreTimerImp.cpp" />
     <ClCompile Include="src\auto\MogreAnimable.cpp" />
     <ClCompile Include="src\auto\MogreAnimation.cpp" />
