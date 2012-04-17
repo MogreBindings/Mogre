@@ -2,7 +2,7 @@
 This is an old file, which previously contained a Mogre build instruction.
 It's content was moved to an other instruction file.
 
---> Look to the other build instruction files !!
+--> Look to the directory "Documentation"
 
 
 Note:
