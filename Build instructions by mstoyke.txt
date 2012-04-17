@@ -1,4 +1,24 @@
 
+--- Foreword ---
+
+This instruction file was originally written by user GantZ 
+in year 2010. Later it was improved by user mstoyke (also in 2010).
+It's related to Mogre 1.7. 
+
+
+Note:
+Have a look to the MogreBuilder.
+By this tool you can do the building/wrapping process very easy.
+http://www.ogre3d.org/tikiwiki/MogreBuilder
+
+So, this was my "foreword". (Written by Beauty in April 2012.)
+
+
+
+
+
+
+
 Step by step instructions to build Mogre/Ogre 1.7.1 with Visual Studio:
 =======================================================================
 
