@@ -1,4 +1,6 @@
 mkdir build 2>nul
+mkdir build\doxyxml 2>nul
+
 bin\doxygen.exe ogre4j.doxygen
 
 copy /y fixedDoxygen\*.xml build\doxyxml
