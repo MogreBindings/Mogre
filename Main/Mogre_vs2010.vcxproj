@@ -80,7 +80,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP3 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -104,7 +104,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalOptions>/MP3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP3 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>include;include\auto;OgreSrc\ogre\OgreMain\include;OgreSrc\ogre\Components\Paging\include;OgreSrc\ogre\Components\Terrain\include;OgreSrc\ogre\include;OgreSrc\build\include;$(BOOST_INCLUDE_DIRECTORY);Ogre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
