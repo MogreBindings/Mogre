@@ -1,7 +1,13 @@
 #pragma once
 
+#pragma managed(push, off)
 #include "OgrePlatform.h"
+#pragma managed(pop)
 #include "CLRObject.h"
+
+#if defined( __cplusplus_cli )
+#pragma managed(push, on)
+#endif
 
 #define DECLARE_CLRHANDLE CLRHandle _CLRHandle;
 
@@ -70,3 +76,7 @@ public:
 #endif
 
 };
+
+#if defined( __cplusplus_cli )
+#pragma managed(pop)
+#endif

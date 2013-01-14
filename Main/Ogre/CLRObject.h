@@ -1,12 +1,18 @@
 #pragma once
 
+#pragma managed(push, off)
 #include "OgrePlatform.h"
+#pragma managed(pop)
+
+#if defined( __cplusplus_cli )
+#pragma managed(push, on)
+#endif
 
 class CLRObject;
 
 #define CLROBJECT(T) \
   void _OgreExport __Init_CLRObject_##T(CLRObject *pObj);
-#include "CLRObjects.inc"
+#include "../include/auto/CLRObjects.inc"
 #undef CLROBJECT
 
 //for subclasses of CLRObject
@@ -89,3 +95,7 @@ public:
 #endif
 
 };
+
+#if defined( __cplusplus_cli )
+#pragma managed(pop)
+#endif

@@ -1,3 +1,38 @@
+diff -r -u -N -w CMakeLists.txt CMakeLists.txt
+--- CMakeLists.txt	Sun Jan 15 02:53:06 2012 -0600
++++ CMakeLists.txt	Sun Jan 13 17:55:01 2013 +0100
+@@ -7,6 +7,8 @@
+ # free to make use of it in any way you like.
+ #-------------------------------------------------------------------
+ 
++include_directories("../../../Main/Ogre")
++
+ ######################################################################
+ # OGRE BUILD SYSTEM
+ # Welcome to the CMake build system for OGRE.
+
+diff -r -u -N -w OgreMain/CMakeLists.txt OgreMain/CMakeLists.txt
+--- OgreMain/CMakeLists.txt	Sun May 08 21:03:08 2011
++++ OgreMain/CMakeLists.txt	Thu Aug 04 16:45:27 2011
+@@ -18,6 +18,9 @@
+ 
+ # define header and source files for the library
+ set (HEADER_FILES
++  ../../../../Main/Ogre/CLRConfig.h
++  ../../../../Main/Ogre/CLRHandle.h
++  ../../../../Main/Ogre/CLRObject.h
+   include/asm_math.h
+   include/Ogre.h
+   include/OgreAlignedAllocator.h
+@@ -256,6 +259,8 @@
+ )
+ 
+ set (SOURCE_FILES
++  ../../../../Main/Ogre/CLRHandle.cpp
++  ../../../../Main/Ogre/CLRObject.cpp
+   src/OgreAlignedAllocator.cpp
+   src/OgreAnimable.cpp
+   src/OgreAnimation.cpp
 diff -r -u -N -w Components\Paging\include\OgreGrid2DPageStrategy.h Components\Paging\include\OgreGrid2DPageStrategy.h
 --- Components\Paging\include\OgreGrid2DPageStrategy.h	Sun May 08 21:03:08 2011
 +++ Components\Paging\include\OgreGrid2DPageStrategy.h	Thu Aug 04 16:45:27 2011
