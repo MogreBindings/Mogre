@@ -79,10 +79,10 @@ Instructions (all commands are to be run on the command line)
 16. Select "Debug" or "Release" configuration in the toolbar.
 17. In the solution explorer right click ALL_BUILD, select "Rebuild" and wait (can last 1-2 hours)
 18. Open solution "Mogre\Main\Mogre_vs2010.sln" or "Mogre\Main\Mogre_vs2012.sln" (according to your VS version).
-19. Select "Debug" or "Release" configuration in the toolbar.
-20. In Solution Explorer right click "Mogre" and select "Rebuild".
-21. Open solution "Mogre\Main\OgreSrc\build\OGRE.sln" again.
-22. In the solution explorer open the file "OgreMain/Header Files/CLRConfig.h" again and change "#define LINK_TO_MOGRE" back to 1.
-23. Right click ALL_BUILD again, select "Build" this time.
-24. Copy all files from "Mogre\Main\OgreSrc\build\bin" and "Mogre\Main\lib" next to each other in a single folder.
-
+20. In solution explorer right click "Mogre" and select "Configuration Manager".
+21. Select active configuration (Debug/Release) and platform (Win32/x64).
+22. In solution explorer right click "Mogre" and select "Rebuild".
+23. Open solution "Mogre\Main\OgreSrc\build\OGRE.sln" again.
+24. In the solution explorer open the file "OgreMain/Header Files/CLRConfig.h" again and change "#define LINK_TO_MOGRE" back to 1.
+25. Right click ALL_BUILD again, select "Build" this time (don't select "Rebuild", it will take much longer).
+26. Copy all files from "Mogre\Main\OgreSrc\build\bin" and "Mogre\Main\lib" next to each other in a single folder.
