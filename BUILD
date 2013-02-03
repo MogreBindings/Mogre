@@ -1,8 +1,6 @@
+This is an old file, which previously contained Mogre build instructions.
 
-This is an old file, which previously contained a Mogre build instruction.
-It's content was moved to an other instruction file.
-
---> Look to the directory "Documentation"
+Its content was moved into the directory "Documentation".
 
 
 Note:

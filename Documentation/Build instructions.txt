@@ -1,0 +1,88 @@
+
+Recommended way to build Mogre:
+=======================================================================
+
+The recommended way to build Mogre is using the MogreBuilder. It automates
+the whole process including downloading repositories, patching Ogre, building
+Ogre/Mogre and building Mogre addons.
+
+You will find instructions, requirements, downloads an more here:
+http://www.ogre3d.org/tikiwiki/MogreBuilder
+
+
+
+
+Building Mogre yourself (without using MogreBuilder):
+=======================================================================
+
+Introduction:
+You may want to build Mogre yourself if you want to include your own
+modifications to Mogre and Ogre or use Addons not included in MogreBuilder
+yet (but feel free to extend MogreBuilder).
+
+
+Required software:
+- TortoiseHg (http://tortoisehg.bitbucket.org/)
+  Needed to grab the sources from a repository on the web. Any other Mercurial
+  client can be used too. 
+- GNU Patch (http://gnuwin32.sourceforge.net/packages/patch.htm
+  Needed to apply the Mogre patch against Ogre sources.
+- CMake (http://www.cmake.org/)
+  Used to generate the Visual Studio projects to build Ogre.
+- Microsoft Visual Studio (http://www.microsoft.com/visualstudio/eng/downloads)
+  Used to compile Mogre. You can either use the 2010 or 2012 versions.
+  If you want to use VS 2012 you need "Visual Studio 2012 Express for Windows
+  Desktop" (free) or VS 2012 "Professional", "Premium" or "ultimate" (paid).
+  If you want to use VS 2010 you need to install "Visual C++ 2010 Express" AND
+  "Visual C# 2010 Express".
+- patch.exe (http://gnuwin32.sourceforge.net/packages/patch.htm)
+  Used to apply the Mogre patch against Ogre.
+
+  
+Instructions (all commands are to be run on the command line)
+1.  Create target directory and "cd" into it.
+2.  Clone Mogre: "hg clone http://bitbucket.org/mogre/mogre Mogre".
+3.  Clone Ogre 1.7: "hg clone http://bitbucket.org/sinbad/ogre -u v1-7 Mogre\Main\OgreSrc\ogre".
+4.  Clone Ogre dependencies: "hg clone https://bitbucket.org/cabalistic/ogredeps Mogre\Main\OgreSrc\ogre\Dependencies".
+5.  Apply Ogre patch: "patch.exe -p0 -i "..\..\Ogre Patches\mogre-1.7.3-clrobject.patch" -d Mogre\Main\OgreSrc\ogre"
+    (make sure patch.exe is on your system PATH or specify path to patch.exe)
+6.  Start CMake GUI to generate Ogre build files.
+    * Set "Where is the source code:" field to "C:\your_target_directory\Mogre\Main\OgreSrc\ogre"
+    * Set "Where to build the binaries:" field to "C:\your_target_directory\Mogre\Main\OgreSrc\build" (directory does not exist yet)
+    * Check the "Advanced" checkbox.
+    * Press "Configure" button
+    * Say yes if CMake asks to create build directory
+    * Select "Visual Studio 10" (= Visual Studio 2010), "Visual Studio 11" (= Visual Studio 2012) according to your installed version.
+      Select the "Win64" ones if you want to build the x64 version.
+    * CMake will run and stop with an error message (this is expected!).
+    * Press "Configure" again. CMake will now run successfully, the last line in the log window will read "Configuring done".
+    * Set the following options:
+        - OGRE_CONFIG_ENABLE_PVRTC = On
+        - OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR = Off
+        - OGRE_BUILD_TOOLS = Off
+        - OGRE_BUILD_SAMPLES = Off
+        - OGREDEPS_BUILD_OIS = Off
+        - CMAKE_CONFIGURATION_TYPES = Debug;Release
+    * Press "Configure" one last time. Again the last line in the log window will read "Configuring done".
+    * Press "Generate" button. The last line in the log window will now read "Generating done".
+    * Close CMake GUI
+7.  Change to cpp2java folder: "cd Mogre\Codegen\cpp2java"
+8.  Execute build.bat: "build.bat"
+9.  Change back to target folder: "cd ..\..\.."
+10. Open solution "Mogre\Codegen\AutoWrap\AutoWrap_vs2010.sln" (will work in VS 2012 too)
+11. Compile an run the project.
+12. From within VS run AutoWrap, click "Produce", wait until "OK", close AutoWrap and Visual Studio
+13.  Apply Cygon's patch: "patch.exe -p0 -i "..\..\Ogre Patches\mogre-1.7.3-cygon.patch" -d Mogre"
+    (Cygon's patch is optional but it contains optimizations resulting in smaller and therefore faster binaries)
+14. Open solution "Mogre\Main\OgreSrc\build\OGRE.sln" in Visual Studio.
+15. In the solution explorer open the file "OgreMain/Header Files/CLRConfig.h" and change "#define LINK_TO_MOGRE 1" to "#define LINK_TO_MOGRE 0".
+16. Select "Debug" or "Release" configuration in the toolbar.
+17. In the solution explorer right click ALL_BUILD, select "Rebuild" and wait (can last 1-2 hours)
+18. Open solution "Mogre\Main\Mogre_vs2010.sln" or "Mogre\Main\Mogre_vs2012.sln" (according to your VS version).
+19. Select "Debug" or "Release" configuration in the toolbar.
+20. In Solution Explorer right click "Mogre" and select "Rebuild".
+21. Open solution "Mogre\Main\OgreSrc\build\OGRE.sln" again.
+22. In the solution explorer open the file "OgreMain/Header Files/CLRConfig.h" again and change "#define LINK_TO_MOGRE" back to 1.
+23. Right click ALL_BUILD again, select "Build" this time.
+24. Copy all files from "Mogre\Main\OgreSrc\build\bin" and "Mogre\Main\lib" next to each other in a single folder.
+
