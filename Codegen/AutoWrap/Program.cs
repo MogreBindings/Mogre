@@ -36,7 +36,7 @@ namespace AutoWrap
                 Directory.CreateDirectory(SRC_DEST_DIR);
 
 
-            Wrapper wrapper = new Wrapper(meta, INCLUDES_DEST_DIR, SRC_DEST_DIR, "Mogre", "Ogre");
+            Wrapper wrapper = new Wrapper(meta, INCLUDES_DEST_DIR, SRC_DEST_DIR);
 
             if (args.Length > 0)
             {

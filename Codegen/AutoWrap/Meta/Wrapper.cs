@@ -118,12 +118,12 @@ namespace AutoWrap.Meta
         public List<ClassProducer> PostClassProducers = new List<ClassProducer>();
         public List<ClassProducer> PreClassProducers = new List<ClassProducer>();
 
-        public Wrapper(MetaDefinition meta, string includePath, string sourcePath, string mngNamespace, string ntvNamespace)
+        public Wrapper(MetaDefinition meta, string includePath, string sourcePath)
         {
             this._includePath = includePath;
             this._sourcePath = sourcePath;
-            this.ManagedNamespace = mngNamespace;
-            this.NativeNamespace = ntvNamespace;
+            this.ManagedNamespace = Globals.ManagedNamespace;
+            this.NativeNamespace = Globals.NativeNamespace;
 
             foreach (DefNameSpace space in meta.NameSpaces)
             {
