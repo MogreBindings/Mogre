@@ -276,19 +276,19 @@ namespace AutoWrap.Meta
             PreDeclarations.Clear();
             PragmaMakePublicTypes.Clear();
 
-            foreach (string include in IncludeFiles.Keys)
+            foreach (string includeFile in IncludeFiles.Keys)
             {
-                string wrapFile = include.Replace(".h", "");
-                wrapFile = GetManagedIncludeFileName(wrapFile);
+                // Strip ".h" from the file name
+                string baseFileName = GetManagedIncludeFileName(includeFile.Substring(0, includeFile.Length - 2));
 
-                string incFile = _includePath + "\\" + wrapFile + ".h";
-                string cppFile = _sourcePath + "\\" + wrapFile + ".cpp";
+                string incFile = _includePath + "\\" + baseFileName + ".h";
+                string cppFile = _sourcePath + "\\" + baseFileName + ".cpp";
 
                 using (StreamWriter write = new StreamWriter(new MemoryStream()))
                 {
-                    write.Write(Copyright);
-                    write.Write(CreateIncludeCodeForIncludeFile(include));
-                    if (include == "OgrePrerequisites.h")
+                    write.Write(HEADER_TEXT);
+                    write.Write(CreateIncludeCodeForIncludeFile(includeFile));
+                    if (includeFile == "OgrePrerequisites.h")
                     {
                       write.Write("#include \"MogrePagingPrerequisites.h\"");
                     }
@@ -297,19 +297,19 @@ namespace AutoWrap.Meta
                 }
 
                 bool hasContent;
-                string txt = CreateCppCodeForIncludeFile(include, out hasContent);
+                string txt = CreateCppCodeForIncludeFile(includeFile, out hasContent);
                 if (hasContent)
                 {
                     using (StreamWriter write = new StreamWriter(new MemoryStream()))
                     {
-                        write.Write(Copyright);
+                        write.Write(HEADER_TEXT);
                         write.Write(txt);
                         write.Flush();
                         WriteToFile((MemoryStream)write.BaseStream, cppFile);
                     }
                 }
 
-                IncludeFileWrapped(this, new IncludeFileWrapEventArgs(include));
+                IncludeFileWrapped(this, new IncludeFileWrapEventArgs(includeFile));
             }
 
             //Create PreDeclarations.h
@@ -447,7 +447,7 @@ namespace AutoWrap.Meta
 
                 using (StreamWriter write = new StreamWriter(new MemoryStream()))
                 {
-                    write.Write(Copyright);
+                    write.Write(HEADER_TEXT);
                     write.Write(CreateIncludeCodeForOverridable(type));
                     write.Flush();
                     WriteToFile(write.BaseStream as MemoryStream, incFile);
@@ -455,7 +455,7 @@ namespace AutoWrap.Meta
 
                 using (StreamWriter write = new StreamWriter(new MemoryStream()))
                 {
-                    write.Write(Copyright);
+                    write.Write(HEADER_TEXT);
                     write.Write(CreateCppCodeForOverridable(type));
                     write.Flush();
                     WriteToFile(write.BaseStream as MemoryStream, cppFile);
@@ -466,6 +466,10 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Writes the contents to the specified file. Checks whether the content has actually
+        /// changed to prevent unnecessary rebuilds.
+        /// </summary>
         protected void WriteToFile(MemoryStream memStream, string file)
         {
             if (File.Exists(file))
@@ -1469,7 +1473,11 @@ namespace AutoWrap.Meta
             }
         }
 
-        public static string Copyright = @"/*  This file is produced by the C++/CLI AutoWrapper utility.
+
+        /// <summary>
+        /// Header text for all auto-generated source files.
+        /// </summary>
+        public static readonly string HEADER_TEXT = @"/*  This file is produced by the C++/CLI AutoWrapper utility.
         Copyright (c) 2006 by Argiris Kirtzidis  */
 
 ".Replace("\r", "");
