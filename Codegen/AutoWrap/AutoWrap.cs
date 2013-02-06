@@ -10,11 +10,11 @@ using AutoWrap.Meta;
 
 namespace AutoWrap
 {
-    public partial class Form1 : Form
+    public partial class AutoWrap : Form
     {
         Wrapper _wrapper;
 
-        public Form1(Wrapper wrapper)
+        public AutoWrap(Wrapper wrapper)
         {
             InitializeComponent();
 

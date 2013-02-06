@@ -65,7 +65,7 @@ namespace AutoWrap
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1(wrapper));
+                Application.Run(new AutoWrap(wrapper));
             }
         }
     }

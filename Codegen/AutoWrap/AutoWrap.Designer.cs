@@ -1,6 +1,6 @@
 namespace AutoWrap
 {
-    partial class Form1
+    partial class AutoWrap
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@ namespace AutoWrap
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoWrap));
             this.button1 = new System.Windows.Forms.Button();
             this.lstTypes = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -100,7 +101,7 @@ namespace AutoWrap
             this.bar.TabIndex = 5;
             this.bar.Visible = false;
             // 
-            // Form1
+            // AutoWrap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,9 +112,10 @@ namespace AutoWrap
             this.Controls.Add(this.button2);
             this.Controls.Add(this.lstTypes);
             this.Controls.Add(this.button1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "AutoWrap";
+            this.Text = "AutoWrap";
             this.ResumeLayout(false);
             this.PerformLayout();
 
