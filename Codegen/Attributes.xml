@@ -18,8 +18,8 @@
     <typedef name="ResourceAllocPolicy" Ignore="" />
     <typedef name="ScriptingAllocPolicy" Ignore="" />
     <typedef name="RenderSysAllocPolicy" Ignore="" />
-	<!--ignore list of mogre 1.7 -->
-	<typedef name="STLAllocator" Ignore="" />
+    <!--ignore list of mogre 1.7 -->
+    <typedef name="STLAllocator" Ignore="" />
 
     <!-- Ignore the script compiler classes for now -->
     <class name="ScriptToken" Ignore="" />
@@ -36,36 +36,37 @@
       <function name="getOptimalAdjustFactor" Ignore="" />
       <function name="setOptimalAdjustFactor" Ignore="" />
       <_CustomIncDeclaration>
-public:
-  property Mogre::Real OptimalAdjustFactor {
-  public:
-    Mogre::Real get() {
-      return static_cast&lt;Ogre::PSSMShadowCameraSetup*&gt;(_native)->getOptimalAdjustFactor();
+public: property Mogre::Real OptimalAdjustFactor
+{
+    public: Mogre::Real get()
+    {
+        return static_cast&lt;Ogre::PSSMShadowCameraSetup*&gt;(_native)->getOptimalAdjustFactor();
     }
-  }
-  void SetOptimalAdjustFactor(int idx, Mogre::Real factor) {
+}
+void SetOptimalAdjustFactor(int idx, Mogre::Real factor)
+{
     static_cast&lt;Ogre::PSSMShadowCameraSetup*&gt;(_native)->setOptimalAdjustFactor(idx, factor);
-  }
+}
       </_CustomIncDeclaration>
     </class>
-    
+
     <class name="MaterialManager">
       <class name="Listener" WrapType="Interface" />
-	  <!-- Mogre 1.7 for an unknow reason, OGRE_THREAD_POINTER make it in meta.xml while it was missing in the previous version  -->
-	  <!--<function name="OGRE_THREAD_POINTER" Ignore="" />-->
+      <!-- Mogre 1.7 for an unknow reason, OGRE_THREAD_POINTER make it in meta.xml while it was missing in the previous version  -->
+      <!--<function name="OGRE_THREAD_POINTER" Ignore="" />-->
     </class>
 
     <class name="BackgroundProcessResult" WrapType="CLRHandle">
       <variable name="error" Rename="Error" />
       <variable name="message" Rename="Message" />
     </class>
-    
+
     <!-- Wrap this class is not necesary for Unicode Support-->
     <class name="UTFString" Ignore=""/>
     <class name="Pass">
       <!-- Must handle "operator()" function first -->
       <!-- For some reason, this is no longer in the meta for 1.6? It still exists, but I believe it was made private -->
-	  <!--<class name="HashFunc" Ignore=""/>-->
+      <!--<class name="HashFunc" Ignore=""/>-->
     </class>
     <class name="UnifiedHighLevelGpuProgram">
       <!-- There are conflicts with addListener/removeListener from the base Resource class -->
@@ -77,9 +78,9 @@ public:
         LoadImageA, and there were stupid linker errors everywhere. -->
     <class name="Texture">
       <_CustomIncDeclaration>
-        #ifdef LoadImage
-          #undef LoadImage
-        #endif
+#ifdef LoadImage
+#undef LoadImage
+#endif
       </_CustomIncDeclaration>
     </class>
 
@@ -101,13 +102,13 @@ public:
       <function name="softwareVertexBlend" Ignore=""/>
       <function name="softwareVertexPoseBlend">
         <_CustomCppDeclaration>
-        void Mesh::SoftwareVertexPoseBlend( Mogre::Real weight, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ vertexOffsetMap, Mogre::VertexData^ targetVertexData )
-        {
-            Ogre::map&lt;size_t,Ogre::Vector3>::type o_vertexOffsetMap;
-            FillMapFromSortedList&lt;Ogre::map&lt;size_t,Ogre::Vector3>::type, size_t, Mogre::Vector3>(o_vertexOffsetMap, vertexOffsetMap);
+void Mesh::SoftwareVertexPoseBlend(Mogre::Real weight, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ vertexOffsetMap, Mogre::VertexData^ targetVertexData)
+{
+    Ogre::map&lt;size_t,Ogre::Vector3>::type o_vertexOffsetMap;
+    FillMapFromSortedList&lt;Ogre::map&lt;size_t,Ogre::Vector3>::type, size_t, Mogre::Vector3>(o_vertexOffsetMap, vertexOffsetMap);
 
-            Ogre::Mesh::softwareVertexPoseBlend( weight, o_vertexOffsetMap, targetVertexData );
-        }
+    Ogre::Mesh::softwareVertexPoseBlend(weight, o_vertexOffsetMap, targetVertexData);
+}
         </_CustomCppDeclaration>
       </function>
     </class>
@@ -118,10 +119,10 @@ public:
       <!-- Replaced by the custom declaration below. -->
       <function name="toString" Ignore="" />
       <_CustomIncDeclaration>
-        public:
-          virtual System::String^ ToString() override {
-            return System::String::Format("{0}.{1}.{2}.{3}", major, minor, release, build);
-          }
+public: virtual System::String^ ToString() override
+{
+    return System::String::Format("{0}.{1}.{2}.{3}", major, minor, release, build);
+}
       </_CustomIncDeclaration>
     </class>
     <class name="TimeIndex" WrapType="CLRHandle"/>
@@ -139,8 +140,6 @@ public:
       <class name="InstancedObject" WrapType="CLRHandle"/>
       <class name="BatchInstance">
         <variable name="mLodValues" Ignore=""/>
-	  <!-- Removed in 1.6
-			<function name="getObjectsAsArray" Ignore=""/>-->
       </class>
     </class>
     <class name="EdgeData">
@@ -167,9 +166,9 @@ public:
     <class name="DynLibManager" Ignore=""/>
     <class name="TempBlendedBufferInfo" Ignore=""/>
     <class name="HardwareBufferLicensee" Ignore=""/>
-	<class name="HardwareVertexBuffer">
-		<variable name="mMgr" Ignore="" />
-	</class>
+    <class name="HardwareVertexBuffer">
+      <variable name="mMgr" Ignore="" />
+    </class>
     <class name="FreeImageCodec" Ignore=""/>
     <!-- ILImageCodec is not used any more -->
     <class name="ILImageCodec" Ignore=""/>
@@ -192,11 +191,11 @@ public:
 
     <class name="DefaultSceneManager" Ignore=""/>
     <class name="ResourceGroupManager">
-      
+
       <!-- These functions are leftovers, without implementation. Should be removed eventually... -->
       <function name="_notifyWorldGeometryStageStarted" Ignore=""/>
       <function name="_notifyWorldGeometryStageEnded" Ignore=""/>
-      
+
       <struct name="ResourceDeclaration" WrapType="NativePtrValueType"/>
       <typedef name="ResourceDeclarationList" STLListNoRemoveAndUnique=""/>
       <!--= It's protected -->
@@ -220,11 +219,10 @@ public:
     <!-- to avoid name clash with System.Exception -->
     <class name="Exception" WrapType="PlainWrapper" ReadOnly="" Rename="OgreException">
       <_CustomIncDeclaration>
-        property bool IsThrown
-        {
-        public:
-          static bool get() { return LastException != nullptr; }
-        }
+property bool IsThrown
+{
+    public: static bool get() { return LastException != nullptr; }
+}
       </_CustomIncDeclaration>
     </class>
     <class name="EdgeData" WrapType="CLRHandle">
@@ -242,11 +240,11 @@ public:
       <struct name="AutoConstantDefinition" WrapType="NativePtrValueType"/>
       <struct name="AutoConstantEntry" WrapType="NativePtrValueType"/>
     </class>
-	<class name="GpuSharedParameters" WrapType="CLRHandle">
-	</class>
-	<class name="GpuSharedParametersUsage" WrapType="CLRHandle">
-		<struct name="CopyDataEntry" WrapType="NativePtrValueType" />
-	</class>
+    <class name="GpuSharedParameters" WrapType="CLRHandle">
+    </class>
+    <class name="GpuSharedParametersUsage" WrapType="CLRHandle">
+      <struct name="CopyDataEntry" WrapType="NativePtrValueType" />
+    </class>
 
     <class name="RenderSystem">
       <class name="Listener" WrapType="NativeDirector"/>
@@ -281,14 +279,14 @@ public:
     </class>
     <!-- class name="Profiler" Ignore=""/ -->
     <class name="AutoParamDataSource" Ignore=""/>
-    <class name="Renderable" WrapType="Interface">      
-		  <class name="Visitor" WrapType="Interface" Ignore="" />
+    <class name="Renderable" WrapType="Interface">
+      <class name="Visitor" WrapType="Interface" Ignore="" />
       <class name="RenderSystemData" Ignore="" />
       <function name="getRenderSystemData" Ignore="" />
       <function name="setRenderSystemData" Ignore="" />
       <function name="getUserAny" Ignore="" />
       <function name="setUserAny" Ignore="" />
-	  </class>
+    </class>
     <class name="RenderQueue">
       <class name="RenderableListener" WrapType="Interface"/>
     </class>
@@ -345,26 +343,26 @@ public:
       <function name="_forceReleaseBufferCopies" Ignore=""/>
       <function name="HardwareBufferManager" Ignore=""/>
       <_CustomIncDeclaration>
-        private protected:
-            static HardwareBufferManager^ _singleton;
-        public:
-		static property HardwareBufferManager^ Singleton
-		{
-			HardwareBufferManager^ get()
-			{
-				Ogre::HardwareBufferManager* ptr = Ogre::HardwareBufferManager::getSingletonPtr();
-				if (_singleton == CLR_NULL || _singleton->_native != ptr)
-				{
-					if (_singleton != CLR_NULL)
-					{
-						_singleton->_native = 0;
-						_singleton = nullptr;
-					}
-					if ( ptr ) _singleton = gcnew HardwareBufferManager( ptr );
-				}
-				return _singleton;
-			}
-		}            
+private protected: static HardwareBufferManager^ _singleton;
+
+public: static property HardwareBufferManager^ Singleton
+{
+    HardwareBufferManager^ get()
+    {
+        Ogre::HardwareBufferManager* ptr = Ogre::HardwareBufferManager::getSingletonPtr();
+        if (_singleton == CLR_NULL || _singleton->_native != ptr)
+        {
+            if (_singleton != CLR_NULL)
+            {
+                _singleton->_native = 0;
+                _singleton = nullptr;
+            }
+            if ( ptr )
+                _singleton = gcnew HardwareBufferManager(ptr);
+        }
+        return _singleton;
+    }
+}
       </_CustomIncDeclaration>
     </class>
     <class name="CompositorInstance">
@@ -459,7 +457,7 @@ public:
       <function name="VertexData" HideParamsWithDefaultValues="">
         <param name="mgr" Ignore=""/>
       </function>
-	</class>
+    </class>
     <class name="TextureUnitState" WrapType="CLRHandle"/>
     <class name="Technique" WrapType="CLRHandle">
       <function name="checkGPURules" Ignore="" />
@@ -473,18 +471,18 @@ public:
         <variable name="includeOrExclude" Rename="IncludeOrExclude" />
         <variable name="caseSensitive" Rename="CaseSensitive" />
         <_CustomIncDeclaration>
-          public:
-          property String^ DevicePattern {
-          public:
-            String^ get() {
-              return TO_CLR_STRING(_native->devicePattern);
-            }
-          public:
-            void set(String^ dp) {
-              DECLARE_NATIVE_STRING(odp, dp);
-              _native->devicePattern = odp;
-            }
-          }
+public: property String^ DevicePattern
+{
+    public: String^ get()
+    {
+        return TO_CLR_STRING(_native->devicePattern);
+    }
+    public: void set(String^ dp)
+    {
+        DECLARE_NATIVE_STRING(odp, dp);
+        _native->devicePattern = odp;
+    }
+}
         </_CustomIncDeclaration>
       </class>
     </class>
@@ -531,10 +529,10 @@ public:
     <class name="PixelBox" ValueType=""/>
     <class name="VertexElement" ReadOnlyForFields="" PureManagedClass="data">
       <_CustomIncClassDefinition>
-        // Can't use a value class inside an array unless it's fully defined.
-        // Include the ported VertexElement definition.
-        // Update: I changed it to ref class but keep it this way in case it goes back to being value
-        #include "Custom\MogreVertexElement.i"
+// Can't use a value class inside an array unless it's fully defined.
+// Include the ported VertexElement definition.
+// Update: I changed it to ref class but keep it this way in case it goes back to being value
+#include "Custom\MogreVertexElement.i"
       </_CustomIncClassDefinition>
     </class>
 
@@ -570,14 +568,13 @@ public:
       <function name="setUserAny" Ignore="" />
       <function name="getUserAny" Ignore="" />
       <_CustomIncDeclaration>
-        protected:
-        Object^ _userObject;
-        public:
-        property Object^ UserObject
-        {
-        Object^ get() { return _userObject; }
-        void set(Object^ obj) { _userObject = obj; }
-        }
+protected: Object^ _userObject;
+
+public: property Object^ UserObject
+{
+    Object^ get() { return _userObject; }
+    void set(Object^ obj) { _userObject = obj; }
+}
       </_CustomIncDeclaration>
     </class>
 
@@ -589,10 +586,10 @@ public:
 
     <class name="Root">
       <_CustomDisposing>
-        // Collect all SharedPtr objects that are waiting for finalization
-        System::GC::Collect();
-        System::GC::WaitForPendingFinalizers();
-        System::GC::Collect();
+// Collect all SharedPtr objects that are waiting for finalization
+System::GC::Collect();
+System::GC::WaitForPendingFinalizers();
+System::GC::Collect();
       </_CustomDisposing>
     </class>
 
@@ -644,78 +641,78 @@ public:
     <class name="Camera">
       <function name="forwardIntersect">
         <_CustomIncDeclaration>
-          void ForwardIntersect(Mogre::Plane worldPlane, [Out] array&lt;Mogre::Vector4>^% intersect3d);
+void ForwardIntersect(Mogre::Plane worldPlane, [Out] array&lt;Mogre::Vector4>^% intersect3d);
         </_CustomIncDeclaration>
         <_CustomCppDeclaration>
-          void Camera::ForwardIntersect(Mogre::Plane worldPlane, array&lt;Mogre::Vector4>^% intersect3d)
-          {
-          Ogre::vector&lt;Ogre::Vector4>::type vec;
-          static_cast&lt;Ogre::Camera*>(_native)->forwardIntersect( worldPlane, &amp;vec);
-          intersect3d = GetArrayFromVector&lt;Mogre::Vector4, Ogre::vector&lt;Ogre::Vector4>::type >(vec);
-          }
+void Camera::ForwardIntersect(Mogre::Plane worldPlane, array&lt;Mogre::Vector4>^% intersect3d)
+{
+    Ogre::vector&lt;Ogre::Vector4>::type vec;
+    static_cast&lt;Ogre::Camera*>(_native)->forwardIntersect(worldPlane, &amp;vec);
+    intersect3d = GetArrayFromVector&lt;Mogre::Vector4, Ogre::vector&lt;Ogre::Vector4>::type >(vec);
+}
         </_CustomCppDeclaration>
       </function>
       <function name="addListener" Ignore="" />
-      <function name="removeListener" Ignore="" />		
+      <function name="removeListener" Ignore="" />
     </class>
 
     <class name="PixelUtil" WrapType="PlainWrapper">
       <function name="getBitDepths">
         <_CustomIncDeclaration>
-          static void GetBitDepths( Mogre::PixelFormat format, [Out] array&lt;int>^% rgba );
+static void GetBitDepths(Mogre::PixelFormat format, [Out] array&lt;int>^% rgba);
         </_CustomIncDeclaration>
         <_CustomCppDeclaration>
-          void PixelUtil::GetBitDepths( Mogre::PixelFormat format, array&lt;int>^% rgba )
-          {
-          rgba = gcnew array&lt;int>(4);
-          pin_ptr&lt;int> ptr = &amp;rgba[0];
-          Ogre::PixelUtil::getBitDepths( (Ogre::PixelFormat)format, ptr );
-          }
+void PixelUtil::GetBitDepths(Mogre::PixelFormat format, array&lt;int>^% rgba)
+{
+    rgba = gcnew array&lt;int>(4);
+    pin_ptr&lt;int> ptr = &amp;rgba[0];
+    Ogre::PixelUtil::getBitDepths((Ogre::PixelFormat)format, ptr);
+}
         </_CustomCppDeclaration>
       </function>
       <function name="getBitMasks">
         <_CustomIncDeclaration>
-          static void GetBitMasks( Mogre::PixelFormat format, [Out] array&lt;uint32>^% rgba );
+static void GetBitMasks(Mogre::PixelFormat format, [Out] array&lt;uint32>^% rgba);
         </_CustomIncDeclaration>
         <_CustomCppDeclaration>
-          void PixelUtil::GetBitMasks( Mogre::PixelFormat format, array&lt;uint32>^% rgba )
-          {
-          rgba = gcnew array&lt;uint32>(4);
-          pin_ptr&lt;uint32> ptr = &amp;rgba[0];
-          Ogre::PixelUtil::getBitMasks( (Ogre::PixelFormat)format, ptr );
-          }
+void PixelUtil::GetBitMasks(Mogre::PixelFormat format, array&lt;uint32>^% rgba)
+{
+    rgba = gcnew array&lt;uint32>(4);
+    pin_ptr&lt;uint32> ptr = &amp;rgba[0];
+    Ogre::PixelUtil::getBitMasks((Ogre::PixelFormat)format, ptr);
+}
         </_CustomCppDeclaration>
       </function>
       <function name="getBitShifts">
         <_CustomIncDeclaration>
-          static void GetBitShifts( Mogre::PixelFormat format, [Out] array&lt;unsigned char>^% rgba );
+static void GetBitShifts(Mogre::PixelFormat format, [Out] array&lt;unsigned char>^% rgba);
         </_CustomIncDeclaration>
         <_CustomCppDeclaration>
-          void PixelUtil::GetBitShifts( Mogre::PixelFormat format, array&lt;unsigned char>^% rgba )
-          {
-          rgba = gcnew array&lt;unsigned char>(4);
-          pin_ptr&lt;unsigned char> ptr = &amp;rgba[0];
-          Ogre::PixelUtil::getBitShifts( (Ogre::PixelFormat)format, ptr );
-          }
+void PixelUtil::GetBitShifts(Mogre::PixelFormat format, array&lt;unsigned char>^% rgba)
+{
+    rgba = gcnew array&lt;unsigned char>(4);
+    pin_ptr&lt;unsigned char> ptr = &amp;rgba[0];
+    Ogre::PixelUtil::getBitShifts((Ogre::PixelFormat)format, ptr);
+}
         </_CustomCppDeclaration>
       </function>
     </class>
 
     <class name="MeshManager">
       <_CustomIncDeclaration>
-        public: generic&lt;typename T> where T : value class
-        Mogre::PatchMeshPtr^ CreateBezierPatch( String^ name, String^ groupName, array&lt;T>^ controlPointArray, Mogre::VertexDeclaration^ declaration, size_t width, size_t height, size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel, Mogre::PatchSurface::VisibleSide visibleSide, Mogre::HardwareBuffer::Usage vbUsage, Mogre::HardwareBuffer::Usage ibUsage, bool vbUseShadow, bool ibUseShadow );
+public: generic&lt;typename T> where T : value class
+Mogre::PatchMeshPtr^ CreateBezierPatch(String^ name, String^ groupName, array&lt;T>^ controlPointArray, Mogre::VertexDeclaration^ declaration, size_t width, size_t height, size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel, Mogre::PatchSurface::VisibleSide visibleSide, Mogre::HardwareBuffer::Usage vbUsage, Mogre::HardwareBuffer::Usage ibUsage, bool vbUseShadow, bool ibUseShadow);
       </_CustomIncDeclaration>
       <_CustomCppDeclaration>
-        generic&lt;typename T> where T : value class
-        Mogre::PatchMeshPtr^ MeshManager::CreateBezierPatch( String^ name, String^ groupName, array&lt;T>^ controlPointArray, Mogre::VertexDeclaration^ declaration, size_t width, size_t height, size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel, Mogre::PatchSurface::VisibleSide visibleSide, Mogre::HardwareBuffer::Usage vbUsage, Mogre::HardwareBuffer::Usage ibUsage, bool vbUseShadow, bool ibUseShadow )
-        {
-        DECLARE_NATIVE_STRING( o_name, name )
-        DECLARE_NATIVE_STRING( o_groupName, groupName )
-        pin_ptr&lt;T> buf = &amp;controlPointArray[0];
+generic&lt;typename T> where T : value class
+Mogre::PatchMeshPtr^ MeshManager::CreateBezierPatch(String^ name, String^ groupName, array&lt;T>^ controlPointArray, Mogre::VertexDeclaration^ declaration, size_t width, size_t height, size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel, Mogre::PatchSurface::VisibleSide visibleSide, Mogre::HardwareBuffer::Usage vbUsage, Mogre::HardwareBuffer::Usage ibUsage, bool vbUseShadow, bool ibUseShadow)
+{
+    DECLARE_NATIVE_STRING(o_name, name)
+    DECLARE_NATIVE_STRING(o_groupName, groupName)
+    pin_ptr&lt;T> buf = &amp;controlPointArray[0];
 
-        return static_cast&lt;Ogre::MeshManager*>(_native)->createBezierPatch( o_name, o_groupName, buf, declaration, width, height, uMaxSubdivisionLevel, vMaxSubdivisionLevel, (Ogre::PatchSurface::VisibleSide)visibleSide, (Ogre::HardwareBuffer::Usage)vbUsage, (Ogre::HardwareBuffer::Usage)ibUsage, vbUseShadow, ibUseShadow );
-        }
+    return static_cast&lt;Ogre::MeshManager*>(_native)->createBezierPatch(o_name, o_groupName, buf, declaration, width, height, uMaxSubdivisionLevel, vMaxSubdivisionLevel, (Ogre::PatchSurface::VisibleSide)visibleSide, (Ogre::HardwareBuffer::Usage)vbUsage, (Ogre::HardwareBuffer::Usage)ibUsage, vbUseShadow, ibUseShadow);
+}
       </_CustomCppDeclaration>
     </class>
 
@@ -725,110 +722,110 @@ public:
 
     <class name="SceneManager">
       <_CustomIncDeclaration>
-        public:
-        // Custom overloads for setting/getting SceneManager options
+public:
+// Custom overloads for setting/getting SceneManager options
 
-        bool SetOption( String^ strKey, bool value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] bool% value )
-        {
-        pin_ptr&lt;bool> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, bool value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] bool% value)
+{
+    pin_ptr&lt;bool> p = &amp;value;
+    return GetOption(strKey, p);
+}
 
-        bool SetOption( String^ strKey, int value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] int% value )
-        {
-        pin_ptr&lt;int> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, int value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] int% value)
+{
+    pin_ptr&lt;int> p = &amp;value;
+    return GetOption(strKey, p);
+}
 
-        bool SetOption( String^ strKey, Real value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] Real% value )
-        {
-        pin_ptr&lt;Real> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, Real value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] Real% value)
+{
+    pin_ptr&lt;Real> p = &amp;value;
+    return GetOption(strKey, p);
+}
 
-        bool SetOption( String^ strKey, String^ value )
-        {
-        DECLARE_NATIVE_STRING( o_str, value )
-        return SetOption(strKey, &amp;o_str);
-        }
-        bool GetOption( String^ strKey, [Out] String^% value )
-        {
-        Ogre::String o_str;
-        bool ret = GetOption(strKey, &amp;o_str);
-        if (ret)
-        {
-        value = TO_CLR_STRING( o_str );
-        }
+bool SetOption(String^ strKey, String^ value)
+{
+    DECLARE_NATIVE_STRING(o_str, value)
+    return SetOption(strKey, &amp;o_str);
+}
+bool GetOption(String^ strKey, [Out] String^% value)
+{
+    Ogre::String o_str;
+    bool ret = GetOption(strKey, &amp;o_str);
+    if (ret)
+    {
+        value = TO_CLR_STRING(o_str);
+    }
 
-        return ret;
-        }
+    return ret;
+}
 
-        bool SetOption( String^ strKey, Mogre::Vector3 value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] Mogre::Vector3% value )
-        {
-        pin_ptr&lt;Mogre::Vector3> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, Mogre::Vector3 value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] Mogre::Vector3% value)
+{
+    pin_ptr&lt;Mogre::Vector3> p = &amp;value;
+    return GetOption(strKey, p);
+}
 
-        bool SetOption( String^ strKey, Mogre::Vector2 value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] Mogre::Vector2% value )
-        {
-        pin_ptr&lt;Mogre::Vector2> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, Mogre::Vector2 value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] Mogre::Vector2% value)
+{
+    pin_ptr&lt;Mogre::Vector2> p = &amp;value;
+    return GetOption(strKey, p);
+}
 
-        bool SetOption( String^ strKey, Mogre::Quaternion value )
-        {
-        return SetOption(strKey, &amp;value);
-        }
-        bool GetOption( String^ strKey, [Out] Mogre::Quaternion% value )
-        {
-        pin_ptr&lt;Mogre::Quaternion> p = &amp;value;
-        return GetOption(strKey, p);
-        }
+bool SetOption(String^ strKey, Mogre::Quaternion value)
+{
+    return SetOption(strKey, &amp;value);
+}
+bool GetOption(String^ strKey, [Out] Mogre::Quaternion% value)
+{
+    pin_ptr&lt;Mogre::Quaternion> p = &amp;value;
+    return GetOption(strKey, p);
+}
       </_CustomIncDeclaration>
     </class>
 
     <class name="RenderTarget">
       <_CustomIncDeclaration>
-        public:
-        // Custom overloads for getting custom attributes
+public:
+// Custom overloads for getting custom attributes
 
-        void GetCustomAttribute( String^ name, [Out] bool% value )
-        {
-        pin_ptr&lt;bool> p = &amp;value;
-        GetCustomAttribute(name, p);
-        }
+void GetCustomAttribute(String^ name, [Out] bool% value)
+{
+    pin_ptr&lt;bool> p = &amp;value;
+    GetCustomAttribute(name, p);
+}
 
-        void GetCustomAttribute( String^ name, [Out] int% value )
-        {
-        pin_ptr&lt;int> p = &amp;value;
-        GetCustomAttribute(name, p);
-        }
+void GetCustomAttribute(String^ name, [Out] int% value)
+{
+    pin_ptr&lt;int> p = &amp;value;
+    GetCustomAttribute(name, p);
+}
 
-        void GetCustomAttribute( String^ name, [Out] IntPtr% value )
-        {
-        pin_ptr&lt;IntPtr> p = &amp;value;
-        GetCustomAttribute(name, p);
-        }
+void GetCustomAttribute(String^ name, [Out] IntPtr% value)
+{
+    pin_ptr&lt;IntPtr> p = &amp;value;
+    GetCustomAttribute(name, p);
+}
       </_CustomIncDeclaration>
     </class>
 
@@ -847,7 +844,7 @@ public:
       <function name="canHandleResponse" Ignore=""/>
       <function name="handleResponse" Ignore=""/>
     </class>
-    
+
     <class name="TerrainGroup">
       <class name="TerrainSlotDefinition" WrapType="PlainWrapper"/>
       <class name="TerrainSlot" WrapType="PlainWrapper"/>
@@ -860,14 +857,14 @@ public:
 
     <class name="TerrainLayerBlendMap" WrapType="PlainWrapper">
       <_CustomIncDeclaration>
-        #ifdef LoadImage
-          #undef LoadImage
-        #endif
+#ifdef LoadImage
+#undef LoadImage
+#endif
       </_CustomIncDeclaration>
       <_CustomCppDeclaration>
-        #ifdef LoadImage
-          #undef LoadImage
-        #endif
+#ifdef LoadImage
+#undef LoadImage
+#endif
       </_CustomCppDeclaration>
     </class>
 
@@ -887,7 +884,7 @@ public:
       <function name="canHandleResponse" Ignore=""/>
       <function name="handleResponse" Ignore=""/>
     </class>
-    
+
     <class name="StreamSerialiser">
       <function name="read" Ignore=""/>
       <function name="write" Ignore=""/>
@@ -896,7 +893,7 @@ public:
 
     <class name="WorkQueue">
       <_CustomIncPreDeclaration>
-        public: typedef Ogre::WorkQueue::RequestID RequestID;
+public: typedef Ogre::WorkQueue::RequestID RequestID;
       </_CustomIncPreDeclaration>
       <typedef name="RequestID" Ignore="" />
       <function name="addRequest" Ignore="" />
@@ -912,6 +909,6 @@ public:
       </class>
     </class>
     <class name="DefaultWorkQueueBase" Ignore="" />
-   
+
   </namespace>
 </meta>
