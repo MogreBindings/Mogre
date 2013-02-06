@@ -80,7 +80,7 @@ namespace AutoWrap
             groupBox2.Size = new System.Drawing.Size(609, 560);
             groupBox2.TabIndex = 7;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Source Code";
+            groupBox2.Text = "Final Source Code";
             // 
             // _sourceCodeField
             // 

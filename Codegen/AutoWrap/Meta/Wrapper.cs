@@ -291,7 +291,7 @@ namespace AutoWrap.Meta
                 // Header file
                 builder.Clear();
                 builder.Append(HEADER_TEXT);
-                builder.Append(CreateIncludeCodeForIncludeFile(includeFile));
+                builder.Append(GenerateIncludeFileCodeForIncludeFile(includeFile));
 				if (includeFile == "OgrePrerequisites.h")
                 {
                     builder.Append("#include \"MogrePagingPrerequisites.h\"");
@@ -300,7 +300,7 @@ namespace AutoWrap.Meta
 
                 // Source file
                 bool hasContent;
-                string txt = CreateCppCodeForIncludeFile(includeFile, out hasContent);
+                string txt = GenerateCppFileCodeForIncludeFile(includeFile, out hasContent);
                 if (hasContent)
                 {
                     // There is a .cpp file for the .h file.
@@ -444,12 +444,12 @@ namespace AutoWrap.Meta
 
                 builder.Clear();
                 builder.Append(HEADER_TEXT);
-                builder.Append(CreateIncludeCodeForOverridable(type));
+                builder.Append(GenerateIncludeFileCodeForOverridable(type));
                 WriteToFile(incFile, builder.ToString());
 
                 builder.Clear();
                 builder.Append(HEADER_TEXT);
-                builder.Append(CreateCppCodeForOverridable(type));
+                builder.Append(GenerateCppFileCodeForOverridable(type));
                 WriteToFile(cppFile, builder.ToString());
 
                 bar.Value++;
@@ -492,7 +492,11 @@ namespace AutoWrap.Meta
             return name;
         }
 
-        public string CreateIncludeCodeForIncludeFile(string include)
+        /// <summary>
+        /// Generates the C++/CLI code for .h file.
+        /// </summary>
+        /// <param name="includeFile">the name of the .h file from which to generate the code</param>
+        public string GenerateIncludeFileCodeForIncludeFile(string includeFile)
         {
             UsedTypes.Clear();
 
@@ -500,7 +504,7 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             IndentStringBuilder sbTypes = new IndentStringBuilder();
-            foreach (DefType t in IncludeFiles[include])
+            foreach (DefType t in IncludeFiles[includeFile])
             {
                 IncAddType(t, sbTypes);
             }
@@ -518,7 +522,7 @@ namespace AutoWrap.Meta
             IndentStringBuilder sb = new IndentStringBuilder();
             sb.AppendLine("#pragma once\n");
 
-            IncAddIncludeFiles(include, UsedTypes, sb);
+            IncAddIncludeFiles(includeFile, UsedTypes, sb);
 
             sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
 
@@ -531,7 +535,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r","");
         }
 
-        public string CreateCppCodeForIncludeFile(string include, out bool hasContent)
+        public string GenerateCppFileCodeForIncludeFile(string include, out bool hasContent)
         {
             UsedTypes.Clear();
 
@@ -577,7 +581,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public string CreateIncludeCodeForOverridable(DefClass type)
+        public string GenerateIncludeFileCodeForOverridable(DefClass type)
         {
             UsedTypes.Clear();
 
@@ -624,7 +628,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public string CreateCppCodeForOverridable(DefClass type)
+        public string GenerateCppFileCodeForOverridable(DefClass type)
         {
             IndentStringBuilder sb = new IndentStringBuilder();
 
