@@ -268,7 +268,10 @@ namespace AutoWrap.Meta
                 return false;
         }
 
-        public void ProduceCodeFiles()
+        /// <summary>
+        /// Generates the C++/CLI source and header files.
+        /// </summary>
+        public void GenerateCodeFiles()
         {
             PreDeclarations.Clear();
             PragmaMakePublicTypes.Clear();

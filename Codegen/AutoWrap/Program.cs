@@ -47,7 +47,7 @@ namespace AutoWrap
                     {
                         Console.WriteLine(e.IncludeFile);
                     };
-                    wrapper.ProduceCodeFiles();
+                    wrapper.GenerateCodeFiles();
                 }
                 else
                 {

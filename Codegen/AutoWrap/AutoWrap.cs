@@ -12,7 +12,8 @@ namespace AutoWrap
 {
     public partial class AutoWrap : Form
     {
-        Wrapper _wrapper;
+        private readonly Wrapper _wrapper;
+        private bool _showHeaderFiles = true;
 
         public AutoWrap(Wrapper wrapper)
         {
@@ -23,11 +24,11 @@ namespace AutoWrap
 
             for (int i = 0; i < _wrapper.IncludeFiles.Count; i++)
             {
-                lstTypes.Items.Add(_wrapper.IncludeFiles.Keys[i]);
+                _inputFilesList.Items.Add(_wrapper.IncludeFiles.Keys[i]);
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void GenerateButtonClicked(object sender, EventArgs e)
         {
             bar.Visible = true;
             bar.Minimum = 0;
@@ -35,8 +36,9 @@ namespace AutoWrap
             bar.Step = 1;
             bar.Value = 0;
 
-            _wrapper.ProduceCodeFiles();
-            MessageBox.Show("OK");
+            // Generate the C++/CLI source files
+            _wrapper.GenerateCodeFiles();
+            MessageBox.Show("Generation complete.");
 
             bar.Visible = false;
         }
@@ -47,20 +49,33 @@ namespace AutoWrap
             bar.Refresh();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void ToggleButtonClicked(object sender, EventArgs e)
         {
-            txt.Text = _wrapper.CreateIncludeCodeForIncludeFile(lstTypes.SelectedItem.ToString()).Replace("\n","\r\n");
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            bool hasContent;
-            txt.Text = _wrapper.CreateCppCodeForIncludeFile(lstTypes.SelectedItem.ToString(), out hasContent).Replace("\n", "\r\n");
+            _showHeaderFiles = !this._showHeaderFiles;
+            if (_showHeaderFiles)
+                _showToggleButton.Text = "Show CPP File";
+            else
+                _showToggleButton.Text = "Show Header File";
+            ShowCurrentFile();
         }
 
         private void lstTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txt.Text = _wrapper.CreateIncludeCodeForIncludeFile(lstTypes.SelectedItem.ToString()).Replace("\n", "\r\n");
+            ShowCurrentFile();
+        }
+
+        private void ShowCurrentFile() 
+        {
+          if (_inputFilesList.SelectedItem == null)
+              return;
+
+          if (_showHeaderFiles)
+              _sourceCodeField.Text = _wrapper.CreateIncludeCodeForIncludeFile(_inputFilesList.SelectedItem.ToString()).Replace("\n", "\r\n");
+          else 
+          {
+              bool hasContent;
+              _sourceCodeField.Text = _wrapper.CreateCppCodeForIncludeFile(_inputFilesList.SelectedItem.ToString(), out hasContent).Replace("\n", "\r\n");
+          }
         }
     }
 }

@@ -28,107 +28,142 @@ namespace AutoWrap
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.GroupBox groupBox1;
+            System.Windows.Forms.GroupBox groupBox2;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoWrap));
-            this.button1 = new System.Windows.Forms.Button();
-            this.lstTypes = new System.Windows.Forms.ListBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.txt = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this._inputFilesList = new System.Windows.Forms.ListBox();
+            this._sourceCodeField = new System.Windows.Forms.TextBox();
+            this._generateButton = new System.Windows.Forms.Button();
+            this._showToggleButton = new System.Windows.Forms.Button();
             this.bar = new System.Windows.Forms.ProgressBar();
+            this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // groupBox1
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
-            this.button1.Location = new System.Drawing.Point(9, 545);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(67, 27);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Produce";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            groupBox1.Controls.Add(this._inputFilesList);
+            groupBox1.Location = new System.Drawing.Point(9, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(264, 528);
+            groupBox1.TabIndex = 6;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Input Header Files";
             // 
-            // lstTypes
+            // _inputFilesList
             // 
-            this.lstTypes.FormattingEnabled = true;
-            this.lstTypes.Location = new System.Drawing.Point(9, 10);
-            this.lstTypes.Margin = new System.Windows.Forms.Padding(2);
-            this.lstTypes.Name = "lstTypes";
-            this.lstTypes.Size = new System.Drawing.Size(249, 511);
-            this.lstTypes.Sorted = true;
-            this.lstTypes.TabIndex = 1;
-            this.lstTypes.SelectedIndexChanged += new System.EventHandler(this.lstTypes_SelectedIndexChanged);
+            this._inputFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this._inputFilesList.FormattingEnabled = true;
+            this._inputFilesList.Location = new System.Drawing.Point(16, 24);
+            this._inputFilesList.Margin = new System.Windows.Forms.Padding(2);
+            this._inputFilesList.Name = "_inputFilesList";
+            this._inputFilesList.Size = new System.Drawing.Size(233, 485);
+            this._inputFilesList.Sorted = true;
+            this._inputFilesList.TabIndex = 1;
+            this.tooltip.SetToolTip(this._inputFilesList, "Generate C++/CLI source code");
+            this._inputFilesList.SelectedIndexChanged += new System.EventHandler(this.lstTypes_SelectedIndexChanged);
             // 
-            // button2
+            // groupBox2
             // 
-            this.button2.Location = new System.Drawing.Point(100, 545);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(56, 19);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Include";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+            groupBox2.Controls.Add(this._sourceCodeField);
+            groupBox2.Location = new System.Drawing.Point(279, 12);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new System.Drawing.Size(609, 560);
+            groupBox2.TabIndex = 7;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Source Code";
             // 
-            // txt
+            // _sourceCodeField
             // 
-            this.txt.Location = new System.Drawing.Point(277, 10);
-            this.txt.Margin = new System.Windows.Forms.Padding(2);
-            this.txt.Multiline = true;
-            this.txt.Name = "txt";
-            this.txt.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt.Size = new System.Drawing.Size(611, 562);
-            this.txt.TabIndex = 3;
+            this._sourceCodeField.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this._sourceCodeField.Location = new System.Drawing.Point(15, 24);
+            this._sourceCodeField.Margin = new System.Windows.Forms.Padding(2);
+            this._sourceCodeField.Multiline = true;
+            this._sourceCodeField.Name = "_sourceCodeField";
+            this._sourceCodeField.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this._sourceCodeField.Size = new System.Drawing.Size(578, 520);
+            this._sourceCodeField.TabIndex = 3;
             // 
-            // button3
+            // _generateButton
             // 
-            this.button3.Location = new System.Drawing.Point(172, 545);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(56, 19);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Cpp";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this._generateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._generateButton.Location = new System.Drawing.Point(9, 545);
+            this._generateButton.Margin = new System.Windows.Forms.Padding(2);
+            this._generateButton.Name = "_generateButton";
+            this._generateButton.Size = new System.Drawing.Size(67, 27);
+            this._generateButton.TabIndex = 0;
+            this._generateButton.Text = "Generate";
+            this.tooltip.SetToolTip(this._generateButton, "Generate C++/CLI files");
+            this._generateButton.UseVisualStyleBackColor = true;
+            this._generateButton.Click += new System.EventHandler(this.GenerateButtonClicked);
+            // 
+            // _showToggleButton
+            // 
+            this._showToggleButton.Location = new System.Drawing.Point(147, 545);
+            this._showToggleButton.Margin = new System.Windows.Forms.Padding(2);
+            this._showToggleButton.Name = "_showToggleButton";
+            this._showToggleButton.Size = new System.Drawing.Size(127, 27);
+            this._showToggleButton.TabIndex = 2;
+            this._showToggleButton.Text = "Show CPP File";
+            this.tooltip.SetToolTip(this._showToggleButton, "Toggle between .h and .cpp files.");
+            this._showToggleButton.UseVisualStyleBackColor = true;
+            this._showToggleButton.Click += new System.EventHandler(this.ToggleButtonClicked);
             // 
             // bar
             // 
+            this.bar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.bar.Location = new System.Drawing.Point(11, 591);
             this.bar.Margin = new System.Windows.Forms.Padding(2);
             this.bar.Name = "bar";
-            this.bar.Size = new System.Drawing.Size(638, 19);
+            this.bar.Size = new System.Drawing.Size(877, 19);
             this.bar.TabIndex = 5;
             this.bar.Visible = false;
+            // 
+            // tooltip
+            // 
+            this.tooltip.ShowAlways = true;
             // 
             // AutoWrap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(899, 621);
+            this.ClientSize = new System.Drawing.Size(899, 625);
+            this.Controls.Add(groupBox2);
+            this.Controls.Add(groupBox1);
             this.Controls.Add(this.bar);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.txt);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.lstTypes);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this._showToggleButton);
+            this.Controls.Add(this._generateButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AutoWrap";
             this.Text = "AutoWrap";
+            groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ListBox lstTypes;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox txt;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button _generateButton;
+        private System.Windows.Forms.ListBox _inputFilesList;
+        private System.Windows.Forms.Button _showToggleButton;
+        private System.Windows.Forms.TextBox _sourceCodeField;
         private System.Windows.Forms.ProgressBar bar;
+        private System.Windows.Forms.ToolTip tooltip;
     }
 }
 
