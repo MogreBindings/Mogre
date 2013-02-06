@@ -34,6 +34,8 @@ namespace AutoWrap
 
         private void GenerateButtonClicked(object sender, EventArgs e)
         {
+            _generateButton.Enabled = false;
+            _showToggleButton.Enabled = false;
             bar.Visible = true;
             bar.Minimum = 0;
             bar.Maximum = _wrapper.IncludeFiles.Count;
@@ -45,6 +47,8 @@ namespace AutoWrap
             MessageBox.Show("Generation complete.");
 
             bar.Visible = false;
+            _generateButton.Enabled = true;
+            _showToggleButton.Enabled = true;
         }
 
         private void ToggleButtonClicked(object sender, EventArgs e)
