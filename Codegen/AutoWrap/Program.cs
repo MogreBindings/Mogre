@@ -8,6 +8,14 @@ namespace AutoWrap
 {
     static class Program
     {
+        private const string BASE_DIR = @"..\..\..\..\";
+        
+        private const string META_XML_FILE = BASE_DIR + @"Codegen\cpp2java\build\meta.xml";
+        private const string ATTRIBUTES_FILE = BASE_DIR + @"Codegen\Attributes.xml";
+        
+        private const string INCLUDES_DEST_DIR = BASE_DIR + @"Main\include\auto";
+        private const string SRC_DEST_DIR = BASE_DIR + @"Main\src\auto";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,18 +25,18 @@ namespace AutoWrap
             Globals.NativeNamespace = "Ogre";
             Globals.ManagedNamespace = "Mogre";
 
-            MetaDefinition meta = new MetaDefinition(@"..\..\..\cpp2java\build\meta.xml", "Mogre");
-            meta.AddAttributes(@"..\..\Attributes.xml");
+            MetaDefinition meta = new MetaDefinition(META_XML_FILE, "Mogre");
+            meta.AddAttributes(ATTRIBUTES_FILE);
 
             //check if auto directories exists, and create it if needed
-            if (!Directory.Exists(@"..\..\..\..\Main\include\auto"))
-                Directory.CreateDirectory(@"..\..\..\..\Main\include\auto");
+            if (!Directory.Exists(INCLUDES_DEST_DIR))
+                Directory.CreateDirectory(INCLUDES_DEST_DIR);
 
-            if (!Directory.Exists(@"..\..\..\..\Main\src\auto"))
-                Directory.CreateDirectory(@"..\..\..\..\Main\src\auto");
+            if (!Directory.Exists(SRC_DEST_DIR))
+                Directory.CreateDirectory(SRC_DEST_DIR);
 
 
-            Wrapper wrapper = new Wrapper(meta, @"..\..\..\..\Main\include\auto", @"..\..\..\..\Main\src\auto", "Mogre", "Ogre");
+            Wrapper wrapper = new Wrapper(meta, INCLUDES_DEST_DIR, SRC_DEST_DIR, "Mogre", "Ogre");
 
             if (args.Length > 0)
             {
