@@ -20,7 +20,11 @@ namespace AutoWrap
             InitializeComponent();
 
             _wrapper = wrapper;
-            wrapper.IncludeFileWrapped += new EventHandler<IncludeFileWrapEventArgs>(IncludeFileWrapped);
+            wrapper.IncludeFileWrapped += (s, e) => {
+                // Called when an include files has been wrapped (update progress).
+                bar.Value++;
+                bar.Refresh();
+            };
 
             for (int i = 0; i < _wrapper.IncludeFiles.Count; i++)
             {
@@ -41,12 +45,6 @@ namespace AutoWrap
             MessageBox.Show("Generation complete.");
 
             bar.Visible = false;
-        }
-
-        void IncludeFileWrapped(object sender, IncludeFileWrapEventArgs e)
-        {
-            bar.Value++;
-            bar.Refresh();
         }
 
         private void ToggleButtonClicked(object sender, EventArgs e)

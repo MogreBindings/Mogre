@@ -38,10 +38,10 @@ namespace AutoWrap.Meta
 
         public List<DefNameSpace> NameSpaces = new List<DefNameSpace>();
 
-        public MetaDefinition(string file, string managedNamespace)
+        public MetaDefinition(string file)
         {
             _doc.Load(file);
-            this._managedNamespace = managedNamespace;
+            this._managedNamespace = Globals.ManagedNamespace;
 
             XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
 

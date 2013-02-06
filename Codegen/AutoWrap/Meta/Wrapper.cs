@@ -278,11 +278,6 @@ namespace AutoWrap.Meta
 
             foreach (string include in IncludeFiles.Keys)
             {
-                if (include == "OgreCamera.h")
-                {
-
-                }
-
                 string wrapFile = include.Replace(".h", "");
                 wrapFile = GetManagedIncludeFileName(wrapFile);
 
@@ -298,7 +293,7 @@ namespace AutoWrap.Meta
                       write.Write("#include \"MogrePagingPrerequisites.h\"");
                     }
                     write.Flush();
-                    WriteToFile(write.BaseStream as MemoryStream, incFile);
+                    WriteToFile((MemoryStream)write.BaseStream, incFile);
                 }
 
                 bool hasContent;
@@ -310,7 +305,7 @@ namespace AutoWrap.Meta
                         write.Write(Copyright);
                         write.Write(txt);
                         write.Flush();
-                        WriteToFile(write.BaseStream as MemoryStream, cppFile);
+                        WriteToFile((MemoryStream)write.BaseStream, cppFile);
                     }
                 }
 
@@ -327,7 +322,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile(write.BaseStream as MemoryStream, _includePath + "\\PreDeclarations.h");
+                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\PreDeclarations.h");
             }
 
             //Create MakePublicDeclarations.h
@@ -375,7 +370,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile(write.BaseStream as MemoryStream, _includePath + "\\MakePublicDeclarations.h");
+                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\MakePublicDeclarations.h");
             }
 
             // Create CLRObjects.inc
@@ -404,7 +399,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile(write.BaseStream as MemoryStream, _includePath + "\\CLRObjects.inc");
+                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\CLRObjects.inc");
             }
         }
 
