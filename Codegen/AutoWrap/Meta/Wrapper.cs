@@ -293,7 +293,7 @@ namespace AutoWrap.Meta
                       write.Write("#include \"MogrePagingPrerequisites.h\"");
                     }
                     write.Flush();
-                    WriteToFile((MemoryStream)write.BaseStream, incFile);
+                    WriteToFile(incFile, (MemoryStream)write.BaseStream);
                 }
 
                 bool hasContent;
@@ -305,7 +305,7 @@ namespace AutoWrap.Meta
                         write.Write(HEADER_TEXT);
                         write.Write(txt);
                         write.Flush();
-                        WriteToFile((MemoryStream)write.BaseStream, cppFile);
+                        WriteToFile(cppFile, (MemoryStream)write.BaseStream);
                     }
                 }
 
@@ -322,7 +322,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\PreDeclarations.h");
+                WriteToFile(_includePath + "\\PreDeclarations.h", (MemoryStream)write.BaseStream);
             }
 
             //Create MakePublicDeclarations.h
@@ -370,7 +370,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\MakePublicDeclarations.h");
+                WriteToFile(_includePath + "\\MakePublicDeclarations.h", (MemoryStream)write.BaseStream);
             }
 
             // Create CLRObjects.inc
@@ -399,7 +399,7 @@ namespace AutoWrap.Meta
                 }
 
                 write.Flush();
-                WriteToFile((MemoryStream)write.BaseStream, _includePath + "\\CLRObjects.inc");
+                WriteToFile(_includePath + "\\CLRObjects.inc", (MemoryStream)write.BaseStream);
             }
         }
 
@@ -450,7 +450,7 @@ namespace AutoWrap.Meta
                     write.Write(HEADER_TEXT);
                     write.Write(CreateIncludeCodeForOverridable(type));
                     write.Flush();
-                    WriteToFile(write.BaseStream as MemoryStream, incFile);
+                    WriteToFile(incFile, (MemoryStream)write.BaseStream);
                 }
 
                 using (StreamWriter write = new StreamWriter(new MemoryStream()))
@@ -458,7 +458,7 @@ namespace AutoWrap.Meta
                     write.Write(HEADER_TEXT);
                     write.Write(CreateCppCodeForOverridable(type));
                     write.Flush();
-                    WriteToFile(write.BaseStream as MemoryStream, cppFile);
+                    WriteToFile(cppFile, (MemoryStream)write.BaseStream);
                 }
 
                 bar.Value++;
@@ -470,7 +470,7 @@ namespace AutoWrap.Meta
         /// Writes the contents to the specified file. Checks whether the content has actually
         /// changed to prevent unnecessary rebuilds.
         /// </summary>
-        protected void WriteToFile(MemoryStream memStream, string file)
+        protected void WriteToFile(string file, MemoryStream memStream)
         {
             if (File.Exists(file))
             {
