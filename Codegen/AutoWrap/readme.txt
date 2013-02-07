@@ -60,14 +60,31 @@ Another example: To rename a member variable (e.g. "error") of a class (e.g.
     </namespace>
   </meta>
 
+Note also that you may specify an element multiple times. The changes to the
+class/element will be merged:
+
+  <meta>
+    <namespace name="Ogre">
+      <class name="MovableObject">
+        <function name="isVisible" Method=""/>
+      </class>
+      ...
+      <class name="MovableObject">
+        <function name="setUserAny" Ignore="" />
+        <function name="getUserAny" Ignore="" />
+      </class>
+    </namespace>
+  </meta>
+
 
 Adding custom code
 ------------------
 Another major point is the ability to add custom code to the generated files. 
-There are two XML elements available for this:
+There are the following XML elements available for this:
 
- * <_CustomIncDeclaration> : Paces the code in the .h file.
+ * <_CustomIncDeclaration> : Places the code in the .h file.
  * <_CustomCppDeclaration> : Places the code in the .cpp file.
+ * <_CustomDisposing> : Adds code to the dispose method ("!ClassName()").
  
 You can add this element either to <class>es/<struct>s or to <function>s. The
 following XML code adds some C++/CLI code at the top of Texture's class 
@@ -85,6 +102,10 @@ definition (in the .h file):
     </namespace>
   </meta>
 
+NOTE: Be careful when adding code that contains templates/generics. The brackets
+  will be interpreted by the XML parser if they aren't escaped (with &lt;/&gt;
+  or the code with <![CDATA[ ... ]]>).
+  
 Note that the indention of the code snippet is copy directly to the source file;
 this means that the indention in the Attributes.xml file might not match the
 indention of the XML tags (as in the example above).
