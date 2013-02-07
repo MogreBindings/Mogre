@@ -30,6 +30,10 @@ namespace AutoWrap.Meta
 {
     public interface ITypeMember
     {
+        /// <summary>
+        /// The name of this member's type. For fields and properties this is the data type.
+        /// For methods this is the return type.
+        /// </summary>
         string TypeName { get; }
         PassedByType PassedByType { get; }
         DefClass Class { get; }
