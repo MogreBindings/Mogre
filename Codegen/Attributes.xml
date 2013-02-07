@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Tweaks the generation of MOGRE's source code. See "AutoWrap/readme.txt" for
+     more information. -->
 <meta>
   <namespace name="Ogre">
 
