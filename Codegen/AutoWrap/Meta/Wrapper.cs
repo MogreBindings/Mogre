@@ -273,9 +273,13 @@ namespace AutoWrap.Meta
         /// </summary>
         public void GenerateCodeFiles()
         {
+            StringBuilder builder = new StringBuilder();
             PreDeclarations.Clear();
             PragmaMakePublicTypes.Clear();
 
+            //
+            // Generate all source files from header files.
+            //
             foreach (string includeFile in IncludeFiles.Keys)
             {
                 // Strip ".h" from the file name
@@ -284,123 +288,114 @@ namespace AutoWrap.Meta
                 string incFile = _includePath + "\\" + baseFileName + ".h";
                 string cppFile = _sourcePath + "\\" + baseFileName + ".cpp";
 
-                using (StreamWriter write = new StreamWriter(new MemoryStream()))
+                // Header file
+                builder.Clear();
+                builder.Append(HEADER_TEXT);
+                builder.Append(CreateIncludeCodeForIncludeFile(includeFile));
+				if (includeFile == "OgrePrerequisites.h")
                 {
-                    write.Write(HEADER_TEXT);
-                    write.Write(CreateIncludeCodeForIncludeFile(includeFile));
-                    if (includeFile == "OgrePrerequisites.h")
-                    {
-                      write.Write("#include \"MogrePagingPrerequisites.h\"");
-                    }
-                    write.Flush();
-                    WriteToFile(incFile, (MemoryStream)write.BaseStream);
+                    builder.Append("#include \"MogrePagingPrerequisites.h\"");
                 }
+                WriteToFile(incFile, builder.ToString());
 
+                // Source file
                 bool hasContent;
                 string txt = CreateCppCodeForIncludeFile(includeFile, out hasContent);
                 if (hasContent)
                 {
-                    using (StreamWriter write = new StreamWriter(new MemoryStream()))
-                    {
-                        write.Write(HEADER_TEXT);
-                        write.Write(txt);
-                        write.Flush();
-                        WriteToFile(cppFile, (MemoryStream)write.BaseStream);
-                    }
+                    // There is a .cpp file for the .h file.
+                    builder.Clear();
+                    builder.Append(HEADER_TEXT);
+                    builder.Append(txt);
+                    WriteToFile(cppFile, builder.ToString());
                 }
 
                 IncludeFileWrapped(this, new IncludeFileWrapEventArgs(includeFile));
             }
 
-            //Create PreDeclarations.h
-
-            using (StreamWriter write = new StreamWriter(new MemoryStream()))
+            //
+            // Create PreDeclarations.h
+            //
+            builder.Clear();
+            foreach (string decl in PreDeclarations)
             {
-                foreach (string decl in PreDeclarations)
-                {
-                    write.WriteLine(decl);
-                }
-
-                write.Flush();
-                WriteToFile(_includePath + "\\PreDeclarations.h", (MemoryStream)write.BaseStream);
+                builder.AppendLine(decl);
             }
 
-            //Create MakePublicDeclarations.h
+            WriteToFile(_includePath + "\\PreDeclarations.h", builder.ToString());
 
-            using (StreamWriter write = new StreamWriter(new MemoryStream()))
+            //
+            // Create MakePublicDeclarations.h
+            //
+            builder.Clear();
+            List<DefType> typesForMakePublic = new List<DefType>();
+
+            foreach (DefType t in PragmaMakePublicTypes)
             {
-                List<DefType> typesForMakePublic = new List<DefType>();
-
-                foreach (DefType t in PragmaMakePublicTypes)
+                if (t is DefClass && !t.IsNested && !t.IsIgnored)
                 {
-                    if (t is DefClass && !t.IsNested && !t.IsIgnored)
-                    {
-                        DefType type = t.FindType<DefType>(t.Name);
+                    DefType type = t.FindType<DefType>(t.Name);
 
-                        if (type.FullNativeName.StartsWith(NativeNamespace + "::")
-                            && type is DefClass && !type.IsTemplate)
-                        {
-                            if (!typesForMakePublic.Contains(type))
-                                typesForMakePublic.Add(type);
-                        }
+                    if (type.FullNativeName.StartsWith(NativeNamespace + "::")
+                        && type is DefClass && !type.IsTemplate)
+                    {
+                        if (!typesForMakePublic.Contains(type))
+                            typesForMakePublic.Add(type);
                     }
                 }
-
-                write.WriteLine("#pragma once");
-                write.WriteLine();
-
-                write.WriteLine("namespace " + NativeNamespace);
-                write.WriteLine("{");
-
-                foreach (DefType type in typesForMakePublic)
-                {
-                    if (type is DefStruct)
-                        write.Write("struct ");
-                    else
-                        write.Write("class ");
-                    write.WriteLine(type.Name + ";");
-                }
-
-                write.WriteLine("}");
-                write.WriteLine();
-
-                foreach (DefType type in typesForMakePublic)
-                {
-                    write.WriteLine("#pragma make_public( " + type.FullNativeName + " )");
-                }
-
-                write.Flush();
-                WriteToFile(_includePath + "\\MakePublicDeclarations.h", (MemoryStream)write.BaseStream);
             }
 
+            builder.AppendLine("#pragma once");
+            builder.AppendLine();
+
+            builder.AppendLine("namespace " + NativeNamespace);
+            builder.AppendLine("{");
+
+            foreach (DefType type in typesForMakePublic)
+            {
+                if (type is DefStruct)
+                    builder.Append("struct ");
+                else
+                    builder.Append("class ");
+                builder.AppendLine(type.Name + ";");
+            }
+
+            builder.AppendLine("}");
+            builder.AppendLine();
+
+            foreach (DefType type in typesForMakePublic)
+            {
+                builder.AppendLine("#pragma make_public( " + type.FullNativeName + " )");
+            }
+
+            WriteToFile(_includePath + "\\MakePublicDeclarations.h", builder.ToString());
+            
+            //
             // Create CLRObjects.inc
+            //
+            builder.Clear();
+            List<DefClass> clrObjs = new List<DefClass>();
 
-            using (StreamWriter write = new StreamWriter(new MemoryStream()))
+            foreach (string include in IncludeFiles.Keys)
             {
-                List<DefClass> clrObjs = new List<DefClass>();
-
-                foreach (string include in IncludeFiles.Keys)
-                {
-                    foreach (DefType t in IncludeFiles[include])
-                        AddCLRObjects(t, clrObjs);
-                }
-
-                foreach (DefClass cls in clrObjs)
-                {
-                    string name = cls.Name;
-                    DefClass parent = cls;
-                    while (parent.ParentClass != null)
-                    {
-                        parent = parent.ParentClass;
-                        name = parent.Name + "_" + name;
-                    }
-
-                    write.WriteLine("CLROBJECT( " + name + " )");
-                }
-
-                write.Flush();
-                WriteToFile(_includePath + "\\CLRObjects.inc", (MemoryStream)write.BaseStream);
+                foreach (DefType t in IncludeFiles[include])
+                    AddCLRObjects(t, clrObjs);
             }
+
+            foreach (DefClass cls in clrObjs)
+            {
+                string name = cls.Name;
+                DefClass parent = cls;
+                while (parent.ParentClass != null)
+                {
+                    parent = parent.ParentClass;
+                    name = parent.Name + "_" + name;
+                }
+
+                builder.AppendLine("CLROBJECT( " + name + " )");
+            }
+
+            WriteToFile(_includePath + "\\CLRObjects.inc", builder.ToString());
         }
 
         public string GetInitCLRObjectFuncSignature(DefClass cls) {
@@ -434,6 +429,8 @@ namespace AutoWrap.Meta
 
         public void ProduceSubclassCodeFiles(System.Windows.Forms.ProgressBar bar)
         {
+          StringBuilder builder = new StringBuilder();
+
             bar.Minimum = 0;
             bar.Maximum = Overridables.Count;
             bar.Step = 1;
@@ -445,21 +442,15 @@ namespace AutoWrap.Meta
                 string incFile = _includePath + "\\" + wrapFile + ".h";
                 string cppFile = _sourcePath + "\\" + wrapFile + ".cpp";
 
-                using (StreamWriter write = new StreamWriter(new MemoryStream()))
-                {
-                    write.Write(HEADER_TEXT);
-                    write.Write(CreateIncludeCodeForOverridable(type));
-                    write.Flush();
-                    WriteToFile(incFile, (MemoryStream)write.BaseStream);
-                }
+                builder.Clear();
+                builder.Append(HEADER_TEXT);
+                builder.Append(CreateIncludeCodeForOverridable(type));
+                WriteToFile(incFile, builder.ToString());
 
-                using (StreamWriter write = new StreamWriter(new MemoryStream()))
-                {
-                    write.Write(HEADER_TEXT);
-                    write.Write(CreateCppCodeForOverridable(type));
-                    write.Flush();
-                    WriteToFile(cppFile, (MemoryStream)write.BaseStream);
-                }
+                builder.Clear();
+                builder.Append(HEADER_TEXT);
+                builder.Append(CreateCppCodeForOverridable(type));
+                WriteToFile(cppFile, builder.ToString());
 
                 bar.Value++;
                 bar.Refresh();
@@ -470,24 +461,23 @@ namespace AutoWrap.Meta
         /// Writes the contents to the specified file. Checks whether the content has actually
         /// changed to prevent unnecessary rebuilds.
         /// </summary>
-        protected void WriteToFile(string file, MemoryStream memStream)
+        protected void WriteToFile(string file, string contents)
         {
             if (File.Exists(file))
             {
-                string memcontent = Encoding.UTF8.GetString(memStream.ToArray());
                 string filecontent;
                 using (StreamReader inp = new StreamReader(file, Encoding.UTF8))
                 {
                     filecontent = inp.ReadToEnd();
                 }
 
-                if (memcontent == filecontent)
+                if (contents == filecontent)
                     return;
             }
 
             using (StreamWriter writer = File.CreateText(file))
             {
-                memStream.WriteTo(writer.BaseStream);
+                writer.Write(contents);
             }
         }
 
