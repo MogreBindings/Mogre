@@ -55,6 +55,11 @@
     <Compile Include="Meta\AttributeHolder.cs" />
     <Compile Include="Meta\ClassProducer.cs" />
     <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
+    <Compile Include="Meta\Definitions\DefClass.cs" />
+    <Compile Include="Meta\Definitions\DefEnum.cs" />
+    <Compile Include="Meta\Definitions\DefStruct.cs" />
+    <Compile Include="Meta\Definitions\DefTypeDef.cs" />
+    <Compile Include="Meta\Definitions\ProtectionType.cs" />
     <Compile Include="Meta\Globals.cs" />
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
