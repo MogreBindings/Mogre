@@ -57,9 +57,17 @@
     <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\Definitions\DefClass.cs" />
     <Compile Include="Meta\Definitions\DefEnum.cs" />
+    <Compile Include="Meta\Definitions\DefField.cs" />
+    <Compile Include="Meta\Definitions\DefFunction.cs" />
+    <Compile Include="Meta\Definitions\DefParam.cs" />
+    <Compile Include="Meta\Definitions\DefProperty.cs" />
     <Compile Include="Meta\Definitions\DefStruct.cs" />
     <Compile Include="Meta\Definitions\DefTypeDef.cs" />
+    <Compile Include="Meta\Definitions\DefTypeMember.cs" />
+    <Compile Include="Meta\Definitions\ITypeMember.cs" />
+    <Compile Include="Meta\Definitions\PassedByType.cs" />
     <Compile Include="Meta\Definitions\ProtectionType.cs" />
+    <Compile Include="Meta\Definitions\VirtualType.cs" />
     <Compile Include="Meta\Globals.cs" />
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
