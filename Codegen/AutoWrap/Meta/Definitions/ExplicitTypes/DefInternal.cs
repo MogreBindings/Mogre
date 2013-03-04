@@ -1,0 +1,244 @@
+﻿using System;
+
+namespace AutoWrap.Meta
+{
+    internal class DefInternal : DefType
+    {
+        public override void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        {
+            preConversion = postConversion = null;
+            conversion = param.Name;
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Value:
+                case PassedByType.Reference:
+                    break;
+                case PassedByType.Pointer:
+                    if (!IsVoid)
+                    {
+                        if (!param.IsConst)
+                        {
+                            conversion = "*" + param.Name;
+                        }
+                        else
+                        {
+                            //Treat it as array
+                            throw new Exception("Unexpected");
+                        }
+                    }
+                    break;
+                case PassedByType.PointerPointer:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        {
+            preConversion = postConversion = "";
+            dependancyType = null;
+            if (IsVoid)
+            {
+                conversion = param.DefaultValue;
+                return;
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (!param.IsConst)
+                    {
+                        preConversion = FullCLRName + " out_" + param.Name + ";";
+                        conversion = "out_" + param.Name;
+                        return;
+                    }
+
+                    throw new Exception("Unexpected");
+                default:
+                    conversion = param.DefaultValue;
+                    break;
+            }
+        }
+
+        public override string GetCLRParamTypeName(DefParam param)
+        {
+            if (IsVoid)
+            {
+                string name = "void";
+                if (param.IsConst)
+                    name = "const " + name;
+
+                switch (param.PassedByType)
+                {
+                    case PassedByType.Value:
+                        break;
+                    case PassedByType.Pointer:
+                        name += "*";
+                        break;
+                    case PassedByType.PointerPointer:
+                        name += "*%";
+                        break;
+                    case PassedByType.Reference:
+                        throw new Exception("Unexpected");
+                }
+                return name;
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Value:
+                    return Name;
+                case PassedByType.Reference:
+                case PassedByType.Pointer:
+                    if (!param.IsConst && !param.HasAttribute<RawPointerParamAttribute>())
+                    {
+                        return "[Out] " + Name + "%";
+                    }
+
+                    //Treat it as array
+                    //return "array<" + FullCLRName + ">^";
+                    string name = Name + "*";
+                    if (param.IsConst)
+                        name = "const " + name;
+                    return name;
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        {
+            if (IsVoid)
+            {
+                newname = param.Name;
+                return "";
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Reference:
+                    newname = "*p_" + param.Name;
+                    return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                case PassedByType.Pointer:
+                    if (!param.IsConst && !param.HasAttribute<RawPointerParamAttribute>())
+                    {
+                        newname = "p_" + param.Name;
+                        return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                    }
+
+                    //Treat it as array
+                    //newname = "arr_" + param.Name;
+                    //string expr = FullNativeName + "* arr_" + param.Name + " = new " + FullNativeName + "[" + param.Name + "->Length];\n";
+                    //expr += "pin_ptr<" + FullCLRName + "> src_" + param.Name + " = &" + param.Name + "[0];\n";
+                    //expr += "memcpy(arr_" + param.Name + ", src_" + param.Name + ", " + param.Name + "->Length * sizeof(" + FullNativeName + "));\n";
+                    //return expr;
+                    newname = param.Name;
+                    return "";
+                default:
+                    return base.GetPreCallParamConversion(param, out newname);
+            }
+        }
+
+        public override string GetPostCallParamConversionCleanup(DefParam param)
+        {
+            if (IsVoid)
+                return "";
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (param.IsConst)
+                    {
+                        //Treat it as array
+                        //return "delete[] arr_" + param.Name + ";";
+                        return "";
+                    }
+                    
+                    return base.GetPostCallParamConversionCleanup(param);
+                default:
+                    return base.GetPostCallParamConversionCleanup(param);
+            }
+        }
+
+        public override string GetCLRTypeName(ITypeMember m)
+        {
+            switch (m.PassedByType)
+            {
+                case PassedByType.Value:
+                    return Name;
+                case PassedByType.Pointer:
+                    if (IsVoid)
+                        return "void*";
+                    
+                    if (m.HasAttribute<ArrayTypeAttribute>())
+                        return "array<" + FullCLRName + ">^";
+                    
+                    string name = Name + "*";
+                    if (m.IsConst)
+                        name = "const " + name;
+                    return name;
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        {
+            switch (m.PassedByType)
+            {
+                case PassedByType.Reference:
+                    //Could be called from NativeClass producer
+                case PassedByType.Value:
+                    return expr;
+                case PassedByType.Pointer:
+                    if (IsVoid)
+                        return expr;
+                    
+                    if (m.HasAttribute<ArrayTypeAttribute>())
+                    {
+                        int len = m.GetAttribute<ArrayTypeAttribute>().Length;
+                        return "GetValueArrayFromNativeArray<" + FullCLRName + ", " + FullNativeName + ">( " + expr + " , " + len + " )";
+                    }
+                    
+                    return expr;
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        public virtual bool IsVoid
+        {
+            get { return (Name == "void"); }
+        }
+
+        private string _name;
+
+        public override string Name
+        {
+            get { return _name; }
+        }
+
+        public override string FullCLRName
+        {
+            get { return Name; }
+        }
+
+        public override string FullNativeName
+        {
+            get { return Name; }
+        }
+
+        public override bool IsValueType
+        {
+            get { return true; }
+        }
+
+        public DefInternal(string name)
+        {
+            if (name.StartsWith("const "))
+                name = name.Substring("const ".Length);
+
+            _name = name;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+﻿using System.Xml;
+
+namespace AutoWrap.Meta
+{
+    internal class DefStdSet : DefStdList
+    {
+        public override string STLContainer
+        {
+            get { return "Set"; }
+        }
+
+        public override string FullSTLContainerTypeName
+        {
+            get { return "STLSet<" + TypeMembers[0].CLRTypeName + ", " + TypeMembers[0].NativeTypeName + ">"; }
+        }
+
+        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        {
+            return new DefStdSet(typedef.Element);
+        }
+
+        public DefStdSet(XmlElement elem)
+            : base(elem)
+        {
+        }
+    }
+}
