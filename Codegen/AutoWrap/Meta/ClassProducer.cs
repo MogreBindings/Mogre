@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class ClassProducer : Producer 
+    public class ClassProducer : CodeProducer 
     {
         protected Wrapper _wrapper;
         protected DefClass _t;
@@ -670,7 +670,7 @@ namespace AutoWrap.Meta
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
                     continue;
 
-                if (Producer.IsIteratorWrapper((DefTypeDef)nested))
+                if (CodeProducer.IsIteratorWrapper((DefTypeDef)nested))
                     iterators.Add(nested);
                 else
                     AddNestedType(nested);

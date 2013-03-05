@@ -29,7 +29,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    public class Producer
+    public class CodeProducer
     {
         protected virtual string GetNativeDirectorReceiverInterfaceName(DefClass type)
         {
@@ -168,7 +168,7 @@ namespace AutoWrap.Meta
             return null;
         }
 
-        protected virtual string ToCamelCase(string name)
+        protected static string ToCamelCase(string name)
         {
             return Char.ToUpper(name[0]) + name.Substring(1);
         }

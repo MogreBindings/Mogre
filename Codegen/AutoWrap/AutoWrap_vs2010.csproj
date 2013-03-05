@@ -118,7 +118,7 @@
     <Compile Include="Meta\IncNativeDirectorClassProducer.cs" />
     <Compile Include="Meta\IncNonOverridableClassProducer.cs" />
     <Compile Include="Meta\MetaDefinition.cs" />
-    <Compile Include="Meta\Producer.cs" />
+    <Compile Include="Meta\CodeProducer.cs" />
     <Compile Include="Meta\NativeProxyClassProducer.cs" />
     <Compile Include="Meta\Wrapper.cs" />
     <Compile Include="Meta\Attributes.cs" />
