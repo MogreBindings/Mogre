@@ -50,28 +50,12 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
-        /// Indicates whether this type is handled. "Handled" means that the type can be
-        /// used as parameter or return type in the generated code. Methods, properties,
-        /// and fields using an unhandled type wont be included in the generated code.
-        /// </summary>
-        protected virtual bool IsTypeHandled(ITypeMember m)
-        {
-            if (m.Type.IsIgnored)
-                return false;
-
-            if (m.Type is DefClass && ((DefClass)m.Type).IsSingleton)
-                return false;
-
-            return (m.TypeName != "UserDefinedObject");
-        }
-
-        /// <summary>
         /// Checks whether the specified property can be added to the generated source code.
         /// </summary>
         protected virtual bool IsPropertyAllowed(DefProperty p)
         {
             // If the property is ignored or the property is unhandled
-            if (p.Function.HasAttribute<IgnoreAttribute>() || !IsTypeHandled(p))
+            if (p.Function.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
                 return false;
             
             if (p.Class.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
@@ -86,13 +70,13 @@ namespace AutoWrap.Meta
         protected virtual bool IsFunctionAllowed(DefFunction f)
         {
             // If the function is ignored or the return value type is unhandled
-            if (f.HasAttribute<IgnoreAttribute>() || !IsTypeHandled(f))
+            if (f.HasAttribute<IgnoreAttribute>() || !f.IsTypeHandled())
                 return false;
         
             // Check whether all parameter types are handled
             foreach (DefParam param in f.Parameters)
             {
-                if (!IsTypeHandled(param))
+                if (!param.IsTypeHandled())
                     return false;
             }
 

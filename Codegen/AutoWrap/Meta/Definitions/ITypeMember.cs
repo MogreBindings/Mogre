@@ -17,4 +17,23 @@
         bool HasAttribute<T>() where T : AutoWrapAttribute;
         T GetAttribute<T>() where T : AutoWrapAttribute;
     }
+
+    public static class ITypeMemberExtensions
+    {
+        /// <summary>
+        /// Indicates whether this type is handled. "Handled" means that the type can be
+        /// used as parameter or return type in the generated code. Methods, properties,
+        /// and fields using an unhandled type wont be included in the generated code.
+        /// </summary>
+        public static bool IsTypeHandled(this ITypeMember m)
+        {
+            if (m.Type.IsIgnored)
+                return false;
+
+            if (m.Type is DefClass && ((DefClass)m.Type).IsSingleton)
+                return false;
+
+            return (m.TypeName != "UserDefinedObject");
+        }
+    }
 }
