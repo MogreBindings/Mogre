@@ -43,9 +43,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override bool AllowProperty(DefProperty p)
+        protected override bool IsPropertyAllowed(DefProperty p)
         {
-            if (base.AllowProperty(p))
+            if (base.IsPropertyAllowed(p))
             {
                 if (p.Name == "Singleton" || p.Name == "SingletonPtr")
                     return false;

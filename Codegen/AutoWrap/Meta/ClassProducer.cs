@@ -94,7 +94,7 @@ namespace AutoWrap.Meta
                 //Store properties of interface classes. They have precedence over type's properties.
                 foreach (DefProperty ip in iface.GetProperties())
                 {
-                    if (AllowProperty(ip) &&
+                    if (IsPropertyAllowed(ip) &&
                         (ip.Function.ProtectionType == ProtectionType.Public
                           || (AllowProtectedMembers && ip.Function.ProtectionType == ProtectionType.Protected)))
                     {
@@ -145,7 +145,7 @@ namespace AutoWrap.Meta
 
             foreach (DefProperty prop in _t.AbstractProperties)
             {
-                if (AllowProperty(prop) && (prop.Function.Class.IsBaseForSubclassing || (prop.Function.Class == _t && AllowSubclassing)))
+                if (IsPropertyAllowed(prop) && (prop.Function.Class.IsBaseForSubclassing || (prop.Function.Class == _t && AllowSubclassing)))
                 {
                     if (prop.Function.ProtectionType == ProtectionType.Public
                         || (AllowProtectedMembers && prop.Function.ProtectionType == ProtectionType.Protected))
@@ -749,7 +749,7 @@ namespace AutoWrap.Meta
 
             foreach (DefProperty p in _t.GetProperties())
             {
-                if (AllowProperty(p) &&
+                if (IsPropertyAllowed(p) &&
                     ( p.Function.ProtectionType == ProtectionType.Public
                      || ( AllowSubclassing && (p.Function.IsStatic || !p.Function.IsVirtual) )
                      || (AllowProtectedMembers && p.Function.ProtectionType == ProtectionType.Protected) ) )

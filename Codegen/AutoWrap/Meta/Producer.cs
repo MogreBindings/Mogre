@@ -66,7 +66,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual bool AllowProperty(DefProperty p)
+        protected virtual bool IsPropertyAllowed(DefProperty p)
         {
             if (p.Function.HasAttribute<IgnoreAttribute>() || IsUnhandledType(p))
                 return false;
@@ -76,7 +76,7 @@ namespace AutoWrap.Meta
                 return true;
         }
 
-        protected virtual bool AllowFunction(DefFunction f)
+        protected virtual bool IsFunctionAllowed(DefFunction f)
         {
             if (f.HasAttribute<IgnoreAttribute>() || IsUnhandledType(f))
                 return false;

@@ -189,7 +189,7 @@ namespace AutoWrap.Meta
             {
                 if (_isDeclarableFunction == null)
                     _isDeclarableFunction = !(IsConstructor || IsListenerAdder || IsListenerRemover
-                                              || IsOperatorOverload || !AllowFunction(this));
+                                              || IsOperatorOverload || !IsFunctionAllowed(this));
 
                 return (bool) _isDeclarableFunction;
             }
