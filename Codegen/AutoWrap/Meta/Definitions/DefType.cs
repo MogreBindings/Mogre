@@ -392,5 +392,24 @@ namespace AutoWrap.Meta
             else
                 return (ProtectionType)Enum.Parse(typeof(ProtectionType), prot, true);
         }
+
+
+        public bool IsInternalTypeDef()
+        {
+            if (!(this is DefTypeDef))
+                return false;
+
+            if (this.IsSharedPtr)
+                return false;
+
+            DefTypeDef explicitType = this.IsNested ? this.ParentClass.FindType<DefTypeDef>(this.Name) : this.NameSpace.FindType<DefTypeDef>(this.Name);
+            if (explicitType.IsSTLContainer)
+                return false;
+
+            if (explicitType.BaseType is DefInternal)
+                return true;
+
+            return false;
+        }
     }
 }

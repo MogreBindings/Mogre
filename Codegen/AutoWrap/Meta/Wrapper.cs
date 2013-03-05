@@ -139,7 +139,7 @@ namespace AutoWrap.Meta
                             IncludeFiles.Add(type.IncludeFile, list);
                         }
 
-                        if (type is DefEnum || Producer.IsInternalTypeDef(type))
+                        if (type is DefEnum || type.IsInternalTypeDef())
                         {
                             list.Insert(0, type);
                         }
@@ -149,7 +149,7 @@ namespace AutoWrap.Meta
                             int i;
                             for (i = 0; i < list.Count; i++)
                             {
-                                if (!(type is DefEnum || Producer.IsInternalTypeDef(type)))
+                                if (!(type is DefEnum || type.IsInternalTypeDef()))
                                     break;
                             }
 

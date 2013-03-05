@@ -31,24 +31,6 @@ namespace AutoWrap.Meta
 {
     public class Producer
     {
-        public static bool IsInternalTypeDef(DefType type)
-        {
-            if (!(type is DefTypeDef))
-                return false;
-
-            if (type.IsSharedPtr)
-                return false;
-
-            DefTypeDef explicitType = (type.IsNested) ? type.ParentClass.FindType<DefTypeDef>(type.Name) : type.NameSpace.FindType<DefTypeDef>(type.Name);
-            if (explicitType.IsSTLContainer)
-                return false;
-
-            if (explicitType.BaseType is DefInternal)
-                return true;
-
-            return false;
-        }
-
         protected virtual string GetNativeDirectorReceiverInterfaceName(DefClass type)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
