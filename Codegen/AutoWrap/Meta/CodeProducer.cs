@@ -163,6 +163,11 @@ namespace AutoWrap.Meta
             return null;
         }
 
+        /// <summary>
+        /// Converts the name into upper camel case, meaning the first character will be
+        /// made upper-case. Note that the remainder of the name must already be in camel
+        /// case.
+        /// </summary>
         public static string ToCamelCase(string name)
         {
             return Char.ToUpper(name[0]) + name.Substring(1);
