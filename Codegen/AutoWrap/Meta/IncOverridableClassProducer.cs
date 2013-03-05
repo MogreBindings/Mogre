@@ -220,7 +220,7 @@ namespace AutoWrap.Meta
                 if (!_t.IsNested)
                     _sb.Append("public ");
                 else
-                    _sb.Append(GetProtectionString(_t.ProtectionType) + ": ");
+                    _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
                     _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.Name, (IsAbstractClass) ? " abstract" : "", baseclass);

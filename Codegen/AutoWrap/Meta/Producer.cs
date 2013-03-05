@@ -49,21 +49,6 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        public static string GetProtectionString(ProtectionType prot)
-        {
-            switch (prot)
-            {
-                case ProtectionType.Public:
-                    return "public";
-                case ProtectionType.Protected:
-                    return "protected public";
-                case ProtectionType.Private:
-                    return "private";
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
         protected virtual string GetNativeDirectorReceiverInterfaceName(DefClass type)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))

@@ -81,7 +81,7 @@ namespace AutoWrap.Meta
             if (!_t.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(GetProtectionString(_t.ProtectionType) + ": ");
+                _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
             _sb.Append("interface class " + _t.CLRName + "\n");
         }
 

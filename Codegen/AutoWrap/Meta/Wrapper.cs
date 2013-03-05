@@ -850,7 +850,7 @@ namespace AutoWrap.Meta
             if (!enm.IsNested)
                 sb.Append("public ");
             else
-                sb.Append(Producer.GetProtectionString(enm.ProtectionType) + ": ");
+              sb.Append(enm.ProtectionType.GetCLRProtectionName() + ": ");
 
             //if (inProtectedTypesProxy)
                 //sb.Append("enum " + enm.Name + "\n");
@@ -907,7 +907,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                sb.AppendIndent(Producer.GetProtectionString(type.ProtectionType) + ": ");
+                sb.AppendIndent(type.ProtectionType.GetCLRProtectionName() + ": ");
             }
 
             sb.Append("ref class " + type.Name + " : public " + baseClass + "\n");
@@ -1150,7 +1150,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                publicprot = Producer.GetProtectionString(t.ProtectionType) + ": ";
+                publicprot = t.ProtectionType.GetCLRProtectionName() + ": ";
                 privateprot = "private:";
                 sb.Append(publicprot);
             }
@@ -1287,7 +1287,7 @@ namespace AutoWrap.Meta
             if (t.IsMapIterator)
                 CheckTypeForDependancy(t.IterationKeyTypeMember.Type);
 
-            sb.AppendIndent(Producer.GetProtectionString(t.ProtectionType));
+            sb.AppendIndent(t.ProtectionType.GetCLRProtectionName());
             if (t.IsNested) sb.Append(":");
 
             if (t.IsMapIterator)
@@ -1368,7 +1368,7 @@ namespace AutoWrap.Meta
         {
             sb.AppendIndent("");
             if (t.IsNested)
-                sb.Append(Producer.GetProtectionString(t.ProtectionType) + ": ");
+                sb.Append(t.ProtectionType.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.FullNativeName + " " + t.CLRName + ";\n\n");
         }
 
@@ -1376,7 +1376,7 @@ namespace AutoWrap.Meta
         {
             sb.AppendIndent("");
             if (t.IsNested)
-                sb.Append(Producer.GetProtectionString(t.ProtectionType) + ": ");
+                sb.Append(t.ProtectionType.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
         }
 

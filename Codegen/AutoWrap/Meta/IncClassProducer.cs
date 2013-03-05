@@ -84,7 +84,7 @@ namespace AutoWrap.Meta
             if (!_t.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(GetProtectionString(_t.ProtectionType) + ": ");
+                _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
             string baseclass = GetBaseAndInterfaces();
             if (baseclass != "")
                 _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
@@ -95,7 +95,7 @@ namespace AutoWrap.Meta
         protected override void AddInterfaceMethod(DefFunction f)
         {
             _sb.DecreaseIndent();
-            _sb.AppendLine(GetProtectionString(f.ProtectionType) + ":");
+            _sb.AppendLine(f.ProtectionType.GetCLRProtectionName() + ":");
             _sb.IncreaseIndent();
             base.AddInterfaceMethod(f);
         }
@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
         protected override void AddInterfaceMethodsForField(DefField field)
         {
             _sb.DecreaseIndent();
-            _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+            _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
             _sb.IncreaseIndent();
             base.AddInterfaceMethodsForField(field);
         }
@@ -552,7 +552,7 @@ namespace AutoWrap.Meta
                     if (expl.IsSTLContainer
                         || ( !nested.IsValueType && nested is DefClass && !(nested as DefClass).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
                     {
-                        _sb.AppendLine(GetProtectionString(nested.ProtectionType) + ": ref class " + nested.CLRName + ";");
+                        _sb.AppendLine(nested.ProtectionType.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
                     }
                 }
             }
@@ -728,7 +728,7 @@ namespace AutoWrap.Meta
 
                 if (p.GetterFunction.ProtectionType == ProtectionType.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionType.Protected) )
                 {
-                    _sb.AppendLine(GetProtectionString(p.GetterFunction.ProtectionType) + ":");
+                    _sb.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 
                     if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                     {
@@ -759,7 +759,7 @@ namespace AutoWrap.Meta
 
                 if (p.SetterFunction.ProtectionType == ProtectionType.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionType.Protected) )
                 {
-                    _sb.AppendLine(GetProtectionString(p.SetterFunction.ProtectionType) + ":");
+                    _sb.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 
                     if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                     {
@@ -817,7 +817,7 @@ namespace AutoWrap.Meta
                     _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
                     _sb.AppendLine("{");
 
-                    _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+                    _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                     _sb.AppendLine("\t" + ptype + " get();");
 
                     _sb.AppendLine("}");
@@ -830,7 +830,7 @@ namespace AutoWrap.Meta
                     _sb.AppendFormat("property {0} {1}[int]\n", ptype, field.Name);
                     _sb.AppendLine("{");
 
-                    _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+                    _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                     _sb.AppendLine("\t" + ptype + " get(int index);");
                     _sb.AppendLine("\tvoid set(int index, " + ptype + " value);");
 
@@ -845,7 +845,7 @@ namespace AutoWrap.Meta
                 _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
                 _sb.AppendLine("{");
 
-                _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+                _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                 _sb.AppendLine("\t" + ptype + " get();");
 
                 _sb.AppendLine("}");
@@ -863,14 +863,14 @@ namespace AutoWrap.Meta
                 }
                 _sb.AppendLine("{");
 
-                _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+                _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                 _sb.AppendLine("\t" + ptype + " get();");
 
                 if ( // SharedPtrs can be copied by value. Let all be copied by value just to be sure (field.PassedByType == PassedByType.Pointer || field.Type.IsValueType)
                     !IsReadOnly && !field.Type.HasAttribute<ReadOnlyForFieldsAttribute>()
                     && !field.IsConst)
                 {
-                    _sb.AppendLine(GetProtectionString(field.ProtectionType) + ":");
+                  _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                     _sb.AppendLine("\tvoid set(" + ptype + " value);");
                 }
 

@@ -40,7 +40,7 @@ namespace AutoWrap.Meta
             if (!_t.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(GetProtectionString(_t.ProtectionType) + ": ");
+                _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
             _sb.AppendFormat("value class {0}\n", _t.CLRName);
         }
 
