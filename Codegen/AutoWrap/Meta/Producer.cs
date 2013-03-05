@@ -49,47 +49,54 @@ namespace AutoWrap.Meta
             return name + "_Director";
         }
 
-        protected virtual bool IsUnhandledType(ITypeMember m)
+        /// <summary>
+        /// Indicates whether this type is handled. "Handled" means that the type can be
+        /// used as parameter or return type in the generated code. Methods, properties,
+        /// and fields using an unhandled type wont be included in the generated code.
+        /// </summary>
+        protected virtual bool IsTypeHandled(ITypeMember m)
         {
             if (m.Type.IsIgnored)
-                return true;
+                return false;
 
-            if (m.Type is DefClass && (m.Type as DefClass).IsSingleton)
-                return true;
+            if (m.Type is DefClass && ((DefClass)m.Type).IsSingleton)
+                return false;
 
-            switch (m.TypeName)
-            {
-                case "UserDefinedObject":
-                    return true;
-                default:
-                    return false;
-            }
+            return (m.TypeName != "UserDefinedObject");
         }
 
+        /// <summary>
+        /// Checks whether the specified property can be added to the generated source code.
+        /// </summary>
         protected virtual bool IsPropertyAllowed(DefProperty p)
         {
-            if (p.Function.HasAttribute<IgnoreAttribute>() || IsUnhandledType(p))
+            // If the property is ignored or the property is unhandled
+            if (p.Function.HasAttribute<IgnoreAttribute>() || !IsTypeHandled(p))
                 return false;
-            else if (p.Class.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
+            
+            if (p.Class.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
                 return false;
-            else
-                return true;
+            
+            return true;
         }
 
+        /// <summary>
+        /// Checks whether the specified function can be added to the generated source code.
+        /// </summary>
         protected virtual bool IsFunctionAllowed(DefFunction f)
         {
-            if (f.HasAttribute<IgnoreAttribute>() || IsUnhandledType(f))
+            // If the function is ignored or the return value type is unhandled
+            if (f.HasAttribute<IgnoreAttribute>() || !IsTypeHandled(f))
                 return false;
-            else
+        
+            // Check whether all parameter types are handled
+            foreach (DefParam param in f.Parameters)
             {
-                foreach (DefParam param in f.Parameters)
-                {
-                    if (IsUnhandledType(param))
-                        return false;
-                }
-
-                return true;
+                if (!IsTypeHandled(param))
+                    return false;
             }
+
+            return true;
         }
 
         protected virtual DefType CreateExplicitContainerType(string container, string key, string val)
