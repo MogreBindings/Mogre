@@ -29,6 +29,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Base class for all classes that generate some kind of source code.
+    /// </summary>
     public class CodeProducer
     {
         protected virtual string GetNativeDirectorReceiverInterfaceName(DefClass type)
@@ -122,22 +125,14 @@ namespace AutoWrap.Meta
         {
         }
 
-        private static bool IsTypeNameIteratorWrapper(string typename)
+        public static bool IsIteratorWrapper(DefTypeDef type)
         {
             string[] iters = new string[] { "MapIterator", "ConstMapIterator",
                             "VectorIterator", "ConstVectorIterator" };
 
             foreach (string it in iters)
-                if (typename.StartsWith(it))
+                if (type.BaseTypeName.StartsWith(it))
                     return true;
-
-            return false;
-        }
-
-        public static bool IsIteratorWrapper(DefTypeDef type)
-        {
-            if (IsTypeNameIteratorWrapper(type.BaseTypeName))
-                return true;
 
             return false;
         }
@@ -168,7 +163,7 @@ namespace AutoWrap.Meta
             return null;
         }
 
-        protected static string ToCamelCase(string name)
+        public static string ToCamelCase(string name)
         {
             return Char.ToUpper(name[0]) + name.Substring(1);
         }
