@@ -90,7 +90,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            return (T)(object)DefType.CreateExplicitType((DefType)(object)type);
+            return (T)(object)((DefType)(object)type).CreateExplicitType();
         }
 
         protected virtual T FindTypeInList<T>(string name, List<DefType> types, bool raiseException)

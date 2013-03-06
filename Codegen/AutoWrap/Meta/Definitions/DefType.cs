@@ -29,66 +29,14 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// This abstract class describes a C++ type. The following constructs are supported: 
+    /// classes, structs, typedefs, and enumerations. This class has the following child
+    /// classes: <see cref="DefClass"/>, <see cref="DefEnum"/>, <see cref="DefInternal"/>,
+    /// <see cref="DefTypeDef"/>, <see cref="DefString"/>, and <see cref="DefUtfString"/>.
+    /// </summary>
     public abstract class DefType : AttributeHolder
     {
-        public static DefType CreateExplicitType(DefType type)
-        {
-            if (type.ReplaceByType != null)
-                return type.ReplaceByType;
-
-            if (type is DefTypeDef)
-                return DefTypeDef.CreateExplicitType(type as DefTypeDef);
-            else
-                return type;
-        }
-
-        public static DefType CreateType(XmlElement elem)
-        {
-            switch (elem.Name)
-            {
-                case "class":
-                case "struct":
-                    return CreateClass(elem);
-                case "typedef":
-                    return CreateTypeDef(elem);
-                case "enumeration":
-                    return CreateEnum(elem);
-                case "variable":
-                    //It's global variables, ignore them
-                    return null;
-                default:
-                    throw new Exception("Type unknown: '" + elem.Name + "'");
-            }
-        }
-
-        private static DefClass CreateClass(XmlElement elem)
-        {
-            if (elem.Name != "class"
-                && elem.Name != "struct")
-                throw new Exception("Not class/struct element");
-
-            DefClass cls = (elem.Name == "class") ? new DefClass(elem) : new DefStruct(elem);
-            return cls;
-        }
-
-        private static DefTypeDef CreateTypeDef(XmlElement elem)
-        {
-            if (elem.Name != "typedef")
-                throw new Exception("Not typedef element");
-
-            DefTypeDef td = new DefTypeDef(elem);
-            return td;
-        }
-
-        private static DefEnum CreateEnum(XmlElement elem)
-        {
-            if (elem.Name != "enumeration")
-                throw new Exception("Not enumeration element");
-
-            DefEnum en = new DefEnum(elem);
-            return en;
-        }
-
         public bool IsSTLContainer
         {
             get { return STLContainer != null; }
@@ -114,6 +62,66 @@ namespace AutoWrap.Meta
             get { return _elem.GetAttribute("template") == "true"; }
         }
 
+        private DefType _replaceByType;
+        public virtual DefType ReplaceByType
+        {
+            get
+            {
+                if (_replaceByType == null && HasAttribute<ReplaceByAttribute>())
+                {
+                    string name = GetAttribute<ReplaceByAttribute>().Name;
+                    if (SurroundingClass != null)
+                        _replaceByType = SurroundingClass.FindType<DefType>(name, false);
+                    else
+                        _replaceByType = NameSpace.FindType<DefType>(name, false);
+                }
+
+                return _replaceByType;
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of this class from the specified xml element. This method will
+        /// create an instance from an apropriate subclass (e.g. <see cref="DefClass"/> for a class).
+        /// </summary>
+        /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
+        public static DefType CreateType(XmlElement elem)
+        {
+            switch (elem.Name)
+            {
+                case "class":
+                    return new DefClass(elem);
+                case "struct":
+                    return new DefStruct(elem);
+                case "typedef":
+                    return new DefTypeDef(elem);
+                case "enumeration":
+                    return new DefEnum(elem);
+                case "variable":
+                    //It's global variables, ignore them
+                    return null;
+                default:
+                    throw new Exception("Type unknown: '" + elem.Name + "'");
+            }
+        }
+
+        public DefType CreateExplicitType()
+        {
+            if (this.ReplaceByType != null)
+            {
+                return this.ReplaceByType;
+            }
+
+            if (this is DefTypeDef)
+            {
+                return DefTypeDef.CreateExplicitType(this as DefTypeDef);
+            } else
+            {
+                return this;
+            }
+        }
+
+
         public virtual string GetNativeTypeName(bool isConst, PassedByType passed)
         {
             string postfix = null;
@@ -135,24 +143,6 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
             }
             return (isConst ? "const " : "") + FullNativeName + postfix;
-        }
-
-        private DefType _replaceByType;
-        public virtual DefType ReplaceByType
-        {
-            get
-            {
-                if (_replaceByType == null && HasAttribute<ReplaceByAttribute>())
-                {
-                    string name = GetAttribute<ReplaceByAttribute>().Name;
-                    if (SurroundingClass != null)
-                        _replaceByType = SurroundingClass.FindType<DefType>(name, false);
-                    else
-                        _replaceByType = NameSpace.FindType<DefType>(name, false);
-                }
-
-                return _replaceByType;
-            }
         }
 
         public virtual void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
@@ -254,10 +244,10 @@ namespace AutoWrap.Meta
             get { return _elem.GetAttribute("name"); }
         }
 
-		public override string ToString()
-		{
-			return Name;
-		}
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public virtual string CLRName
         {
@@ -383,10 +373,11 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        public DefType()
+        protected DefType()
         {
         }
-        public DefType(XmlElement elem)
+
+        protected DefType(XmlElement elem)
         {
             this._elem = elem;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
