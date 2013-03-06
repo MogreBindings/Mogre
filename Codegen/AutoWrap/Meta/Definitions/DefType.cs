@@ -62,6 +62,40 @@ namespace AutoWrap.Meta
             get { return _elem.GetAttribute("template") == "true"; }
         }
 
+        /// <summary>
+        /// Denotes whether subclasses of this class can be created.
+        /// </summary>
+        public virtual bool AllowSubClassing
+        {
+            get { return this.HasWrapType(WrapTypes.Overridable); }
+        }
+
+        public virtual bool AllowVirtuals
+        {
+            get { return AllowSubClassing; }
+        }
+
+        public virtual bool IsIgnored
+        {
+            get
+            {
+                if (SurroundingClass != null && SurroundingClass.IsIgnored)
+                    return true;
+
+                return this.HasAttribute<IgnoreAttribute>();
+            }
+        }
+
+        public virtual bool IsPureManagedClass
+        {
+            get { return HasAttribute<PureManagedClassAttribute>(); }
+        }
+
+        public virtual bool IsValueType
+        {
+            get { return HasAttribute<ValueTypeAttribute>(); }
+        }
+
         private DefType _replaceByType;
         public virtual DefType ReplaceByType
         {
@@ -193,41 +227,6 @@ namespace AutoWrap.Meta
         }
 
         #endregion
-
-        public virtual bool IsBaseForSubclassing
-        {
-            get
-            {
-                return this.HasWrapType(WrapTypes.Overridable);
-            }
-            //get { return this.HasAttribute<BaseForSubclassingAttribute>(); }
-        }
-
-        public virtual bool AllowVirtuals
-        {
-            get { return IsBaseForSubclassing; }
-        }
-
-        public virtual bool IsIgnored
-        {
-            get
-            {
-                if (SurroundingClass != null && SurroundingClass.IsIgnored)
-                    return true;
-
-                return this.HasAttribute<IgnoreAttribute>();
-            }
-        }
-
-        public virtual bool IsPureManagedClass
-        {
-            get { return HasAttribute<PureManagedClassAttribute>(); }
-        }
-
-        public virtual bool IsValueType
-        {
-            get { return HasAttribute<ValueTypeAttribute>(); }
-        }
 
         public DefNameSpace GetNameSpace()
         {

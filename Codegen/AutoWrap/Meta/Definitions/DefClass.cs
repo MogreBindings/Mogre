@@ -390,12 +390,12 @@ namespace AutoWrap.Meta
             get { return base.AllowVirtuals || IsInterface; }
         }
 
-        public override bool IsBaseForSubclassing
+        public override bool AllowSubClassing
         {
             get
             {
-                return base.IsBaseForSubclassing ||
-                       (this.BaseClass != null && this.BaseClass.IsBaseForSubclassing);
+                return base.AllowSubClassing ||
+                    (BaseClass != null && BaseClass.AllowSubClassing);
             }
         }
 

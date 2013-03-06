@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
                 if (func.ProtectionType == ProtectionLevel.Public
                         || (AllowProtectedMembers && func.ProtectionType == ProtectionLevel.Protected))
                 {
-                    if ((func.Class.IsBaseForSubclassing || (func.Class == _t && AllowSubclassing)) && !func.IsProperty)
+                    if ((func.Class.AllowSubClassing || (func.Class == _t && AllowSubclassing)) && !func.IsProperty)
                     {
                         _isAbstractClass = true;
                         _abstractFunctions.Add(func);
@@ -145,7 +145,7 @@ namespace AutoWrap.Meta
 
             foreach (DefProperty prop in _t.AbstractProperties)
             {
-                if (IsPropertyAllowed(prop) && (prop.ContainingClass.IsBaseForSubclassing
+                if (IsPropertyAllowed(prop) && (prop.ContainingClass.AllowSubClassing
                     || (prop.ContainingClass == _t && AllowSubclassing)))
                 {
                     if (prop.ProtectionLevel == ProtectionLevel.Public
@@ -265,7 +265,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool AllowVirtualMethods
         {
-            get { return _t.IsBaseForSubclassing; }
+            get { return _t.AllowSubClassing; }
         }
 
         protected virtual bool AllowProtectedMembers
@@ -275,7 +275,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool AllowSubclassing
         {
-            get { return _t.IsBaseForSubclassing; }
+            get { return _t.AllowSubClassing; }
         }
 
         protected virtual bool AllowMethodOverloads
