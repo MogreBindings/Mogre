@@ -131,7 +131,7 @@ namespace AutoWrap.Meta
                 {
                     DefParam p = f.Parameters[i];
                     string newname;
-                    p.Type.GetPreCallParamConversion(p, out newname);
+                    p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
                     if (i < count - 1) _sb.Append(",");
                 }

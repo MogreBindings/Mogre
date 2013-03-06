@@ -106,7 +106,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             if (IsVoid)
             {
@@ -135,11 +135,11 @@ namespace AutoWrap.Meta
                     newname = param.Name;
                     return "";
                 default:
-                    return base.GetPreCallParamConversion(param, out newname);
+                    return base.ProducePreCallParamConversionCode(param, out newname);
             }
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             if (IsVoid)
                 return "";
@@ -153,10 +153,10 @@ namespace AutoWrap.Meta
                         //return "delete[] arr_" + param.Name + ";";
                         return "";
                     }
-                    
-                    return base.GetPostCallParamConversionCleanup(param);
+
+                    return base.ProducePostCallParamConversionCleanupCode(param);
                 default:
-                    return base.GetPostCallParamConversionCleanup(param);
+                    return base.ProducePostCallParamConversionCleanupCode(param);
             }
         }
 

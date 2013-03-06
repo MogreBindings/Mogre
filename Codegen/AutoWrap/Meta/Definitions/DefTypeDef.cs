@@ -32,34 +32,34 @@ namespace AutoWrap.Meta
                 BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.GetPreCallParamConversion(param, out newname).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProducePreCallParamConversionCode(param, out newname).Replace(BaseType.FullCLRName, FullCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
                 return
-                    BaseType.GetPreCallParamConversion(param, out newname)
+                    BaseType.ProducePreCallParamConversionCode(param, out newname)
                             .Replace(BaseType.FullCLRName, FullCLRName)
                             .Replace(BaseType.FullNativeName, FullNativeName);
             }
-            
-            return base.GetPreCallParamConversion(param, out newname);
+
+            return base.ProducePreCallParamConversionCode(param, out newname);
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.GetPostCallParamConversionCleanup(param).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullCLRName, FullCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
                 return
-                    BaseType.GetPostCallParamConversionCleanup(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+                    BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
             }
-            
-            return base.GetPostCallParamConversionCleanup(param);
+
+            return base.ProducePostCallParamConversionCleanupCode(param);
         }
 
         public override string GetCLRTypeName(ITypeMember m)

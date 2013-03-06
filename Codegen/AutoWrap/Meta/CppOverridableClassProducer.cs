@@ -113,8 +113,8 @@ namespace AutoWrap.Meta
                     string returnExpr;
                     string newname, expr, postcall;
                     DefParam param = new DefParam(f, managedCall);
-                    expr = f.Type.GetPreCallParamConversion(param, out newname);
-                    postcall = f.Type.GetPostCallParamConversionCleanup(param);
+                    expr = f.Type.ProducePreCallParamConversionCode(param, out newname);
+                    postcall = f.Type.ProducePostCallParamConversionCleanupCode(param);
                     if (!String.IsNullOrEmpty(expr))
                     {
                         sb.AppendLine(expr);
@@ -388,7 +388,7 @@ namespace AutoWrap.Meta
                 {
                     DefParam p = f.Parameters[i];
                     string newname;
-                    p.Type.GetPreCallParamConversion(p, out newname);
+                    p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
                     if (i < count - 1) _sb.Append(",");
                 }
@@ -413,7 +413,7 @@ namespace AutoWrap.Meta
                     {
                         DefParam p = f.Parameters[i];
                         string newname;
-                        p.Type.GetPreCallParamConversion(p, out newname);
+                        p.Type.ProducePreCallParamConversionCode(p, out newname);
                         _sb.Append(" " + newname);
                         if (i < count - 1) _sb.Append(",");
                     }

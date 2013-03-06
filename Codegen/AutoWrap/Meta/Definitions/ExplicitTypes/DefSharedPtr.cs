@@ -5,7 +5,7 @@ namespace AutoWrap.Meta
 {
     internal class DefSharedPtr : DefTemplateOneType
     {
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
             return String.Empty;

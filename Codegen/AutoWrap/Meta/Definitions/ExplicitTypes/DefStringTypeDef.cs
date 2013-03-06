@@ -10,10 +10,18 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public DefStringTypeDef(XmlElement elem)
+            : base(elem)
+        {
+        }
+
+        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, 
+                                                        out string conversion, out string postConversion, 
+                                                        out DefType dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
+
             switch (param.PassedByType)
             {
                 case PassedByType.Reference:
@@ -53,7 +61,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             string name = param.Name;
             switch (param.PassedByType)
@@ -75,7 +83,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             switch (param.PassedByType)
             {
@@ -113,11 +121,6 @@ namespace AutoWrap.Meta
                 default:
                     throw new Exception("Unexpected");
             }
-        }
-
-        public DefStringTypeDef(XmlElement elem)
-            : base(elem)
-        {
         }
     }
 }

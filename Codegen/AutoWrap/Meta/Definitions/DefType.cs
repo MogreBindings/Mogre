@@ -164,14 +164,30 @@ namespace AutoWrap.Meta
             return expr;
         }
 
-        public virtual string GetPreCallParamConversion(DefParam param, out string newname)
+        /// <summary>
+        /// Produces the code to convert a single parameter from a CLR type to its native
+        /// counterpart. This code then will be inserted before the call to the method that
+        /// uses this parameter.
+        /// </summary>
+        /// <param name="param">the parameter to pass</param>
+        /// <param name="newname">the name of the converted (i.e. native) parameter; should
+        /// be <c>param.Name</c> if no conversion is done.</param>
+        /// <returns>the conversion code; should be an empty string, if no conversion is done</returns>
+        public virtual string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             newname = param.Name;
-            return string.Empty;
+            return "";
         }
-        public virtual string GetPostCallParamConversionCleanup(DefParam param)
-        {
-            return string.Empty;
+
+        /// <summary>
+        /// Produces the code to convert a single parameter from a native type to its CLR
+        /// counterpart. This code then will be inserted after the call to the method that
+        /// uses this parameter. The code may also contain cleanup code.
+        /// </summary>
+        /// <param name="param">the parameter that was passed</param>
+        /// <returns>the conversion code; should be an empty string, if no conversion is done</returns>
+        public virtual string ProducePostCallParamConversionCleanupCode(DefParam param) {
+            return "";
         }
 
         public virtual bool IsBaseForSubclassing

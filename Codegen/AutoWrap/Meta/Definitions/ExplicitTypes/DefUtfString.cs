@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             string name = param.Name;
             switch (param.PassedByType)
@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             switch (param.PassedByType)
             {

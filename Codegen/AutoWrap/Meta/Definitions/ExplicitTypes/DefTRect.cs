@@ -10,7 +10,7 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             if (param.PassedByType == PassedByType.Pointer)
                 newname = "(" + param.Type.FullNativeName + "*) " + param.Name;
@@ -19,7 +19,7 @@ namespace AutoWrap.Meta
             return string.Empty;
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             return string.Empty;
         }

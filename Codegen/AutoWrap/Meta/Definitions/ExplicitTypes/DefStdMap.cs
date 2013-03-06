@@ -103,10 +103,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             if (!IsUnnamedSTLContainer)
-                return base.GetPreCallParamConversion(param, out newname);
+                return base.ProducePreCallParamConversionCode(param, out newname);
 
             string expr;
             switch (param.PassedByType)

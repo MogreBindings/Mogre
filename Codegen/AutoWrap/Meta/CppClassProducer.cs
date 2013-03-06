@@ -186,7 +186,7 @@ namespace AutoWrap.Meta
                 {
                     DefParam p = f.Parameters[i];
                     string newname;
-                    p.Type.GetPreCallParamConversion(p, out newname);
+                    p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
                     if (i < count - 1) _sb.Append(",");
                 }
@@ -459,7 +459,7 @@ namespace AutoWrap.Meta
             {
                 DefParam p = f.Parameters[i];
                 string newname;
-                res += p.Type.GetPreCallParamConversion(p, out newname);
+                res += p.Type.ProducePreCallParamConversionCode(p, out newname);
             }
 
             return res;
@@ -489,7 +489,7 @@ namespace AutoWrap.Meta
             {
                 DefParam p = f.Parameters[i];
                 string newname;
-                p.Type.GetPreCallParamConversion(p, out newname);
+                p.Type.ProducePreCallParamConversionCode(p, out newname);
                 invoke += " " + newname;
                 if (i < paramCount - 1) invoke += ",";
             }
@@ -509,7 +509,7 @@ namespace AutoWrap.Meta
             for (int i = 0; i < paramCount; i++)
             {
                 DefParam p = f.Parameters[i];
-                res += p.Type.GetPostCallParamConversionCleanup(p);
+                res += p.Type.ProducePostCallParamConversionCleanupCode(p);
             }
 
             return res;
@@ -518,8 +518,8 @@ namespace AutoWrap.Meta
         protected string AddParameterConversion(DefParam param)
         {
             string newname, expr, postcall;
-            expr = param.Type.GetPreCallParamConversion(param, out newname);
-            postcall = param.Type.GetPostCallParamConversionCleanup(param);
+            expr = param.Type.ProducePreCallParamConversionCode(param, out newname);
+            postcall = param.Type.ProducePostCallParamConversionCleanupCode(param);
             if (!String.IsNullOrEmpty(postcall))
                 throw new Exception("Unexpected");
 

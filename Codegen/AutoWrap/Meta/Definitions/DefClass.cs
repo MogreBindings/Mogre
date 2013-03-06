@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetPreCallParamConversion(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
         {
             if (param.Type.IsSharedPtr)
             {
@@ -126,19 +126,19 @@ namespace AutoWrap.Meta
                             return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
                         }
                         else
-                            return base.GetPreCallParamConversion(param, out newname);
+                            return base.ProducePreCallParamConversionCode(param, out newname);
                     }
                     else
-                        return base.GetPreCallParamConversion(param, out newname);
+                        return base.ProducePreCallParamConversionCode(param, out newname);
                 case PassedByType.PointerPointer:
                     newname = "&out_" + param.Name;
                     return (param.IsConst ? "const " : "") + FullNativeName + "* out_" + param.Name + ";\n";
                 default:
-                    return base.GetPreCallParamConversion(param, out newname);
+                    return base.ProducePreCallParamConversionCode(param, out newname);
             }
         }
 
-        public override string GetPostCallParamConversionCleanup(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
         {
             if (HasAttribute<NativeValueContainerAttribute>())
             {
@@ -161,7 +161,7 @@ namespace AutoWrap.Meta
                         else
                             throw new Exception("Unexpected");
                     default:
-                        return base.GetPostCallParamConversionCleanup(param);
+                        return base.ProducePostCallParamConversionCleanupCode(param);
                 }
             }
 
@@ -170,7 +170,7 @@ namespace AutoWrap.Meta
                 case PassedByType.PointerPointer:
                     return param.Name + " = out_" + param.Name + ";\n";
                 default:
-                    return base.GetPostCallParamConversionCleanup(param);
+                    return base.ProducePostCallParamConversionCleanupCode(param);
             }
         }
 
