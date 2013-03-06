@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
             if (p.Function.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
                 return false;
             
-            if (p.Class.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
+            if (p.ContainingClass.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
                 return false;
             
             return true;

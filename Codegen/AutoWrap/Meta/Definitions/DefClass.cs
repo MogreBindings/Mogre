@@ -814,16 +814,15 @@ namespace AutoWrap.Meta
                         p = props[f.CLRName];
                     else
                     {
-                        p = new DefProperty();
-                        p.Name = f.CLRName;
+                        p = new DefProperty(f.CLRName);
                         if (f.IsGetProperty)
                         {
-                            p.TypeName = f.TypeName;
+                            p.MemberTypeName = f.TypeName;
                             p.PassedByType = f.PassedByType;
                         }
                         else
                         {
-                            p.TypeName = f.Parameters[0].TypeName;
+                            p.MemberTypeName = f.Parameters[0].TypeName;
                             p.PassedByType = f.Parameters[0].PassedByType;
                         }
 
@@ -831,15 +830,9 @@ namespace AutoWrap.Meta
                     }
 
                     if (f.IsGetProperty)
-                    {
-                        p.CanRead = true;
                         p.GetterFunction = f;
-                    }
                     else if (f.IsSetProperty)
-                    {
-                        p.CanWrite = true;
                         p.SetterFunction = f;
-                    }
                 }
             }
 
@@ -854,7 +847,6 @@ namespace AutoWrap.Meta
                             DefProperty ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanWrite)
                             {
-                                prop.CanWrite = true;
                                 prop.SetterFunction = ip.SetterFunction;
                                 break;
                             }
@@ -868,7 +860,6 @@ namespace AutoWrap.Meta
                             DefProperty ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanRead)
                             {
-                                prop.CanRead = true;
                                 prop.GetterFunction = ip.GetterFunction;
                                 break;
                             }

@@ -189,6 +189,11 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Converts the specified methods into CLR properties.
+        /// </summary>
+        /// <param name="funcs">The methods to convert. Must only contain getter and setter
+        /// methods.</param>
         public static DefProperty[] GetPropertiesFromFunctions(List<DefFunction> funcs)
         {
             SortedList<string, DefProperty> props = new SortedList<string, DefProperty>();
@@ -203,16 +208,15 @@ namespace AutoWrap.Meta
                         p = props[f.CLRName];
                     else
                     {
-                        p = new DefProperty();
-                        p.Name = f.CLRName;
+                        p = new DefProperty(f.CLRName);
                         if (f.IsGetProperty)
                         {
-                            p.TypeName = f.TypeName;
+                            p.MemberTypeName = f.TypeName;
                             p.PassedByType = f.PassedByType;
                         }
                         else
                         {
-                            p.TypeName = f.Parameters[0].TypeName;
+                            p.MemberTypeName = f.Parameters[0].TypeName;
                             p.PassedByType = f.Parameters[0].PassedByType;
                         }
 
@@ -221,12 +225,10 @@ namespace AutoWrap.Meta
 
                     if (f.IsGetProperty)
                     {
-                        p.CanRead = true;
                         p.GetterFunction = f;
                     }
                     else if (f.IsSetProperty)
                     {
-                        p.CanWrite = true;
                         p.SetterFunction = f;
                     }
                 }
@@ -931,7 +933,6 @@ namespace AutoWrap.Meta
                         DefProperty bp = _t.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanWrite)
                         {
-                            prop.CanWrite = true;
                             prop.SetterFunction = bp.SetterFunction;
                         }
                     }
@@ -952,7 +953,6 @@ namespace AutoWrap.Meta
                         DefProperty bp = _t.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanRead)
                         {
-                            prop.CanRead = true;
                             prop.GetterFunction = bp.GetterFunction;
                         }
                     }
