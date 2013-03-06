@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
                 {
                     DefType type = nested.FindType<DefType>(nested.Name);
 
-                    if (type.ProtectionType == ProtectionType.Protected
+                    if (type.ProtectionType == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
                     {
                         AddNestedType(type);
@@ -90,7 +90,7 @@ namespace AutoWrap.Meta
             {
                 DefType type = nested.FindType<DefType>(nested.Name);
 
-                if (type.ProtectionType == ProtectionType.Protected
+                if (type.ProtectionType == ProtectionLevel.Protected
                     && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )
                 {
                     return true;
@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
         {
             foreach (DefField field in _t.Fields)
             {
-                if (field.ProtectionType == ProtectionType.Protected
+                if (field.ProtectionType == ProtectionLevel.Protected
                     && field.IsStatic
                     && !field.IsIgnored)
                 {
@@ -251,7 +251,7 @@ namespace AutoWrap.Meta
             foreach (DefFunction func in type.Functions)
             {
                 if (func.IsDeclarableFunction
-                    && func.ProtectionType == ProtectionType.Protected
+                    && func.ProtectionType == ProtectionLevel.Protected
                     && !(func.IsStatic && type != _t)
                     && func.IsProperty
                     && !func.IsVirtual)
@@ -292,7 +292,7 @@ namespace AutoWrap.Meta
             foreach (DefFunction func in type.Functions)
             {
                 if (func.IsDeclarableFunction
-                    && func.ProtectionType == ProtectionType.Protected
+                    && func.ProtectionType == ProtectionLevel.Protected
                     && !(func.IsStatic && type != _t)
                     && !func.IsVirtual)
                 {

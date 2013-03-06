@@ -290,7 +290,7 @@ namespace AutoWrap.Meta
             {
                 foreach (DefType type in NestedTypes)
                 {
-                    if (type.ProtectionType == ProtectionType.Public)
+                    if (type.ProtectionType == ProtectionLevel.Public)
                         yield return type;
                 }
             }
@@ -327,7 +327,7 @@ namespace AutoWrap.Meta
                 foreach (DefFunction func in Functions)
                 {
                     if (!func.IsProperty
-                        && func.ProtectionType == ProtectionType.Public)
+                        && func.ProtectionType == ProtectionLevel.Public)
                         yield return func;
                 }
             }
@@ -353,7 +353,7 @@ namespace AutoWrap.Meta
                 foreach (DefFunction func in Functions)
                 {
                     if (!func.IsProperty
-                        && func.ProtectionType == ProtectionType.Protected)
+                        && func.ProtectionType == ProtectionLevel.Protected)
                         yield return func;
                 }
             }
@@ -365,7 +365,7 @@ namespace AutoWrap.Meta
             {
                 foreach (DefField f in Fields)
                 {
-                    if (f.ProtectionType == ProtectionType.Public)
+                    if (f.ProtectionType == ProtectionLevel.Public)
                         yield return f;
                 }
             }
@@ -377,7 +377,7 @@ namespace AutoWrap.Meta
             {
                 foreach (DefField f in Fields)
                 {
-                    if (f.ProtectionType == ProtectionType.Protected)
+                    if (f.ProtectionType == ProtectionLevel.Protected)
                         yield return f;
                 }
             }
@@ -1152,8 +1152,8 @@ namespace AutoWrap.Meta
 
                 if ((prevf.ProtectionType == func.ProtectionType
                      && prevf.IsConstFunctionCall)
-                    || (prevf.ProtectionType == ProtectionType.Protected
-                        && func.ProtectionType == ProtectionType.Public))
+                    || (prevf.ProtectionType == ProtectionLevel.Protected
+                        && func.ProtectionType == ProtectionLevel.Public))
                 {
                     Members.Remove(prevf);
                     Members.Add(func);

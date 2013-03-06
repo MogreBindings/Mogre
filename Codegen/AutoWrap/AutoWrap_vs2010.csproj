@@ -85,7 +85,7 @@
     <Compile Include="Meta\Definitions\ExplicitTypes\IDefString.cs" />
     <Compile Include="Meta\Definitions\ITypeMember.cs" />
     <Compile Include="Meta\Definitions\PassedByType.cs" />
-    <Compile Include="Meta\Definitions\ProtectionType.cs" />
+    <Compile Include="Meta\Definitions\ProtectionLevel.cs" />
     <Compile Include="Meta\Definitions\VirtualLevel.cs" />
     <Compile Include="Meta\Globals.cs" />
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />

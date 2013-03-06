@@ -7,7 +7,7 @@ namespace AutoWrap.Meta
     public class DefFunction : DefMember
     {
         public List<DefParam> Parameters = new List<DefParam>();
-        public VirtualLevel VirtualType;
+        public VirtualLevel VirtualLevel;
 
         private bool? _isConst;
         public override bool IsConst
@@ -173,12 +173,12 @@ namespace AutoWrap.Meta
 
         public bool IsVirtual
         {
-            get { return VirtualType != VirtualLevel.NotVirtual; }
+            get { return VirtualLevel != VirtualLevel.NotVirtual; }
         }
 
         public bool IsAbstract
         {
-            get { return VirtualType == VirtualLevel.Abstract; }
+            get { return VirtualLevel == VirtualLevel.Abstract; }
         }
 
         private bool? _isDeclarableFunction;
@@ -363,13 +363,13 @@ namespace AutoWrap.Meta
             switch (elem.GetAttribute("virt"))
             {
                 case "virtual":
-                    VirtualType = VirtualLevel.Virtual;
+                    VirtualLevel = VirtualLevel.Virtual;
                     break;
                 case "non-virtual":
-                    VirtualType = VirtualLevel.NotVirtual;
+                    VirtualLevel = VirtualLevel.NotVirtual;
                     break;
                 case "pure-virtual":
-                    VirtualType = VirtualLevel.Abstract;
+                    VirtualLevel = VirtualLevel.Abstract;
                     break;
                 default:
                     throw new Exception("unexpected");

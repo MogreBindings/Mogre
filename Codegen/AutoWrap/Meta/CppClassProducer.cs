@@ -97,7 +97,7 @@ namespace AutoWrap.Meta
 				{
 					foreach (DefFunction function in _t.Constructors)
 					{
-						if (function.ProtectionType == ProtectionType.Public &&
+						if (function.ProtectionType == ProtectionLevel.Public &&
 							!function.HasAttribute<IgnoreAttribute>())
 						{
 							AddPublicConstructor(function);
@@ -221,7 +221,7 @@ namespace AutoWrap.Meta
                 if (m.IsStatic)
                 {
                     _sb.AppendIndent(NameToPrivate(m) + " = ");
-                    if (m.ProtectionType == ProtectionType.Protected)
+                    if (m.ProtectionType == ProtectionLevel.Protected)
                     {
                         _sb.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.Class));
                         _sb.Append("::" + m.Name + ";\n");
@@ -470,7 +470,7 @@ namespace AutoWrap.Meta
             string invoke;
             if (f.IsStatic)
             {
-                if (f.ProtectionType == ProtectionType.Protected)
+                if (f.ProtectionType == ProtectionLevel.Protected)
                 {
                     string classname = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_t);
                     invoke = classname + "::" + f.Name + "(";
@@ -537,7 +537,7 @@ namespace AutoWrap.Meta
             {
                 if (!(p.GetterFunction.IsAbstract && AllowSubclassing))
                 {
-                    if (AllowProtectedMembers || p.GetterFunction.ProtectionType != ProtectionType.Protected)
+                    if (AllowProtectedMembers || p.GetterFunction.ProtectionType != ProtectionLevel.Protected)
                     {
                         string managedType = GetMethodNativeCall(p.GetterFunction, 0);
 
@@ -561,7 +561,7 @@ namespace AutoWrap.Meta
             {
                 if (!(p.SetterFunction.IsAbstract && AllowSubclassing))
                 {
-                    if (AllowProtectedMembers || p.SetterFunction.ProtectionType != ProtectionType.Protected)
+                    if (AllowProtectedMembers || p.SetterFunction.ProtectionType != ProtectionLevel.Protected)
                     {
                         _sb.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
                         _sb.AppendLine("{");

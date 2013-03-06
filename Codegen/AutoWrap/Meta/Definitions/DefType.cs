@@ -292,7 +292,7 @@ namespace AutoWrap.Meta
         }
 
         public DefNameSpace NameSpace;
-        public ProtectionType ProtectionType;
+        public ProtectionLevel ProtectionType;
         public DefClass ParentClass;
 
         public virtual bool IsNested
@@ -385,12 +385,12 @@ namespace AutoWrap.Meta
             this.ProtectionType = GetProtectionEnum(elem.GetAttribute("protection"));
         }
 
-        public static ProtectionType GetProtectionEnum(string prot)
+        public static ProtectionLevel GetProtectionEnum(string prot)
         {
             if (prot == "")
-                return ProtectionType.Public;
+                return ProtectionLevel.Public;
             else
-                return (ProtectionType)Enum.Parse(typeof(ProtectionType), prot, true);
+                return (ProtectionLevel)Enum.Parse(typeof(ProtectionLevel), prot, true);
         }
 
 

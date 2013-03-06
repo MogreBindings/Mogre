@@ -5,27 +5,27 @@ namespace AutoWrap.Meta
     /// <summary>
     /// Visibility/protection level.
     /// </summary>
-    public enum ProtectionType
+    public enum ProtectionLevel
     {
         Public,
         Private,
         Protected
     }
 
-    public static class ProtectionTypeExtensions
+    public static class ProtectionLevelExtensions
     {
         /// <summary>
         /// Returns the C++/CLI protection/visibility level name for the C++ level name.
         /// </summary>
-        public static string GetCLRProtectionName(this ProtectionType prot)
+        public static string GetCLRProtectionName(this ProtectionLevel prot)
         {
             switch (prot)
             {
-                case ProtectionType.Public:
+                case ProtectionLevel.Public:
                     return "public";
-                case ProtectionType.Protected:
+                case ProtectionLevel.Protected:
                     return "protected public";
-                case ProtectionType.Private:
+                case ProtectionLevel.Private:
                     return "private";
                 default:
                     throw new Exception("Unexpected");

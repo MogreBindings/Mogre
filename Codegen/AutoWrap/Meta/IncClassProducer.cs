@@ -309,7 +309,7 @@ namespace AutoWrap.Meta
 			{
 				foreach (DefFunction func in _t.Constructors)
 				{
-					if (func.ProtectionType == ProtectionType.Public && 
+					if (func.ProtectionType == ProtectionLevel.Public && 
 						!func.HasAttribute<IgnoreAttribute>())
 					{
 						AddPublicConstructor(func);
@@ -544,8 +544,8 @@ namespace AutoWrap.Meta
             //Predeclare all nested classes in case there are classes referencing their "siblings"
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionType.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionType.Protected))
+                if (nested.ProtectionType == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
                 {
                     DefType expl = _t.FindType<DefType>(nested.Name);
 
@@ -726,7 +726,7 @@ namespace AutoWrap.Meta
                 DefFunction f = p.GetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
-                if (p.GetterFunction.ProtectionType == ProtectionType.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionType.Protected) )
+                if (p.GetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionLevel.Protected) )
                 {
                     _sb.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 
@@ -757,7 +757,7 @@ namespace AutoWrap.Meta
                 DefFunction f = p.SetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
-                if (p.SetterFunction.ProtectionType == ProtectionType.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionType.Protected) )
+                if (p.SetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionLevel.Protected) )
                 {
                     _sb.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 

@@ -496,7 +496,7 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionType.Public)
+                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public)
                 {
                     AddMethod(func);
                     _sb.AppendLine();
@@ -508,7 +508,7 @@ namespace AutoWrap.Meta
         {
             foreach (DefFunction func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionType.Protected)
+                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
                     _sb.AppendLine();

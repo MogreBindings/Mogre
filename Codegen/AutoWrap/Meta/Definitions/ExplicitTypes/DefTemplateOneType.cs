@@ -120,8 +120,8 @@ namespace AutoWrap.Meta
             {
                 if (Name.StartsWith("std::"))
                     return Name + "<" + TypeMembers[0].MemberTypeNativeName + ">";
-                
-                if (ProtectionType == ProtectionType.Protected)
+
+                if (ProtectionType == ProtectionLevel.Protected)
                     return NativeProtectedTypesProxy.GetProtectedTypesProxyName(ParentClass) + "::" + Name;
 
                 return base.FullNativeName;

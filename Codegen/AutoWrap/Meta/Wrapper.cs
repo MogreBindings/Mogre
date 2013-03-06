@@ -417,7 +417,7 @@ namespace AutoWrap.Meta
             DefClass cls = t as DefClass;
             if (cls == null)
                 return;
-            if (cls.IsIgnored || cls.ProtectionType != ProtectionType.Public)
+            if (cls.IsIgnored || cls.ProtectionType != ProtectionLevel.Public)
                 return;
 
             if (cls.HasAttribute<CLRObjectAttribute>(true))
@@ -1295,7 +1295,7 @@ namespace AutoWrap.Meta
             else
                 sb.Append(" INC_DECLARE_ITERATOR");
 
-            if (t.TypeMembers[0].MemberType.ProtectionType == ProtectionType.Protected
+            if (t.TypeMembers[0].MemberType.ProtectionType == ProtectionLevel.Protected
                 && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals)
             {
                 // the container type will not be declared,
@@ -1334,7 +1334,7 @@ namespace AutoWrap.Meta
             else
                 sb.Append("CPP_DECLARE_ITERATOR");
 
-            bool noConstructor = t.TypeMembers[0].MemberType.ProtectionType == ProtectionType.Protected
+            bool noConstructor = t.TypeMembers[0].MemberType.ProtectionType == ProtectionLevel.Protected
                 && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals;
 
             if (noConstructor)

@@ -95,8 +95,8 @@ namespace AutoWrap.Meta
                 foreach (DefProperty ip in iface.GetProperties())
                 {
                     if (IsPropertyAllowed(ip) &&
-                        (ip.Function.ProtectionType == ProtectionType.Public
-                          || (AllowProtectedMembers && ip.Function.ProtectionType == ProtectionType.Protected)))
+                        (ip.Function.ProtectionType == ProtectionLevel.Public
+                          || (AllowProtectedMembers && ip.Function.ProtectionType == ProtectionLevel.Protected)))
                     {
                         _interfaceProperties.Add(ip);
                     }
@@ -107,8 +107,8 @@ namespace AutoWrap.Meta
             {
                 if (!field.IsIgnored && field.Type.IsSTLContainer)
                 {
-                    if (field.ProtectionType == ProtectionType.Public
-                        || ( (AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionType.Protected))
+                    if (field.ProtectionType == ProtectionLevel.Public
+                        || ( (AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionLevel.Protected))
                         MarkCachedMember(field);
                 }
             }
@@ -123,8 +123,8 @@ namespace AutoWrap.Meta
                     if (!field.IsIgnored && field.Type.IsSTLContainer
                         && !field.IsStatic)
                     {
-                        if (field.ProtectionType == ProtectionType.Public
-                            || ((AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionType.Protected))
+                        if (field.ProtectionType == ProtectionLevel.Public
+                            || ((AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionLevel.Protected))
                             MarkCachedMember(field);
                     }
                 }
@@ -132,8 +132,8 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction func in _t.AbstractFunctions)
             {
-                if (func.ProtectionType == ProtectionType.Public
-                        || (AllowProtectedMembers && func.ProtectionType == ProtectionType.Protected))
+                if (func.ProtectionType == ProtectionLevel.Public
+                        || (AllowProtectedMembers && func.ProtectionType == ProtectionLevel.Protected))
                 {
                     if ((func.Class.IsBaseForSubclassing || (func.Class == _t && AllowSubclassing)) && !func.IsProperty)
                     {
@@ -147,8 +147,8 @@ namespace AutoWrap.Meta
             {
                 if (IsPropertyAllowed(prop) && (prop.Function.Class.IsBaseForSubclassing || (prop.Function.Class == _t && AllowSubclassing)))
                 {
-                    if (prop.Function.ProtectionType == ProtectionType.Public
-                        || (AllowProtectedMembers && prop.Function.ProtectionType == ProtectionType.Protected))
+                    if (prop.Function.ProtectionType == ProtectionLevel.Public
+                        || (AllowProtectedMembers && prop.Function.ProtectionType == ProtectionLevel.Protected))
                     {
 
                         _isAbstractClass = true;
@@ -339,11 +339,11 @@ namespace AutoWrap.Meta
         {
             if (!f.IsStatic)
             {
-                if (f.ProtectionType == ProtectionType.Public)
+                if (f.ProtectionType == ProtectionLevel.Public)
                 {
                     return GetNativeInvokationTarget(f.IsConstFunctionCall) + "->" + f.Name;
                 }
-                else if (f.ProtectionType == ProtectionType.Protected)
+                else if (f.ProtectionType == ProtectionLevel.Protected)
                 {
                     if (!f.IsVirtual)
                     {
@@ -358,7 +358,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                if (f.ProtectionType == ProtectionType.Public)
+                if (f.ProtectionType == ProtectionLevel.Public)
                     return f.Class.FullNativeName + "::" + f.Name;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.Class) + "::" + f.Name;
@@ -368,11 +368,11 @@ namespace AutoWrap.Meta
         {
             if (!field.IsStatic)
             {
-                if (field.ProtectionType == ProtectionType.Public)
+                if (field.ProtectionType == ProtectionLevel.Public)
                 {
                     return GetNativeInvokationTarget() + "->" + field.Name;
                 }
-                else if (field.ProtectionType == ProtectionType.Protected)
+                else if (field.ProtectionType == ProtectionLevel.Protected)
                 {
                     string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_t);
                     return "static_cast<" + proxyName + "*>(_native)->" + field.Name;
@@ -382,7 +382,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                if (field.ProtectionType == ProtectionType.Public)
+                if (field.ProtectionType == ProtectionLevel.Public)
                     return field.Class.FullNativeName + "::" + field.Name;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.Class) + "::" + field.Name;
@@ -540,8 +540,8 @@ namespace AutoWrap.Meta
             // of this class
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionType.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionType.Protected))
+                if (nested.ProtectionType == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
                 {
                     if (nested.HasWrapType(WrapTypes.NativeDirector))
                         AddNestedTypeBeforeMainType(nested);
@@ -625,8 +625,8 @@ namespace AutoWrap.Meta
 
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionType.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionType.Protected))
+                if (nested.ProtectionType == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
                 {
                     if (nested is DefEnum || _wrapper.TypeIsWrappable(nested))
                     {
@@ -695,8 +695,8 @@ namespace AutoWrap.Meta
             {
                 if ((m is DefField || (m is DefFunction && (m as DefFunction).IsDeclarableFunction))
                     && !m.IsIgnored
-                    && ( m.ProtectionType == ProtectionType.Public
-                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionType.Protected)) )
+                    && ( m.ProtectionType == ProtectionLevel.Public
+                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)) )
                 {
                     if (m.Type.IsUnnamedSTLContainer
                         && !stls.Contains(m.Type.CLRName))
@@ -716,8 +716,8 @@ namespace AutoWrap.Meta
                 {
                     if ((m is DefField || (m is DefFunction && (m as DefFunction).IsDeclarableFunction))
                         && !m.IsIgnored
-                        && (m.ProtectionType == ProtectionType.Public
-                            || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionType.Protected)))
+                        && (m.ProtectionType == ProtectionLevel.Public
+                            || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)))
                     {
                         if (m.Type.IsUnnamedSTLContainer
                             && !stls.Contains(m.Type.CLRName))
@@ -752,9 +752,9 @@ namespace AutoWrap.Meta
             foreach (DefProperty p in _t.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
-                    ( p.Function.ProtectionType == ProtectionType.Public
+                    ( p.Function.ProtectionType == ProtectionLevel.Public
                      || ( AllowSubclassing && (p.Function.IsStatic || !p.Function.IsVirtual) )
-                     || (AllowProtectedMembers && p.Function.ProtectionType == ProtectionType.Protected) ) )
+                     || (AllowProtectedMembers && p.Function.ProtectionType == ProtectionLevel.Protected) ) )
                 {
                     AddProperty(EnhanceProperty(p));
                     _sb.Append("\n");
@@ -813,9 +813,9 @@ namespace AutoWrap.Meta
                 if (inf.IsStatic)
                     continue;
 
-                if (inf.ProtectionType == ProtectionType.Public
+                if (inf.ProtectionType == ProtectionLevel.Public
                     || (AllowSubclassing && !inf.IsVirtual)
-                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionType.Protected))
+                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionLevel.Protected))
                 {
                     if (!_t.ContainsFunctionSignature(inf.Signature, true))
                     {
@@ -830,9 +830,9 @@ namespace AutoWrap.Meta
                 if (inf.IsStatic)
                     continue;
 
-                if (inf.ProtectionType == ProtectionType.Public
+                if (inf.ProtectionType == ProtectionLevel.Public
                     || (AllowSubclassing && !inf.IsVirtual)
-                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionType.Protected))
+                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionLevel.Protected))
                 {
                     if (!_t.ContainsFunctionSignature(inf.Signature, false))
                     {
@@ -849,9 +849,9 @@ namespace AutoWrap.Meta
                     if (field.IsStatic)
                         continue;
 
-                    if (field.ProtectionType == ProtectionType.Public
+                    if (field.ProtectionType == ProtectionLevel.Public
                         || AllowSubclassing
-                        || (AllowProtectedMembers && field.ProtectionType == ProtectionType.Protected))
+                        || (AllowProtectedMembers && field.ProtectionType == ProtectionLevel.Protected))
                     {
                         //if (CheckTypeMemberForGetProperty(field) == false)
                         //    AddInterfaceMethodsForField(field);

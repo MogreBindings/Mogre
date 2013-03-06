@@ -148,7 +148,7 @@ namespace AutoWrap.Meta
 
         public string TypeName = null;
         public string Definition;
-        public ProtectionType ProtectionType;
+        public ProtectionLevel ProtectionType;
         public PassedByType PassedByType;
 
         public virtual bool IsVoid

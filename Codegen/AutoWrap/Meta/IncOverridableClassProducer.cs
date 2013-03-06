@@ -81,8 +81,8 @@ namespace AutoWrap.Meta
             //with 'friend' specifier
             foreach (DefProperty prop in _overridableProperties)
             {
-                if (prop.GetterFunction.ProtectionType == ProtectionType.Protected
-                    || (prop.CanWrite && prop.SetterFunction.ProtectionType == ProtectionType.Protected))
+                if (prop.GetterFunction.ProtectionType == ProtectionLevel.Protected
+                    || (prop.CanWrite && prop.SetterFunction.ProtectionType == ProtectionLevel.Protected))
                     _sb.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }
 
@@ -91,7 +91,7 @@ namespace AutoWrap.Meta
                 foreach (DefField field in _t.Fields)
                 {
                     if (!field.IsIgnored
-                        && field.ProtectionType == ProtectionType.Protected
+                        && field.ProtectionType == ProtectionLevel.Protected
                         && !field.IsStatic)
                         _sb.AppendLine("friend ref class " + className + "::" + field.Name + ";");
                 }
@@ -363,7 +363,7 @@ namespace AutoWrap.Meta
 
         protected override bool DeclareAsOverride(DefFunction f)
         {
-            if (f.ProtectionType == ProtectionType.Public)
+            if (f.ProtectionType == ProtectionLevel.Public)
                 return true;
             else
                 return false;
@@ -419,7 +419,7 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionType.Public
+                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public
                     && !func.IsAbstract)
                 {
                     AddMethod(func);
@@ -436,7 +436,7 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionType.Protected)
+                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
                     _sb.AppendLine();

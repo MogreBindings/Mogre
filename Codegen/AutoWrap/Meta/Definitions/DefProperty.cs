@@ -37,16 +37,6 @@
             get { return SetterFunction != null; }
         }
 
-        public bool IsGetterVirtual
-        {
-            get { return GetterFunction.VirtualType != VirtualLevel.NotVirtual; }
-        }
-
-        public bool IsSetterVirtual
-        {
-            get { return SetterFunction.VirtualType != VirtualLevel.NotVirtual; }
-        }
-
         #region ITypeMember Implementations
 
         public DefType MemberType
