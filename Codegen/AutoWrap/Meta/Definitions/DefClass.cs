@@ -12,7 +12,7 @@ namespace AutoWrap.Meta
         public string[] Derives;
         public string[] Inherits;
 
-        public override void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
         {
             switch (param.PassedByType)
             {
@@ -23,10 +23,10 @@ namespace AutoWrap.Meta
                     return;
             }
 
-            base.GetNativeParamConversion(param, out preConversion, out conversion, out postConversion);
+            base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
         }
 
-        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
         {
             if (param.DefaultValue == null)
                 throw new Exception("Unexpected");
@@ -247,7 +247,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             if (HasAttribute<NativeValueContainerAttribute>())
             {
@@ -276,9 +276,9 @@ namespace AutoWrap.Meta
                             return "reinterpret_cast<" + GetCLRTypeName(m) + ">(" + expr + ")";
                     }
                     else
-                        return base.GetNativeCallConversion(expr, m);
+                        return base.ProduceNativeCallConversionCode(expr, m);
                 default:
-                    return base.GetNativeCallConversion(expr, m);
+                    return base.ProduceNativeCallConversionCode(expr, m);
             }
         }
 

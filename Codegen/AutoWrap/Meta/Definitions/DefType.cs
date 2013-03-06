@@ -145,23 +145,25 @@ namespace AutoWrap.Meta
             return (isConst ? "const " : "") + FullNativeName + postfix;
         }
 
-        public virtual void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
-        {
-            preConversion = postConversion = null;
-            conversion = param.Type.GetNativeCallConversion(param.Name, param);
-        }
-
-        public virtual void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
-        {
-            throw new Exception("Unexpected");
-        }
-
         public abstract string GetCLRTypeName(ITypeMember m);
         public abstract string GetCLRParamTypeName(DefParam param);
 
-        public virtual string GetNativeCallConversion(string expr, ITypeMember m)
+        #region Code Generation Methods
+
+        public virtual string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             return expr;
+        }
+
+        public virtual void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        {
+            preConversion = postConversion = null;
+            conversion = param.Type.ProduceNativeCallConversionCode(param.Name, param);
+        }
+
+        public virtual void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        {
+            throw new Exception("Unexpected");
         }
 
         /// <summary>
@@ -189,6 +191,8 @@ namespace AutoWrap.Meta
         public virtual string ProducePostCallParamConversionCleanupCode(DefParam param) {
             return "";
         }
+
+        #endregion
 
         public virtual bool IsBaseForSubclassing
         {

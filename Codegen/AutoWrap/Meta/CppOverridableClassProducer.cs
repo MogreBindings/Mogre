@@ -49,7 +49,7 @@ namespace AutoWrap.Meta
             else if (f.IsSetProperty)
             {
                 DefParam param = f.Parameters[0];
-                managedCall = managedTarget + "->" + f.CLRName + " = " + param.Type.GetNativeCallConversion(param.Name, param);
+                managedCall = managedTarget + "->" + f.CLRName + " = " + param.Type.ProduceNativeCallConversionCode(param.Name, param);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
 
                 foreach (DefParam param in f.Parameters)
                 {
-                    param.Type.GetNativeParamConversion(param, out pre, out conv, out post);
+                    param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                     if (!String.IsNullOrEmpty(pre))
                         sb.AppendLine(pre);
 
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         DefParam param = f.Parameters[i];
-                        param.Type.GetNativeParamConversion(param, out pre, out conv, out post);
+                        param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                         sb.Append(" ");
                         if (explicitCast) sb.Append("(" + param.MemberTypeCLRName + ")");
                         sb.Append(conv);
@@ -91,7 +91,7 @@ namespace AutoWrap.Meta
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         DefParam param = f.Parameters[i];
-                        param.Type.GetNativeParamConversion(param, out pre, out conv, out post);
+                        param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                         managedCall += " ";
                         if (explicitCast) managedCall += "(" + param.MemberTypeCLRName + ")";
                         managedCall += conv;

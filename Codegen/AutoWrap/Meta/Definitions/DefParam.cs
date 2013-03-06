@@ -54,7 +54,7 @@ namespace AutoWrap.Meta
             {
                 DefType depend;
                 if (_CLRDefaultValuePreConversion == null)
-                    Type.GetDefaultParamValueConversion(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
+                    Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
                 return _CLRDefaultValuePreConversion;
             }
@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
             {
                 DefType depend;
                 if (_CLRDefaultValue == null)
-                    Type.GetDefaultParamValueConversion(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
+                    Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
                 return _CLRDefaultValue;
             }
@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
             {
                 DefType depend;
                 if (_CLRDefaultValuePostConversion == null)
-                    Type.GetDefaultParamValueConversion(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
+                    Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
                 return _CLRDefaultValuePostConversion;
             }

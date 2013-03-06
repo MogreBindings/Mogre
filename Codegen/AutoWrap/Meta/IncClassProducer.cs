@@ -530,7 +530,7 @@ namespace AutoWrap.Meta
             _sb.AppendIndent("");
             if (field.IsConst) _sb.Append("const ");
             if (field.IsStatic) _sb.Append("static ");
-            _sb.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.Type.GetNativeCallConversion(field.FullNativeName, field) + ";\n\n");
+            _sb.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.Type.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
         protected override void AddNestedTypeBeforeMainType(DefType nested)

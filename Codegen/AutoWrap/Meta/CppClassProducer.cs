@@ -340,7 +340,7 @@ namespace AutoWrap.Meta
 
                         string n1, n2, n3;
                         DefType dependancy;
-                        p.Type.GetDefaultParamValueConversion(p, out n1, out n2, out n3, out dependancy);
+                        p.Type.ProduceDefaultParamValueConversionCode(p, out n1, out n2, out n3, out dependancy);
                         if (dependancy != null)
                             AddTypeDependancy(dependancy);
                     }
@@ -499,7 +499,7 @@ namespace AutoWrap.Meta
             if (f.IsVoid)
                 return invoke;
             else
-                return f.Type.GetNativeCallConversion(invoke, f);
+                return f.Type.ProduceNativeCallConversionCode(invoke, f);
         }
 
         protected virtual string GetMethodPostNativeCall(DefFunction f, int paramCount)
@@ -610,7 +610,7 @@ namespace AutoWrap.Meta
                     }
 
                     ptype = GetCLRTypeName(tmpParam);
-                    string managedType = field.Type.GetNativeCallConversion(GetNativeInvokationTarget(field), tmpParam);
+                    string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), tmpParam);
 
                     _sb.AppendLine(ptype + " " + pname + "::get()");
                     _sb.AppendLine("{");
@@ -619,7 +619,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    string managedType = field.Type.GetNativeCallConversion(GetNativeInvokationTarget(field) + "[index]", field);
+                    string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field) + "[index]", field);
 
                     _sb.AppendLine(ptype + " " + pname + "::get(int index)");
                     _sb.AppendLine("{");
@@ -645,7 +645,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    managedType = field.Type.GetNativeCallConversion(GetNativeInvokationTarget(field), field);
+                    managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
                 }
                 string priv = NameToPrivate(field);
 
@@ -659,7 +659,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                string managedType = field.Type.GetNativeCallConversion(GetNativeInvokationTarget(field), field);
+                string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
                 _sb.AppendLine(ptype + " " + pname + "::get()");
                 _sb.AppendLine("{");
@@ -683,7 +683,7 @@ namespace AutoWrap.Meta
 
         protected override void AddMethodsForField(DefField field)
         {
-            string managedType = field.Type.GetNativeCallConversion(GetNativeInvokationTarget(field), field);
+            string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
             _sb.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.Name + "()");
             _sb.AppendLine("{");

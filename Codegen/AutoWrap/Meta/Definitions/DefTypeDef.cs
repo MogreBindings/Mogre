@@ -3,9 +3,12 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Describes a C++ <c>typedef</c>.
+    /// </summary>
     public class DefTypeDef : DefType
     {
-        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -15,12 +18,12 @@ namespace AutoWrap.Meta
                 throw new Exception("Unexpected");
         }
 
-        public override void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
-                BaseType.GetNativeParamConversion(param, out preConversion, out conversion, out postConversion);
+                BaseType.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
             else
-                base.GetNativeParamConversion(param, out preConversion, out conversion, out postConversion);
+                base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
         }
 
         public override string GetCLRParamTypeName(DefParam param)
@@ -70,18 +73,18 @@ namespace AutoWrap.Meta
             return BaseType.GetCLRTypeName(m).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
         }
 
-        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.GetNativeCallConversion(expr, m).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullCLRName, FullCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
                 return
-                    BaseType.GetNativeCallConversion(expr, m).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+                    BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
             }
-            
-            return base.GetNativeCallConversion(expr, m);
+
+            return base.ProduceNativeCallConversionCode(expr, m);
         }
 
         public static DefTypeDef CreateExplicitType(DefTypeDef typedef)

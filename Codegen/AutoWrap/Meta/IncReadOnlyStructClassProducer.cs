@@ -77,7 +77,7 @@ namespace AutoWrap.Meta
             {
                 if (!field.IsIgnored)
                 {
-                    string conv = field.Type.GetNativeCallConversion("obj." + field.Name, field);
+                    string conv = field.Type.ProduceNativeCallConversionCode("obj." + field.Name, field);
                     _sb.AppendLine("clr->" + NameToPrivate(field) + " = " + conv + ";");
                 }
             }

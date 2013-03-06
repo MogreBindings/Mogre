@@ -4,7 +4,7 @@ namespace AutoWrap.Meta
 {
     internal class DefInternal : DefType
     {
-        public override void GetNativeParamConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
         {
             preConversion = postConversion = null;
             conversion = param.Name;
@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -182,7 +182,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             switch (m.PassedByType)
             {

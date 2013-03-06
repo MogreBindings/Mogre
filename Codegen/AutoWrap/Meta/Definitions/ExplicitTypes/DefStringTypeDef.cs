@@ -15,7 +15,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, 
+        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion,
                                                         out string conversion, out string postConversion, 
                                                         out DefType dependancyType)
         {
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             switch (m.PassedByType)
             {

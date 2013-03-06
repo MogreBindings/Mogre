@@ -82,7 +82,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetNativeCallConversion(string expr, ITypeMember m)
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             switch (m.PassedByType)
             {
