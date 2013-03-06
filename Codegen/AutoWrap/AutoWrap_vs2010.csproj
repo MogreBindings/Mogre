@@ -86,7 +86,7 @@
     <Compile Include="Meta\Definitions\ITypeMember.cs" />
     <Compile Include="Meta\Definitions\PassedByType.cs" />
     <Compile Include="Meta\Definitions\ProtectionType.cs" />
-    <Compile Include="Meta\Definitions\VirtualType.cs" />
+    <Compile Include="Meta\Definitions\VirtualLevel.cs" />
     <Compile Include="Meta\Globals.cs" />
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
