@@ -75,6 +75,9 @@ namespace AutoWrap.Meta
             get { return AllowSubClassing; }
         }
 
+        /// <summary>
+        /// Indicates whether this type is ignored.
+        /// </summary>
         public virtual bool IsIgnored
         {
             get

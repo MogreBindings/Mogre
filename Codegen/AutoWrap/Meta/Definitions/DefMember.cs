@@ -28,6 +28,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Describes a class or struct member, i.e. a field (see <see cref="DefField"/>) or a 
+    /// method (<see cref="DefFunction"/>).
+    /// </summary>
     public abstract class DefMember : AttributeHolder, ITypeMember
     {
         string ITypeMember.MemberTypeName
