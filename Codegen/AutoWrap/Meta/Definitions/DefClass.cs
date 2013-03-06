@@ -545,14 +545,14 @@ namespace AutoWrap.Meta
                     {
                         foreach (DefProperty prop in BaseClass.AbstractProperties)
                         {
-                            if (!ContainsFunctionSignature(prop.Function.Signature, false))
+                            if (!prop.IsContainedIn(this, false))
                                 list.Add(prop);
                         }
                     }
 
                     foreach (DefProperty prop in this.GetProperties())
                     {
-                        if (prop.Function.IsDeclarableFunction && prop.Function.IsAbstract)
+                        if (prop.IsAbstract)
                             list.Add(prop);
                     }
 
@@ -574,18 +574,24 @@ namespace AutoWrap.Meta
             return null;
         }
 
-        public virtual bool ContainsFunctionSignature(string signature, bool inherit)
+        /// <summary>
+        /// Indicates whether a method with the specified signature is part of this class.
+        /// </summary>
+        /// <param name="signature">the signature</param>
+        /// <param name="allowInheritedSignature">if this is <c>false</c> only this class will be
+        /// checked for the signature. Otherwise all base classes will be checked as well.</param>
+        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature)
         {
             DefFunction f;
-            return ContainsFunctionSignature(signature, inherit, out f);
+            return ContainsFunctionSignature(signature, allowInheritedSignature, out f);
         }
 
-        public virtual bool ContainsFunctionSignature(string signature, bool inherit, out DefFunction basefunc)
+        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature, out DefFunction basefunc)
         {
             basefunc = null;
-            if (inherit && BaseClass != null)
+            if (allowInheritedSignature && BaseClass != null)
             {
-                BaseClass.ContainsFunctionSignature(signature, inherit, out basefunc);
+                BaseClass.ContainsFunctionSignature(signature, allowInheritedSignature, out basefunc);
             }
 
             if (basefunc != null)
@@ -806,7 +812,7 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction f in this.Functions)
             {
-                if (f.IsProperty && !f.IsIgnored)
+                if (f.IsProperty && f.IsDeclarableFunction)
                 {
                     DefProperty p = null;
 

@@ -58,7 +58,7 @@ namespace AutoWrap.Meta
         protected virtual bool IsPropertyAllowed(DefProperty p)
         {
             // If the property is ignored or the property is unhandled
-            if (p.Function.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
+            if (p.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
                 return false;
             
             if (p.ContainingClass.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))

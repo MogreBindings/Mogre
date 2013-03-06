@@ -95,8 +95,8 @@ namespace AutoWrap.Meta
                 foreach (DefProperty ip in iface.GetProperties())
                 {
                     if (IsPropertyAllowed(ip) &&
-                        (ip.Function.ProtectionType == ProtectionLevel.Public
-                          || (AllowProtectedMembers && ip.Function.ProtectionType == ProtectionLevel.Protected)))
+                        (ip.ProtectionLevel == ProtectionLevel.Public
+                          || (AllowProtectedMembers && ip.ProtectionLevel == ProtectionLevel.Protected)))
                     {
                         _interfaceProperties.Add(ip);
                     }
@@ -145,10 +145,11 @@ namespace AutoWrap.Meta
 
             foreach (DefProperty prop in _t.AbstractProperties)
             {
-                if (IsPropertyAllowed(prop) && (prop.Function.Class.IsBaseForSubclassing || (prop.Function.Class == _t && AllowSubclassing)))
+                if (IsPropertyAllowed(prop) && (prop.ContainingClass.IsBaseForSubclassing
+                    || (prop.ContainingClass == _t && AllowSubclassing)))
                 {
-                    if (prop.Function.ProtectionType == ProtectionLevel.Public
-                        || (AllowProtectedMembers && prop.Function.ProtectionType == ProtectionLevel.Protected))
+                    if (prop.ProtectionLevel == ProtectionLevel.Public
+                        || (AllowProtectedMembers && prop.ProtectionLevel == ProtectionLevel.Protected))
                     {
 
                         _isAbstractClass = true;
@@ -200,7 +201,7 @@ namespace AutoWrap.Meta
 
             foreach (DefFunction f in funcs)
             {
-                if (f.IsProperty)
+                if (f.IsProperty && f.IsDeclarableFunction)
                 {
                     DefProperty p = null;
 
@@ -752,9 +753,9 @@ namespace AutoWrap.Meta
             foreach (DefProperty p in _t.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
-                    ( p.Function.ProtectionType == ProtectionLevel.Public
-                     || ( AllowSubclassing && (p.Function.IsStatic || !p.Function.IsVirtual) )
-                     || (AllowProtectedMembers && p.Function.ProtectionType == ProtectionLevel.Protected) ) )
+                    ( p.ProtectionLevel == ProtectionLevel.Public
+                     || ( AllowSubclassing && (p.IsStatic || !p.IsVirtual) )
+                     || (AllowProtectedMembers && p.ProtectionLevel == ProtectionLevel.Protected) ) )
                 {
                     AddProperty(EnhanceProperty(p));
                     _sb.Append("\n");
@@ -808,16 +809,14 @@ namespace AutoWrap.Meta
 
             foreach (DefProperty ip in iface.GetProperties())
             {
-                DefFunction inf = ip.Function;
-
-                if (inf.IsStatic)
+                if (ip.IsStatic)
                     continue;
 
-                if (inf.ProtectionType == ProtectionLevel.Public
-                    || (AllowSubclassing && !inf.IsVirtual)
-                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionLevel.Protected))
+                if (ip.ProtectionLevel == ProtectionLevel.Public
+                    || (AllowSubclassing && !ip.IsVirtual)
+                    || (AllowProtectedMembers && ip.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (!_t.ContainsFunctionSignature(inf.Signature, true))
+                    if (!ip.IsContainedIn(_t, true))
                     {
                         AddInterfaceProperty(ip);
                         _sb.Append("\n");

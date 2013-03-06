@@ -6,20 +6,21 @@
     public class DefProperty : ITypeMember
     {
         /// <summary>
-        /// Either the get or the set accessor method of this property.
+        /// The name of this property.
         /// </summary>
-        public virtual DefFunction Function
+        public readonly string Name;
+
+        /// <summary>
+        /// Returns one of the accessor functions to be used to identify certain attribues
+        /// of this property (like protection level).
+        /// </summary>
+        private DefFunction _accessorFunction
         {
             get { return (CanRead) ? GetterFunction : SetterFunction; }
         }
 
         public DefFunction SetterFunction;
         public DefFunction GetterFunction;
-
-        /// <summary>
-        /// The name of this property.
-        /// </summary>
-        public readonly string Name;
 
         /// <summary>
         /// Denotes whether this property can be read.
@@ -36,6 +37,27 @@
         {
             get { return SetterFunction != null; }
         }
+
+        public ProtectionLevel ProtectionLevel
+        {
+            get { return _accessorFunction.ProtectionType; }
+        }
+    
+        public bool IsVirtual
+        {
+            get { return _accessorFunction.IsVirtual; }
+        }
+    
+        public bool IsAbstract
+        {
+            get { return _accessorFunction.IsAbstract; }
+        }
+    
+        public bool IsStatic
+        {
+            get { return _accessorFunction.IsStatic; }
+        }
+    
 
         #region ITypeMember Implementations
 
@@ -75,7 +97,7 @@
         
         public DefClass ContainingClass
         {
-            get { return (CanRead) ? GetterFunction.Class : SetterFunction.Class; }
+            get { return _accessorFunction.Class; }
         }
 
         public bool IsConst
@@ -85,12 +107,12 @@
 
         public bool HasAttribute<T>() where T : AutoWrapAttribute
         {
-            return Function.HasAttribute<T>();
+            return _accessorFunction.HasAttribute<T>();
         }
 
         public T GetAttribute<T>() where T : AutoWrapAttribute
         {
-            return Function.GetAttribute<T>();
+            return _accessorFunction.GetAttribute<T>();
         }
 
         #endregion
@@ -103,6 +125,17 @@
         public DefProperty Clone()
         {
             return (DefProperty)MemberwiseClone();
+        }
+    
+        /// <summary>
+        /// Checks whether this property is contained in the specified class or any of its base classes.
+        /// </summary>
+        /// <param name="clazz">the class to check</param>
+        /// <param name="allowInheritedSignature">if this is <c>false</c> only the specified class will be
+        /// checked for the property. Otherwise all base classes will be checked as well.</param>
+        public bool IsContainedIn(DefClass clazz, bool allowInBaseClass)
+        {
+            return clazz.ContainsFunctionSignature(_accessorFunction.Signature, allowInBaseClass);
         }
     }
 }

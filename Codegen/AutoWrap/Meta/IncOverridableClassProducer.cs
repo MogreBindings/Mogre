@@ -410,7 +410,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine();
             foreach (DefProperty prop in _overridableProperties)
             {
-                if (!prop.Function.IsAbstract)
+                if (!prop.IsAbstract)
                 {
                     AddProperty(prop);
                     _sb.AppendLine();

@@ -97,7 +97,7 @@ namespace AutoWrap.Meta
 
         protected override void AddProperty(DefProperty p)
         {
-            if (p.Function.IsVirtual)
+            if (p.IsVirtual)
                 base.AddProperty(p);
         }
     }
