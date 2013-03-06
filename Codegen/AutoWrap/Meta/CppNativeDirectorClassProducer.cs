@@ -111,7 +111,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddNativeMethodParam(DefParam param)
         {
-            _sb.Append(param.NativeTypeName + " " + param.Name);
+            _sb.Append(param.MemberTypeNativeName + " " + param.Name);
         }
     }
 }

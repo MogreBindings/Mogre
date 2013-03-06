@@ -17,7 +17,7 @@ namespace AutoWrap.Meta
 
         public virtual string ConversionTypeName
         {
-            get { return "Pair<" + TypeMembers[0].CLRTypeName + ", " + TypeMembers[1].CLRTypeName + ">"; }
+            get { return "Pair<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">"; }
         }
 
         public override string GetCLRParamTypeName(DefParam param)

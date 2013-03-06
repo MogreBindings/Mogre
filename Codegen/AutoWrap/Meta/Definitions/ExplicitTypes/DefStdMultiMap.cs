@@ -11,7 +11,7 @@ namespace AutoWrap.Meta
 
         public override string FullSTLContainerTypeName
         {
-            get { return "STLMultiMap<" + TypeMembers[0].CLRTypeName + ", " + TypeMembers[1].CLRTypeName + ", " + TypeMembers[0].NativeTypeName + ", " + TypeMembers[1].NativeTypeName + ">"; }
+            get { return "STLMultiMap<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ", " + TypeMembers[1].MemberTypeNativeName + ">"; }
         }
 
         //public override string GetCLRTypeName(ITypeMember m)

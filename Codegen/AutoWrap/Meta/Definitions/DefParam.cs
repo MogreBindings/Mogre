@@ -5,7 +5,7 @@ namespace AutoWrap.Meta
 {
     public class DefParam : AttributeHolder, ITypeMember
     {
-        string ITypeMember.TypeName
+        string ITypeMember.MemberTypeName
         {
             get { return TypeName; }
         }
@@ -15,12 +15,12 @@ namespace AutoWrap.Meta
             get { return PassedByType; }
         }
 
-        DefClass ITypeMember.Class
+        DefClass ITypeMember.ContainingClass
         {
             get { return Function.Class; }
         }
 
-        DefType ITypeMember.Type
+        DefType ITypeMember.MemberType
         {
             get { return Type; }
         }
@@ -36,7 +36,7 @@ namespace AutoWrap.Meta
         }
 
         private string _clrTypeName;
-        public virtual string CLRTypeName
+        public virtual string MemberTypeCLRName
         {
             get
             {
@@ -86,9 +86,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        public virtual string NativeTypeName
+        public virtual string MemberTypeNativeName
         {
-            get { return (this as ITypeMember).Type.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
+            get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
         private DefType _type;
@@ -199,8 +199,8 @@ namespace AutoWrap.Meta
         public DefParam(ITypeMember m, string name)
         {
             _name = name;
-            _type = m.Type;
-            _typename = m.TypeName;
+            _type = m.MemberType;
+            _typename = m.MemberTypeName; 
             PassedByType = m.PassedByType;
             _isConst = m.IsConst;
         }

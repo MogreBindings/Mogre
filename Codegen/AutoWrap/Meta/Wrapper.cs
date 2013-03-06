@@ -228,7 +228,7 @@ namespace AutoWrap.Meta
                 {
                     foreach (ITypeMember m in (type as DefTypeDef).TypeMembers)
                     {
-                        DefType mt = m.Type;
+                        DefType mt = m.MemberType;
                         if (!mt.IsValueType && !mt.IsPureManagedClass
                             && !TypeIsWrappable(mt))
                             return false;
@@ -238,7 +238,7 @@ namespace AutoWrap.Meta
                 }
                 else if (type is DefIterator)
                 {
-                    if (TypeIsWrappable((type as DefIterator).TypeMembers[0].Type))
+                    if (TypeIsWrappable((type as DefIterator).TypeMembers[0].MemberType))
                     {
                         if ((type as DefIterator).IsConstIterator)
                         {
@@ -1127,18 +1127,18 @@ namespace AutoWrap.Meta
                     sb.AppendLine();
                 }
 
-                sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].CLRTypeName);
-                sb.AppendLine("#define STLDECL_NATIVETYPE " + t.TypeMembers[0].NativeTypeName);
-                CheckTypeForDependancy(t.TypeMembers[0].Type);
+                sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_NATIVETYPE " + t.TypeMembers[0].MemberTypeNativeName);
+                CheckTypeForDependancy(t.TypeMembers[0].MemberType);
             }
             else if (t is DefTemplateTwoTypes)
             {
-                sb.AppendLine("#define STLDECL_MANAGEDKEY " + t.TypeMembers[0].CLRTypeName);
-                sb.AppendLine("#define STLDECL_MANAGEDVALUE " + t.TypeMembers[1].CLRTypeName);
-                sb.AppendLine("#define STLDECL_NATIVEKEY " + t.TypeMembers[0].NativeTypeName);
-                sb.AppendLine("#define STLDECL_NATIVEVALUE " + t.TypeMembers[1].NativeTypeName);
-                CheckTypeForDependancy(t.TypeMembers[0].Type);
-                CheckTypeForDependancy(t.TypeMembers[1].Type);
+                sb.AppendLine("#define STLDECL_MANAGEDKEY " + t.TypeMembers[0].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_MANAGEDVALUE " + t.TypeMembers[1].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_NATIVEKEY " + t.TypeMembers[0].MemberTypeNativeName);
+                sb.AppendLine("#define STLDECL_NATIVEVALUE " + t.TypeMembers[1].MemberTypeNativeName);
+                CheckTypeForDependancy(t.TypeMembers[0].MemberType);
+                CheckTypeForDependancy(t.TypeMembers[1].MemberType);
             }
 
             sb.AppendIndent("");
@@ -1208,18 +1208,18 @@ namespace AutoWrap.Meta
                     sb.AppendLine();
                 }
 
-                sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].CLRTypeName);
-                sb.AppendLine("#define STLDECL_NATIVETYPE " + t.TypeMembers[0].NativeTypeName);
-                CppCheckTypeForDependancy(t.TypeMembers[0].Type);
+                sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_NATIVETYPE " + t.TypeMembers[0].MemberTypeNativeName);
+                CppCheckTypeForDependancy(t.TypeMembers[0].MemberType);
             }
             else if (t is DefTemplateTwoTypes)
             {
-                sb.AppendLine("#define STLDECL_MANAGEDKEY " + t.TypeMembers[0].CLRTypeName);
-                sb.AppendLine("#define STLDECL_MANAGEDVALUE " + t.TypeMembers[1].CLRTypeName);
-                sb.AppendLine("#define STLDECL_NATIVEKEY " + t.TypeMembers[0].NativeTypeName);
-                sb.AppendLine("#define STLDECL_NATIVEVALUE " + t.TypeMembers[1].NativeTypeName);
-                CppCheckTypeForDependancy(t.TypeMembers[0].Type);
-                CppCheckTypeForDependancy(t.TypeMembers[1].Type);
+                sb.AppendLine("#define STLDECL_MANAGEDKEY " + t.TypeMembers[0].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_MANAGEDVALUE " + t.TypeMembers[1].MemberTypeCLRName);
+                sb.AppendLine("#define STLDECL_NATIVEKEY " + t.TypeMembers[0].MemberTypeNativeName);
+                sb.AppendLine("#define STLDECL_NATIVEVALUE " + t.TypeMembers[1].MemberTypeNativeName);
+                CppCheckTypeForDependancy(t.TypeMembers[0].MemberType);
+                CppCheckTypeForDependancy(t.TypeMembers[1].MemberType);
             }
 
             sb.AppendIndent("CPP_DECLARE_STL" + t.STLContainer.ToUpper());
@@ -1282,10 +1282,10 @@ namespace AutoWrap.Meta
                 this.AddPreDeclaration("ref class " + t.CLRName + ";");
             }
 
-            CheckTypeForDependancy(t.IterationElementTypeMember.Type);
+            CheckTypeForDependancy(t.IterationElementTypeMember.MemberType);
 
             if (t.IsMapIterator)
-                CheckTypeForDependancy(t.IterationKeyTypeMember.Type);
+                CheckTypeForDependancy(t.IterationKeyTypeMember.MemberType);
 
             sb.AppendIndent(t.ProtectionType.GetCLRProtectionName());
             if (t.IsNested) sb.Append(":");
@@ -1295,8 +1295,8 @@ namespace AutoWrap.Meta
             else
                 sb.Append(" INC_DECLARE_ITERATOR");
 
-            if (t.TypeMembers[0].Type.ProtectionType == ProtectionType.Protected
-                && !t.TypeMembers[0].Type.ParentClass.AllowVirtuals)
+            if (t.TypeMembers[0].MemberType.ProtectionType == ProtectionType.Protected
+                && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals)
             {
                 // the container type will not be declared,
                 // declare an iterator without a constructor that takes a container class
@@ -1304,9 +1304,9 @@ namespace AutoWrap.Meta
             }
 
             if (t.IsMapIterator)
-                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].Type.FullCLRName + ", " + t.IterationElementTypeMember.CLRTypeName + ", " + t.IterationElementTypeMember.NativeTypeName + ", " + t.IterationKeyTypeMember.CLRTypeName + ", " + t.IterationKeyTypeMember.NativeTypeName + " )\n");
+                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName + " )\n");
             else
-                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].Type.FullCLRName + ", " + t.IterationElementTypeMember.CLRTypeName + ", " + t.IterationElementTypeMember.NativeTypeName + " )\n");
+                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )\n");
 
             sb.AppendLine();
         }
@@ -1334,8 +1334,8 @@ namespace AutoWrap.Meta
             else
                 sb.Append("CPP_DECLARE_ITERATOR");
 
-            bool noConstructor = t.TypeMembers[0].Type.ProtectionType == ProtectionType.Protected
-                && !t.TypeMembers[0].Type.ParentClass.AllowVirtuals;
+            bool noConstructor = t.TypeMembers[0].MemberType.ProtectionType == ProtectionType.Protected
+                && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals;
 
             if (noConstructor)
             {
@@ -1345,9 +1345,9 @@ namespace AutoWrap.Meta
             }
 
             if (t.IsMapIterator)
-                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].Type.FullCLRName + ", " + t.IterationElementTypeMember.CLRTypeName + ", " + t.IterationElementTypeMember.NativeTypeName + ", " + t.IterationKeyTypeMember.CLRTypeName + ", " + t.IterationKeyTypeMember.NativeTypeName);
+                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName);
             else
-                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].Type.FullCLRName + ", " + t.IterationElementTypeMember.CLRTypeName + ", " + t.IterationElementTypeMember.NativeTypeName);
+                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName);
 
             if (!noConstructor)
             {
@@ -1359,7 +1359,7 @@ namespace AutoWrap.Meta
 
             sb.Append(" )\n");
 
-            AddTypeDependancy(t.TypeMembers[0].Type);
+            AddTypeDependancy(t.TypeMembers[0].MemberType);
 
             sb.AppendLine();
         }

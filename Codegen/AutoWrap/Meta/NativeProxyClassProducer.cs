@@ -91,7 +91,7 @@ namespace AutoWrap.Meta
                 DefParam param = f.Parameters[i];
                 _sb.Append(" ");
 
-                _sb.Append(param.NativeTypeName);
+                _sb.Append(param.MemberTypeNativeName);
                 _sb.Append(" " + param.Name);
 
                 if (i < f.Parameters.Count - 1) _sb.Append(",");

@@ -46,11 +46,11 @@ namespace AutoWrap.Meta
 
         protected virtual string GetCLRTypeName(ITypeMember m)
         {
-            AddTypeDependancy(m.Type);
-            if (m.Type.IsUnnamedSTLContainer)
-                return GetClassName() + "::" + m.CLRTypeName;
+            AddTypeDependancy(m.MemberType);
+            if (m.MemberType.IsUnnamedSTLContainer)
+                return GetClassName() + "::" + m.MemberTypeCLRName;
             else
-                return m.CLRTypeName;
+                return m.MemberTypeCLRName;
         }
 
         protected virtual string GetCLRParamTypeName(DefParam param)

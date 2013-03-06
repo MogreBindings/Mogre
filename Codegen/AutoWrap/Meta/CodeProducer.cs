@@ -154,10 +154,10 @@ namespace AutoWrap.Meta
 
         protected virtual bool? CheckTypeMemberForGetProperty(ITypeMember m)
         {
-            if (!m.Type.IsValueType && (m.Type.IsSharedPtr || m.Type is DefTemplateOneType || m.Type is DefTemplateTwoTypes))
+            if (!m.MemberType.IsValueType && (m.MemberType.IsSharedPtr || m.MemberType is DefTemplateOneType || m.MemberType is DefTemplateTwoTypes))
                 return false;
 
-            if (m.Type.HasAttribute<ReturnOnlyByMethodAttribute>())
+            if (m.MemberType.HasAttribute<ReturnOnlyByMethodAttribute>())
                 return false;
 
             return null;

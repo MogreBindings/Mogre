@@ -2,7 +2,7 @@
 {
     public class DefProperty : ITypeMember
     {
-        string ITypeMember.TypeName
+        string ITypeMember.MemberTypeName
         {
             get { return TypeName; }
         }
@@ -12,12 +12,12 @@
             get { return PassedByType; }
         }
 
-        DefClass ITypeMember.Class
+        DefClass ITypeMember.ContainingClass
         {
             get { return Class; }
         }
 
-        DefType ITypeMember.Type
+        DefType ITypeMember.MemberType
         {
             get { return (CanRead) ? GetterFunction.Type : SetterFunction.Parameters[0].Type; }
         }
@@ -43,20 +43,20 @@
         }
 
         private string _clrTypeName;
-        public virtual string CLRTypeName
+        public virtual string MemberTypeCLRName
         {
             get
             {
                 if (_clrTypeName == null)
-                    _clrTypeName = (this as ITypeMember).Type.GetCLRTypeName(this);
+                    _clrTypeName = (this as ITypeMember).MemberType.GetCLRTypeName(this);
 
                 return _clrTypeName;
             }
         }
 
-        public virtual string NativeTypeName
+        public virtual string MemberTypeNativeName
         {
-            get { return (this as ITypeMember).Type.GetNativeTypeName((this as ITypeMember).IsConst, (this as ITypeMember).PassedByType); }
+            get { return (this as ITypeMember).MemberType.GetNativeTypeName((this as ITypeMember).IsConst, (this as ITypeMember).PassedByType); }
         }
 
         public DefFunction SetterFunction;

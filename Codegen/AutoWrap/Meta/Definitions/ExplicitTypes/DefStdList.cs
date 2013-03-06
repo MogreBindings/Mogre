@@ -17,7 +17,7 @@ namespace AutoWrap.Meta
 
         public override string FullSTLContainerTypeName
         {
-            get { return "STLList<" + TypeMembers[0].CLRTypeName + ", " + TypeMembers[0].NativeTypeName + ">"; }
+            get { return "STLList<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ">"; }
         }
 
         public virtual string NativeCallConversionFunction

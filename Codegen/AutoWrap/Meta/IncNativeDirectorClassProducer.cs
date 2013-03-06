@@ -116,7 +116,7 @@ namespace AutoWrap.Meta
                     //    AddEventArgsClass(f, sb);
                     //}
 
-                    sb.AppendIndent("delegate static " + f.CLRTypeName + " " + f.CLRName + "Handler(");
+                    sb.AppendIndent("delegate static " + f.MemberTypeCLRName + " " + f.CLRName + "Handler(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         DefParam param = f.Parameters[i];
@@ -209,7 +209,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddNativeMethodParam(DefParam param)
         {
-            _sb.Append(param.NativeTypeName + " " + param.Name);
+            _sb.Append(param.MemberTypeNativeName + " " + param.Name);
         }
 
         protected override void AddDefinition()

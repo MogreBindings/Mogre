@@ -12,7 +12,7 @@ namespace AutoWrap.Meta
 
         public bool IsMapIterator
         {
-            get { return TypeMembers[0].Type is DefTemplateTwoTypes; }
+            get { return TypeMembers[0].MemberType is DefTemplateTwoTypes; }
         }
 
         private ITypeMember _iterationElementType;
@@ -22,10 +22,10 @@ namespace AutoWrap.Meta
             {
                 if (_iterationElementType == null)
                 {
-                    if (TypeMembers[0].Type is DefTemplateOneType)
-                        _iterationElementType = (TypeMembers[0].Type as DefTemplateOneType).TypeMembers[0];
-                    else if (TypeMembers[0].Type is DefTemplateTwoTypes)
-                        _iterationElementType = (TypeMembers[0].Type as DefTemplateTwoTypes).TypeMembers[1];
+                    if (TypeMembers[0].MemberType is DefTemplateOneType)
+                        _iterationElementType = (TypeMembers[0].MemberType as DefTemplateOneType).TypeMembers[0];
+                    else if (TypeMembers[0].MemberType is DefTemplateTwoTypes)
+                        _iterationElementType = (TypeMembers[0].MemberType as DefTemplateTwoTypes).TypeMembers[1];
                     else
                         throw new Exception("Unexpected");
                 }
@@ -41,8 +41,8 @@ namespace AutoWrap.Meta
             {
                 if (_iterationKeyType == null)
                 {
-                    if (TypeMembers[0].Type is DefTemplateTwoTypes)
-                        _iterationKeyType = (TypeMembers[0].Type as DefTemplateTwoTypes).TypeMembers[0];
+                    if (TypeMembers[0].MemberType is DefTemplateTwoTypes)
+                        _iterationKeyType = (TypeMembers[0].MemberType as DefTemplateTwoTypes).TypeMembers[0];
                 }
 
                 return _iterationKeyType;

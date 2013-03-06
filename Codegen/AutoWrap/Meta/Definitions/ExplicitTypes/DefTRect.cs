@@ -62,7 +62,7 @@ namespace AutoWrap.Meta
                 case PassedByType.Value:
                     return expr;
                 case PassedByType.Pointer:
-                    return "(" + m.CLRTypeName + ") " + expr;
+                    return "(" + m.MemberTypeCLRName + ") " + expr;
                 default:
                     throw new Exception("Unexpected");
             }

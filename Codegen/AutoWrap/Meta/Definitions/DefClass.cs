@@ -55,7 +55,7 @@ namespace AutoWrap.Meta
         {
             if (param.Type.IsSharedPtr)
             {
-                newname = "(" + param.NativeTypeName + ")" + param.Name;
+                newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
                 return String.Empty;
             }
 
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
                 {
                     case PassedByType.Pointer:
                         newname = "o_" + param.Name;
-                        return param.NativeTypeName + " o_" + param.Name + " = reinterpret_cast<" + param.NativeTypeName + ">(" + param.Name + ");\n";
+                        return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
                 }
             }
 
@@ -123,7 +123,7 @@ namespace AutoWrap.Meta
                             && !HasWrapType(WrapTypes.NativePtrValueType))
                         {
                             newname = "o_" + param.Name;
-                            return param.NativeTypeName + " o_" + param.Name + " = reinterpret_cast<" + param.NativeTypeName + ">(" + param.Name + ");\n";
+                            return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
                         }
                         else
                             return base.GetPreCallParamConversion(param, out newname);

@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
 
             if (f.IsGetProperty)
             {
-                sb.AppendLine(f.CLRTypeName + " mp_return = " + managedTarget + "->" + f.CLRName + ";");
+                sb.AppendLine(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + ";");
                 managedCall = "mp_return";
             }
             else if (f.IsSetProperty)
@@ -69,13 +69,13 @@ namespace AutoWrap.Meta
 
                 if (!f.IsVoid)
                 {
-                    sb.AppendIndent(f.CLRTypeName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
+                    sb.AppendIndent(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         DefParam param = f.Parameters[i];
                         param.Type.GetNativeParamConversion(param, out pre, out conv, out post);
                         sb.Append(" ");
-                        if (explicitCast) sb.Append("(" + param.CLRTypeName + ")");
+                        if (explicitCast) sb.Append("(" + param.MemberTypeCLRName + ")");
                         sb.Append(conv);
                         if (i < f.Parameters.Count - 1) sb.Append(",");
                     }
@@ -93,7 +93,7 @@ namespace AutoWrap.Meta
                         DefParam param = f.Parameters[i];
                         param.Type.GetNativeParamConversion(param, out pre, out conv, out post);
                         managedCall += " ";
-                        if (explicitCast) managedCall += "(" + param.CLRTypeName + ")";
+                        if (explicitCast) managedCall += "(" + param.MemberTypeCLRName + ")";
                         managedCall += conv;
                         if (i < f.Parameters.Count - 1) managedCall += ",";
                     }
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
             _sb.AppendIndent("");
-            _sb.Append(f.NativeTypeName + " " + ProxyName + "::" + f.Name + "(");
+            _sb.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.Name + "(");
             AddNativeMethodParams(f);
             _sb.Append(" )");
             if (f.IsConstFunctionCall)

@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
             foreach (DefField field in _t.PublicFields)
             {
                 if (!field.IsIgnored)
-                    _sb.AppendLine(field.CLRTypeName + " " + NameToPrivate(field) + ";");
+                    _sb.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
             }
             _sb.AppendLine();
 

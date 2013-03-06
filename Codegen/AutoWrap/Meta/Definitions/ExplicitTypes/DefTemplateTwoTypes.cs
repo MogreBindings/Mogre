@@ -15,7 +15,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (IsUnnamedSTLContainer)
-                    return "STL" + STLContainer + "_" + TypeMembers[0].Type.Name + "_" + TypeMembers[1].Type.Name;
+                    return "STL" + STLContainer + "_" + TypeMembers[0].MemberType.Name + "_" + TypeMembers[1].MemberType.Name;
 
                 return base.CLRName;
             }
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (Name.StartsWith("std::"))
-                    return Name + "<" + TypeMembers[0].NativeTypeName + "," + TypeMembers[1].NativeTypeName + ">";
+                    return Name + "<" + TypeMembers[0].MemberTypeNativeName + "," + TypeMembers[1].MemberTypeNativeName + ">";
                 
                 if (ProtectionType == ProtectionType.Protected)
                     return NativeProtectedTypesProxy.GetProtectedTypesProxyName(ParentClass) + "::" + Name;

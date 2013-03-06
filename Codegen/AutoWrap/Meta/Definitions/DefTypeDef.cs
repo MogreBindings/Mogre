@@ -133,7 +133,7 @@ namespace AutoWrap.Meta
                     return true;
 
                 foreach (ITypeMember m in TypeMembers)
-                    if (m.Type.IsIgnored || m.Type.HasWrapType(WrapTypes.NativeDirector))
+                    if (m.MemberType.IsIgnored || m.MemberType.HasWrapType(WrapTypes.NativeDirector))
                         return true;
 
                 return false;

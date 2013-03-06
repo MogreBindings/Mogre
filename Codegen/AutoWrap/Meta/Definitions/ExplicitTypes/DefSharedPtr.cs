@@ -7,7 +7,7 @@ namespace AutoWrap.Meta
     {
         public override string GetPreCallParamConversion(DefParam param, out string newname)
         {
-            newname = "(" + param.NativeTypeName + ")" + param.Name;
+            newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
             return String.Empty;
         }
 

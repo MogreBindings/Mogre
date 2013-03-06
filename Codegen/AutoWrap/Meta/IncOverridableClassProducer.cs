@@ -128,7 +128,7 @@ namespace AutoWrap.Meta
             if (f != null)
             {
                 foreach (DefParam param in f.Parameters)
-                    _sb.Append(", " + param.NativeTypeName + " " + param.Name);
+                    _sb.Append(", " + param.MemberTypeNativeName + " " + param.Name);
             }
 
             _sb.Append(" ) :\n");
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
             _sb.AppendIndent("");
             if (f.IsVirtual)
                 _sb.Append("virtual ");
-            _sb.Append(f.NativeTypeName + " " + f.Name + "(");
+            _sb.Append(f.MemberTypeNativeName + " " + f.Name + "(");
             AddNativeMethodParams(f);
             _sb.Append(" ) ");
             if (f.IsConstFunctionCall)

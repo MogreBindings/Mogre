@@ -11,7 +11,7 @@ namespace AutoWrap.Meta
 
         public override string FullSTLContainerTypeName
         {
-            get { return "STLDeque<" + TypeMembers[0].CLRTypeName + ", " + TypeMembers[0].NativeTypeName + ">"; }
+            get { return "STLDeque<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ">"; }
         }
 
         public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)

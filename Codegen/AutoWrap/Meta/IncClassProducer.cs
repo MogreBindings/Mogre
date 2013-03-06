@@ -68,8 +68,8 @@ namespace AutoWrap.Meta
 
         protected virtual string GetCLRTypeName(ITypeMember m)
         {
-            CheckTypeForDependancy(m.Type);
-            return m.CLRTypeName;
+            CheckTypeForDependancy(m.MemberType);
+            return m.MemberTypeCLRName;
         }
 
         protected virtual string GetCLRParamTypeName(DefParam param)
@@ -590,7 +590,7 @@ namespace AutoWrap.Meta
                         _wrapper.UsedTypes.Add(m.Type);
                     }
 
-                    _sb.Append(m.CLRTypeName + " " + NameToPrivate(m) + ";\n");
+                    _sb.Append(m.MemberTypeCLRName + " " + NameToPrivate(m) + ";\n");
                 }
             }
         }
@@ -811,7 +811,7 @@ namespace AutoWrap.Meta
                             throw new Exception("Unexpected");
                     }
 
-                    ptype = tmpParam.CLRTypeName;
+                    ptype = tmpParam.MemberTypeCLRName;
                     _sb.AppendIndent("");
                     if (field.IsStatic) _sb.Append("static ");
                     _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
@@ -824,7 +824,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    ptype = field.CLRTypeName;
+                    ptype = field.MemberTypeCLRName;
                     _sb.AppendIndent("");
                     if (field.IsStatic) _sb.Append("static ");
                     _sb.AppendFormat("property {0} {1}[int]\n", ptype, field.Name);
@@ -839,7 +839,7 @@ namespace AutoWrap.Meta
             }
             else if (_cachedMembers.Contains(field))
             {
-                ptype = field.CLRTypeName;
+                ptype = field.MemberTypeCLRName;
                 _sb.AppendIndent("");
                 if (field.IsStatic) _sb.Append("static ");
                 _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);

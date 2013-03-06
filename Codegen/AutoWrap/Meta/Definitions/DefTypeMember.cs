@@ -4,7 +4,7 @@ namespace AutoWrap.Meta
 {
     internal class DefTypeMember : ITypeMember
     {
-        string ITypeMember.TypeName
+        string ITypeMember.MemberTypeName
         {
             get { return _type.Name; }
         }
@@ -14,12 +14,12 @@ namespace AutoWrap.Meta
             get { return _passed; }
         }
 
-        DefClass ITypeMember.Class
+        DefClass ITypeMember.ContainingClass
         {
             get { throw new Exception("Unexpected"); }
         }
 
-        DefType ITypeMember.Type
+        DefType ITypeMember.MemberType 
         {
             get { return _type; }
         }
@@ -40,18 +40,18 @@ namespace AutoWrap.Meta
             get { return _isConst; }
         }
 
-        public virtual string NativeTypeName
+        public virtual string MemberTypeNativeName
         {
-            get { return (this as ITypeMember).Type.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
+            get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
         private string _clrTypeName;
-        public virtual string CLRTypeName
+        public virtual string MemberTypeCLRName 
         {
             get
             {
                 if (_clrTypeName == null)
-                    _clrTypeName = (this as ITypeMember).Type.GetCLRTypeName(this);
+                    _clrTypeName = (this as ITypeMember).MemberType.GetCLRTypeName(this);
 
                 return _clrTypeName;
             }
