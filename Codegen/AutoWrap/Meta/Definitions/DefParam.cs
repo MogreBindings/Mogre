@@ -101,7 +101,7 @@ namespace AutoWrap.Meta
                     if (Container != "")
                     {
                         _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.ParentClass = Function.Class;
+                        _type.SurroundingClass = Function.Class;
                     }
                     else
                         _type = Function.Class.FindType<DefType>(TypeName, false);

@@ -39,7 +39,7 @@ namespace AutoWrap.Meta
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");
 
-            string name = (type.IsNested) ? type.ParentClass.Name + "_" + type.Name : type.Name;
+            string name = (type.IsNested) ? type.SurroundingClass.Name + "_" + type.Name : type.Name;
             return "I" + name + "_Receiver";
         }
 
@@ -48,7 +48,7 @@ namespace AutoWrap.Meta
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");
 
-            string name = (type.IsNested) ? type.ParentClass.Name + "_" + type.Name : type.Name;
+            string name = (type.IsNested) ? type.SurroundingClass.Name + "_" + type.Name : type.Name;
             return name + "_Director";
         }
 

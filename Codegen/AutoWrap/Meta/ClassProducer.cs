@@ -541,8 +541,8 @@ namespace AutoWrap.Meta
             // of this class
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionLevel.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
+                if (nested.ProtectionLevel == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if (nested.HasWrapType(WrapTypes.NativeDirector))
                         AddNestedTypeBeforeMainType(nested);
@@ -626,8 +626,8 @@ namespace AutoWrap.Meta
 
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionLevel.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
+                if (nested.ProtectionLevel == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if (nested is DefEnum || _wrapper.TypeIsWrappable(nested))
                     {

@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
                 {
                     DefType type = nested.FindType<DefType>(nested.Name);
 
-                    if (type.ProtectionType == ProtectionLevel.Protected
+                    if (type.ProtectionLevel == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
                     {
                         AddNestedType(type);
@@ -90,7 +90,7 @@ namespace AutoWrap.Meta
             {
                 DefType type = nested.FindType<DefType>(nested.Name);
 
-                if (type.ProtectionType == ProtectionLevel.Protected
+                if (type.ProtectionLevel == ProtectionLevel.Protected
                     && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )
                 {
                     return true;

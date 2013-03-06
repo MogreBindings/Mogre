@@ -116,7 +116,7 @@ namespace AutoWrap.Meta
 
             if (expl != null)
             {
-                expl.ParentClass = typedef.ParentClass;
+                expl.SurroundingClass = typedef.SurroundingClass;
                 expl.NameSpace = typedef.NameSpace;
                 expl.Attributes = typedef.Attributes;
                 return expl;

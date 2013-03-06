@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
                     if (Container != "")
                     {
                         _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.ParentClass = Class;
+                        _type.SurroundingClass = Class;
                     }
                     else
                         _type = Class.FindType<DefType>(TypeName, false);

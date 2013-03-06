@@ -290,7 +290,7 @@ namespace AutoWrap.Meta
             {
                 foreach (DefType type in NestedTypes)
                 {
-                    if (type.ProtectionType == ProtectionLevel.Public)
+                    if (type.ProtectionLevel == ProtectionLevel.Public)
                         yield return type;
                 }
             }
@@ -411,8 +411,8 @@ namespace AutoWrap.Meta
                 if (base.IsIgnored)
                     return true;
 
-                if (this.ParentClass != null)
-                    return this.ParentClass.IsIgnored;
+                if (SurroundingClass != null)
+                    return SurroundingClass.IsIgnored;
                 else
                     return false;
             }
@@ -1049,8 +1049,8 @@ namespace AutoWrap.Meta
                         return t;
                 }
 
-                if (ParentClass != null)
-                    return ParentClass.FindType<T>(name, raiseException);
+                if (SurroundingClass != null)
+                    return SurroundingClass.FindType<T>(name, raiseException);
                 else
                     return NameSpace.FindType<T>(name, raiseException);
             }
@@ -1122,7 +1122,7 @@ namespace AutoWrap.Meta
 
                     default:
                         DefType type = CreateType(child);
-                        type.ParentClass = this;
+                        type.SurroundingClass = this;
                         type.NameSpace = this.NameSpace;
                         NestedTypes.Add(type);
                         break;

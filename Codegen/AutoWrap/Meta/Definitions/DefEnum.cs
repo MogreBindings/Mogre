@@ -14,8 +14,8 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (ProtectionType == ProtectionLevel.Protected)
-                    return NativeProtectedTypesProxy.GetProtectedTypesProxyName(ParentClass) + "::" + Name;
+                if (ProtectionLevel == ProtectionLevel.Protected)
+                    return NativeProtectedTypesProxy.GetProtectedTypesProxyName(SurroundingClass) + "::" + Name;
                 
                 return base.FullNativeName;
             }

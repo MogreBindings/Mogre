@@ -186,7 +186,7 @@ namespace AutoWrap.Meta
             }
 
             // Get explicit type or a new type if type has ReplaceBy attribute
-            type = (type.IsNested) ? type.ParentClass.FindType<DefType>(type.Name) : type.NameSpace.FindType<DefType>(type.Name);
+            type = (type.IsNested) ? type.SurroundingClass.FindType<DefType>(type.Name) : type.NameSpace.FindType<DefType>(type.Name);
 
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
@@ -386,9 +386,9 @@ namespace AutoWrap.Meta
             {
                 string name = cls.Name;
                 DefClass parent = cls;
-                while (parent.ParentClass != null)
+                while (parent.SurroundingClass != null)
                 {
-                    parent = parent.ParentClass;
+                    parent = parent.SurroundingClass;
                     name = parent.Name + "_" + name;
                 }
 
@@ -404,9 +404,9 @@ namespace AutoWrap.Meta
 
             string name = cls.Name;
             DefClass parent = cls;
-            while (parent.ParentClass != null)
+            while (parent.SurroundingClass != null)
             {
-                parent = parent.ParentClass;
+                parent = parent.SurroundingClass;
                 name = parent.Name + "_" + name;
             }
 
@@ -417,7 +417,7 @@ namespace AutoWrap.Meta
             DefClass cls = t as DefClass;
             if (cls == null)
                 return;
-            if (cls.IsIgnored || cls.ProtectionType != ProtectionLevel.Public)
+            if (cls.IsIgnored || cls.ProtectionLevel != ProtectionLevel.Public)
                 return;
 
             if (cls.HasAttribute<CLRObjectAttribute>(true))
@@ -740,7 +740,7 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as DefTypeDef;
                 else
-                    explicitType = (t.IsNested) ? t.ParentClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
 
                 if (t.HasWrapType(WrapTypes.SharedPtr))
                 {
@@ -819,7 +819,7 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as DefTypeDef;
                 else
-                    explicitType = (t.IsNested) ? t.ParentClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
 
                 if (explicitType.IsSTLContainer)
                 {
@@ -850,7 +850,7 @@ namespace AutoWrap.Meta
             if (!enm.IsNested)
                 sb.Append("public ");
             else
-              sb.Append(enm.ProtectionType.GetCLRProtectionName() + ": ");
+              sb.Append(enm.ProtectionLevel.GetCLRProtectionName() + ": ");
 
             //if (inProtectedTypesProxy)
                 //sb.Append("enum " + enm.Name + "\n");
@@ -907,7 +907,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                sb.AppendIndent(type.ProtectionType.GetCLRProtectionName() + ": ");
+                sb.AppendIndent(type.ProtectionLevel.GetCLRProtectionName() + ": ");
             }
 
             sb.Append("ref class " + type.Name + " : public " + baseClass + "\n");
@@ -1150,7 +1150,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                publicprot = t.ProtectionType.GetCLRProtectionName() + ": ";
+                publicprot = t.ProtectionLevel.GetCLRProtectionName() + ": ";
                 privateprot = "private:";
                 sb.Append(publicprot);
             }
@@ -1235,7 +1235,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                prefix = t.ParentClass.FullNativeName;
+                prefix = t.SurroundingClass.FullNativeName;
             }
 
             if (prefix.Contains("::"))
@@ -1287,7 +1287,7 @@ namespace AutoWrap.Meta
             if (t.IsMapIterator)
                 CheckTypeForDependancy(t.IterationKeyTypeMember.MemberType);
 
-            sb.AppendIndent(t.ProtectionType.GetCLRProtectionName());
+            sb.AppendIndent(t.ProtectionLevel.GetCLRProtectionName());
             if (t.IsNested) sb.Append(":");
 
             if (t.IsMapIterator)
@@ -1295,8 +1295,8 @@ namespace AutoWrap.Meta
             else
                 sb.Append(" INC_DECLARE_ITERATOR");
 
-            if (t.TypeMembers[0].MemberType.ProtectionType == ProtectionLevel.Protected
-                && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals)
+            if (t.TypeMembers[0].MemberType.ProtectionLevel == ProtectionLevel.Protected
+                && !t.TypeMembers[0].MemberType.SurroundingClass.AllowVirtuals)
             {
                 // the container type will not be declared,
                 // declare an iterator without a constructor that takes a container class
@@ -1321,7 +1321,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                prefix = t.ParentClass.FullNativeName;
+                prefix = t.SurroundingClass.FullNativeName;
             }
 
             if (prefix.Contains("::"))
@@ -1334,8 +1334,8 @@ namespace AutoWrap.Meta
             else
                 sb.Append("CPP_DECLARE_ITERATOR");
 
-            bool noConstructor = t.TypeMembers[0].MemberType.ProtectionType == ProtectionLevel.Protected
-                && !t.TypeMembers[0].MemberType.ParentClass.AllowVirtuals;
+            bool noConstructor = t.TypeMembers[0].MemberType.ProtectionLevel == ProtectionLevel.Protected
+                && !t.TypeMembers[0].MemberType.SurroundingClass.AllowVirtuals;
 
             if (noConstructor)
             {
@@ -1368,7 +1368,7 @@ namespace AutoWrap.Meta
         {
             sb.AppendIndent("");
             if (t.IsNested)
-                sb.Append(t.ProtectionType.GetCLRProtectionName() + ": ");
+                sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.FullNativeName + " " + t.CLRName + ";\n\n");
         }
 
@@ -1376,7 +1376,7 @@ namespace AutoWrap.Meta
         {
             sb.AppendIndent("");
             if (t.IsNested)
-                sb.Append(t.ProtectionType.GetCLRProtectionName() + ": ");
+                sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
         }
 
@@ -1446,8 +1446,8 @@ namespace AutoWrap.Meta
                 || type.HasWrapType(WrapTypes.NativePtrValueType)
                 || type.HasWrapType(WrapTypes.ValueType))
                 AddTypeDependancy(type);
-            else if (type.ParentClass != null)
-                AddTypeDependancy(type.ParentClass);
+            else if (type.SurroundingClass != null)
+                AddTypeDependancy(type.SurroundingClass);
             else if (type is DefTypeDef)
                 CheckTypeForDependancy((type as DefTypeDef).BaseType);
 

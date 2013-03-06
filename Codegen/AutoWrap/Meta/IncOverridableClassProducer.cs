@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
             string className;
             if (_t.IsNested)
             {
-                className = _t.ParentClass.FullCLRName + "::" + _t.Name;
+                className = _t.SurroundingClass.FullCLRName + "::" + _t.Name;
             }
             else
             {
@@ -118,7 +118,7 @@ namespace AutoWrap.Meta
             string className;
             if (_t.IsNested)
             {
-                className = _t.ParentClass.FullCLRName + "::" + _t.Name;
+                className = _t.SurroundingClass.FullCLRName + "::" + _t.Name;
             }
             else
             {
@@ -220,7 +220,7 @@ namespace AutoWrap.Meta
                 if (!_t.IsNested)
                     _sb.Append("public ");
                 else
-                    _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
+                    _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
                     _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.Name, (IsAbstractClass) ? " abstract" : "", baseclass);

@@ -145,8 +145,8 @@ namespace AutoWrap.Meta
                 if (_replaceByType == null && HasAttribute<ReplaceByAttribute>())
                 {
                     string name = GetAttribute<ReplaceByAttribute>().Name;
-                    if (ParentClass != null)
-                        _replaceByType = ParentClass.FindType<DefType>(name, false);
+                    if (SurroundingClass != null)
+                        _replaceByType = SurroundingClass.FindType<DefType>(name, false);
                     else
                         _replaceByType = NameSpace.FindType<DefType>(name, false);
                 }
@@ -202,7 +202,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (ParentClass != null && ParentClass.IsIgnored)
+                if (SurroundingClass != null && SurroundingClass.IsIgnored)
                     return true;
 
                 return this.HasAttribute<IgnoreAttribute>();
@@ -222,7 +222,7 @@ namespace AutoWrap.Meta
         public DefNameSpace GetNameSpace()
         {
             if (this.NameSpace == null)
-                return ParentClass.GetNameSpace();
+                return SurroundingClass.GetNameSpace();
             else
                 return this.NameSpace;
         }
@@ -239,7 +239,7 @@ namespace AutoWrap.Meta
                 return GetNameSpace().FindType<T>(name, raiseException);
             }
 
-            return (this.IsNested) ? ParentClass.FindType<T>(name, raiseException) : NameSpace.FindType<T>(name, raiseException);
+            return (this.IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : NameSpace.FindType<T>(name, raiseException);
         }
 
         protected XmlElement _elem;
@@ -292,12 +292,19 @@ namespace AutoWrap.Meta
         }
 
         public DefNameSpace NameSpace;
-        public ProtectionLevel ProtectionType;
-        public DefClass ParentClass;
+        public ProtectionLevel ProtectionLevel;
+        /// <summary>
+        /// The class this type is nested within or <c>null</c> if this type is not nested.
+        /// </summary>
+        /// <seealso cref="IsNested"/>
+        public DefClass SurroundingClass;
 
+        /// <summary>
+        /// Denotes whether this type is nested within a surrounding class.
+        /// </summary>
         public virtual bool IsNested
         {
-            get { return ParentClass != null; }
+            get { return SurroundingClass != null; }
         }
 
         public virtual string ParentNativeName
@@ -336,8 +343,8 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (ParentClass != null)
-                    return ParentClass.RealFullNativeName + "::" + Name;
+                if (SurroundingClass != null)
+                    return SurroundingClass.RealFullNativeName + "::" + Name;
                 else
                     return NameSpace.NativeName + "::" + Name;
             }
@@ -352,15 +359,15 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (ParentClass != null)
+                if (SurroundingClass != null)
                 {
-                    if (!ParentClass.IsInterface)
+                    if (!SurroundingClass.IsInterface)
                     {
-                        return ParentClass.FullCLRName + "::" + CLRName;
+                        return SurroundingClass.FullCLRName + "::" + CLRName;
                     }
                     else
                     {
-                        string name = ParentClass.FullCLRName.Replace("::" + ParentClass.CLRName, "::" + ParentClass.Name);
+                        string name = SurroundingClass.FullCLRName.Replace("::" + SurroundingClass.CLRName, "::" + SurroundingClass.Name);
                         return name + "::" + CLRName;
                     }
                 }
@@ -382,7 +389,7 @@ namespace AutoWrap.Meta
         public DefType(XmlElement elem)
         {
             this._elem = elem;
-            this.ProtectionType = GetProtectionEnum(elem.GetAttribute("protection"));
+            this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
         }
 
         public static ProtectionLevel GetProtectionEnum(string prot)
@@ -402,7 +409,8 @@ namespace AutoWrap.Meta
             if (this.IsSharedPtr)
                 return false;
 
-            DefTypeDef explicitType = this.IsNested ? this.ParentClass.FindType<DefTypeDef>(this.Name) : this.NameSpace.FindType<DefTypeDef>(this.Name);
+            DefTypeDef explicitType = this.IsNested ? this.SurroundingClass.FindType<DefTypeDef>(this.Name)
+                                                    : this.NameSpace.FindType<DefTypeDef>(this.Name);
             if (explicitType.IsSTLContainer)
                 return false;
 

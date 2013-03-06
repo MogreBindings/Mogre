@@ -84,7 +84,7 @@ namespace AutoWrap.Meta
             if (!_t.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(_t.ProtectionType.GetCLRProtectionName() + ": ");
+                _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
             string baseclass = GetBaseAndInterfaces();
             if (baseclass != "")
                 _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
@@ -544,15 +544,15 @@ namespace AutoWrap.Meta
             //Predeclare all nested classes in case there are classes referencing their "siblings"
             foreach (DefType nested in _t.NestedTypes)
             {
-                if (nested.ProtectionType == ProtectionLevel.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionType == ProtectionLevel.Protected))
+                if (nested.ProtectionLevel == ProtectionLevel.Public
+                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     DefType expl = _t.FindType<DefType>(nested.Name);
 
                     if (expl.IsSTLContainer
                         || ( !nested.IsValueType && nested is DefClass && !(nested as DefClass).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
                     {
-                        _sb.AppendLine(nested.ProtectionType.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
+                        _sb.AppendLine(nested.ProtectionLevel.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
                     }
                 }
             }
@@ -609,7 +609,7 @@ namespace AutoWrap.Meta
                 {
                     AddTypeDependancy(it);
                     string itname = it.CLRName;
-                    if (it.IsNested) itname = it.ParentClass.FullCLRName + "::" + itname;
+                    if (it.IsNested) itname = it.SurroundingClass.FullCLRName + "::" + itname;
                     baseclass += "public " + itname + ", ";
                 }
                 baseclass = baseclass.Substring(0, baseclass.Length - ", ".Length);
