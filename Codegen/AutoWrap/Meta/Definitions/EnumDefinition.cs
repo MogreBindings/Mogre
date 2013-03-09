@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class DefEnum : DefType
+    public class EnumDefinition : TypeDefinition
     {
         public override bool IsValueType
         {
@@ -21,7 +21,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             switch (param.PassedByType)
             {
@@ -55,7 +55,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
             {
@@ -89,7 +89,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
             switch (param.PassedByType)
             {
@@ -147,7 +147,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefEnum(XmlElement elem)
+        public EnumDefinition(XmlElement elem)
             : base(elem)
         {
             if (elem.Name != "enumeration")

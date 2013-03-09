@@ -34,7 +34,7 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public static string GetProxyName(DefClass type)
+        public static string GetProxyName(ClassDefinition type)
         {
             string name = type.FullNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
 
         //protected List<DefFunction> _protectedFunctions = new List<DefFunction>();
 
-        public NativeProxyClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public NativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             //SearchProtectedFunctions(_t);
@@ -84,11 +84,11 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddNativeMethodParams(DefFunction f)
+        protected virtual void AddNativeMethodParams(MemberMethodDefinition f)
         {
             for (int i = 0; i < f.Parameters.Count; i++)
             {
-                DefParam param = f.Parameters[i];
+                ParamDefinition param = f.Parameters[i];
                 _sb.Append(" ");
 
                 _sb.Append(param.MemberTypeNativeName);
@@ -112,13 +112,13 @@ namespace AutoWrap.Meta
             _sb.AppendLine();
             if (_t.Constructors.Length > 0)
             {
-                foreach (DefFunction func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _t.Constructors)
                     AddConstructor(func);
             }
             else
                 AddConstructor(null);
 
-            foreach (DefFunction func in _overridableFunctions)
+            foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 _sb.AppendLine();
                 AddOverridableFunction(func);
@@ -135,11 +135,11 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected virtual void AddConstructor(DefFunction f)
+        protected virtual void AddConstructor(MemberMethodDefinition f)
         {
         }
 
-        protected virtual void AddOverridableFunction(DefFunction f)
+        protected virtual void AddOverridableFunction(MemberMethodDefinition f)
         {
         }
 

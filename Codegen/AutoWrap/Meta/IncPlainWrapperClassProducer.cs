@@ -85,7 +85,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                DefClass topclass = GetTopClass(_t);
+                ClassDefinition topclass = GetTopClass(_t);
                 _sb.AppendFormatIndent("{0}( " + topclass.FullNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _t.CLRName);
             }
             _sb.AppendLine("{");
@@ -110,7 +110,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        public IncPlainWrapperClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncPlainWrapperClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

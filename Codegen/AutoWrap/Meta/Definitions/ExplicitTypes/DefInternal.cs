@@ -2,9 +2,9 @@
 
 namespace AutoWrap.Meta
 {
-    internal class DefInternal : DefType
+    class DefInternal : TypeDefinition
     {
-        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
             preConversion = postConversion = null;
             conversion = param.Name;
@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType) 
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -60,7 +60,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             if (IsVoid)
             {
@@ -106,7 +106,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (IsVoid)
             {
@@ -139,7 +139,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             if (IsVoid)
                 return "";

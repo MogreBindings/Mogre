@@ -29,7 +29,7 @@ namespace AutoWrap.Meta
 {
     class NativeProtectedTypesProxy : ClassProducer
     {
-        public static string GetProtectedTypesProxyName(DefType type)
+        public static string GetProtectedTypesProxyName(TypeDefinition type)
         {
             string name = type.FullNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
@@ -38,7 +38,7 @@ namespace AutoWrap.Meta
             return name;
         }
 
-        public NativeProtectedTypesProxy(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public NativeProtectedTypesProxy(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -68,9 +68,9 @@ namespace AutoWrap.Meta
 
                 _sb.AppendLine("friend ref class " + className + ";");
 
-                foreach (DefType nested in _t.NestedTypes)
+                foreach (TypeDefinition nested in _t.NestedTypes)
                 {
-                    DefType type = nested.FindType<DefType>(nested.Name);
+                    TypeDefinition type = nested.FindType<TypeDefinition>(nested.Name);
 
                     if (type.ProtectionLevel == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
@@ -86,9 +86,9 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedTypes()
         {
-            foreach (DefType nested in _t.NestedTypes)
+            foreach (TypeDefinition nested in _t.NestedTypes)
             {
-                DefType type = nested.FindType<DefType>(nested.Name);
+                TypeDefinition type = nested.FindType<TypeDefinition>(nested.Name);
 
                 if (type.ProtectionLevel == ProtectionLevel.Protected
                     && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )
@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedStaticFields()
         {
-            foreach (DefField field in _t.Fields)
+            foreach (MemberFieldDefinition field in _t.Fields)
             {
                 if (field.ProtectionType == ProtectionLevel.Protected
                     && field.IsStatic
@@ -115,7 +115,7 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected override void AddNestedType(DefType nested)
+        protected override void AddNestedType(TypeDefinition nested)
         {
             if (nested.IsSTLContainer)
             {
@@ -183,7 +183,7 @@ namespace AutoWrap.Meta
 
     class NativeProtectedStaticsProxy : ClassProducer
     {
-        public static string GetProtectedStaticsProxyName(DefType type)
+        public static string GetProtectedStaticsProxyName(TypeDefinition type)
         {
             string name = type.FullNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
@@ -192,7 +192,7 @@ namespace AutoWrap.Meta
             return name;
         }
 
-        public NativeProtectedStaticsProxy(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public NativeProtectedStaticsProxy(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -224,7 +224,7 @@ namespace AutoWrap.Meta
 
                 AddFriends(className, _t);
 
-                foreach (DefClass iface in _interfaces)
+                foreach (ClassDefinition iface in _interfaces)
                 {
                     if (iface == _t)
                         continue;
@@ -237,9 +237,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddFriends(string className, DefClass type)
+        protected virtual void AddFriends(string className, ClassDefinition type)
         {
-            foreach (DefField field in type.ProtectedFields)
+            foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
                     && !(field.IsStatic && type != _t) )
@@ -248,7 +248,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Functions)
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionType == ProtectionLevel.Protected
@@ -266,7 +266,7 @@ namespace AutoWrap.Meta
             if (HasProtectedStatics(_t))
                 return true;
 
-            foreach (DefClass iface in _interfaces)
+            foreach (ClassDefinition iface in _interfaces)
             {
                 if (iface == _t)
                     continue;
@@ -278,9 +278,9 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected virtual bool HasProtectedStatics(DefClass type)
+        protected virtual bool HasProtectedStatics(ClassDefinition type)
         {
-            foreach (DefField field in type.ProtectedFields)
+            foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
                     && !(field.IsStatic && type != _t))
@@ -289,7 +289,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Functions)
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionType == ProtectionLevel.Protected

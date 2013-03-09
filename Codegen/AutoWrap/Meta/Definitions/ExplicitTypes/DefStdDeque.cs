@@ -14,7 +14,7 @@ namespace AutoWrap.Meta
             get { return "STLDeque<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ">"; }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefStdDeque(typedef.Element);
         }

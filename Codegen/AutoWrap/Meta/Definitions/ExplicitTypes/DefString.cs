@@ -2,7 +2,7 @@
 
 namespace AutoWrap.Meta
 {
-    internal class DefString : DefType, IDefString
+    class DefString : TypeDefinition, IDefString
     {
         public override string FullNativeName
         {
@@ -14,7 +14,7 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
                         }
 
                         string name = conversion.Substring(0, conversion.LastIndexOf("::"));
-                        dependancyType = FindType<DefType>(name);
+                        dependancyType = FindType<TypeDefinition>(name);
                     }
                     break;
                 default:
@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
             {
@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             string name = param.Name;
             switch (param.PassedByType)
@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             switch (param.PassedByType)
             {

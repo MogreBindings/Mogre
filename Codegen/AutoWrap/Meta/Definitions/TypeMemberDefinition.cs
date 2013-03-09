@@ -2,7 +2,7 @@
 
 namespace AutoWrap.Meta
 {
-    internal class DefTypeMember : ITypeMember
+    class TypeMemberDefinition : ITypeMember
     {
         string ITypeMember.MemberTypeName
         {
@@ -14,12 +14,12 @@ namespace AutoWrap.Meta
             get { return _passed; }
         }
 
-        DefClass ITypeMember.ContainingClass
+        ClassDefinition ITypeMember.ContainingClass
         {
             get { throw new Exception("Unexpected"); }
         }
 
-        DefType ITypeMember.MemberType 
+        TypeDefinition ITypeMember.MemberType
         {
             get { return _type; }
         }
@@ -57,10 +57,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected DefType _type;
+        protected TypeDefinition _type;
         protected PassedByType _passed;
 
-        public DefTypeMember(DefType type, PassedByType passed, bool isConst)
+        public TypeMemberDefinition(TypeDefinition type, PassedByType passed, bool isConst)
         {
             _type = type;
             _passed = passed;

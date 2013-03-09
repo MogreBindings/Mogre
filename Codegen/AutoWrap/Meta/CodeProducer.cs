@@ -34,7 +34,7 @@ namespace AutoWrap.Meta
     /// </summary>
     public class CodeProducer
     {
-        protected virtual string GetNativeDirectorReceiverInterfaceName(DefClass type)
+        protected virtual string GetNativeDirectorReceiverInterfaceName(ClassDefinition type)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");
@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
             return "I" + name + "_Receiver";
         }
 
-        protected virtual string GetNativeDirectorName(DefClass type)
+        protected virtual string GetNativeDirectorName(ClassDefinition type)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");
@@ -55,7 +55,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Checks whether the specified property can be added to the generated source code.
         /// </summary>
-        protected virtual bool IsPropertyAllowed(DefProperty p)
+        protected virtual bool IsPropertyAllowed(PropertyDefinition p)
         {
             // If the property is ignored or the property is unhandled
             if (p.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
@@ -70,14 +70,14 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Checks whether the specified function can be added to the generated source code.
         /// </summary>
-        protected virtual bool IsFunctionAllowed(DefFunction f)
+        protected virtual bool IsFunctionAllowed(MemberMethodDefinition f)
         {
             // If the function is ignored or the return value type is unhandled
             if (f.HasAttribute<IgnoreAttribute>() || !f.IsTypeHandled())
                 return false;
         
             // Check whether all parameter types are handled
-            foreach (DefParam param in f.Parameters)
+            foreach (ParamDefinition param in f.Parameters)
             {
                 if (!param.IsTypeHandled())
                     return false;
@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
             return true;
         }
 
-        protected virtual DefType CreateExplicitContainerType(string container, string key, string val)
+        protected virtual TypeDefinition CreateExplicitContainerType(string container, string key, string val)
         {
             string stdcont = "std::" + container;
             XmlDocument doc = new XmlDocument();
@@ -103,29 +103,29 @@ namespace AutoWrap.Meta
                 elem.InsertAfter(te, null);
             }
 
-            return DefTypeDef.CreateExplicitType((DefTypeDef)DefType.CreateType(elem));
+            return TypedefDefinition.CreateExplicitType((TypedefDefinition)TypeDefinition.CreateType(elem));
         }
 
         protected virtual string NameToPrivate(string name)
         {
             return "_" + Char.ToLower(name[0]) + name.Substring(1);
         }
-        protected virtual string NameToPrivate(DefMember m)
+        protected virtual string NameToPrivate(AbstractMemberDefinition m)
         {
             string name = m.Name;
-            if (m is DefFunction
-                && (m as DefFunction).IsGetProperty
+            if (m is MemberMethodDefinition
+                && (m as MemberMethodDefinition).IsGetProperty
                 && name.StartsWith("get"))
                 name = name.Substring(3);
 
             return NameToPrivate(name);
         }
 
-        protected virtual void AddTypeDependancy(DefType type)
+        protected virtual void AddTypeDependancy(TypeDefinition type)
         {
         }
 
-        public static bool IsIteratorWrapper(DefTypeDef type)
+        public static bool IsIteratorWrapper(TypedefDefinition type)
         {
             string[] iters = new string[] { "MapIterator", "ConstMapIterator",
                             "VectorIterator", "ConstVectorIterator" };
@@ -137,7 +137,7 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected virtual bool? CheckFunctionForGetProperty(DefFunction f)
+        protected virtual bool? CheckFunctionForGetProperty(MemberMethodDefinition f)
         {
             string name = f.HasAttribute<RenameAttribute>() ? f.GetAttribute<RenameAttribute>().Name : f.Name;
 

@@ -4,9 +4,9 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class DefFunction : DefMember
+    public class MemberMethodDefinition : AbstractMemberDefinition
     {
-        public List<DefParam> Parameters = new List<DefParam>();
+        public List<ParamDefinition> Parameters = new List<ParamDefinition>();
         public VirtualLevel VirtualLevel;
 
         private bool? _isConst;
@@ -38,7 +38,7 @@ namespace AutoWrap.Meta
                 if (_signature == null)
                 {
                     _signature = IsVirtual.ToString() + ProtectionType + Name;
-                    foreach (DefParam param in Parameters)
+                    foreach (ParamDefinition param in Parameters)
                     {
                         _signature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
                     }
@@ -56,7 +56,7 @@ namespace AutoWrap.Meta
                 if (_signatureNameAndParams == null)
                 {
                     _signatureNameAndParams = Name;
-                    foreach (DefParam param in Parameters)
+                    foreach (ParamDefinition param in Parameters)
                     {
                         _signatureNameAndParams += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
                     }
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
                 if (base.IsIgnored)
                     return true;
 
-                foreach (DefParam param in Parameters)
+                foreach (ParamDefinition param in Parameters)
                 {
                     if (param.Type.IsIgnored)
                         return true;
@@ -84,7 +84,7 @@ namespace AutoWrap.Meta
         }
 
         private bool? _isOverride;
-        private DefFunction _baseFunc;
+        private MemberMethodDefinition _baseFunc;
 
         public bool IsOverride
         {
@@ -108,7 +108,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefFunction BaseFunction
+        public MemberMethodDefinition BaseFunction
         {
             get
             {
@@ -291,13 +291,13 @@ namespace AutoWrap.Meta
                             {
                                 string pname = name.Substring(3);
                                 //check if property name collides with a nested type
-                                DefType type = Class.GetNestedType(pname, false);
+                                TypeDefinition type = Class.GetNestedType(pname, false);
                                 if (type != null)
                                     _isGetProperty = false;
                                 else
                                 {
                                     //check if property name collides with a method
-                                    DefFunction func = Class.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+                                    MemberMethodDefinition func = Class.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
                                     if (func != null && !func.HasAttribute<RenameAttribute>())
                                         _isGetProperty = false;
                                     else
@@ -341,7 +341,7 @@ namespace AutoWrap.Meta
                         if (name.StartsWith("set") && Char.IsUpper(name[3]))
                         {
                             // Check to see if there is a "get" function
-                            DefFunction func = Class.GetFunction("get" + name.Substring(3), false, false);
+                            MemberMethodDefinition func = Class.GetFunction("get" + name.Substring(3), false, false);
                             _isSetProperty = (func != null && func.IsGetProperty && func.TypeName == Parameters[0].TypeName
                                               && (!Class.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverride == IsOverride)));
                         }
@@ -354,7 +354,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefFunction(XmlElement elem)
+        public MemberMethodDefinition(XmlElement elem)
             : base(elem)
         {
             if (elem.Name != "function")
@@ -385,7 +385,7 @@ namespace AutoWrap.Meta
                     int count = 1;
                     foreach (XmlElement param in child.ChildNodes)
                     {
-                        DefParam p = new DefParam(param);
+                        ParamDefinition p = new ParamDefinition(param);
                         if (p.Name == null && (p.TypeName != "void" || p.PassedByType != PassedByType.Value))
                             p.Name = "param" + count;
 

@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class DefParam : AttributeHolder, ITypeMember
+    public class ParamDefinition : AttributeHolder, ITypeMember
     {
         string ITypeMember.MemberTypeName
         {
@@ -15,12 +15,12 @@ namespace AutoWrap.Meta
             get { return PassedByType; }
         }
 
-        DefClass ITypeMember.ContainingClass
+        ClassDefinition ITypeMember.ContainingClass
         {
             get { return Function.Class; }
         }
 
-        DefType ITypeMember.MemberType
+        TypeDefinition ITypeMember.MemberType
         {
             get { return Type; }
         }
@@ -52,7 +52,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                DefType depend;
+                TypeDefinition depend;
                 if (_CLRDefaultValuePreConversion == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                DefType depend;
+                TypeDefinition depend;
                 if (_CLRDefaultValue == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                DefType depend;
+                TypeDefinition depend;
                 if (_CLRDefaultValuePostConversion == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -91,8 +91,8 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        private DefType _type;
-        public virtual DefType Type
+        TypeDefinition _type;
+        public virtual TypeDefinition Type
         {
             get
             {
@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
                         _type.SurroundingClass = Function.Class;
                     }
                     else
-                        _type = Function.Class.FindType<DefType>(TypeName, false);
+                        _type = Function.Class.FindType<TypeDefinition>(TypeName, false);
                 }
 
                 return _type;
@@ -133,7 +133,7 @@ namespace AutoWrap.Meta
 
         protected XmlElement _elem;
 
-        public DefFunction Function;
+        public MemberMethodDefinition Function;
         public PassedByType PassedByType;
 
         private bool? _isConst;
@@ -190,13 +190,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefParam(XmlElement elem)
+        public ParamDefinition(XmlElement elem)
         {
             _elem = elem;
             PassedByType = (PassedByType) Enum.Parse(typeof (PassedByType), elem.GetAttribute("passedBy"), true);
         }
 
-        public DefParam(ITypeMember m, string name)
+        public ParamDefinition(ITypeMember m, string name)
         {
             _name = name;
             _type = m.MemberType;

@@ -5,14 +5,14 @@ using System.Collections;
 
 namespace AutoWrap.Meta
 {
-    public class DefClass : DefType
+    public class ClassDefinition : TypeDefinition
     {
-        public List<DefMember> Members = new List<DefMember>();
-        public List<DefType> NestedTypes = new List<DefType>();
+        public List<AbstractMemberDefinition> Members = new List<AbstractMemberDefinition>();
+        public List<TypeDefinition> NestedTypes = new List<TypeDefinition>();
         public string[] Derives;
         public string[] Inherits;
 
-        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
             switch (param.PassedByType)
             {
@@ -26,7 +26,7 @@ namespace AutoWrap.Meta
             base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
         }
 
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             if (param.DefaultValue == null)
                 throw new Exception("Unexpected");
@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (param.Type.IsSharedPtr)
             {
@@ -138,7 +138,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             if (HasAttribute<NativeValueContainerAttribute>())
             {
@@ -174,7 +174,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             if (HasAttribute<NativeValueContainerAttribute>())
             {
@@ -288,7 +288,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefType type in NestedTypes)
+                foreach (TypeDefinition type in NestedTypes)
                 {
                     if (type.ProtectionLevel == ProtectionLevel.Public)
                         yield return type;
@@ -300,9 +300,9 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefMember m in Members)
+                foreach (AbstractMemberDefinition m in Members)
                 {
-                    if (m is DefFunction)
+                    if (m is MemberMethodDefinition)
                         yield return m;
                 }
             }
@@ -312,9 +312,9 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefMember m in Members)
+                foreach (AbstractMemberDefinition m in Members)
                 {
-                    if (m is DefField)
+                    if (m is MemberFieldDefinition)
                         yield return m;
                 }
             }
@@ -324,7 +324,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefFunction func in Functions)
+                foreach (MemberMethodDefinition func in Functions)
                 {
                     if (!func.IsProperty
                         && func.ProtectionType == ProtectionLevel.Public)
@@ -337,7 +337,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefFunction func in Functions)
+                foreach (MemberMethodDefinition func in Functions)
                 {
                     if (func.IsDeclarableFunction
                         && !func.IsProperty)
@@ -350,7 +350,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefFunction func in Functions)
+                foreach (MemberMethodDefinition func in Functions)
                 {
                     if (!func.IsProperty
                         && func.ProtectionType == ProtectionLevel.Protected)
@@ -363,7 +363,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefField f in Fields)
+                foreach (MemberFieldDefinition f in Fields)
                 {
                     if (f.ProtectionType == ProtectionLevel.Public)
                         yield return f;
@@ -375,7 +375,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (DefField f in Fields)
+                foreach (MemberFieldDefinition f in Fields)
                 {
                     if (f.ProtectionType == ProtectionLevel.Protected)
                         yield return f;
@@ -461,29 +461,29 @@ namespace AutoWrap.Meta
             get { return HasWrapType(WrapTypes.Interface); }
         }
 
-        private DefFunction[] _allAbstractFunctions = null;
+        private MemberMethodDefinition[] _allAbstractFunctions = null;
 
         /// <summary>
         /// All abstract functions
         /// </summary>
-        public virtual DefFunction[] AllAbstractFunctions
+        public virtual MemberMethodDefinition[] AllAbstractFunctions
         {
             get
             {
                 if (_allAbstractFunctions == null)
                 {
-                    List<DefFunction> list = new List<DefFunction>();
+                    List<MemberMethodDefinition> list = new List<MemberMethodDefinition>();
 
                     if (BaseClass != null)
                     {
-                        foreach (DefFunction func in BaseClass.AllAbstractFunctions)
+                        foreach (MemberMethodDefinition func in BaseClass.AllAbstractFunctions)
                         {
                             if (!ContainsFunctionSignature(func.Signature, false))
                                 list.Add(func);
                         }
                     }
 
-                    foreach (DefFunction func in this.Functions)
+                    foreach (MemberMethodDefinition func in this.Functions)
                     {
                         if (func.IsAbstract)
                             list.Add(func);
@@ -496,29 +496,29 @@ namespace AutoWrap.Meta
             }
         }
 
-        private DefFunction[] _abstractFunctions = null;
+        private MemberMethodDefinition[] _abstractFunctions = null;
 
         /// <summary>
         /// Only declarable abstract functions
         /// </summary>
-        public virtual DefFunction[] AbstractFunctions
+        public virtual MemberMethodDefinition[] AbstractFunctions
         {
             get
             {
                 if (_abstractFunctions == null)
                 {
-                    List<DefFunction> list = new List<DefFunction>();
+                    List<MemberMethodDefinition> list = new List<MemberMethodDefinition>();
 
                     if (BaseClass != null)
                     {
-                        foreach (DefFunction func in BaseClass.AbstractFunctions)
+                        foreach (MemberMethodDefinition func in BaseClass.AbstractFunctions)
                         {
                             if (!ContainsFunctionSignature(func.Signature, false))
                                 list.Add(func);
                         }
                     }
 
-                    foreach (DefFunction func in this.Functions)
+                    foreach (MemberMethodDefinition func in this.Functions)
                     {
                         if (func.IsDeclarableFunction && func.IsAbstract)
                             list.Add(func);
@@ -531,26 +531,26 @@ namespace AutoWrap.Meta
             }
         }
 
-        private DefProperty[] _abstractProperties = null;
+        private PropertyDefinition[] _abstractProperties = null;
 
-        public virtual DefProperty[] AbstractProperties
+        public virtual PropertyDefinition[] AbstractProperties
         {
             get
             {
                 if (_abstractProperties == null)
                 {
-                    List<DefProperty> list = new List<DefProperty>();
+                    List<PropertyDefinition> list = new List<PropertyDefinition>();
 
                     if (BaseClass != null)
                     {
-                        foreach (DefProperty prop in BaseClass.AbstractProperties)
+                        foreach (PropertyDefinition prop in BaseClass.AbstractProperties)
                         {
                             if (!prop.IsContainedIn(this, false))
                                 list.Add(prop);
                         }
                     }
 
-                    foreach (DefProperty prop in this.GetProperties())
+                    foreach (PropertyDefinition prop in this.GetProperties())
                     {
                         if (prop.IsAbstract)
                             list.Add(prop);
@@ -563,9 +563,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        public virtual DefFunction GetFunctionWithSignature(string signature)
+        public virtual MemberMethodDefinition GetFunctionWithSignature(string signature)
         {
-            foreach (DefFunction func in this.Functions)
+            foreach (MemberMethodDefinition func in this.Functions)
             {
                 if (func.Signature == signature)
                     return func;
@@ -582,11 +582,11 @@ namespace AutoWrap.Meta
         /// checked for the signature. Otherwise all base classes will be checked as well.</param>
         public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature)
         {
-            DefFunction f;
+            MemberMethodDefinition f;
             return ContainsFunctionSignature(signature, allowInheritedSignature, out f);
         }
 
-        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature, out DefFunction basefunc)
+        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature, out MemberMethodDefinition basefunc)
         {
             basefunc = null;
             if (allowInheritedSignature && BaseClass != null)
@@ -597,7 +597,7 @@ namespace AutoWrap.Meta
             if (basefunc != null)
                 return true;
 
-            foreach (DefFunction func in this.Functions)
+            foreach (MemberMethodDefinition func in this.Functions)
             {
                 if (func.Signature == signature)
                 {
@@ -611,11 +611,11 @@ namespace AutoWrap.Meta
 
         public virtual bool ContainsInterfaceFunctionSignature(string signature, bool inherit)
         {
-            DefFunction f;
+            MemberMethodDefinition f;
             return ContainsInterfaceFunctionSignature(signature, inherit, out f);
         }
 
-        public virtual bool ContainsInterfaceFunctionSignature(string signature, bool inherit, out DefFunction basefunc)
+        public virtual bool ContainsInterfaceFunctionSignature(string signature, bool inherit, out MemberMethodDefinition basefunc)
         {
             basefunc = null;
             if (inherit && BaseClass != null)
@@ -626,7 +626,7 @@ namespace AutoWrap.Meta
             if (basefunc != null)
                 return true;
 
-            foreach (DefClass iface in GetInterfaces())
+            foreach (ClassDefinition iface in GetInterfaces())
             {
                 if (iface.ContainsFunctionSignature(signature, true, out basefunc))
                     return true;
@@ -643,9 +643,9 @@ namespace AutoWrap.Meta
         }
 
         protected bool _baseClassSearched = false;
-        protected DefClass _baseClass = null;
+        protected ClassDefinition _baseClass = null;
 
-        public virtual DefClass BaseClass
+        public virtual ClassDefinition BaseClass
         {
             get
             {
@@ -657,7 +657,7 @@ namespace AutoWrap.Meta
                 if (HasAttribute<BaseClassAttribute>())
                 {
                     string basename = GetAttribute<BaseClassAttribute>().Name;
-                    _baseClass = this.FindType<DefClass>(basename);
+                    _baseClass = this.FindType<ClassDefinition>(basename);
                 }
                 else
                 {
@@ -667,7 +667,7 @@ namespace AutoWrap.Meta
                     if (this.IsDirectSubclassOfCLRObject)
                         return null;
 
-                    List<DefClass> inherits = new List<DefClass>();
+                    List<ClassDefinition> inherits = new List<ClassDefinition>();
                     foreach (string tn in this.Inherits)
                     {
                         string n = tn;
@@ -679,10 +679,10 @@ namespace AutoWrap.Meta
                             n = n.Substring(0, n.IndexOf("<")).Trim();
                         }
 
-                        inherits.Add(this.FindType<DefClass>(n));
+                        inherits.Add(this.FindType<ClassDefinition>(n));
                     }
 
-                    foreach (DefClass t in inherits)
+                    foreach (ClassDefinition t in inherits)
                     {
                         if (!t.IsInterface && !t.HasAttribute<IgnoreAttribute>())
                         {
@@ -696,20 +696,20 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected DefClass[] _interfaces = null;
+        protected ClassDefinition[] _interfaces = null;
 
-        public virtual DefClass[] GetInterfaces()
+        public virtual ClassDefinition[] GetInterfaces()
         {
             if (_interfaces != null)
                 return _interfaces;
 
             if (this.Inherits == null)
             {
-                _interfaces = new DefClass[] {};
+                _interfaces = new ClassDefinition[] { };
                 return _interfaces;
             }
 
-            List<DefClass> inherits = new List<DefClass>();
+            List<ClassDefinition> inherits = new List<ClassDefinition>();
             foreach (string tn in this.Inherits)
             {
                 string n = tn;
@@ -721,7 +721,7 @@ namespace AutoWrap.Meta
                     n = n.Substring(0, n.IndexOf("<")).Trim();
                 }
 
-                inherits.Add(this.FindType<DefClass>(n));
+                inherits.Add(this.FindType<ClassDefinition>(n));
             }
 
             for (int i = 0; i < inherits.Count; i++)
@@ -737,18 +737,18 @@ namespace AutoWrap.Meta
             return _interfaces;
         }
 
-        protected DefClass[] _derives = null;
+        protected ClassDefinition[] _derives = null;
 
-        public virtual DefClass[] GetDerives()
+        public virtual ClassDefinition[] GetDerives()
         {
             if (_derives == null)
             {
-                List<DefClass> list = new List<DefClass>();
+                List<ClassDefinition> list = new List<ClassDefinition>();
                 foreach (string cls in this.Derives)
                 {
                     try
                     {
-                        list.Add(FindType<DefClass>(cls));
+                        list.Add(FindType<ClassDefinition>(cls));
                     }
                     catch
                     {
@@ -761,10 +761,10 @@ namespace AutoWrap.Meta
             return _derives;
         }
 
-        public virtual DefProperty GetProperty(string name, bool inherit)
+        public virtual PropertyDefinition GetProperty(string name, bool inherit)
         {
-            DefProperty prop = null;
-            foreach (DefProperty p in this.GetProperties())
+            PropertyDefinition prop = null;
+            foreach (PropertyDefinition p in this.GetProperties())
             {
                 if (p.Name == name)
                 {
@@ -779,16 +779,16 @@ namespace AutoWrap.Meta
                 return prop;
         }
 
-        private DefFunction[] _constructors;
+        private MemberMethodDefinition[] _constructors;
 
-        public virtual DefFunction[] Constructors
+        public virtual MemberMethodDefinition[] Constructors
         {
             get
             {
                 if (_constructors == null)
                 {
-                    List<DefFunction> list = new List<DefFunction>();
-                    foreach (DefFunction f in Functions)
+                    List<MemberMethodDefinition> list = new List<MemberMethodDefinition>();
+                    foreach (MemberMethodDefinition f in Functions)
                     {
                         if (f.IsConstructor)
                             list.Add(f);
@@ -801,26 +801,26 @@ namespace AutoWrap.Meta
             }
         }
 
-        private DefProperty[] _properties;
+        private PropertyDefinition[] _properties;
 
-        public virtual DefProperty[] GetProperties()
+        public virtual PropertyDefinition[] GetProperties()
         {
             if (_properties != null)
                 return _properties;
 
-            SortedList<string, DefProperty> props = new SortedList<string, DefProperty>();
+            SortedList<string, PropertyDefinition> props = new SortedList<string, PropertyDefinition>();
 
-            foreach (DefFunction f in this.Functions)
+            foreach (MemberMethodDefinition f in this.Functions)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
-                    DefProperty p = null;
+                    PropertyDefinition p = null;
 
                     if (props.ContainsKey(f.CLRName))
                         p = props[f.CLRName];
                     else
                     {
-                        p = new DefProperty(f.CLRName);
+                        p = new PropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
                             p.MemberTypeName = f.TypeName;
@@ -844,13 +844,13 @@ namespace AutoWrap.Meta
 
             if (GetInterfaces().Length > 0)
             {
-                foreach (DefProperty prop in props.Values)
+                foreach (PropertyDefinition prop in props.Values)
                 {
                     if (!prop.CanWrite)
                     {
-                        foreach (DefClass iface in GetInterfaces())
+                        foreach (ClassDefinition iface in GetInterfaces())
                         {
-                            DefProperty ip = iface.GetProperty(prop.Name, true);
+                            PropertyDefinition ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanWrite)
                             {
                                 prop.SetterFunction = ip.SetterFunction;
@@ -861,9 +861,9 @@ namespace AutoWrap.Meta
 
                     if (!prop.CanRead)
                     {
-                        foreach (DefClass iface in GetInterfaces())
+                        foreach (ClassDefinition iface in GetInterfaces())
                         {
-                            DefProperty ip = iface.GetProperty(prop.Name, true);
+                            PropertyDefinition ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanRead)
                             {
                                 prop.GetterFunction = ip.GetterFunction;
@@ -874,7 +874,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            DefProperty[] parr = new DefProperty[props.Count];
+            PropertyDefinition[] parr = new PropertyDefinition[props.Count];
             for (int i = 0; i < props.Count; i++)
                 parr[i] = props.Values[i];
 
@@ -882,15 +882,15 @@ namespace AutoWrap.Meta
             return _properties;
         }
 
-        public DefField GetField(string name)
+        public MemberFieldDefinition GetField(string name)
         {
             return GetField(name, true);
         }
 
-        public DefField GetField(string name, bool raiseException)
+        public MemberFieldDefinition GetField(string name, bool raiseException)
         {
-            DefField field = null;
-            foreach (DefField f in Fields)
+            MemberFieldDefinition field = null;
+            foreach (MemberFieldDefinition f in Fields)
             {
                 if (f.Name == name)
                 {
@@ -905,15 +905,15 @@ namespace AutoWrap.Meta
             return field;
         }
 
-        public DefFunction GetFunction(string name)
+        public MemberMethodDefinition GetFunction(string name)
         {
             return GetFunction(name, false, true);
         }
 
-        public DefFunction GetFunction(string name, bool inherit, bool raiseException)
+        public MemberMethodDefinition GetFunction(string name, bool inherit, bool raiseException)
         {
-            DefFunction func = null;
-            foreach (DefFunction f in Functions)
+            MemberMethodDefinition func = null;
+            foreach (MemberMethodDefinition f in Functions)
             {
                 if (f.Name == name)
                 {
@@ -931,14 +931,14 @@ namespace AutoWrap.Meta
             return func;
         }
 
-        public DefType GetNestedType(string name)
+        public TypeDefinition GetNestedType(string name)
         {
             return GetNestedType(name, true);
         }
 
-        public DefType GetNestedType(string name, bool raiseException)
+        public TypeDefinition GetNestedType(string name, bool raiseException)
         {
-            foreach (DefType t in NestedTypes)
+            foreach (TypeDefinition t in NestedTypes)
             {
                 if (t.Name == name)
                     return t;
@@ -950,14 +950,14 @@ namespace AutoWrap.Meta
                 return null;
         }
 
-        public DefMember GetMember(string name)
+        public AbstractMemberDefinition GetMember(string name)
         {
             return GetMember(name, true);
         }
 
-        public DefMember GetMember(string name, bool raiseException)
+        public AbstractMemberDefinition GetMember(string name, bool raiseException)
         {
-            foreach (DefMember m in Members)
+            foreach (AbstractMemberDefinition m in Members)
             {
                 if (m.Name == name)
                     return m;
@@ -969,16 +969,16 @@ namespace AutoWrap.Meta
                 return null;
         }
 
-        public DefMember[] GetMembers(string name)
+        public AbstractMemberDefinition[] GetMembers(string name)
         {
             return GetMembers(name, true);
         }
 
-        public DefMember[] GetMembers(string name, bool raiseException)
+        public AbstractMemberDefinition[] GetMembers(string name, bool raiseException)
         {
-            List<DefMember> list = new List<DefMember>();
+            List<AbstractMemberDefinition> list = new List<AbstractMemberDefinition>();
 
-            foreach (DefMember m in Members)
+            foreach (AbstractMemberDefinition m in Members)
             {
                 if (m.Name == name)
                     list.Add(m);
@@ -1030,9 +1030,9 @@ namespace AutoWrap.Meta
                 return GetNameSpace().FindType<T>(name, raiseException);
             }
 
-            List<DefType> list = new List<DefType>();
+            List<TypeDefinition> list = new List<TypeDefinition>();
 
-            foreach (DefType t in NestedTypes)
+            foreach (TypeDefinition t in NestedTypes)
             {
                 if (t is T && t.Name == name)
                 {
@@ -1062,10 +1062,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefClass(XmlElement elem)
+        public ClassDefinition(XmlElement elem)
             : base(elem)
         {
-            if (this.GetType() == typeof (DefClass)
+            if (this.GetType() == typeof(ClassDefinition)
                 && elem.Name != "class")
                 throw new Exception("Not class element");
 
@@ -1074,14 +1074,14 @@ namespace AutoWrap.Meta
                 switch (child.Name)
                 {
                     case "function":
-                        DefFunction func = new DefFunction(child);
+                        MemberMethodDefinition func = new MemberMethodDefinition(child);
                         func.Class = this;
                         if (func.Name != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.Name.StartsWith("OGRE_"))
                             AddNewFunction(func);
                         break;
 
                     case "variable":
-                        DefField field = new DefField(child);
+                        MemberFieldDefinition field = new MemberFieldDefinition(child);
                         if (field.Name != this.Name && !field.Name.StartsWith("OGRE_"))
                         {
                             field.Class = this;
@@ -1121,7 +1121,7 @@ namespace AutoWrap.Meta
                         break;
 
                     default:
-                        DefType type = CreateType(child);
+                        TypeDefinition type = CreateType(child);
                         type.SurroundingClass = this;
                         type.NameSpace = this.NameSpace;
                         NestedTypes.Add(type);
@@ -1130,17 +1130,17 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddNewFunction(DefFunction func)
+        private void AddNewFunction(MemberMethodDefinition func)
         {
-            DefMember[] members = GetMembers(func.Name, false);
-            DefFunction prevf = null;
-            foreach (DefMember m in members)
+            AbstractMemberDefinition[] members = GetMembers(func.Name, false);
+            MemberMethodDefinition prevf = null;
+            foreach (AbstractMemberDefinition m in members)
             {
-                if (m is DefFunction)
+                if (m is MemberMethodDefinition)
                 {
-                    if ((m as DefFunction).SignatureNameAndParams == func.SignatureNameAndParams)
+                    if ((m as MemberMethodDefinition).SignatureNameAndParams == func.SignatureNameAndParams)
                     {
-                        prevf = m as DefFunction;
+                        prevf = m as MemberMethodDefinition;
                         break;
                     }
                 }

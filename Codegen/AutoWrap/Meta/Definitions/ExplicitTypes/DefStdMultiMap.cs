@@ -42,7 +42,7 @@ namespace AutoWrap.Meta
         //    }
         //}
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefStdMultiMap(typedef.Element);
         }

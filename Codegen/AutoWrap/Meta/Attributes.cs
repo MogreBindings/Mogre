@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected void AddAttributeToInheritanceChain(DefClass type, AutoWrapAttribute attr)
+        protected void AddAttributeToInheritanceChain(ClassDefinition type, AutoWrapAttribute attr)
         {
             bool hasit = false;
             foreach (AutoWrapAttribute a in type.Attributes)
@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
                         holder.Attributes.Add(new ValueTypeAttribute());
                     break;
                 case WrapTypes.Overridable:
-                    DefClass type = (DefClass)holder;
+                    ClassDefinition type = (ClassDefinition)holder;
                     AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
                     break;
             }
@@ -413,7 +413,7 @@ namespace AutoWrap.Meta
     {
         public override void ProcessHolder(AttributeHolder holder)
         {
-            DefClass type = (DefClass)holder;
+            ClassDefinition type = (ClassDefinition)holder;
             AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
         }
 
@@ -425,20 +425,20 @@ namespace AutoWrap.Meta
 
     public class InterfacesForOverridableAttribute : AutoWrapAttribute
     {
-        public List<DefClass[]> Interfaces = new List<DefClass[]>();
+        public List<ClassDefinition[]> Interfaces = new List<ClassDefinition[]>();
 
         private List<string[]> _interfaceNames = new List<string[]>();
 
         public override void ProcessHolder(AttributeHolder holder)
         {
-            DefClass type = (DefClass)holder;
+            ClassDefinition type = (ClassDefinition)holder;
 
             foreach (string[] names in _interfaceNames)
             {
-                List<DefClass> ifaces = new List<DefClass>();
+                List<ClassDefinition> ifaces = new List<ClassDefinition>();
                 foreach (string ifacename in names)
                 {
-                    ifaces.Add(type.FindType<DefClass>(ifacename));
+                    ifaces.Add(type.FindType<ClassDefinition>(ifacename));
                 }
                 Interfaces.Add(ifaces.ToArray());
             }

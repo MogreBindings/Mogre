@@ -2,8 +2,8 @@
 {
     /// <summary>
     /// Describes a member of a class (or struct) or something in a class (or struct) context. 
-    /// This interface is implemented by: <see cref="DefTypeMember"/>, <see cref="DefProperty"/>, 
-    /// <see cref="DefParam"/>, and <see cref="DefMember"/>.
+    /// This interface is implemented by: <see cref="TypeMemberDefinition"/>, <see cref="PropertyDefinition"/>, 
+    /// <see cref="ParamDefinition"/>, and <see cref="AbstractMemberDefinition"/>.
     /// </summary>
     public interface ITypeMember
     {
@@ -11,7 +11,7 @@
         /// The member's type. For fields and properties this is the data type.
         /// For methods this is the return type.
         /// </summary>
-        DefType MemberType { get; }
+        TypeDefinition MemberType { get; }
 
         /// <summary>
         /// The name of this member's type - valid for both C++ and C++/CLI. May be different from 
@@ -39,7 +39,7 @@
         /// <summary>
         /// The class this member is contained in.
         /// </summary>
-        DefClass ContainingClass { get; }
+        ClassDefinition ContainingClass { get; }
 
         /// <summary>
         /// Indicates whether this member is C++ <c>const</c>.
@@ -62,7 +62,7 @@
             if (m.MemberType.IsIgnored)
                 return false;
 
-            if (m.MemberType is DefClass && ((DefClass)m.MemberType).IsSingleton)
+            if (m.MemberType is ClassDefinition && ((ClassDefinition)m.MemberType).IsSingleton)
                 return false;
 
             return (m.MemberTypeName != "UserDefinedObject");

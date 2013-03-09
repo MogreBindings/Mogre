@@ -29,13 +29,13 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class DefNameSpace
+    public class NamespaceDefinition
     {
         XmlElement _elem;
         string _managedNamespace;
 
-        public DefNameSpace ParentNameSpace = null;
-        public List<DefNameSpace> ChildNameSpaces = new List<DefNameSpace>();
+        public NamespaceDefinition ParentNameSpace = null;
+        public List<NamespaceDefinition> ChildNameSpaces = new List<NamespaceDefinition>();
 
         public XmlElement Element
         {
@@ -44,12 +44,12 @@ namespace AutoWrap.Meta
 
         public string NativeName
         {
-            get { return DefNameSpace.GetFullName(_elem); }
+            get { return NamespaceDefinition.GetFullName(_elem); }
         }
 
         public string CLRName;
 
-        public List<DefType> Types = new List<DefType>();
+        public List<TypeDefinition> Types = new List<TypeDefinition>();
 
         public T FindType<T>(string name)
         {
@@ -83,19 +83,19 @@ namespace AutoWrap.Meta
                     return ParentNameSpace.FindType<T>(name, raiseException);
             }
 
-            if(type is DefType) {
+            if(type is TypeDefinition) {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
-                if(((DefType)(object)type).IsIgnored) {
+                if(((TypeDefinition)(object)type).IsIgnored) {
                     return (T)(object)type;
                 }
             }
 
-            return (T)(object)((DefType)(object)type).CreateExplicitType();
+            return (T)(object)((TypeDefinition)(object)type).CreateExplicitType();
         }
 
-        protected virtual T FindTypeInList<T>(string name, List<DefType> types, bool raiseException)
+        protected virtual T FindTypeInList<T>(string name, List<TypeDefinition> types, bool raiseException)
         {
-            List<DefType> list = new List<DefType>();
+            List<TypeDefinition> list = new List<TypeDefinition>();
 
             string topname = name;
             string nextnames = null;
@@ -106,7 +106,7 @@ namespace AutoWrap.Meta
                 nextnames = name.Substring(name.IndexOf("::") + 2);
             }
 
-            foreach (DefType t in types)
+            foreach (TypeDefinition t in types)
             {
                 if (t is T && t.Name == topname)
                 {
@@ -129,10 +129,10 @@ namespace AutoWrap.Meta
             if (nextnames == null)
                 return type;
             else
-                return FindTypeInList<T>(nextnames, ((DefClass)(object)type).NestedTypes, raiseException);
+                return FindTypeInList<T>(nextnames, ((ClassDefinition)(object)type).NestedTypes, raiseException);
         }
 
-        public DefNameSpace(XmlElement elem, string managedNamespace)
+        public NamespaceDefinition(XmlElement elem, string managedNamespace)
         {
             this._elem = elem;
             this._managedNamespace = managedNamespace;
@@ -150,7 +150,7 @@ namespace AutoWrap.Meta
 
             foreach (XmlElement child in elem.ChildNodes)
             {
-                DefType type = DefType.CreateType(child);
+                TypeDefinition type = TypeDefinition.CreateType(child);
                 if (type != null)
                 {
                     type.NameSpace = this;
@@ -159,10 +159,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefType GetDefType(string name)
+        public TypeDefinition GetDefType(string name)
         {
-            DefType type = null;
-            foreach (DefType t in Types)
+            TypeDefinition type = null;
+            foreach (TypeDefinition t in Types)
             {
                 if (t.Name == name)
                 {

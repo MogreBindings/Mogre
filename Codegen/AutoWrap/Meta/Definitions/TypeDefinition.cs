@@ -32,10 +32,10 @@ namespace AutoWrap.Meta
     /// <summary>
     /// This abstract class describes a C++ type. The following constructs are supported: 
     /// classes, structs, typedefs, and enumerations. This class has the following child
-    /// classes: <see cref="DefClass"/>, <see cref="DefEnum"/>, <see cref="DefInternal"/>,
-    /// <see cref="DefTypeDef"/>, <see cref="DefString"/>, and <see cref="DefUtfString"/>.
+    /// classes: <see cref="ClassDefinition"/>, <see cref="EnumDefinition"/>, <see cref="DefInternal"/>,
+    /// <see cref="TypedefDefinition"/>, <see cref="DefString"/>, and <see cref="DefUtfString"/>.
     /// </summary>
-    public abstract class DefType : AttributeHolder
+    public abstract class TypeDefinition : AttributeHolder
     {
         public bool IsSTLContainer
         {
@@ -99,8 +99,8 @@ namespace AutoWrap.Meta
             get { return HasAttribute<ValueTypeAttribute>(); }
         }
 
-        private DefType _replaceByType;
-        public virtual DefType ReplaceByType
+        private TypeDefinition _replaceByType;
+        public virtual TypeDefinition ReplaceByType
         {
             get
             {
@@ -108,9 +108,9 @@ namespace AutoWrap.Meta
                 {
                     string name = GetAttribute<ReplaceByAttribute>().Name;
                     if (SurroundingClass != null)
-                        _replaceByType = SurroundingClass.FindType<DefType>(name, false);
+                        _replaceByType = SurroundingClass.FindType<TypeDefinition>(name, false);
                     else
-                        _replaceByType = NameSpace.FindType<DefType>(name, false);
+                        _replaceByType = NameSpace.FindType<TypeDefinition>(name, false);
                 }
 
                 return _replaceByType;
@@ -119,21 +119,21 @@ namespace AutoWrap.Meta
 
         /// <summary>
         /// Creates an instance of this class from the specified xml element. This method will
-        /// create an instance from an apropriate subclass (e.g. <see cref="DefClass"/> for a class).
+        /// create an instance from an apropriate subclass (e.g. <see cref="ClassDefinition"/> for a class).
         /// </summary>
         /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
-        public static DefType CreateType(XmlElement elem)
+        public static TypeDefinition CreateType(XmlElement elem)
         {
             switch (elem.Name)
             {
                 case "class":
-                    return new DefClass(elem);
+                    return new ClassDefinition(elem);
                 case "struct":
-                    return new DefStruct(elem);
+                    return new StructDefinition(elem);
                 case "typedef":
-                    return new DefTypeDef(elem);
+                    return new TypedefDefinition(elem);
                 case "enumeration":
-                    return new DefEnum(elem);
+                    return new EnumDefinition(elem);
                 case "variable":
                     //It's global variables, ignore them
                     return null;
@@ -142,16 +142,16 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefType CreateExplicitType()
+        public TypeDefinition CreateExplicitType()
         {
             if (this.ReplaceByType != null)
             {
                 return this.ReplaceByType;
             }
 
-            if (this is DefTypeDef)
+            if (this is TypedefDefinition)
             {
-                return DefTypeDef.CreateExplicitType(this as DefTypeDef);
+                return TypedefDefinition.CreateExplicitType(this as TypedefDefinition);
             } else
             {
                 return this;
@@ -183,7 +183,7 @@ namespace AutoWrap.Meta
         }
 
         public abstract string GetCLRTypeName(ITypeMember m);
-        public abstract string GetCLRParamTypeName(DefParam param);
+        public abstract string GetCLRParamTypeName(ParamDefinition param);
 
         #region Code Generation Methods
 
@@ -192,13 +192,13 @@ namespace AutoWrap.Meta
             return expr;
         }
 
-        public virtual void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public virtual void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
             preConversion = postConversion = null;
             conversion = param.Type.ProduceNativeCallConversionCode(param.Name, param);
         }
 
-        public virtual void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public virtual void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             throw new Exception("Unexpected");
         }
@@ -212,7 +212,7 @@ namespace AutoWrap.Meta
         /// <param name="newname">the name of the converted (i.e. native) parameter; should
         /// be <c>param.Name</c> if no conversion is done.</param>
         /// <returns>the conversion code; should be an empty string, if no conversion is done</returns>
-        public virtual string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public virtual string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             newname = param.Name;
             return "";
@@ -225,13 +225,14 @@ namespace AutoWrap.Meta
         /// </summary>
         /// <param name="param">the parameter that was passed</param>
         /// <returns>the conversion code; should be an empty string, if no conversion is done</returns>
-        public virtual string ProducePostCallParamConversionCleanupCode(DefParam param) {
+        public virtual string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
+        {
             return "";
         }
 
         #endregion
 
-        public DefNameSpace GetNameSpace()
+        public NamespaceDefinition GetNameSpace()
         {
             if (this.NameSpace == null)
                 return SurroundingClass.GetNameSpace();
@@ -303,13 +304,13 @@ namespace AutoWrap.Meta
             get { return HasAttribute<ReadOnlyAttribute>(); }
         }
 
-        public DefNameSpace NameSpace;
+        public NamespaceDefinition NameSpace;
         public ProtectionLevel ProtectionLevel;
         /// <summary>
         /// The class this type is nested within or <c>null</c> if this type is not nested.
         /// </summary>
         /// <seealso cref="IsNested"/>
-        public DefClass SurroundingClass;
+        public ClassDefinition SurroundingClass;
 
         /// <summary>
         /// Denotes whether this type is nested within a surrounding class.
@@ -326,9 +327,9 @@ namespace AutoWrap.Meta
                 switch (_elem.ParentNode.Name)
                 {
                     case "class":
-                        return DefClass.GetName(_elem.ParentNode as XmlElement);
+                        return ClassDefinition.GetName(_elem.ParentNode as XmlElement);
                     case "namespace":
-                        return DefNameSpace.GetFullName(_elem.ParentNode as XmlElement);
+                        return NamespaceDefinition.GetFullName(_elem.ParentNode as XmlElement);
                     default:
                         throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
                 }
@@ -342,9 +343,9 @@ namespace AutoWrap.Meta
                 switch (_elem.ParentNode.Name)
                 {
                     case "class":
-                        return DefClass.GetFullName(_elem.ParentNode as XmlElement);
+                        return ClassDefinition.GetFullName(_elem.ParentNode as XmlElement);
                     case "namespace":
-                        return DefNameSpace.GetFullName(_elem.ParentNode as XmlElement);
+                        return NamespaceDefinition.GetFullName(_elem.ParentNode as XmlElement);
                     default:
                         throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
                 }
@@ -395,11 +396,11 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        protected DefType()
+        protected TypeDefinition()
         {
         }
 
-        protected DefType(XmlElement elem)
+        protected TypeDefinition(XmlElement elem)
         {
             this._elem = elem;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
@@ -416,14 +417,14 @@ namespace AutoWrap.Meta
 
         public bool IsInternalTypeDef()
         {
-            if (!(this is DefTypeDef))
+            if (!(this is TypedefDefinition))
                 return false;
 
             if (this.IsSharedPtr)
                 return false;
 
-            DefTypeDef explicitType = this.IsNested ? this.SurroundingClass.FindType<DefTypeDef>(this.Name)
-                                                    : this.NameSpace.FindType<DefTypeDef>(this.Name);
+            TypedefDefinition explicitType = this.IsNested ? this.SurroundingClass.FindType<TypedefDefinition>(this.Name) 
+                                                            : this.NameSpace.FindType<TypedefDefinition>(this.Name);
             if (explicitType.IsSTLContainer)
                 return false;
 

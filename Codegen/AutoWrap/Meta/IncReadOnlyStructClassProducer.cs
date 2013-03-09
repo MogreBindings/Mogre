@@ -62,7 +62,7 @@ namespace AutoWrap.Meta
         protected override void AddInternalDeclarations()
         {
             base.AddInternalDeclarations();
-            foreach (DefField field in _t.PublicFields)
+            foreach (MemberFieldDefinition field in _t.PublicFields)
             {
                 if (!field.IsIgnored)
                     _sb.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
             _sb.AppendLine(_t.CLRName + "^ clr = gcnew " + _t.CLRName + ";");
-            foreach (DefField field in _t.PublicFields)
+            foreach (MemberFieldDefinition field in _t.PublicFields)
             {
                 if (!field.IsIgnored)
                 {
@@ -93,7 +93,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        protected override void AddPropertyField(DefField field)
+        protected override void AddPropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);
@@ -107,7 +107,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        public IncReadOnlyStructClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncReadOnlyStructClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

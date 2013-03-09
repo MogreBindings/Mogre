@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a CLR property (inside of a CLR class).
     /// </summary>
-    public class DefProperty : ITypeMember
+    public class PropertyDefinition : ITypeMember
     {
         /// <summary>
         /// The name of this property.
@@ -14,13 +14,13 @@
         /// Returns one of the accessor functions to be used to identify certain attribues
         /// of this property (like protection level).
         /// </summary>
-        private DefFunction _accessorFunction
+        private MemberMethodDefinition _accessorFunction
         {
             get { return (CanRead) ? GetterFunction : SetterFunction; }
         }
 
-        public DefFunction SetterFunction;
-        public DefFunction GetterFunction;
+        public MemberMethodDefinition SetterFunction;
+        public MemberMethodDefinition GetterFunction;
 
         /// <summary>
         /// Denotes whether this property can be read.
@@ -61,7 +61,7 @@
 
         #region ITypeMember Implementations
 
-        public DefType MemberType
+        public TypeDefinition MemberType
         {
             get { return (CanRead) ? GetterFunction.Type : SetterFunction.Parameters[0].Type; }
         }
@@ -95,7 +95,7 @@
         /// </summary>
         public PassedByType PassedByType { get; set; }
         
-        public DefClass ContainingClass
+        public ClassDefinition ContainingClass
         {
             get { return _accessorFunction.Class; }
         }
@@ -117,14 +117,14 @@
 
         #endregion
 
-        public DefProperty(string name)
+        public PropertyDefinition(string name)
         {
             Name = name;
         }
 
-        public DefProperty Clone()
+        public PropertyDefinition Clone()
         {
-            return (DefProperty)MemberwiseClone();
+            return (PropertyDefinition)MemberwiseClone();
         }
     
         /// <summary>
@@ -133,7 +133,7 @@
         /// <param name="clazz">the class to check</param>
         /// <param name="allowInheritedSignature">if this is <c>false</c> only the specified class will be
         /// checked for the property. Otherwise all base classes will be checked as well.</param>
-        public bool IsContainedIn(DefClass clazz, bool allowInBaseClass)
+        public bool IsContainedIn(ClassDefinition clazz, bool allowInBaseClass)
         {
             return clazz.ContainsFunctionSignature(_accessorFunction.Signature, allowInBaseClass);
         }

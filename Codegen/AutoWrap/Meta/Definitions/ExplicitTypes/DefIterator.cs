@@ -49,18 +49,18 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             newname = param.Name;
             return String.Empty;
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             return String.Empty;
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
             {
@@ -93,7 +93,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefIterator(typedef.Element);
         }

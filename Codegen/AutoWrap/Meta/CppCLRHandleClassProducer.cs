@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("_native->_CLRHandle._MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }
 
-        public CppCLRHandleClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppCLRHandleClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

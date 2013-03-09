@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class DefField : DefMember
+    public class MemberFieldDefinition : AbstractMemberDefinition
     {
         public override bool IsProperty
         {
@@ -34,7 +34,7 @@ namespace AutoWrap.Meta
             get { return (_arraySize != null); }
         }
 
-        public DefField(XmlElement elem)
+        public MemberFieldDefinition(XmlElement elem)
             : base(elem)
         {
             if (elem.Name != "variable")

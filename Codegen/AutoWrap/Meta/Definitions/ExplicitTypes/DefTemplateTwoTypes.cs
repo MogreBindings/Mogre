@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    internal class DefTemplateTwoTypes : DefTypeDef
+    class DefTemplateTwoTypes : TypedefDefinition
     {
         public override bool IsValueType
         {
@@ -32,7 +32,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
             {
@@ -66,13 +66,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             newname = param.Name;
             return "";
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             return "";
         }
@@ -128,7 +128,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             string baseTypeName = Mogre17.GetBaseType(typedef);
 

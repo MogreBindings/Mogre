@@ -84,7 +84,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             if (!IsUnnamedSTLContainer)
                 return base.GetCLRParamTypeName(param);
@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (!IsUnnamedSTLContainer)
                 return base.ProducePreCallParamConversionCode(param, out newname);
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
         //    }
         //}
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefStdMap(typedef.Element);
         }

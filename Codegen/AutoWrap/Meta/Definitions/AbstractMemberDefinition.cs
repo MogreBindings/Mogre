@@ -29,10 +29,10 @@ using System.Xml;
 namespace AutoWrap.Meta
 {
     /// <summary>
-    /// Describes a class or struct member, i.e. a field (see <see cref="DefField"/>) or a 
-    /// method (<see cref="DefFunction"/>).
+    /// Describes a class or struct member, i.e. a field (see <see cref="MemberFieldDefinition"/>) or a 
+    /// method (<see cref="MemberMethodDefinition"/>).
     /// </summary>
-    public abstract class DefMember : AttributeHolder, ITypeMember
+    public abstract class AbstractMemberDefinition : AttributeHolder, ITypeMember
     {
         string ITypeMember.MemberTypeName
         {
@@ -42,11 +42,11 @@ namespace AutoWrap.Meta
         {
             get { return this.PassedByType; }
         }
-        DefClass ITypeMember.ContainingClass
+        ClassDefinition ITypeMember.ContainingClass
         {
             get { return this.Class; }
         }
-        DefType ITypeMember.MemberType
+        TypeDefinition ITypeMember.MemberType
         {
             get { return this.Type; }
         }
@@ -96,9 +96,8 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        private DefType _type = null;
-
-        public virtual DefType Type
+        TypeDefinition _type = null;
+        public virtual TypeDefinition Type
         {
             get
             {
@@ -110,7 +109,7 @@ namespace AutoWrap.Meta
                         _type.SurroundingClass = Class;
                     }
                     else
-                        _type = Class.FindType<DefType>(TypeName, false);
+                        _type = Class.FindType<TypeDefinition>(TypeName, false);
                 }
 
                 return _type;
@@ -124,7 +123,7 @@ namespace AutoWrap.Meta
 
         protected XmlElement _elem;
 
-        public DefClass Class;
+        public ClassDefinition Class;
 
         protected string _name;
         public virtual string Name
@@ -182,10 +181,10 @@ namespace AutoWrap.Meta
             get { return _elem; }
         }
 
-        public DefMember(XmlElement elem)
+        public AbstractMemberDefinition(XmlElement elem)
         {
             this._elem = elem;
-            this.ProtectionType = DefType.GetProtectionEnum(elem.GetAttribute("protection"));
+            this.ProtectionType = TypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
             this.PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)

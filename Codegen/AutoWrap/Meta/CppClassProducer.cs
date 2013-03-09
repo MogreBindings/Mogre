@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     abstract class CppClassProducer : ClassProducer
     {
-        public CppClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             //if (AllowSubclassing)
@@ -39,7 +39,7 @@ namespace AutoWrap.Meta
             //}
         }
 
-        protected override void AddTypeDependancy(DefType type)
+        protected override void AddTypeDependancy(TypeDefinition type)
         {
             _wrapper.CppCheckTypeForDependancy(type);
         }
@@ -53,7 +53,7 @@ namespace AutoWrap.Meta
                 return m.MemberTypeCLRName;
         }
 
-        protected virtual string GetCLRParamTypeName(DefParam param)
+        protected virtual string GetCLRParamTypeName(ParamDefinition param)
         {
             AddTypeDependancy(param.Type);
             return param.Type.GetCLRParamTypeName(param);
@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
         {
             base.AddInternalDeclarations();
 
-            foreach (DefClass cls in _interfaces)
+            foreach (ClassDefinition cls in _interfaces)
             {
                 _sb.AppendLine(cls.FullNativeName + "* " + GetClassName() + "::_" + cls.CLRName + "_GetNativePtr()");
                 _sb.AppendLine("{");
@@ -95,7 +95,7 @@ namespace AutoWrap.Meta
 			{
 				if (_t.Constructors.Length > 0)
 				{
-					foreach (DefFunction function in _t.Constructors)
+					foreach (MemberMethodDefinition function in _t.Constructors)
 					{
 						if (function.ProtectionType == ProtectionLevel.Public &&
 							!function.HasAttribute<IgnoreAttribute>())
@@ -115,7 +115,7 @@ namespace AutoWrap.Meta
 			base.AddPublicDeclarations();
 		}
 
-        protected virtual void AddPublicConstructor(DefFunction function)
+        protected virtual void AddPublicConstructor(MemberMethodDefinition function)
 		{
 			if (function == null)
 			{
@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
 
                 if (!function.HasAttribute<NoDefaultParamOverloadsAttribute>())
                 {
-                    foreach (DefParam param in function.Parameters)
+                    foreach (ParamDefinition param in function.Parameters)
                         if (param.DefaultValue != null)
                             defcount++;
                 }
@@ -145,7 +145,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddPublicConstructorOverload(DefFunction f, int count)
+        protected virtual void AddPublicConstructorOverload(MemberMethodDefinition f, int count)
         {
             _sb.AppendIndent(GetClassName() + "::" + _t.CLRName);
             if (f == null)
@@ -184,7 +184,7 @@ namespace AutoWrap.Meta
             {
                 for (int i = 0; i < count; i++)
                 {
-                    DefParam p = f.Parameters[i];
+                    ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
@@ -216,7 +216,7 @@ namespace AutoWrap.Meta
 
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
-            foreach (DefMember m in _cachedMembers)
+            foreach (AbstractMemberDefinition m in _cachedMembers)
             {
                 if (m.IsStatic)
                 {
@@ -250,13 +250,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddNestedTypeBeforeMainType(DefType nested)
+        protected override void AddNestedTypeBeforeMainType(TypeDefinition nested)
         {
             base.AddNestedType(nested);
             _wrapper.CppAddType(nested, _sb);
         }
 
-        protected override void AddNestedType(DefType nested)
+        protected override void AddNestedType(TypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {
@@ -268,7 +268,7 @@ namespace AutoWrap.Meta
             _wrapper.CppAddType(nested, _sb);
         }
 
-        protected override void AddMethod(DefFunction f)
+        protected override void AddMethod(MemberMethodDefinition f)
         {
             if (f.HasAttribute<CustomCppDeclarationAttribute>())
             {
@@ -290,7 +290,7 @@ namespace AutoWrap.Meta
 
             if (!f.HasAttribute<NoDefaultParamOverloadsAttribute>())
             {
-                foreach (DefParam param in f.Parameters)
+                foreach (ParamDefinition param in f.Parameters)
                     if (param.DefaultValue != null)
                         defcount++;
             }
@@ -332,14 +332,14 @@ namespace AutoWrap.Meta
                     bool hasPostConversions = false;
                     for (int i = f.Parameters.Count - dc; i < f.Parameters.Count; i++)
                     {
-                        DefParam p = f.Parameters[i];
+                        ParamDefinition p = f.Parameters[i];
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePreConversion))
                             _sb.AppendLine(p.CLRDefaultValuePreConversion);
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePostConversion))
                             hasPostConversions = true;
 
                         string n1, n2, n3;
-                        DefType dependancy;
+                        TypeDefinition dependancy;
                         p.Type.ProduceDefaultParamValueConversionCode(p, out n1, out n2, out n3, out dependancy);
                         if (dependancy != null)
                             AddTypeDependancy(dependancy);
@@ -361,7 +361,7 @@ namespace AutoWrap.Meta
                     _sb.Append(f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
-                        DefParam p = f.Parameters[i];
+                        ParamDefinition p = f.Parameters[i];
                         _sb.Append(" ");
                         if (i < f.Parameters.Count - dc)
                             _sb.Append(p.Name);
@@ -375,7 +375,7 @@ namespace AutoWrap.Meta
 
                     for (int i = f.Parameters.Count - dc; i < f.Parameters.Count; i++)
                     {
-                        DefParam p = f.Parameters[i];
+                        ParamDefinition p = f.Parameters[i];
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePostConversion))
                             _sb.AppendLine(p.CLRDefaultValuePostConversion);
                     }
@@ -405,23 +405,23 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddMethodParameters(DefFunction f, int count)
+        protected virtual void AddMethodParameters(MemberMethodDefinition f, int count)
         {
             _sb.Append("(");
             for (int i = 0; i < count; i++)
             {
-                DefParam p = f.Parameters[i];
+                ParamDefinition p = f.Parameters[i];
                 _sb.Append(" " + GetCLRParamTypeName(p) + " " + p.Name);
                 if (i < count - 1) _sb.Append(",");
             }
             _sb.Append(" )");
         }
-        protected void AddMethodParameters(DefFunction f)
+        protected void AddMethodParameters(MemberMethodDefinition f)
         {
             AddMethodParameters(f, f.Parameters.Count);
         }
 
-        protected virtual void AddMethodBody(DefFunction f, int count)
+        protected virtual void AddMethodBody(MemberMethodDefinition f, int count)
         {
             string preCall = GetMethodPreNativeCall(f, count);
             string nativeCall = GetMethodNativeCall(f, count);
@@ -451,13 +451,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual string GetMethodPreNativeCall(DefFunction f, int paramCount)
+        protected virtual string GetMethodPreNativeCall(MemberMethodDefinition f, int paramCount)
         {
             string res = String.Empty;
 
             for (int i = 0; i < paramCount; i++)
             {
-                DefParam p = f.Parameters[i];
+                ParamDefinition p = f.Parameters[i];
                 string newname;
                 res += p.Type.ProducePreCallParamConversionCode(p, out newname);
             }
@@ -465,7 +465,7 @@ namespace AutoWrap.Meta
             return res;
         }
 
-        protected virtual string GetMethodNativeCall(DefFunction f, int paramCount)
+        protected virtual string GetMethodNativeCall(MemberMethodDefinition f, int paramCount)
         {
             string invoke;
             if (f.IsStatic)
@@ -487,7 +487,7 @@ namespace AutoWrap.Meta
 
             for (int i = 0; i < paramCount; i++)
             {
-                DefParam p = f.Parameters[i];
+                ParamDefinition p = f.Parameters[i];
                 string newname;
                 p.Type.ProducePreCallParamConversionCode(p, out newname);
                 invoke += " " + newname;
@@ -502,20 +502,20 @@ namespace AutoWrap.Meta
                 return f.Type.ProduceNativeCallConversionCode(invoke, f);
         }
 
-        protected virtual string GetMethodPostNativeCall(DefFunction f, int paramCount)
+        protected virtual string GetMethodPostNativeCall(MemberMethodDefinition f, int paramCount)
         {
             string res = String.Empty;
 
             for (int i = 0; i < paramCount; i++)
             {
-                DefParam p = f.Parameters[i];
+                ParamDefinition p = f.Parameters[i];
                 res += p.Type.ProducePostCallParamConversionCleanupCode(p);
             }
 
             return res;
         }
 
-        protected string AddParameterConversion(DefParam param)
+        protected string AddParameterConversion(ParamDefinition param)
         {
             string newname, expr, postcall;
             expr = param.Type.ProducePreCallParamConversionCode(param, out newname);
@@ -529,7 +529,7 @@ namespace AutoWrap.Meta
             return newname;
         }
 
-        protected override void AddProperty(DefProperty p)
+        protected override void AddProperty(PropertyDefinition p)
         {
             string ptype = GetCLRTypeName(p);
             string pname =  GetClassName() + "::" + p.Name;
@@ -586,7 +586,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPropertyField(DefField field)
+        protected override void AddPropertyField(MemberFieldDefinition field)
         {
             string ptype = GetCLRTypeName(field);
             string pname = GetClassName () + "::" + (field.HasAttribute<RenameAttribute>() ? field.GetAttribute<RenameAttribute> ().Name : field.Name);
@@ -596,7 +596,7 @@ namespace AutoWrap.Meta
                 if (field.Type.HasAttribute<NativeValueContainerAttribute>()
                     || (field.Type.IsValueType && !field.Type.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    DefParam tmpParam = new DefParam(field, field.Name + "_array");
+                    ParamDefinition tmpParam = new ParamDefinition(field, field.Name + "_array");
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -630,7 +630,7 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("{");
                     _sb.IncreaseIndent();
                     _sb.AppendLine("if (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
-                    string param = AddParameterConversion(new DefParam(field, "value"));
+                    string param = AddParameterConversion(new ParamDefinition(field, "value"));
                     _sb.AppendLine(GetNativeInvokationTarget(field) + "[index] = " + param + ";");
                     _sb.DecreaseIndent();
                     _sb.AppendLine("}");
@@ -673,7 +673,7 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("void " + pname + "::set( " + ptype + " value )");
                     _sb.AppendLine("{");
                     _sb.IncreaseIndent();
-                    string param = AddParameterConversion(new DefParam(field, "value"));
+                    string param = AddParameterConversion(new ParamDefinition(field, "value"));
                     _sb.AppendLine(GetNativeInvokationTarget(field) + " = " + param + ";");
                     _sb.DecreaseIndent();
                     _sb.AppendLine("}");
@@ -681,7 +681,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethodsForField(DefField field)
+        protected override void AddMethodsForField(MemberFieldDefinition field)
         {
             string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
@@ -690,7 +690,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("\treturn " + managedType + ";");
             _sb.AppendLine("}");
 
-            DefParam param = new DefParam(field, "value");
+            ParamDefinition param = new ParamDefinition(field, "value");
             _sb.AppendLine("void " + GetClassName() + "::set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();

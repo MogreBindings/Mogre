@@ -111,10 +111,10 @@ namespace AutoWrap.Meta
         public string NativeNamespace;
         public string ManagedNamespace;
         public List<string> PreDeclarations = new List<string>();
-        public List<DefType> PragmaMakePublicTypes = new List<DefType>();
-        public List<DefType> UsedTypes = new List<DefType>();
-        public SortedList<string, List<DefType>> IncludeFiles = new SortedList<string, List<DefType>>();
-        public List<DefClass> Overridables = new List<DefClass>();
+        public List<TypeDefinition> PragmaMakePublicTypes = new List<TypeDefinition>();
+        public List<TypeDefinition> UsedTypes = new List<TypeDefinition>();
+        public SortedList<string, List<TypeDefinition>> IncludeFiles = new SortedList<string, List<TypeDefinition>>();
+        public List<ClassDefinition> Overridables = new List<ClassDefinition>();
         public List<ClassProducer> PostClassProducers = new List<ClassProducer>();
         public List<ClassProducer> PreClassProducers = new List<ClassProducer>();
 
@@ -125,21 +125,21 @@ namespace AutoWrap.Meta
             this.ManagedNamespace = Globals.ManagedNamespace;
             this.NativeNamespace = Globals.NativeNamespace;
 
-            foreach (DefNameSpace space in meta.NameSpaces)
+            foreach (NamespaceDefinition space in meta.NameSpaces)
             {
-                foreach (DefType type in space.Types)
+                foreach (TypeDefinition type in space.Types)
                 {
 
                     if (TypeIsWrappable(type))
                     {
-                        List<DefType> list;
+                        List<TypeDefinition> list;
                         if (!IncludeFiles.TryGetValue(type.IncludeFile, out list))
                         {
-                            list = new List<DefType>();
+                            list = new List<TypeDefinition>();
                             IncludeFiles.Add(type.IncludeFile, list);
                         }
 
-                        if (type is DefEnum || type.IsInternalTypeDef())
+                        if (type is EnumDefinition || type.IsInternalTypeDef())
                         {
                             list.Insert(0, type);
                         }
@@ -149,7 +149,7 @@ namespace AutoWrap.Meta
                             int i;
                             for (i = 0; i < list.Count; i++)
                             {
-                                if (!(type is DefEnum || type.IsInternalTypeDef()))
+                                if (!(type is EnumDefinition || type.IsInternalTypeDef()))
                                     break;
                             }
 
@@ -159,20 +159,20 @@ namespace AutoWrap.Meta
                             list.Add(type);
 
                         if (type.HasWrapType(WrapTypes.Overridable))
-                            Overridables.Add((DefClass)type);
+                            Overridables.Add((ClassDefinition)type);
                     }
                 }
 
-                foreach (DefType type in space.Types)
+                foreach (TypeDefinition type in space.Types)
                 {
-                    if (type is DefEnum && IncludeFiles.ContainsKey(type.IncludeFile))
+                    if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFile))
                         if (!IncludeFiles[type.IncludeFile].Contains(type))
                             IncludeFiles[type.IncludeFile].Insert(0, type);
                 }
             }
         }
 
-        public bool TypeIsWrappable(DefType type)
+        public bool TypeIsWrappable(TypeDefinition type)
         {
             if (type.Name.StartsWith("DLL_"))
             {
@@ -186,7 +186,7 @@ namespace AutoWrap.Meta
             }
 
             // Get explicit type or a new type if type has ReplaceBy attribute
-            type = (type.IsNested) ? type.SurroundingClass.FindType<DefType>(type.Name) : type.NameSpace.FindType<DefType>(type.Name);
+            type = (type.IsNested) ? type.SurroundingClass.FindType<TypeDefinition>(type.Name) : type.NameSpace.FindType<TypeDefinition>(type.Name);
 
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
@@ -202,9 +202,9 @@ namespace AutoWrap.Meta
                 type.Attributes.Add(new WrapTypeAttribute(WrapTypes.SharedPtr));
                 return true;
             }
-            else if (type is DefClass)
+            else if (type is ClassDefinition)
             {
-                DefClass cls = type as DefClass;
+                ClassDefinition cls = type as ClassDefinition;
                 if (cls.HasAttribute<CLRObjectAttribute>(true))
                 {
                     if (cls.HasAttribute<OverridableAttribute>(true))
@@ -222,13 +222,13 @@ namespace AutoWrap.Meta
 
                 return false;
             }
-            else if (type is DefTypeDef)
+            else if (type is TypedefDefinition)
             {
                 if (type.IsSTLContainer)
                 {
-                    foreach (ITypeMember m in (type as DefTypeDef).TypeMembers)
+                    foreach (ITypeMember m in (type as TypedefDefinition).TypeMembers)
                     {
-                        DefType mt = m.MemberType;
+                        TypeDefinition mt = m.MemberType;
                         if (!mt.IsValueType && !mt.IsPureManagedClass
                             && !TypeIsWrappable(mt))
                             return false;
@@ -244,7 +244,7 @@ namespace AutoWrap.Meta
                         {
                             try
                             {
-                                DefType notconst = type.FindType<DefType>(type.Name.Substring("Const".Length), true);
+                                TypeDefinition notconst = type.FindType<TypeDefinition>(type.Name.Substring("Const".Length), true);
                                 return false;
                             }
                             catch
@@ -258,11 +258,11 @@ namespace AutoWrap.Meta
                     else
                         return false;
                 }
-                else if ((type as DefTypeDef).BaseType is DefInternal
-                         || (type as DefTypeDef).BaseType.HasAttribute<ValueTypeAttribute>())
+                else if ((type as TypedefDefinition).BaseType is DefInternal
+                         || (type as TypedefDefinition).BaseType.HasAttribute<ValueTypeAttribute>())
                     return true;
                 else
-                    return TypeIsWrappable((type as DefTypeDef).BaseType);
+                    return TypeIsWrappable((type as TypedefDefinition).BaseType);
             }
             else
                 return false;
@@ -328,16 +328,16 @@ namespace AutoWrap.Meta
             // Create MakePublicDeclarations.h
             //
             builder.Clear();
-            List<DefType> typesForMakePublic = new List<DefType>();
+            List<TypeDefinition> typesForMakePublic = new List<TypeDefinition>();
 
-            foreach (DefType t in PragmaMakePublicTypes)
+            foreach (TypeDefinition t in PragmaMakePublicTypes)
             {
-                if (t is DefClass && !t.IsNested && !t.IsIgnored)
+                if (t is ClassDefinition && !t.IsNested && !t.IsIgnored)
                 {
-                    DefType type = t.FindType<DefType>(t.Name);
+                    TypeDefinition type = t.FindType<TypeDefinition>(t.Name);
 
                     if (type.FullNativeName.StartsWith(NativeNamespace + "::")
-                        && type is DefClass && !type.IsTemplate)
+                        && type is ClassDefinition && !type.IsTemplate)
                     {
                         if (!typesForMakePublic.Contains(type))
                             typesForMakePublic.Add(type);
@@ -351,9 +351,9 @@ namespace AutoWrap.Meta
             builder.AppendLine("namespace " + NativeNamespace);
             builder.AppendLine("{");
 
-            foreach (DefType type in typesForMakePublic)
+            foreach (TypeDefinition type in typesForMakePublic)
             {
-                if (type is DefStruct)
+                if (type is StructDefinition)
                     builder.Append("struct ");
                 else
                     builder.Append("class ");
@@ -363,7 +363,7 @@ namespace AutoWrap.Meta
             builder.AppendLine("}");
             builder.AppendLine();
 
-            foreach (DefType type in typesForMakePublic)
+            foreach (TypeDefinition type in typesForMakePublic)
             {
                 builder.AppendLine("#pragma make_public( " + type.FullNativeName + " )");
             }
@@ -374,18 +374,18 @@ namespace AutoWrap.Meta
             // Create CLRObjects.inc
             //
             builder.Clear();
-            List<DefClass> clrObjs = new List<DefClass>();
+            List<ClassDefinition> clrObjs = new List<ClassDefinition>();
 
             foreach (string include in IncludeFiles.Keys)
             {
-                foreach (DefType t in IncludeFiles[include])
+                foreach (TypeDefinition t in IncludeFiles[include])
                     AddCLRObjects(t, clrObjs);
             }
 
-            foreach (DefClass cls in clrObjs)
+            foreach (ClassDefinition cls in clrObjs)
             {
                 string name = cls.Name;
-                DefClass parent = cls;
+                ClassDefinition parent = cls;
                 while (parent.SurroundingClass != null)
                 {
                     parent = parent.SurroundingClass;
@@ -398,12 +398,12 @@ namespace AutoWrap.Meta
             WriteToFile(_includePath + "\\CLRObjects.inc", builder.ToString());
         }
 
-        public string GetInitCLRObjectFuncSignature(DefClass cls) {
+        public string GetInitCLRObjectFuncSignature(ClassDefinition cls) {
             if (!cls.HasAttribute<CLRObjectAttribute>(true))
                 throw new Exception("class is not subclass of CLRObject");
 
             string name = cls.Name;
-            DefClass parent = cls;
+            ClassDefinition parent = cls;
             while (parent.SurroundingClass != null)
             {
                 parent = parent.SurroundingClass;
@@ -413,8 +413,8 @@ namespace AutoWrap.Meta
             return "void _Init_CLRObject_" + name + "(CLRObject* pClrObj)";
         }
 
-        void AddCLRObjects(DefType t, List<DefClass> clrObjs) {
-            DefClass cls = t as DefClass;
+        void AddCLRObjects(TypeDefinition t, List<ClassDefinition> clrObjs) {
+            ClassDefinition cls = t as ClassDefinition;
             if (cls == null)
                 return;
             if (cls.IsIgnored || cls.ProtectionLevel != ProtectionLevel.Public)
@@ -423,7 +423,7 @@ namespace AutoWrap.Meta
             if (cls.HasAttribute<CLRObjectAttribute>(true))
                 clrObjs.Add(cls);
 
-            foreach (DefType nested in cls.NestedTypes)
+            foreach (TypeDefinition nested in cls.NestedTypes)
                 AddCLRObjects(nested, clrObjs);
         }
 
@@ -436,7 +436,7 @@ namespace AutoWrap.Meta
             bar.Step = 1;
             bar.Value = 0;
 
-            foreach (DefClass type in Overridables)
+            foreach (ClassDefinition type in Overridables)
             {
                 string wrapFile = "Subclass" + type.Name;
                 string incFile = _includePath + "\\" + wrapFile + ".h";
@@ -504,7 +504,7 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             IndentStringBuilder sbTypes = new IndentStringBuilder();
-            foreach (DefType t in IncludeFiles[includeFile])
+            foreach (TypeDefinition t in IncludeFiles[includeFile])
             {
                 IncAddType(t, sbTypes);
             }
@@ -543,7 +543,7 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             IndentStringBuilder contentsb = new IndentStringBuilder();
-            foreach (DefType t in IncludeFiles[include])
+            foreach (TypeDefinition t in IncludeFiles[include])
             {
                 CppAddType(t, contentsb);
             }
@@ -581,7 +581,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public string GenerateIncludeFileCodeForOverridable(DefClass type)
+        public string GenerateIncludeFileCodeForOverridable(ClassDefinition type)
         {
             UsedTypes.Clear();
 
@@ -593,8 +593,8 @@ namespace AutoWrap.Meta
             new IncSubclassingClassProducer(this, type, sbTypes, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
             {
-                List<DefClass[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
-                foreach (DefClass[] ifaces in interfaces)
+                List<ClassDefinition[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
+                foreach (ClassDefinition[] ifaces in interfaces)
                 {
                     new IncSubclassingClassProducer(this, type, sbTypes, ifaces).Add();
                 }
@@ -628,7 +628,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public string GenerateCppFileCodeForOverridable(DefClass type)
+        public string GenerateCppFileCodeForOverridable(ClassDefinition type)
         {
             IndentStringBuilder sb = new IndentStringBuilder();
 
@@ -645,8 +645,8 @@ namespace AutoWrap.Meta
             new CppSubclassingClassProducer(this, type, sb, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
             {
-                List<DefClass[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
-                foreach (DefClass[] ifaces in interfaces)
+                List<ClassDefinition[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
+                foreach (ClassDefinition[] ifaces in interfaces)
                 {
                     new CppSubclassingClassProducer(this, type, sb, ifaces).Add();
                 }
@@ -673,7 +673,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public void IncAddType(DefType t, IndentStringBuilder sb)
+        public void IncAddType(TypeDefinition t, IndentStringBuilder sb)
         {
             if (t.HasAttribute<CustomIncClassDefinitionAttribute>())
             {
@@ -682,7 +682,7 @@ namespace AutoWrap.Meta
                 return;
             }
 
-            if (t is DefClass)
+            if (t is ClassDefinition)
             {
                 if (!t.HasAttribute<WrapTypeAttribute>())
                 {
@@ -693,35 +693,35 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new IncNonOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new IncNonOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Overridable:
-                            new IncOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new IncOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativeDirector:
-                            new IncNativeDirectorClassProducer(this, t as DefClass, sb).Add();
+                            new IncNativeDirectorClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Interface:
-                            new IncInterfaceClassProducer(this, t as DefClass, sb).Add();
-                            new IncOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new IncInterfaceClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Singleton:
-                            new IncSingletonClassProducer(this, t as DefClass, sb).Add();
+                            new IncSingletonClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.ReadOnlyStruct:
-                            new IncReadOnlyStructClassProducer(this, t as DefClass, sb).Add();
+                            new IncReadOnlyStructClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.ValueType:
-                            new IncValueClassProducer(this, t as DefClass, sb).Add();
+                            new IncValueClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new IncNativePtrValueClassProducer(this, t as DefClass, sb).Add();
+                            new IncNativePtrValueClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.CLRHandle:
-                            new IncCLRHandleClassProducer(this, t as DefClass, sb).Add();
+                            new IncCLRHandleClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new IncPlainWrapperClassProducer(this, t as DefClass, sb).Add();
+                            new IncPlainWrapperClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.SharedPtr:
                             IncAddSharedPtrType(t, sb);
@@ -729,18 +729,18 @@ namespace AutoWrap.Meta
                     }
                 }
             }
-            else if (t is DefEnum)
+            else if (t is EnumDefinition)
             {
-                IncAddEnum(t as DefEnum, sb);
+                IncAddEnum(t as EnumDefinition, sb);
             }
-            else if (t is DefTypeDef)
+            else if (t is TypedefDefinition)
             {
-                DefTypeDef explicitType;
+                TypedefDefinition explicitType;
 
                 if (t.IsUnnamedSTLContainer)
-                    explicitType = t as DefTypeDef;
+                    explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) : t.NameSpace.FindType<TypedefDefinition>(t.Name);
 
                 if (t.HasWrapType(WrapTypes.SharedPtr))
                 {
@@ -766,7 +766,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public void CppAddType(DefType t, IndentStringBuilder sb)
+        public void CppAddType(TypeDefinition t, IndentStringBuilder sb)
         {
             if (t.HasAttribute<CustomCppClassDefinitionAttribute>())
             {
@@ -775,7 +775,7 @@ namespace AutoWrap.Meta
                 return;
             }
 
-            if (t is DefClass)
+            if (t is ClassDefinition)
             {
                 if (!t.HasAttribute<WrapTypeAttribute>())
                 {
@@ -786,40 +786,40 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new CppNonOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new CppNonOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Overridable:
-                            new CppOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new CppOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Interface:
-                            new CppOverridableClassProducer(this, t as DefClass, sb).Add();
+                            new CppOverridableClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativeDirector:
-                            new CppNativeDirectorClassProducer(this, t as DefClass, sb).Add();
+                            new CppNativeDirectorClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new CppNativePtrValueClassProducer(this, t as DefClass, sb).Add();
+                            new CppNativePtrValueClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Singleton:
-                            new CppSingletonClassProducer(this, t as DefClass, sb).Add();
+                            new CppSingletonClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.CLRHandle:
-                            new CppCLRHandleClassProducer(this, t as DefClass, sb).Add();
+                            new CppCLRHandleClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new CppPlainWrapperClassProducer(this, t as DefClass, sb).Add();
+                            new CppPlainWrapperClassProducer(this, t as ClassDefinition, sb).Add();
                             break;
                     }
                 }
             }
-            else if (t is DefTypeDef)
+            else if (t is TypedefDefinition)
             {
-                DefTypeDef explicitType;
+                TypedefDefinition explicitType;
 
                 if (t.IsUnnamedSTLContainer)
-                    explicitType = t as DefTypeDef;
+                    explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<DefTypeDef>(t.Name) : t.NameSpace.FindType<DefTypeDef>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) : t.NameSpace.FindType<TypedefDefinition>(t.Name);
 
                 if (explicitType.IsSTLContainer)
                 {
@@ -836,7 +836,7 @@ namespace AutoWrap.Meta
         //{
         //    IncAddEnum(enm, sb, false);
         //}
-        public void IncAddEnum(DefEnum enm, IndentStringBuilder sb) //, bool inProtectedTypesProxy)
+        public void IncAddEnum(EnumDefinition enm, IndentStringBuilder sb) //, bool inProtectedTypesProxy)
         {
             if (enm.Name[0] == '@')
                 return;
@@ -878,22 +878,22 @@ namespace AutoWrap.Meta
             sb.AppendLine("};\n");
         }
 
-        private void IncAddSharedPtrType(DefType type, IndentStringBuilder sb)
+        private void IncAddSharedPtrType(TypeDefinition type, IndentStringBuilder sb)
         {
             if (!type.Name.EndsWith("Ptr"))
                 throw new Exception("SharedPtr class that doesn't have a name ending to 'Ptr'");
 
             string basename = null;
-            if (type is DefClass)
-                basename = (type as DefClass).Inherits[0];
+            if (type is ClassDefinition)
+                basename = (type as ClassDefinition).Inherits[0];
             else
-                basename = (type as DefTypeDef).BaseTypeName;
+                basename = (type as TypedefDefinition).BaseTypeName;
 
             int s = basename.IndexOf("<");
             int e = basename.LastIndexOf(">");
             string baseClass = basename.Substring(s + 1, e - s - 1).Trim();
             //string nativeClass = _nativePrefix + "::" + baseClass;
-            DefType baseType = type.FindType<DefType>(baseClass);
+            TypeDefinition baseType = type.FindType<TypeDefinition>(baseClass);
             string nativeClass = baseType.FullNativeName;
 
             string className = type.FullCLRName;
@@ -944,9 +944,9 @@ namespace AutoWrap.Meta
             sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_SHAREDPTR( " + className + " )");
             sb.AppendLine();
 
-            if (type is DefClass)
+            if (type is ClassDefinition)
             {
-                DefClass realType = type.FindType<DefClass>(baseClass, false);
+                ClassDefinition realType = type.FindType<ClassDefinition>(baseClass, false);
                 if (realType != null && realType.BaseClass != null && realType.BaseClass.Name == "Resource")
                 {
                     // For Resource subclasses (Material etc.) allow implicit conversion of ResourcePtr (i.e ResourcePtr -> MaterialPtr)
@@ -977,9 +977,9 @@ namespace AutoWrap.Meta
             //sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "();");
             //sb.AppendLine("}");
             //sb.AppendLine();
-            if (baseType is DefClass && (baseType as DefClass).IsInterface)
+            if (baseType is ClassDefinition && (baseType as ClassDefinition).IsInterface)
             {
-                string proxyName = NativeProxyClassProducer.GetProxyName(baseType as DefClass);
+                string proxyName = NativeProxyClassProducer.GetProxyName(baseType as ClassDefinition);
                 sb.AppendLine(type.Name + "(" + baseType.CLRName + "^ obj) : " + baseClass + "( static_cast<" + proxyName + "*>( (" + nativeClass + "*)obj ) )");
                 sb.AppendLine("{");
                 sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
@@ -1101,7 +1101,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("};\n\n");
         }
 
-        public void IncAddSTLContainer(DefTypeDef t, IndentStringBuilder sb)
+        public void IncAddSTLContainer(TypedefDefinition t, IndentStringBuilder sb)
         {
             if (t is DefStdPair)
             {
@@ -1192,7 +1192,7 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        public void CppAddSTLContainer(DefTypeDef t, IndentStringBuilder sb)
+        public void CppAddSTLContainer(TypedefDefinition t, IndentStringBuilder sb)
         {
             if (t is DefStdPair)
             {
@@ -1364,7 +1364,7 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        public void IncAddInternalTypeDef(DefTypeDef t, IndentStringBuilder sb)
+        public void IncAddInternalTypeDef(TypedefDefinition t, IndentStringBuilder sb)
         {
             sb.AppendIndent("");
             if (t.IsNested)
@@ -1372,7 +1372,7 @@ namespace AutoWrap.Meta
             sb.Append("typedef " + t.FullNativeName + " " + t.CLRName + ";\n\n");
         }
 
-        public void IncAddValueTypeTypeDef(DefTypeDef t, IndentStringBuilder sb)
+        public void IncAddValueTypeTypeDef(TypedefDefinition t, IndentStringBuilder sb)
         {
             sb.AppendIndent("");
             if (t.IsNested)
@@ -1380,12 +1380,12 @@ namespace AutoWrap.Meta
             sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
         }
 
-        private void IncAddIncludeFiles(string include, List<DefType> usedTypes, IndentStringBuilder sb)
+        private void IncAddIncludeFiles(string include, List<TypeDefinition> usedTypes, IndentStringBuilder sb)
         {
             sb.AppendFormat("#include \"{0}\"\n", include);
             List<string> added = new List<string>();
 
-            foreach (DefType type in usedTypes)
+            foreach (TypeDefinition type in usedTypes)
             {
                 if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
                     continue;
@@ -1400,13 +1400,13 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        private void CppAddIncludeFiles(string include, List<DefType> usedTypes, IndentStringBuilder sb)
+        private void CppAddIncludeFiles(string include, List<TypeDefinition> usedTypes, IndentStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
             sb.AppendFormat("#include \"{0}\"\n", GetManagedIncludeFileName(include));
             List<string> added = new List<string>();
 
-            foreach (DefType type in usedTypes)
+            foreach (TypeDefinition type in usedTypes)
             {
                 if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
                     continue;
@@ -1421,7 +1421,7 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        public virtual void AddTypeDependancy(DefType type)
+        public virtual void AddTypeDependancy(TypeDefinition type)
         {
             if (!UsedTypes.Contains(type))
                 this.UsedTypes.Add(type);
@@ -1433,31 +1433,31 @@ namespace AutoWrap.Meta
                 PreDeclarations.Add(decl);
         }
 
-        public virtual void AddPragmaMakePublicForType(DefType type)
+        public virtual void AddPragmaMakePublicForType(TypeDefinition type)
         {
             if (!PragmaMakePublicTypes.Contains(type))
                 PragmaMakePublicTypes.Add(type);
         }
 
-        public virtual void CheckTypeForDependancy(DefType type)
+        public virtual void CheckTypeForDependancy(TypeDefinition type)
         {
-            if (type is DefEnum
-                || (!(type is IDefString) && type is DefTypeDef && (type as DefTypeDef).BaseType is DefInternal)
+            if (type is EnumDefinition
+                || (!(type is IDefString) && type is TypedefDefinition && (type as TypedefDefinition).BaseType is DefInternal)
                 || type.HasWrapType(WrapTypes.NativePtrValueType)
                 || type.HasWrapType(WrapTypes.ValueType))
                 AddTypeDependancy(type);
             else if (type.SurroundingClass != null)
                 AddTypeDependancy(type.SurroundingClass);
-            else if (type is DefTypeDef)
-                CheckTypeForDependancy((type as DefTypeDef).BaseType);
+            else if (type is TypedefDefinition)
+                CheckTypeForDependancy((type as TypedefDefinition).BaseType);
 
-            if (!type.IsNested && type is DefClass)
+            if (!type.IsNested && type is ClassDefinition)
                 AddPragmaMakePublicForType(type);
         }
 
-        public virtual void CppCheckTypeForDependancy(DefType type)
+        public virtual void CppCheckTypeForDependancy(TypeDefinition type)
         {
-            if (!(type is DefEnum)
+            if (!(type is EnumDefinition)
                 && !type.IsNested
                 && !type.IsPureManagedClass
                 && !(type is DefInternal)

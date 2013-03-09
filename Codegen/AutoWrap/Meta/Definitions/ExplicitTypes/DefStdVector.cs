@@ -19,7 +19,7 @@ namespace AutoWrap.Meta
             get { return "GetArrayFromVector"; }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefStdVector(typedef.Element);
         }

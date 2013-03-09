@@ -30,29 +30,29 @@ namespace AutoWrap.Meta
     public class ClassProducer : CodeProducer 
     {
         protected Wrapper _wrapper;
-        protected DefClass _t;
+        protected ClassDefinition _t;
         protected IndentStringBuilder _sb;
-        protected List<DefClass> _listeners = new List<DefClass>();
-        protected List<DefProperty> _interfaceProperties = new List<DefProperty>();
-        protected List<DefFunction> _abstractFunctions = new List<DefFunction>();
-        protected List<DefProperty> _abstractProperties = new List<DefProperty>();
-        protected List<DefClass> _interfaces = new List<DefClass>();
+        protected List<ClassDefinition> _listeners = new List<ClassDefinition>();
+        protected List<PropertyDefinition> _interfaceProperties = new List<PropertyDefinition>();
+        protected List<MemberMethodDefinition> _abstractFunctions = new List<MemberMethodDefinition>();
+        protected List<PropertyDefinition> _abstractProperties = new List<PropertyDefinition>();
+        protected List<ClassDefinition> _interfaces = new List<ClassDefinition>();
 
-        protected List<DefFunction> _overridableFunctions = new List<DefFunction>();
-        protected DefProperty[] _overridableProperties;
+        protected List<MemberMethodDefinition> _overridableFunctions = new List<MemberMethodDefinition>();
+        protected PropertyDefinition[] _overridableProperties;
         //protected List<DefField> _protectedFields = new List<DefField>();
-        protected Dictionary<DefFunction, int> _methodIndices = new Dictionary<DefFunction, int>();
+        protected Dictionary<MemberMethodDefinition, int> _methodIndices = new Dictionary<MemberMethodDefinition, int>();
         protected int _methodIndicesCount = 0;
 
-        protected List<DefMember> _cachedMembers = new List<DefMember>();
+        protected List<AbstractMemberDefinition> _cachedMembers = new List<AbstractMemberDefinition>();
 
-        public ClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public ClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
         {
             this._wrapper = wrapper;
             this._t = t;
             this._sb = sb;
 
-            foreach (DefClass iface in _t.GetInterfaces())
+            foreach (ClassDefinition iface in _t.GetInterfaces())
             {
                 AddTypeDependancy(iface);
                 _interfaces.Add(iface);
@@ -73,26 +73,26 @@ namespace AutoWrap.Meta
 
             _initCalled = true;
 
-            foreach (DefFunction f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _t.PublicMethods)
             {
                 if (f.IsListenerAdder && !f.IsIgnored)
                 {
-                    _listeners.Add((DefClass)f.Parameters[0].Type);
+                    _listeners.Add((ClassDefinition)f.Parameters[0].Type);
                 }
             }
 
-            foreach (DefClass iface in _t.GetInterfaces())
+            foreach (ClassDefinition iface in _t.GetInterfaces())
             {
                 // Add attributes of interface methods from the interface classes
-                foreach (DefFunction f in iface.Functions)
+                foreach (MemberMethodDefinition f in iface.Functions)
                 {
-                    DefFunction tf = _t.GetFunctionWithSignature(f.Signature);
+                    MemberMethodDefinition tf = _t.GetFunctionWithSignature(f.Signature);
                     if (tf != null)
                         tf.Attributes.AddRange(f.Attributes);
                 }
 
                 //Store properties of interface classes. They have precedence over type's properties.
-                foreach (DefProperty ip in iface.GetProperties())
+                foreach (PropertyDefinition ip in iface.GetProperties())
                 {
                     if (IsPropertyAllowed(ip) &&
                         (ip.ProtectionLevel == ProtectionLevel.Public
@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefField field in _t.Fields)
+            foreach (MemberFieldDefinition field in _t.Fields)
             {
                 if (!field.IsIgnored && field.Type.IsSTLContainer)
                 {
@@ -113,12 +113,12 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefClass iface in _interfaces)
+            foreach (ClassDefinition iface in _interfaces)
             {
                 if (iface == _t)
                     continue;
 
-                foreach (DefField field in iface.Fields)
+                foreach (MemberFieldDefinition field in iface.Fields)
                 {
                     if (!field.IsIgnored && field.Type.IsSTLContainer
                         && !field.IsStatic)
@@ -130,7 +130,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction func in _t.AbstractFunctions)
+            foreach (MemberMethodDefinition func in _t.AbstractFunctions)
             {
                 if (func.ProtectionType == ProtectionLevel.Public
                         || (AllowProtectedMembers && func.ProtectionType == ProtectionLevel.Protected))
@@ -143,7 +143,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefProperty prop in _t.AbstractProperties)
+            foreach (PropertyDefinition prop in _t.AbstractProperties)
             {
                 if (IsPropertyAllowed(prop) && (prop.ContainingClass.AllowSubClassing
                     || (prop.ContainingClass == _t && AllowSubclassing)))
@@ -161,7 +161,7 @@ namespace AutoWrap.Meta
             SearchOverridableFunctions(_t);
             //SearchProtectedFields(_t);
 
-            foreach (DefClass iface in _interfaces)
+            foreach (ClassDefinition iface in _interfaces)
             {
                 SearchOverridableFunctions(iface);
                 //SearchProtectedFields(iface);
@@ -171,18 +171,18 @@ namespace AutoWrap.Meta
 
             //Find cached members
 
-            foreach (DefMember m in _t.Members)
+            foreach (AbstractMemberDefinition m in _t.Members)
             {
                 if (m.HasAttribute<CachedAttribute>())
                     MarkCachedMember(m);
             }
 
-            foreach (DefClass iface in _interfaces)
+            foreach (ClassDefinition iface in _interfaces)
             {
                 if (iface == _t)
                     continue;
 
-                foreach (DefMember m in iface.Members)
+                foreach (AbstractMemberDefinition m in iface.Members)
                 {
                     if (m.HasAttribute<CachedAttribute>())
                         MarkCachedMember(m);
@@ -195,21 +195,21 @@ namespace AutoWrap.Meta
         /// </summary>
         /// <param name="funcs">The methods to convert. Must only contain getter and setter
         /// methods.</param>
-        public static DefProperty[] GetPropertiesFromFunctions(List<DefFunction> funcs)
+        public static PropertyDefinition[] GetPropertiesFromFunctions(List<MemberMethodDefinition> funcs)
         {
-            SortedList<string, DefProperty> props = new SortedList<string, DefProperty>();
+            SortedList<string, PropertyDefinition> props = new SortedList<string, PropertyDefinition>();
 
-            foreach (DefFunction f in funcs)
+            foreach (MemberMethodDefinition f in funcs)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
-                    DefProperty p = null;
+                    PropertyDefinition p = null;
 
                     if (props.ContainsKey(f.CLRName))
                         p = props[f.CLRName];
                     else
                     {
-                        p = new DefProperty(f.CLRName);
+                        p = new PropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
                             p.MemberTypeName = f.TypeName;
@@ -235,7 +235,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            DefProperty[] parr = new DefProperty[props.Count];
+            PropertyDefinition[] parr = new PropertyDefinition[props.Count];
             for (int i = 0; i < props.Count; i++)
                 parr[i] = props.Values[i];
 
@@ -298,19 +298,19 @@ namespace AutoWrap.Meta
             get { return _t.HasAttribute<ReadOnlyAttribute>(); }
         }
 
-        protected virtual bool DeclareAsVirtual(DefFunction f)
+        protected virtual bool DeclareAsVirtual(MemberMethodDefinition f)
         {
             return (f.IsVirtual && AllowVirtualMethods) || f.IsVirtualInterfaceMethod
                 || (f.IsVirtual && f.BaseFunction != null && f.BaseFunction.Class.AllowVirtuals);
         }
 
-        protected virtual bool DeclareAsOverride(DefFunction f)
+        protected virtual bool DeclareAsOverride(MemberMethodDefinition f)
         {
             return (f.IsOverride && DeclareAsVirtual(f))
                 || (f.IsVirtualInterfaceMethod && !f.Class.IsInterface && !f.Class.ContainsInterfaceFunctionSignature(f.Signature, false));
         }
 
-        protected DefClass GetTopClass(DefClass type)
+        protected ClassDefinition GetTopClass(ClassDefinition type)
         {
             if (type.BaseClass == null)
                 return type;
@@ -318,7 +318,7 @@ namespace AutoWrap.Meta
                 return GetTopClass(type.BaseClass);
         }
 
-        protected virtual void MarkCachedMember(DefMember m)
+        protected virtual void MarkCachedMember(AbstractMemberDefinition m)
         {
             if (m.IsStatic || AllowCachedMemberFields)
                 _cachedMembers.Add(m);
@@ -336,7 +336,7 @@ namespace AutoWrap.Meta
             return GetNativeInvokationTarget(false);
         }
 
-        protected virtual string GetNativeInvokationTarget(DefFunction f)
+        protected virtual string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
             if (!f.IsStatic)
             {
@@ -365,7 +365,7 @@ namespace AutoWrap.Meta
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.Class) + "::" + f.Name;
             }
         }
-        protected virtual string GetNativeInvokationTarget(DefField field)
+        protected virtual string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
             if (!field.IsStatic)
             {
@@ -395,9 +395,9 @@ namespace AutoWrap.Meta
             return "*(static_cast<" + ClassFullNativeName + "*>(_native))";
         }
 
-        protected virtual void SearchOverridableFunctions(DefClass type)
+        protected virtual void SearchOverridableFunctions(ClassDefinition type)
         {
-            foreach (DefFunction func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Functions)
             {
                 if (func.IsDeclarableFunction && func.IsVirtual)
                 {
@@ -414,16 +414,16 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefClass iface in type.GetInterfaces())
+            foreach (ClassDefinition iface in type.GetInterfaces())
                 SearchOverridableFunctions(iface);
 
             if (type.BaseClass != null)
                 SearchOverridableFunctions(type.BaseClass);
         }
 
-        protected bool ContainsFunction(DefFunction func, List<DefFunction> list)
+        protected bool ContainsFunction(MemberMethodDefinition func, List<MemberMethodDefinition> list)
         {
-            foreach (DefFunction lf in list)
+            foreach (MemberMethodDefinition lf in list)
             {
                 if (lf.Signature == func.Signature)
                     return true;
@@ -491,7 +491,7 @@ namespace AutoWrap.Meta
             return txt;
         }
 
-        protected virtual string ReplaceCustomVariables(string txt, DefFunction func)
+        protected virtual string ReplaceCustomVariables(string txt, MemberMethodDefinition func)
         {
             txt = ReplaceCustomVariables(txt);
             string replace;
@@ -526,7 +526,7 @@ namespace AutoWrap.Meta
 
         protected bool HasStaticCachedFields()
         {
-            foreach (DefMember m in _cachedMembers)
+            foreach (AbstractMemberDefinition m in _cachedMembers)
             {
                 if (m.IsStatic)
                     return true;
@@ -539,7 +539,7 @@ namespace AutoWrap.Meta
         {
             // If there are nested NativeDirectors, declare them before the declaration
             // of this class
-            foreach (DefType nested in _t.NestedTypes)
+            foreach (TypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
@@ -554,7 +554,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("//################################################################\n");
         }
 
-        protected virtual void AddNestedTypeBeforeMainType(DefType nested)
+        protected virtual void AddNestedTypeBeforeMainType(TypeDefinition nested)
         {
         }
 
@@ -614,24 +614,24 @@ namespace AutoWrap.Meta
 
         protected virtual void AddAllNestedTypes()
         {
-            List<DefType> enums = new List<DefType>();
-            List<DefType> nativePtrClasses = new List<DefType>();
-            List<DefType> rest = new List<DefType>();
-            List<DefType> typedefs = new List<DefType>();
+            List<TypeDefinition> enums = new List<TypeDefinition>();
+            List<TypeDefinition> nativePtrClasses = new List<TypeDefinition>();
+            List<TypeDefinition> rest = new List<TypeDefinition>();
+            List<TypeDefinition> typedefs = new List<TypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
             if(_t.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer))) {
                 return;
             }
 
-            foreach (DefType nested in _t.NestedTypes)
+            foreach (TypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (nested is DefEnum || _wrapper.TypeIsWrappable(nested))
+                    if (nested is EnumDefinition || _wrapper.TypeIsWrappable(nested))
                     {
-                        if (nested is DefEnum)
+                        if (nested is EnumDefinition)
                         {
                             enums.Add(nested);
                         }
@@ -642,7 +642,7 @@ namespace AutoWrap.Meta
                             else
                                 nativePtrClasses.Add(nested);
                         }
-                        else if (nested is DefTypeDef)
+                        else if (nested is TypedefDefinition)
                         {
                             typedefs.Add(nested);
                         }
@@ -652,35 +652,35 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefTypeDef nested in typedefs)
+            foreach (TypedefDefinition nested in typedefs)
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
                     AddNestedType(nested);
 
-            foreach (DefType nested in enums)
+            foreach (TypeDefinition nested in enums)
                 AddNestedType(nested);
 
-            foreach (DefType nested in nativePtrClasses)
+            foreach (TypeDefinition nested in nativePtrClasses)
                 AddNestedType(nested);
 
-            foreach (DefType nested in rest)
+            foreach (TypeDefinition nested in rest)
                 AddNestedType(nested);
 
-            List<DefType> iterators = new List<DefType>();
+            List<TypeDefinition> iterators = new List<TypeDefinition>();
 
             //Add typedefs after class declarations
-            foreach (DefTypeDef nested in typedefs)
+            foreach (TypedefDefinition nested in typedefs)
             {
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
                     continue;
 
-                if (CodeProducer.IsIteratorWrapper((DefTypeDef)nested))
+                if (CodeProducer.IsIteratorWrapper((TypedefDefinition)nested))
                     iterators.Add(nested);
                 else
                     AddNestedType(nested);
             }
 
             //Add iterators last
-            foreach (DefType nested in iterators)
+            foreach (TypeDefinition nested in iterators)
                 AddNestedType(nested);
 
             // Exit out here if this is CPP
@@ -692,9 +692,9 @@ namespace AutoWrap.Meta
 
             List<string> stls = new List<string>();
 
-            foreach (DefMember m in _t.Members)
+            foreach (AbstractMemberDefinition m in _t.Members)
             {
-                if ((m is DefField || (m is DefFunction && (m as DefFunction).IsDeclarableFunction))
+                if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                     && !m.IsIgnored
                     && ( m.ProtectionType == ProtectionLevel.Public
                         || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)) )
@@ -708,14 +708,14 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefClass iface in _interfaces)
+            foreach (ClassDefinition iface in _interfaces)
             {
                 if (iface == _t)
                     continue;
 
-                foreach (DefMember m in iface.Members)
+                foreach (AbstractMemberDefinition m in iface.Members)
                 {
-                    if ((m is DefField || (m is DefFunction && (m as DefFunction).IsDeclarableFunction))
+                    if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                         && !m.IsIgnored
                         && (m.ProtectionType == ProtectionLevel.Public
                             || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)))
@@ -737,7 +737,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicDeclarations()
         {
-            foreach (DefField field in _t.PublicFields)
+            foreach (MemberFieldDefinition field in _t.PublicFields)
             {
                 if (!field.IsIgnored)
                 {
@@ -750,7 +750,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefProperty p in _t.GetProperties())
+            foreach (PropertyDefinition p in _t.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
                     ( p.ProtectionLevel == ProtectionLevel.Public
@@ -762,7 +762,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _t.PublicMethods)
             {
                 if (f.IsOperatorOverload)
                 {
@@ -792,7 +792,7 @@ namespace AutoWrap.Meta
                 _sb.AppendLine();
             }
 
-            foreach (DefClass cls in _interfaces)
+            foreach (ClassDefinition cls in _interfaces)
             {
                 if (cls == _t)
                     continue;
@@ -801,13 +801,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddInterfaceImplementation(DefClass iface)
+        protected virtual void AddInterfaceImplementation(ClassDefinition iface)
         {
             _sb.AppendLine("//------------------------------------------------------------");
             _sb.AppendLine("// Implementation for " + iface.CLRName);
             _sb.AppendLine("//------------------------------------------------------------\n");
 
-            foreach (DefProperty ip in iface.GetProperties())
+            foreach (PropertyDefinition ip in iface.GetProperties())
             {
                 if (ip.IsStatic)
                     continue;
@@ -824,7 +824,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction inf in iface.DeclarableMethods)
+            foreach (MemberMethodDefinition inf in iface.DeclarableMethods)
             {
                 if (inf.IsStatic)
                     continue;
@@ -841,7 +841,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefField field in iface.Fields)
+            foreach (MemberFieldDefinition field in iface.Fields)
             {
                 if (!field.HasAttribute<IgnoreAttribute>())
                 {
@@ -863,22 +863,22 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddInterfaceProperty(DefProperty prop)
+        protected virtual void AddInterfaceProperty(PropertyDefinition prop)
         {
             AddProperty(prop);
         }
 
-        protected virtual void AddInterfaceMethod(DefFunction f)
+        protected virtual void AddInterfaceMethod(MemberMethodDefinition f)
         {
             AddMethod(f);
         }
 
-        protected virtual void AddInterfacePropertyField(DefField field)
+        protected virtual void AddInterfacePropertyField(MemberFieldDefinition field)
         {
             AddPropertyField(field);
         }
 
-        protected virtual void AddInterfaceMethodsForField(DefField field)
+        protected virtual void AddInterfaceMethodsForField(MemberFieldDefinition field)
         {
             AddMethodsForField(field);
         }
@@ -887,7 +887,7 @@ namespace AutoWrap.Meta
         {
             if (AllowSubclassing)
             {
-                foreach (DefField field in _t.ProtectedFields)
+                foreach (MemberFieldDefinition field in _t.ProtectedFields)
                 {
                     if (!field.IsIgnored)
                     {
@@ -900,7 +900,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                foreach (DefFunction f in _t.ProtectedMethods)
+                foreach (MemberMethodDefinition f in _t.ProtectedMethods)
                 {
                     if (f.IsDeclarableFunction &&
                         (AllowProtectedMembers || f.IsStatic || !f.IsVirtual) )
@@ -912,9 +912,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected DefProperty EnhanceProperty(DefProperty property)
+        protected PropertyDefinition EnhanceProperty(PropertyDefinition property)
         {
-            DefProperty prop = property.Clone();
+            PropertyDefinition prop = property.Clone();
             if (_t.BaseClass != null)
             {
                 if (!prop.CanWrite)
@@ -929,7 +929,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.GetterFunction))
                     {
-                        DefProperty bp = _t.BaseClass.GetProperty(prop.Name, true);
+                        PropertyDefinition bp = _t.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanWrite)
                         {
                             prop.SetterFunction = bp.SetterFunction;
@@ -949,7 +949,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.SetterFunction))
                     {
-                        DefProperty bp = _t.BaseClass.GetProperty(prop.Name, true);
+                        PropertyDefinition bp = _t.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanRead)
                         {
                             prop.GetterFunction = bp.GetterFunction;
@@ -961,27 +961,27 @@ namespace AutoWrap.Meta
             return prop;
         }
 
-        protected virtual void AddStaticField(DefField field)
+        protected virtual void AddStaticField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddMethodsForField(DefField field)
+        protected virtual void AddMethodsForField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddPropertyField(DefField field)
+        protected virtual void AddPropertyField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddNestedType(DefType nested)
+        protected virtual void AddNestedType(TypeDefinition nested)
         {
         }
 
-        protected virtual void AddMethod(DefFunction func)
+        protected virtual void AddMethod(MemberMethodDefinition func)
         {
         }
 
-        protected virtual void AddProperty(DefProperty prop)
+        protected virtual void AddProperty(PropertyDefinition prop)
         {
         }
 

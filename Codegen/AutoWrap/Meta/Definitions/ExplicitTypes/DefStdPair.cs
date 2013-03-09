@@ -20,7 +20,7 @@ namespace AutoWrap.Meta
             get { return "Pair<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">"; }
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
             {
@@ -32,7 +32,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             switch (param.PassedByType)
             {
@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefStdPair(typedef.Element);
         }

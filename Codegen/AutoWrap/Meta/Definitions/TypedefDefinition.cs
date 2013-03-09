@@ -6,9 +6,9 @@ namespace AutoWrap.Meta
     /// <summary>
     /// Describes a C++ <c>typedef</c>.
     /// </summary>
-    public class DefTypeDef : DefType
+    public class TypedefDefinition : TypeDefinition
     {
-        public override void ProduceDefaultParamValueConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion, out DefType dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -18,7 +18,7 @@ namespace AutoWrap.Meta
                 throw new Exception("Unexpected");
         }
 
-        public override void ProduceNativeParamConversionCode(DefParam param, out string preConversion, out string conversion, out string postConversion)
+        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
                 BaseType.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
@@ -26,7 +26,7 @@ namespace AutoWrap.Meta
                 base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             string s = BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullCLRName, FullCLRName);
             if (s.Contains("Mogre::int32"))
@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
                 BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
         }
 
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             return base.ProducePreCallParamConversionCode(param, out newname);
         }
 
-        public override string ProducePostCallParamConversionCleanupCode(DefParam param)
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
@@ -87,9 +87,9 @@ namespace AutoWrap.Meta
             return base.ProduceNativeCallConversionCode(expr, m);
         }
 
-        public static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            DefTypeDef expl = null;
+            TypedefDefinition expl = null;
 
             if (typedef.BaseTypeName.Contains("<") || typedef.BaseTypeName.Contains("std::") || Mogre17.IsCollection(typedef.BaseTypeName))
             {
@@ -148,9 +148,8 @@ namespace AutoWrap.Meta
             get { return BaseType.IsValueType; }
         }
 
-        private DefType _baseType;
-
-        public virtual DefType BaseType
+        private TypeDefinition _baseType;
+        public virtual TypeDefinition BaseType
         {
             get
             {
@@ -160,7 +159,7 @@ namespace AutoWrap.Meta
                     if (basename.Contains("<"))
                         basename = basename.Substring(0, basename.IndexOf("<")).Trim();
 
-                    _baseType = FindType<DefType>(basename, false);
+                    _baseType = FindType<TypeDefinition>(basename, false);
                 }
 
                 return _baseType;
@@ -171,7 +170,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return BaseType is DefInternal || (BaseType is DefTypeDef && (BaseType as DefTypeDef).IsTypedefOfInternalType);
+                return BaseType is DefInternal || (BaseType is TypedefDefinition && (BaseType as TypedefDefinition).IsTypedefOfInternalType);
             }
         }
 
@@ -198,7 +197,7 @@ namespace AutoWrap.Meta
                             isConst = true;
                             name = name.Substring("const ".Length);
                         }
-                        _types[i] = new DefTypeMember(FindType<DefType>(name, false), _passed[i], isConst);
+                        _types[i] = new TypeMemberDefinition(FindType<TypeDefinition>(name, false), _passed[i], isConst);
                     }
                 }
 
@@ -211,7 +210,7 @@ namespace AutoWrap.Meta
             get { return BaseTypeName.StartsWith("SharedPtr"); }
         }
 
-        public DefTypeDef(XmlElement elem)
+        public TypedefDefinition(XmlElement elem)
             : base(elem)
         {
             if (elem.Name != "typedef")

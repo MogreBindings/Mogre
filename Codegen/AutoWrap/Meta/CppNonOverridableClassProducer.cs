@@ -53,7 +53,7 @@ namespace AutoWrap.Meta
             if (IsAbstractClass)
             {
                 string className = GetClassName() + "_Default";
-                foreach (DefFunction f in _abstractFunctions)
+                foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
                     _sb.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("}\n");
                 }
 
-                foreach (DefProperty p in _abstractProperties)
+                foreach (PropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
                     string pname = className + "::" + p.Name;
@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNonOverridableClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppNonOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

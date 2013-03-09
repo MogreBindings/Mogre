@@ -44,7 +44,7 @@ namespace AutoWrap.Meta
             get { return false; }
         }
 
-        public IncNativeDirectorClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
         {
             _sb.AppendLine("interface class " + ReceiverInterfaceName + "\n{");
             _sb.IncreaseIndent();
-            foreach (DefFunction f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _t.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -92,7 +92,7 @@ namespace AutoWrap.Meta
             base.AddPreBody();
         }
 
-        public static void AddMethodHandlersClass(DefClass type, IndentStringBuilder sb)
+        public static void AddMethodHandlersClass(ClassDefinition type, IndentStringBuilder sb)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");
@@ -107,7 +107,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("public:");
             sb.IncreaseIndent();
 
-            foreach (DefFunction f in type.PublicMethods)
+            foreach (MemberMethodDefinition f in type.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
                     sb.AppendIndent("delegate static " + f.MemberTypeCLRName + " " + f.CLRName + "Handler(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
-                        DefParam param = f.Parameters[i];
+                        ParamDefinition param = f.Parameters[i];
                         sb.Append(" " + param.Type.GetCLRParamTypeName(param) + " " + param.Name);
                         if (i < f.Parameters.Count - 1) sb.Append(",");
                     }
@@ -170,7 +170,7 @@ namespace AutoWrap.Meta
         {
             _sb.AppendLine(DirectorName + "( " + ReceiverInterfaceName + "^ recv )");
             _sb.AppendIndent("\t: _receiver(recv)");
-            foreach (DefFunction f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _t.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -185,7 +185,7 @@ namespace AutoWrap.Meta
         protected override void AddPublicFields()
         {
             base.AddPublicFields();
-            foreach (DefFunction f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _t.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -194,12 +194,12 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethod(DefFunction f)
+        protected override void AddMethod(MemberMethodDefinition f)
         {
             _sb.AppendIndent(f.Definition.Replace(f.Class.FullNativeName + "::", "") + "(");
             for (int i = 0; i < f.Parameters.Count; i++)
             {
-                DefParam param = f.Parameters[i];
+                ParamDefinition param = f.Parameters[i];
                 _sb.Append(" ");
                 AddNativeMethodParam(param);
                 if (i < f.Parameters.Count - 1) _sb.Append(",");
@@ -207,7 +207,7 @@ namespace AutoWrap.Meta
             _sb.Append(" ) override;\n");
         }
 
-        protected virtual void AddNativeMethodParam(DefParam param)
+        protected virtual void AddNativeMethodParam(ParamDefinition param)
         {
             _sb.Append(param.MemberTypeNativeName + " " + param.Name);
         }

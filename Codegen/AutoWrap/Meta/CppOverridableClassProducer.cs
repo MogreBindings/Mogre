@@ -30,13 +30,13 @@ namespace AutoWrap.Meta
 {
     class CppNativeProxyClassProducer : NativeProxyClassProducer
     {
-        private static bool IsCachedFunction(DefFunction f)
+        private static bool IsCachedFunction(MemberMethodDefinition f)
         {
             return (f.PassedByType == PassedByType.Reference
                 && (f.Type.IsValueType || f.Type.IsPureManagedClass));
         }
 
-        public static void AddNativeProxyMethodBody(DefFunction f, string managedTarget, IndentStringBuilder sb)
+        public static void AddNativeProxyMethodBody(MemberMethodDefinition f, string managedTarget, IndentStringBuilder sb)
         {
             string managedCall;
             string fullPostConv = null;
@@ -48,14 +48,14 @@ namespace AutoWrap.Meta
             }
             else if (f.IsSetProperty)
             {
-                DefParam param = f.Parameters[0];
+                ParamDefinition param = f.Parameters[0];
                 managedCall = managedTarget + "->" + f.CLRName + " = " + param.Type.ProduceNativeCallConversionCode(param.Name, param);
             }
             else
             {
                 string pre, post, conv;
 
-                foreach (DefParam param in f.Parameters)
+                foreach (ParamDefinition param in f.Parameters)
                 {
                     param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                     if (!String.IsNullOrEmpty(pre))
@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
                     sb.AppendIndent(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
-                        DefParam param = f.Parameters[i];
+                        ParamDefinition param = f.Parameters[i];
                         param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                         sb.Append(" ");
                         if (explicitCast) sb.Append("(" + param.MemberTypeCLRName + ")");
@@ -90,7 +90,7 @@ namespace AutoWrap.Meta
                     managedCall = managedTarget + "->" + f.CLRName + "(";
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
-                        DefParam param = f.Parameters[i];
+                        ParamDefinition param = f.Parameters[i];
                         param.Type.ProduceNativeParamConversionCode(param, out pre, out conv, out post);
                         managedCall += " ";
                         if (explicitCast) managedCall += "(" + param.MemberTypeCLRName + ")";
@@ -112,7 +112,7 @@ namespace AutoWrap.Meta
                 {
                     string returnExpr;
                     string newname, expr, postcall;
-                    DefParam param = new DefParam(f, managedCall);
+                    ParamDefinition param = new ParamDefinition(f, managedCall);
                     expr = f.Type.ProducePreCallParamConversionCode(param, out newname);
                     postcall = f.Type.ProducePostCallParamConversionCleanupCode(param);
                     if (!String.IsNullOrEmpty(expr))
@@ -151,15 +151,15 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNativeProxyClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
 
-        protected override void AddOverridableFunction(DefFunction f)
+        protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
             _wrapper.CppCheckTypeForDependancy(f.Type);
-            foreach (DefParam param in f.Parameters)
+            foreach (ParamDefinition param in f.Parameters)
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
             _sb.AppendIndent("");
@@ -200,7 +200,7 @@ namespace AutoWrap.Meta
                 _sb.Append(f.Class.Name + "::" + f.Name + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
-                    DefParam param = f.Parameters[i];
+                    ParamDefinition param = f.Parameters[i];
                     _sb.Append(" " + param.Name);
                     if (i < f.Parameters.Count - 1) _sb.Append(",");
                 }
@@ -278,7 +278,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppOverridableClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _t, _sb));
@@ -304,12 +304,12 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override string GetNativeInvokationTarget(DefFunction f)
+        protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
             return "static_cast<" + ProxyName + "*>(_native)->" + f.Class.Name + "::" + f.Name;
         }
 
-        protected override string GetNativeInvokationTarget(DefField field)
+        protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
             return "static_cast<" + ProxyName + "*>(_native)->" + _t.FullNativeName + "::" + field.Name;
         }
@@ -338,7 +338,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddPublicConstructor(DefFunction f)
+        protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
             _sb.AppendIndent(GetClassName() + "::" + _t.Name);
             if (f == null)
@@ -386,7 +386,7 @@ namespace AutoWrap.Meta
                 _sb.Append(",");
                 for (int i = 0; i < count; i++)
                 {
-                    DefParam p = f.Parameters[i];
+                    ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
@@ -411,7 +411,7 @@ namespace AutoWrap.Meta
                     _sb.Append(",");
                     for (int i = 0; i < count; i++)
                     {
-                        DefParam p = f.Parameters[i];
+                        ParamDefinition p = f.Parameters[i];
                         string newname;
                         p.Type.ProducePreCallParamConversionCode(p, out newname);
                         _sb.Append(" " + newname);
@@ -439,9 +439,9 @@ namespace AutoWrap.Meta
 
     class CppSubclassingClassProducer : CppOverridableClassProducer
     {
-        protected DefClass[] _additionalInterfaces;
+        protected ClassDefinition[] _additionalInterfaces;
 
-        public CppSubclassingClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb, DefClass[] additionalInterfaces)
+        public CppSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb, ClassDefinition[] additionalInterfaces)
             : base(wrapper, t, sb)
         {
             this._additionalInterfaces = additionalInterfaces;
@@ -449,7 +449,7 @@ namespace AutoWrap.Meta
 
         protected override void Init()
         {
-            _interfaces = new List<DefClass>();
+            _interfaces = new List<ClassDefinition>();
 
             if (_additionalInterfaces != null)
                 _interfaces.AddRange(_additionalInterfaces);
@@ -481,20 +481,20 @@ namespace AutoWrap.Meta
         {
             if (_t.Constructors.Length > 0)
             {
-                foreach (DefFunction func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _t.Constructors)
                     AddPublicConstructor(func);
             }
             else
                 AddPublicConstructor(null);
 
             _sb.AppendLine();
-            foreach (DefProperty prop in _overridableProperties)
+            foreach (PropertyDefinition prop in _overridableProperties)
             {
                 AddProperty(prop);
                 _sb.AppendLine();
             }
 
-            foreach (DefFunction func in _overridableFunctions)
+            foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public)
                 {
@@ -506,7 +506,7 @@ namespace AutoWrap.Meta
 
         protected override void AddProtectedDeclarations()
         {
-            foreach (DefFunction func in _overridableFunctions)
+            foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {

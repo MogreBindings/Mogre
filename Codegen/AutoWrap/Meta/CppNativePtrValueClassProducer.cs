@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPublicConstructor(DefFunction f)
+        protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
         }
 
@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
             {
                 if (_t.Constructors.Length > 0)
                 {
-                    foreach (DefFunction func in _t.Constructors)
+                    foreach (MemberMethodDefinition func in _t.Constructors)
                         if (func.ProtectionType == ProtectionLevel.Public)
                             AddCreator(func);
                 }
@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddCreator(DefFunction f)
+        protected virtual void AddCreator(MemberMethodDefinition f)
         {
             if (f == null)
                 AddCreatorOverload(f, 0);
@@ -82,7 +82,7 @@ namespace AutoWrap.Meta
 
                 if (!f.HasAttribute<NoDefaultParamOverloadsAttribute>())
                 {
-                    foreach (DefParam param in f.Parameters)
+                    foreach (ParamDefinition param in f.Parameters)
                         if (param.DefaultValue != null)
                             defcount++;
                 }
@@ -99,7 +99,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddCreatorOverload(DefFunction f, int count)
+        protected virtual void AddCreatorOverload(MemberMethodDefinition f, int count)
         {
             _sb.AppendIndent(_t.FullCLRName + " " + GetClassName() + "::Create");
             if (f == null)
@@ -129,7 +129,7 @@ namespace AutoWrap.Meta
             {
                 for (int i = 0; i < count; i++)
                 {
-                    DefParam p = f.Parameters[i];
+                    ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
                     _sb.Append(" " + newname);
@@ -152,7 +152,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        public CppNativePtrValueClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

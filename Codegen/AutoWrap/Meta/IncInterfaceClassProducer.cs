@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncInterfaceClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncInterfaceClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -89,13 +89,13 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddMethod(DefFunction f)
+        protected override void AddMethod(MemberMethodDefinition f)
         {
             if (f.IsVirtual)
                 base.AddMethod(f);
         }
 
-        protected override void AddProperty(DefProperty p)
+        protected override void AddProperty(PropertyDefinition p)
         {
             if (p.IsVirtual)
                 base.AddProperty(p);

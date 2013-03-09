@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
 
             if (_t.Constructors.Length > 0)
             {
-                foreach (DefFunction func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _t.Constructors)
                     if (func.ProtectionType == ProtectionLevel.Public)
                         AddCreator(func);
             }
@@ -110,7 +110,7 @@ namespace AutoWrap.Meta
                 AddCreator(null);
         }
 
-        protected virtual void AddCreator(DefFunction f)
+        protected virtual void AddCreator(MemberMethodDefinition f)
         {
             if (f == null)
                 _sb.AppendLine("static " + _t.CLRName + " Create();");
@@ -120,7 +120,7 @@ namespace AutoWrap.Meta
 
                 if (!f.HasAttribute<NoDefaultParamOverloadsAttribute>())
                 {
-                    foreach (DefParam param in f.Parameters)
+                    foreach (ParamDefinition param in f.Parameters)
                         if (param.DefaultValue != null)
                             defcount++;
                 }
@@ -139,7 +139,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncNativePtrValueClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     class IncNativeProxyClassProducer : NativeProxyClassProducer
     {
-        public IncNativeProxyClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
             //Because of a possible compiler bug, in order for properties to access
             //protected members of a native class, they must be explicitely declared
             //with 'friend' specifier
-            foreach (DefProperty prop in _overridableProperties)
+            foreach (PropertyDefinition prop in _overridableProperties)
             {
                 if (prop.GetterFunction.ProtectionType == ProtectionLevel.Protected
                     || (prop.CanWrite && prop.SetterFunction.ProtectionType == ProtectionLevel.Protected))
@@ -88,7 +88,7 @@ namespace AutoWrap.Meta
 
             if (_t.IsInterface)
             {
-                foreach (DefField field in _t.Fields)
+                foreach (MemberFieldDefinition field in _t.Fields)
                 {
                     if (!field.IsIgnored
                         && field.ProtectionType == ProtectionLevel.Protected
@@ -113,7 +113,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
         }
 
-        protected override void AddConstructor(DefFunction f)
+        protected override void AddConstructor(MemberMethodDefinition f)
         {
             string className;
             if (_t.IsNested)
@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
             _sb.AppendIndent(ProxyName + "( " + className + "^ managedObj");
             if (f != null)
             {
-                foreach (DefParam param in f.Parameters)
+                foreach (ParamDefinition param in f.Parameters)
                     _sb.Append(", " + param.MemberTypeNativeName + " " + param.Name);
             }
 
@@ -138,7 +138,7 @@ namespace AutoWrap.Meta
                 _sb.AppendIndent("\t" + _t.FullNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
-                    DefParam param = f.Parameters[i];
+                    ParamDefinition param = f.Parameters[i];
                     _sb.Append(" " + param.Name);
                     if (i < f.Parameters.Count - 1)
                         _sb.Append(",");
@@ -158,7 +158,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        protected override void AddOverridableFunction(DefFunction f)
+        protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
             _sb.AppendIndent("");
             if (f.IsVirtual)
@@ -255,7 +255,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncOverridableClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _t, _sb));
@@ -281,12 +281,12 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override string GetNativeInvokationTarget(DefFunction f)
+        protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
             return "static_cast<" + ProxyName + "*>(_native)->" + f.Class.Name + "::" + f.Name;
         }
 
-        protected override string GetNativeInvokationTarget(DefField field)
+        protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
             return "static_cast<" + ProxyName + "*>(_native)->" + _t.FullNativeName + "::" + field.Name;
         }
@@ -327,9 +327,9 @@ namespace AutoWrap.Meta
 
     class IncSubclassingClassProducer : IncOverridableClassProducer
     {
-        protected DefClass[] _additionalInterfaces;
+        protected ClassDefinition[] _additionalInterfaces;
 
-        public IncSubclassingClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb, DefClass[] additionalInterfaces)
+        public IncSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb, ClassDefinition[] additionalInterfaces)
             : base(wrapper, t, sb)
         {
             this._additionalInterfaces = additionalInterfaces;
@@ -337,7 +337,7 @@ namespace AutoWrap.Meta
 
         protected override void Init()
         {
-            _interfaces = new List<DefClass>();
+            _interfaces = new List<ClassDefinition>();
 
             if (_additionalInterfaces != null)
                 _interfaces.AddRange(_additionalInterfaces);
@@ -361,7 +361,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override bool DeclareAsOverride(DefFunction f)
+        protected override bool DeclareAsOverride(MemberMethodDefinition f)
         {
             if (f.ProtectionType == ProtectionLevel.Public)
                 return true;
@@ -408,7 +408,7 @@ namespace AutoWrap.Meta
             AddPublicConstructors();
 
             _sb.AppendLine();
-            foreach (DefProperty prop in _overridableProperties)
+            foreach (PropertyDefinition prop in _overridableProperties)
             {
                 if (!prop.IsAbstract)
                 {
@@ -417,7 +417,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (DefFunction func in _overridableFunctions)
+            foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public
                     && !func.IsAbstract)
@@ -434,7 +434,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("protected public:");
             _sb.IncreaseIndent();
 
-            foreach (DefFunction func in _overridableFunctions)
+            foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {

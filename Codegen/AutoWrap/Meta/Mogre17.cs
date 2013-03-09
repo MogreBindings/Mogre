@@ -5,7 +5,7 @@ namespace AutoWrap.Meta
 {
 	internal class Mogre17
 	{
-		public static string GetBaseType(DefTypeDef typedef)
+		public static string GetBaseType(TypedefDefinition typedef)
 		{
 			string baseTypeName = typedef.BaseTypeName;
 

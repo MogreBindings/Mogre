@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     abstract class IncClassProducer : ClassProducer
     {
-        public IncClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             AddPreDeclarations();
@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddTypeDependancy(DefType type)
+        protected override void AddTypeDependancy(TypeDefinition type)
         {
             base.AddTypeDependancy(type);
             _wrapper.AddTypeDependancy(type);
@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void CheckTypeForDependancy(DefType type)
+        protected virtual void CheckTypeForDependancy(TypeDefinition type)
         {
             _wrapper.CheckTypeForDependancy(type);
         }
@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
             return m.MemberTypeCLRName;
         }
 
-        protected virtual string GetCLRParamTypeName(DefParam param)
+        protected virtual string GetCLRParamTypeName(ParamDefinition param)
         {
             CheckTypeForDependancy(param.Type);
             return param.Type.GetCLRParamTypeName(param);
@@ -92,7 +92,7 @@ namespace AutoWrap.Meta
                 _sb.AppendFormat("ref class {0}{1}\n", _t.CLRName, (IsAbstractClass) ? " abstract" : "");
         }
 
-        protected override void AddInterfaceMethod(DefFunction f)
+        protected override void AddInterfaceMethod(MemberMethodDefinition f)
         {
             _sb.DecreaseIndent();
             _sb.AppendLine(f.ProtectionType.GetCLRProtectionName() + ":");
@@ -100,7 +100,7 @@ namespace AutoWrap.Meta
             base.AddInterfaceMethod(f);
         }
 
-        protected override void AddInterfaceMethodsForField(DefField field)
+        protected override void AddInterfaceMethodsForField(MemberFieldDefinition field)
         {
             _sb.DecreaseIndent();
             _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
@@ -156,10 +156,10 @@ namespace AutoWrap.Meta
 
         protected virtual void AddEventFields()
         {
-            foreach (DefClass cls in _listeners)
+            foreach (ClassDefinition cls in _listeners)
             {
                 _sb.AppendLine(GetNativeDirectorName(cls) + "* " + NameToPrivate(cls.Name) + ";");
-                foreach (DefFunction f in cls.PublicMethods)
+                foreach (MemberMethodDefinition f in cls.PublicMethods)
                 {
                     if (f.IsDeclarableFunction)
                     {
@@ -209,7 +209,7 @@ namespace AutoWrap.Meta
                 _sb.AppendLine("}\n");
             }
 
-            foreach (DefClass cls in _interfaces)
+            foreach (ClassDefinition cls in _interfaces)
             {
                 _sb.AppendLine("virtual " + cls.FullNativeName + "* _" + cls.CLRName + "_GetNativePtr() = " + cls.CLRName + "::_GetNativePtr;");
                 _sb.AppendLine();
@@ -233,10 +233,10 @@ namespace AutoWrap.Meta
                 _sb.AppendLine(text);
             }
 
-            foreach (DefClass cls in _listeners)
+            foreach (ClassDefinition cls in _listeners)
             {
-                DefFunction removerFunc = null;
-                foreach (DefFunction func in _t.PublicMethods)
+                MemberMethodDefinition removerFunc = null;
+                foreach (MemberMethodDefinition func in _t.PublicMethods)
                 {
                     if (func.IsListenerRemover && func.Parameters[0].Type == cls)
                     {
@@ -307,7 +307,7 @@ namespace AutoWrap.Meta
 
 			if (_t.Constructors.Length > 0)
 			{
-				foreach (DefFunction func in _t.Constructors)
+				foreach (MemberMethodDefinition func in _t.Constructors)
 				{
 					if (func.ProtectionType == ProtectionLevel.Public && 
 						!func.HasAttribute<IgnoreAttribute>())
@@ -322,7 +322,7 @@ namespace AutoWrap.Meta
 			}
 		}
 
-        protected virtual void AddPublicConstructor(DefFunction function)
+        protected virtual void AddPublicConstructor(MemberMethodDefinition function)
         {
             string className = (_t.IsInterface) ? _t.Name : _t.CLRName;
 
@@ -336,7 +336,7 @@ namespace AutoWrap.Meta
 
                 if (!function.HasAttribute<NoDefaultParamOverloadsAttribute>())
                 {
-                    foreach (DefParam param in function.Parameters)
+                    foreach (ParamDefinition param in function.Parameters)
                         if (param.DefaultValue != null)
                             defcount++;
                 }
@@ -363,9 +363,9 @@ namespace AutoWrap.Meta
 
         protected virtual void AddEventInvokers()
         {
-            foreach (DefClass cls in _listeners)
+            foreach (ClassDefinition cls in _listeners)
             {
-                foreach (DefFunction f in cls.PublicMethods)
+                foreach (MemberMethodDefinition f in cls.PublicMethods)
                 {
                     if (f.IsDeclarableFunction)
                     {
@@ -378,7 +378,7 @@ namespace AutoWrap.Meta
                         _sb.Append(f.CLRName + "(");
                         for (int i = 0; i < f.Parameters.Count; i++)
                         {
-                            DefParam param = f.Parameters[i];
+                            ParamDefinition param = f.Parameters[i];
                             _sb.Append(" " + param.Name);
                             if (i < f.Parameters.Count - 1) _sb.Append(",");
                         }
@@ -393,10 +393,10 @@ namespace AutoWrap.Meta
 
         protected virtual void AddEventMethods()
         {
-            foreach (DefClass cls in _listeners)
+            foreach (ClassDefinition cls in _listeners)
             {
-                DefFunction adderFunc = null;
-                foreach (DefFunction func in _t.PublicMethods)
+                MemberMethodDefinition adderFunc = null;
+                foreach (MemberMethodDefinition func in _t.PublicMethods)
                 {
                     if (func.IsListenerAdder && func.Parameters[0].Type == cls)
                     {
@@ -407,7 +407,7 @@ namespace AutoWrap.Meta
                 if (adderFunc == null)
                     throw new Exception("Unexpected");
 
-                foreach (DefFunction f in cls.PublicMethods)
+                foreach (MemberMethodDefinition f in cls.PublicMethods)
                 {
                     if (f.IsDeclarableFunction)
                     {
@@ -474,7 +474,7 @@ namespace AutoWrap.Meta
                             _sb.AppendIndent("mp_return = " + "static_cast<" + handler + ">(" + list + "[i])(");
                             for (int i = 0; i < f.Parameters.Count; i++)
                             {
-                                DefParam param = f.Parameters[i];
+                                ParamDefinition param = f.Parameters[i];
                                 _sb.Append(" " + param.Name);
                                 if (i < f.Parameters.Count - 1) _sb.Append(",");
                             }
@@ -495,7 +495,7 @@ namespace AutoWrap.Meta
                             _sb.Append(privField + "->Invoke(");
                             for (int i = 0; i < f.Parameters.Count; i++)
                             {
-                                DefParam param = f.Parameters[i];
+                                ParamDefinition param = f.Parameters[i];
                                 _sb.Append(" " + param.Name);
                                 if (i < f.Parameters.Count - 1) _sb.Append(",");
                             }
@@ -524,7 +524,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddStaticField(DefField field)
+        protected override void AddStaticField(MemberFieldDefinition field)
         {
             base.AddStaticField(field);
             _sb.AppendIndent("");
@@ -533,7 +533,7 @@ namespace AutoWrap.Meta
             _sb.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.Type.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
-        protected override void AddNestedTypeBeforeMainType(DefType nested)
+        protected override void AddNestedTypeBeforeMainType(TypeDefinition nested)
         {
             base.AddNestedType(nested);
             _wrapper.IncAddType(nested, _sb);
@@ -542,15 +542,15 @@ namespace AutoWrap.Meta
         protected override void AddAllNestedTypes()
         {
             //Predeclare all nested classes in case there are classes referencing their "siblings"
-            foreach (DefType nested in _t.NestedTypes)
+            foreach (TypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    DefType expl = _t.FindType<DefType>(nested.Name);
+                    TypeDefinition expl = _t.FindType<TypeDefinition>(nested.Name);
 
                     if (expl.IsSTLContainer
-                        || ( !nested.IsValueType && nested is DefClass && !(nested as DefClass).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
+                        || ( !nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
                     {
                         _sb.AppendLine(nested.ProtectionLevel.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
                     }
@@ -562,13 +562,13 @@ namespace AutoWrap.Meta
             base.AddAllNestedTypes();
         }
 
-        protected override void AddNestedType(DefType nested)
+        protected override void AddNestedType(TypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {
                 //Interface and native director are already declared before the declaration of this class.
                 //Just declare the method handlers of the class.
-                IncNativeDirectorClassProducer.AddMethodHandlersClass((DefClass)nested, _sb);
+                IncNativeDirectorClassProducer.AddMethodHandlersClass((ClassDefinition)nested, _sb);
                 return;
             }
 
@@ -581,7 +581,7 @@ namespace AutoWrap.Meta
             if (_cachedMembers.Count > 0)
             {
                 _sb.AppendLine("//Cached fields");
-                foreach (DefMember m in _cachedMembers)
+                foreach (AbstractMemberDefinition m in _cachedMembers)
                 {
                     _sb.AppendIndent("");
                     if (m.IsStatic)
@@ -605,7 +605,7 @@ namespace AutoWrap.Meta
             {
                 if (baseclass != "") baseclass += ", ";
 
-                foreach (DefClass it in _interfaces)
+                foreach (ClassDefinition it in _interfaces)
                 {
                     AddTypeDependancy(it);
                     string itname = it.CLRName;
@@ -619,7 +619,7 @@ namespace AutoWrap.Meta
             {
                 if (baseclass != "") baseclass += ", ";
 
-                foreach (DefClass it in _listeners)
+                foreach (ClassDefinition it in _listeners)
                 {
                     AddTypeDependancy(it);
                     baseclass += "public " + GetNativeDirectorReceiverInterfaceName(it) + ", ";
@@ -630,7 +630,7 @@ namespace AutoWrap.Meta
             return baseclass;
         }
 
-        protected override void AddMethod(DefFunction f)
+        protected override void AddMethod(MemberMethodDefinition f)
         {
             if (f.HasAttribute<CustomIncDeclarationAttribute>())
             {
@@ -645,7 +645,7 @@ namespace AutoWrap.Meta
 
             if (!f.HasAttribute<NoDefaultParamOverloadsAttribute>())
             {
-                foreach (DefParam param in f.Parameters)
+                foreach (ParamDefinition param in f.Parameters)
                     if (param.DefaultValue != null)
                         defcount++;
             }
@@ -692,17 +692,17 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddMethodIndexAttribute(DefFunction f)
+        protected virtual void AddMethodIndexAttribute(MemberMethodDefinition f)
         {
             _sb.AppendLine("[Implementation::MethodIndex( " + _methodIndices[f] + " )]");
         }
 
-        protected virtual void AddMethodParameters(DefFunction f, int count)
+        protected virtual void AddMethodParameters(MemberMethodDefinition f, int count)
         {
             _sb.Append("(");
             for (int i = 0; i < count; i++)
             {
-                DefParam param = f.Parameters[i];
+                ParamDefinition param = f.Parameters[i];
 
                 _sb.Append(" " + GetCLRParamTypeName(param));
                 _sb.Append(" " + param.Name);
@@ -710,12 +710,12 @@ namespace AutoWrap.Meta
             }
             _sb.Append(" )");
         }
-        protected void AddMethodParameters(DefFunction f)
+        protected void AddMethodParameters(MemberMethodDefinition f)
         {
             AddMethodParameters(f, f.Parameters.Count);
         }
 
-        protected override void AddProperty(DefProperty p)
+        protected override void AddProperty(PropertyDefinition p)
         {
             //TODO comments for properties
             //AddComments(p);
@@ -723,7 +723,7 @@ namespace AutoWrap.Meta
             _sb.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
             if (p.CanRead)
             {
-                DefFunction f = p.GetterFunction;
+                MemberMethodDefinition f = p.GetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
                 if (p.GetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionLevel.Protected) )
@@ -754,7 +754,7 @@ namespace AutoWrap.Meta
             }
             if (p.CanWrite)
             {
-                DefFunction f = p.SetterFunction;
+                MemberMethodDefinition f = p.SetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
                 if (p.SetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionLevel.Protected) )
@@ -786,7 +786,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        protected override void AddPropertyField(DefField field)
+        protected override void AddPropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);
@@ -798,7 +798,7 @@ namespace AutoWrap.Meta
                 if (field.Type.HasAttribute<NativeValueContainerAttribute>()
                     || (field.Type.IsValueType && !field.Type.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    DefParam tmpParam = new DefParam(field, field.Name);
+                    ParamDefinition tmpParam = new ParamDefinition(field, field.Name);
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -878,10 +878,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethodsForField(DefField field)
+        protected override void AddMethodsForField(MemberFieldDefinition field)
         {
             _sb.AppendLine(GetCLRTypeName(field) + " get_" + field.Name + "();");
-            DefParam param = new DefParam(field, "value");
+            ParamDefinition param = new ParamDefinition(field, "value");
             _sb.AppendLine("void set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value);");
         }
 
@@ -889,7 +889,7 @@ namespace AutoWrap.Meta
         {
             //TODO
         }
-        protected virtual void AddComments(DefFunction f)
+        protected virtual void AddComments(MemberMethodDefinition f)
         {
             //TODO
         }

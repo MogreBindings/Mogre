@@ -167,7 +167,7 @@ namespace AutoWrap.Meta
         //        return base.GetNativeCallConversion(expr, m);
         //}
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             string baseTypeName = Mogre17.GetBaseType(typedef);
 

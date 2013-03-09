@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override bool IsPropertyAllowed(DefProperty p)
+        protected override bool IsPropertyAllowed(PropertyDefinition p)
         {
             if (base.IsPropertyAllowed(p))
             {
@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
             base.AddPublicFields();
         }
 
-        public IncSingletonClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncSingletonClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

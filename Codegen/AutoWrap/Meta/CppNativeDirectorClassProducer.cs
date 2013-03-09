@@ -35,12 +35,12 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public CppNativeDirectorClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public CppNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
 
-        protected override void AddPublicConstructor(DefFunction f)
+        protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
         }
 
@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethod(DefFunction f)
+        protected override void AddMethod(MemberMethodDefinition f)
         {
             string def = f.Definition.Replace(f.Class.FullNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
@@ -77,7 +77,7 @@ namespace AutoWrap.Meta
             _sb.AppendIndent(def);
             for (int i = 0; i < f.Parameters.Count; i++)
             {
-                DefParam param = f.Parameters[i];
+                ParamDefinition param = f.Parameters[i];
                 _sb.Append(" ");
                 AddNativeMethodParam(param);
                 if (i < f.Parameters.Count - 1) _sb.Append(",");
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        protected virtual void AddNativeMethodParam(DefParam param)
+        protected virtual void AddNativeMethodParam(ParamDefinition param)
         {
             _sb.Append(param.MemberTypeNativeName + " " + param.Name);
         }

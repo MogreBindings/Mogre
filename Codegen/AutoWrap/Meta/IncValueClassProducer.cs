@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
 
             if (IsReadOnly)
             {
-                foreach (DefField field in _t.PublicFields)
+                foreach (MemberFieldDefinition field in _t.PublicFields)
                 {
                     _sb.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
                 }
@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddPropertyField(DefField field)
+        protected override void AddPropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);
@@ -101,7 +101,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncValueClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncValueClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

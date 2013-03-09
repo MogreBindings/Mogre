@@ -55,15 +55,15 @@
     <Compile Include="Meta\AttributeHolder.cs" />
     <Compile Include="Meta\ClassProducer.cs" />
     <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
-    <Compile Include="Meta\Definitions\DefClass.cs" />
-    <Compile Include="Meta\Definitions\DefEnum.cs" />
-    <Compile Include="Meta\Definitions\DefField.cs" />
-    <Compile Include="Meta\Definitions\DefFunction.cs" />
-    <Compile Include="Meta\Definitions\DefParam.cs" />
-    <Compile Include="Meta\Definitions\DefProperty.cs" />
-    <Compile Include="Meta\Definitions\DefStruct.cs" />
-    <Compile Include="Meta\Definitions\DefTypeDef.cs" />
-    <Compile Include="Meta\Definitions\DefTypeMember.cs" />
+    <Compile Include="Meta\Definitions\ClassDefinition.cs" />
+    <Compile Include="Meta\Definitions\EnumDefinition.cs" />
+    <Compile Include="Meta\Definitions\MemberFieldDefinition.cs" />
+    <Compile Include="Meta\Definitions\MethodDefinition.cs" />
+    <Compile Include="Meta\Definitions\ParamDefinition.cs" />
+    <Compile Include="Meta\Definitions\PropertyDefinition.cs" />
+    <Compile Include="Meta\Definitions\StructDefinition.cs" />
+    <Compile Include="Meta\Definitions\TypedefDefinition.cs" />
+    <Compile Include="Meta\Definitions\TypeMemberDefinition.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefHashedVector.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefInternal.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefIterator.cs" />
@@ -110,9 +110,9 @@
     <Compile Include="Meta\CppNonOverridableClassProducer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Meta\Definitions\DefMember.cs" />
-    <Compile Include="Meta\Definitions\DefNameSpace.cs" />
-    <Compile Include="Meta\Definitions\DefType.cs" />
+    <Compile Include="Meta\Definitions\AbstractMemberDefinition.cs" />
+    <Compile Include="Meta\Definitions\NamespaceDefinition.cs" />
+    <Compile Include="Meta\Definitions\TypeDefinition.cs" />
     <Compile Include="Meta\IncClassProducer.cs" />
     <Compile Include="Meta\IncInterfaceClassProducer.cs" />
     <Compile Include="Meta\IncNativeDirectorClassProducer.cs" />

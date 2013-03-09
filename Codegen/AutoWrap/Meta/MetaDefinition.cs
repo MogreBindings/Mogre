@@ -36,7 +36,7 @@ namespace AutoWrap.Meta
         string _managedNamespace;
         List<KeyValuePair<AttributeHolder, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeHolder, AutoWrapAttribute>>();
 
-        public List<DefNameSpace> NameSpaces = new List<DefNameSpace>();
+        public List<NamespaceDefinition> NameSpaces = new List<NamespaceDefinition>();
 
         public MetaDefinition(string file)
         {
@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInNamespace(DefNameSpace nameSpace, XmlElement elem)
+        private void AddAttributesInNamespace(NamespaceDefinition nameSpace, XmlElement elem)
         {
             foreach (XmlNode child in elem.ChildNodes)
             {
@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInType(DefType type, XmlElement elem)
+        private void AddAttributesInType(TypeDefinition type, XmlElement elem)
         {
             foreach (XmlAttribute attr in elem.Attributes)
             {
@@ -105,11 +105,11 @@ namespace AutoWrap.Meta
                     case "struct":
                     case "enumeration":
                     case "typedef":
-                        AddAttributesInType((type as DefClass).GetNestedType((child as XmlElement).GetAttribute("name")), child as XmlElement);
+                        AddAttributesInType((type as ClassDefinition).GetNestedType((child as XmlElement).GetAttribute("name")), child as XmlElement);
                         break;
                     case "function":
                     case "variable":
-                        foreach (DefMember m in (type as DefClass).GetMembers((child as XmlElement).GetAttribute("name")))
+                        foreach (AbstractMemberDefinition m in (type as ClassDefinition).GetMembers((child as XmlElement).GetAttribute("name")))
                             AddAttributesInMember(m, child as XmlElement);
                         break;
                     default:
@@ -118,7 +118,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInMember(DefMember member, XmlElement elem)
+        private void AddAttributesInMember(AbstractMemberDefinition member, XmlElement elem)
         {
             foreach (XmlAttribute attr in elem.Attributes)
             {
@@ -140,12 +140,12 @@ namespace AutoWrap.Meta
                 switch (child.Name)
                 {
                     case "param":
-                        if (!(member is DefFunction))
+                        if (!(member is MemberMethodDefinition))
                             throw new Exception("Unexpected");
 
                         string name = (child as XmlElement).GetAttribute("name");
-                        DefParam param = null;
-                        foreach (DefParam p in (member as DefFunction).Parameters)
+                        ParamDefinition param = null;
+                        foreach (ParamDefinition p in (member as MemberMethodDefinition).Parameters)
                         {
                             if (p.Name == name)
                             {
@@ -193,10 +193,10 @@ namespace AutoWrap.Meta
             _holders.Add(new KeyValuePair<AttributeHolder, AutoWrapAttribute>(holder, attr));
         }
 
-        public DefNameSpace GetNameSpace(string name)
+        public NamespaceDefinition GetNameSpace(string name)
         {
-            DefNameSpace spc = null;
-            foreach (DefNameSpace ns in NameSpaces)
+            NamespaceDefinition spc = null;
+            foreach (NamespaceDefinition ns in NameSpaces)
             {
                 if (ns.NativeName == name)
                 {
@@ -216,12 +216,12 @@ namespace AutoWrap.Meta
             if (elem.Name != "namespace")
                 throw new Exception("Wrong element; expected 'namespace'.");
 
-            DefNameSpace spc = new DefNameSpace(elem, _managedNamespace);
+            NamespaceDefinition spc = new NamespaceDefinition(elem, _managedNamespace);
 
             if (spc.NativeName.Contains("::"))
             {
                 string pname = spc.NativeName.Substring(0, spc.NativeName.LastIndexOf("::"));
-                foreach (DefNameSpace fns in NameSpaces)
+                foreach (NamespaceDefinition fns in NameSpaces)
                 {
                     if (fns.NativeName == pname)
                     {

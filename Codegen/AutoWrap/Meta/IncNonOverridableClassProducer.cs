@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
                 _sb.AppendLine("public:");
                 _sb.IncreaseIndent();
 
-                foreach (DefFunction f in _abstractFunctions)
+                foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
                     _sb.AppendIndent("virtual ");
                     _sb.Append(GetCLRTypeName(f) + " " + f.CLRName);
@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
                     _sb.Append(" override;\n");
                 }
 
-                foreach (DefProperty p in _abstractProperties)
+                foreach (PropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
                     _sb.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
@@ -108,7 +108,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncNonOverridableClassProducer(Wrapper wrapper, DefClass t, IndentStringBuilder sb)
+        public IncNonOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

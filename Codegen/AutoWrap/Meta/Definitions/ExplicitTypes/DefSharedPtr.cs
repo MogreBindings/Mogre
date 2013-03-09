@@ -5,13 +5,13 @@ namespace AutoWrap.Meta
 {
     internal class DefSharedPtr : DefTemplateOneType
     {
-        public override string ProducePreCallParamConversionCode(DefParam param, out string newname)
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
             return String.Empty;
         }
 
-        public override string GetCLRParamTypeName(DefParam param)
+        public override string GetCLRParamTypeName(ParamDefinition param)
         {
             return GetCLRTypeName(param);
         }
@@ -40,7 +40,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static DefTypeDef CreateExplicitType(DefTypeDef typedef)
+        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
             return new DefSharedPtr(typedef.Element);
         }
