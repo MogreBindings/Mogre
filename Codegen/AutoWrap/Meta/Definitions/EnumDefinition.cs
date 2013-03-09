@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class EnumDefinition : TypeDefinition
+    public class EnumDefinition : AbstractTypeDefinition
     {
         public override bool IsValueType
         {
@@ -21,7 +21,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;

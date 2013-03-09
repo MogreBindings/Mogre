@@ -49,7 +49,7 @@ namespace AutoWrap.Meta
 
         public string CLRName;
 
-        public List<TypeDefinition> Types = new List<TypeDefinition>();
+        public List<AbstractTypeDefinition> Types = new List<AbstractTypeDefinition>();
 
         public T FindType<T>(string name)
         {
@@ -83,19 +83,19 @@ namespace AutoWrap.Meta
                     return ParentNameSpace.FindType<T>(name, raiseException);
             }
 
-            if(type is TypeDefinition) {
+            if(type is AbstractTypeDefinition) {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
-                if(((TypeDefinition)(object)type).IsIgnored) {
+                if(((AbstractTypeDefinition)(object)type).IsIgnored) {
                     return (T)(object)type;
                 }
             }
 
-            return (T)(object)((TypeDefinition)(object)type).CreateExplicitType();
+            return (T)(object)((AbstractTypeDefinition)(object)type).CreateExplicitType();
         }
 
-        protected virtual T FindTypeInList<T>(string name, List<TypeDefinition> types, bool raiseException)
+        protected virtual T FindTypeInList<T>(string name, List<AbstractTypeDefinition> types, bool raiseException)
         {
-            List<TypeDefinition> list = new List<TypeDefinition>();
+            List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
 
             string topname = name;
             string nextnames = null;
@@ -106,7 +106,7 @@ namespace AutoWrap.Meta
                 nextnames = name.Substring(name.IndexOf("::") + 2);
             }
 
-            foreach (TypeDefinition t in types)
+            foreach (AbstractTypeDefinition t in types)
             {
                 if (t is T && t.Name == topname)
                 {
@@ -150,7 +150,7 @@ namespace AutoWrap.Meta
 
             foreach (XmlElement child in elem.ChildNodes)
             {
-                TypeDefinition type = TypeDefinition.CreateType(child);
+                AbstractTypeDefinition type = AbstractTypeDefinition.CreateType(child);
                 if (type != null)
                 {
                     type.NameSpace = this;
@@ -159,10 +159,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public TypeDefinition GetDefType(string name)
+        public AbstractTypeDefinition GetDefType(string name)
         {
-            TypeDefinition type = null;
-            foreach (TypeDefinition t in Types)
+            AbstractTypeDefinition type = null;
+            foreach (AbstractTypeDefinition t in Types)
             {
                 if (t.Name == name)
                 {

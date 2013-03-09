@@ -539,7 +539,7 @@ namespace AutoWrap.Meta
         {
             // If there are nested NativeDirectors, declare them before the declaration
             // of this class
-            foreach (TypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
@@ -554,7 +554,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("//################################################################\n");
         }
 
-        protected virtual void AddNestedTypeBeforeMainType(TypeDefinition nested)
+        protected virtual void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
         }
 
@@ -614,17 +614,17 @@ namespace AutoWrap.Meta
 
         protected virtual void AddAllNestedTypes()
         {
-            List<TypeDefinition> enums = new List<TypeDefinition>();
-            List<TypeDefinition> nativePtrClasses = new List<TypeDefinition>();
-            List<TypeDefinition> rest = new List<TypeDefinition>();
-            List<TypeDefinition> typedefs = new List<TypeDefinition>();
+            List<AbstractTypeDefinition> enums = new List<AbstractTypeDefinition>();
+            List<AbstractTypeDefinition> nativePtrClasses = new List<AbstractTypeDefinition>();
+            List<AbstractTypeDefinition> rest = new List<AbstractTypeDefinition>();
+            List<AbstractTypeDefinition> typedefs = new List<AbstractTypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
             if(_t.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer))) {
                 return;
             }
 
-            foreach (TypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
@@ -656,16 +656,16 @@ namespace AutoWrap.Meta
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
                     AddNestedType(nested);
 
-            foreach (TypeDefinition nested in enums)
+            foreach (AbstractTypeDefinition nested in enums)
                 AddNestedType(nested);
 
-            foreach (TypeDefinition nested in nativePtrClasses)
+            foreach (AbstractTypeDefinition nested in nativePtrClasses)
                 AddNestedType(nested);
 
-            foreach (TypeDefinition nested in rest)
+            foreach (AbstractTypeDefinition nested in rest)
                 AddNestedType(nested);
 
-            List<TypeDefinition> iterators = new List<TypeDefinition>();
+            List<AbstractTypeDefinition> iterators = new List<AbstractTypeDefinition>();
 
             //Add typedefs after class declarations
             foreach (TypedefDefinition nested in typedefs)
@@ -680,7 +680,7 @@ namespace AutoWrap.Meta
             }
 
             //Add iterators last
-            foreach (TypeDefinition nested in iterators)
+            foreach (AbstractTypeDefinition nested in iterators)
                 AddNestedType(nested);
 
             // Exit out here if this is CPP
@@ -973,7 +973,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected virtual void AddNestedType(TypeDefinition nested)
+        protected virtual void AddNestedType(AbstractTypeDefinition nested)
         {
         }
 

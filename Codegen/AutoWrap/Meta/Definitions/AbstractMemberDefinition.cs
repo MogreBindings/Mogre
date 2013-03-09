@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
         {
             get { return this.Class; }
         }
-        TypeDefinition ITypeMember.MemberType
+        AbstractTypeDefinition ITypeMember.MemberType
         {
             get { return this.Type; }
         }
@@ -96,8 +96,8 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        TypeDefinition _type = null;
-        public virtual TypeDefinition Type
+        AbstractTypeDefinition _type = null;
+        public virtual AbstractTypeDefinition Type
         {
             get
             {
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
                         _type.SurroundingClass = Class;
                     }
                     else
-                        _type = Class.FindType<TypeDefinition>(TypeName, false);
+                        _type = Class.FindType<AbstractTypeDefinition>(TypeName, false);
                 }
 
                 return _type;
@@ -184,7 +184,7 @@ namespace AutoWrap.Meta
         public AbstractMemberDefinition(XmlElement elem)
         {
             this._elem = elem;
-            this.ProtectionType = TypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
+            this.ProtectionType = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
             this.PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)

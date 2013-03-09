@@ -111,9 +111,9 @@ namespace AutoWrap.Meta
         public string NativeNamespace;
         public string ManagedNamespace;
         public List<string> PreDeclarations = new List<string>();
-        public List<TypeDefinition> PragmaMakePublicTypes = new List<TypeDefinition>();
-        public List<TypeDefinition> UsedTypes = new List<TypeDefinition>();
-        public SortedList<string, List<TypeDefinition>> IncludeFiles = new SortedList<string, List<TypeDefinition>>();
+        public List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
+        public List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
+        public SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
         public List<ClassDefinition> Overridables = new List<ClassDefinition>();
         public List<ClassProducer> PostClassProducers = new List<ClassProducer>();
         public List<ClassProducer> PreClassProducers = new List<ClassProducer>();
@@ -127,15 +127,15 @@ namespace AutoWrap.Meta
 
             foreach (NamespaceDefinition space in meta.NameSpaces)
             {
-                foreach (TypeDefinition type in space.Types)
+                foreach (AbstractTypeDefinition type in space.Types)
                 {
 
                     if (TypeIsWrappable(type))
                     {
-                        List<TypeDefinition> list;
+                        List<AbstractTypeDefinition> list;
                         if (!IncludeFiles.TryGetValue(type.IncludeFile, out list))
                         {
-                            list = new List<TypeDefinition>();
+                            list = new List<AbstractTypeDefinition>();
                             IncludeFiles.Add(type.IncludeFile, list);
                         }
 
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                foreach (TypeDefinition type in space.Types)
+                foreach (AbstractTypeDefinition type in space.Types)
                 {
                     if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFile))
                         if (!IncludeFiles[type.IncludeFile].Contains(type))
@@ -172,7 +172,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public bool TypeIsWrappable(TypeDefinition type)
+        public bool TypeIsWrappable(AbstractTypeDefinition type)
         {
             if (type.Name.StartsWith("DLL_"))
             {
@@ -186,7 +186,7 @@ namespace AutoWrap.Meta
             }
 
             // Get explicit type or a new type if type has ReplaceBy attribute
-            type = (type.IsNested) ? type.SurroundingClass.FindType<TypeDefinition>(type.Name) : type.NameSpace.FindType<TypeDefinition>(type.Name);
+            type = (type.IsNested) ? type.SurroundingClass.FindType<AbstractTypeDefinition>(type.Name) : type.NameSpace.FindType<AbstractTypeDefinition>(type.Name);
 
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
@@ -228,7 +228,7 @@ namespace AutoWrap.Meta
                 {
                     foreach (ITypeMember m in (type as TypedefDefinition).TypeMembers)
                     {
-                        TypeDefinition mt = m.MemberType;
+                        AbstractTypeDefinition mt = m.MemberType;
                         if (!mt.IsValueType && !mt.IsPureManagedClass
                             && !TypeIsWrappable(mt))
                             return false;
@@ -244,7 +244,7 @@ namespace AutoWrap.Meta
                         {
                             try
                             {
-                                TypeDefinition notconst = type.FindType<TypeDefinition>(type.Name.Substring("Const".Length), true);
+                                AbstractTypeDefinition notconst = type.FindType<AbstractTypeDefinition>(type.Name.Substring("Const".Length), true);
                                 return false;
                             }
                             catch
@@ -328,13 +328,13 @@ namespace AutoWrap.Meta
             // Create MakePublicDeclarations.h
             //
             builder.Clear();
-            List<TypeDefinition> typesForMakePublic = new List<TypeDefinition>();
+            List<AbstractTypeDefinition> typesForMakePublic = new List<AbstractTypeDefinition>();
 
-            foreach (TypeDefinition t in PragmaMakePublicTypes)
+            foreach (AbstractTypeDefinition t in PragmaMakePublicTypes)
             {
                 if (t is ClassDefinition && !t.IsNested && !t.IsIgnored)
                 {
-                    TypeDefinition type = t.FindType<TypeDefinition>(t.Name);
+                    AbstractTypeDefinition type = t.FindType<AbstractTypeDefinition>(t.Name);
 
                     if (type.FullNativeName.StartsWith(NativeNamespace + "::")
                         && type is ClassDefinition && !type.IsTemplate)
@@ -351,7 +351,7 @@ namespace AutoWrap.Meta
             builder.AppendLine("namespace " + NativeNamespace);
             builder.AppendLine("{");
 
-            foreach (TypeDefinition type in typesForMakePublic)
+            foreach (AbstractTypeDefinition type in typesForMakePublic)
             {
                 if (type is StructDefinition)
                     builder.Append("struct ");
@@ -363,7 +363,7 @@ namespace AutoWrap.Meta
             builder.AppendLine("}");
             builder.AppendLine();
 
-            foreach (TypeDefinition type in typesForMakePublic)
+            foreach (AbstractTypeDefinition type in typesForMakePublic)
             {
                 builder.AppendLine("#pragma make_public( " + type.FullNativeName + " )");
             }
@@ -378,7 +378,7 @@ namespace AutoWrap.Meta
 
             foreach (string include in IncludeFiles.Keys)
             {
-                foreach (TypeDefinition t in IncludeFiles[include])
+                foreach (AbstractTypeDefinition t in IncludeFiles[include])
                     AddCLRObjects(t, clrObjs);
             }
 
@@ -413,7 +413,7 @@ namespace AutoWrap.Meta
             return "void _Init_CLRObject_" + name + "(CLRObject* pClrObj)";
         }
 
-        void AddCLRObjects(TypeDefinition t, List<ClassDefinition> clrObjs) {
+        void AddCLRObjects(AbstractTypeDefinition t, List<ClassDefinition> clrObjs) {
             ClassDefinition cls = t as ClassDefinition;
             if (cls == null)
                 return;
@@ -423,7 +423,7 @@ namespace AutoWrap.Meta
             if (cls.HasAttribute<CLRObjectAttribute>(true))
                 clrObjs.Add(cls);
 
-            foreach (TypeDefinition nested in cls.NestedTypes)
+            foreach (AbstractTypeDefinition nested in cls.NestedTypes)
                 AddCLRObjects(nested, clrObjs);
         }
 
@@ -504,7 +504,7 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             IndentStringBuilder sbTypes = new IndentStringBuilder();
-            foreach (TypeDefinition t in IncludeFiles[includeFile])
+            foreach (AbstractTypeDefinition t in IncludeFiles[includeFile])
             {
                 IncAddType(t, sbTypes);
             }
@@ -543,7 +543,7 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             IndentStringBuilder contentsb = new IndentStringBuilder();
-            foreach (TypeDefinition t in IncludeFiles[include])
+            foreach (AbstractTypeDefinition t in IncludeFiles[include])
             {
                 CppAddType(t, contentsb);
             }
@@ -673,7 +673,7 @@ namespace AutoWrap.Meta
             return sb.ToString().Replace("\r", "");
         }
 
-        public void IncAddType(TypeDefinition t, IndentStringBuilder sb)
+        public void IncAddType(AbstractTypeDefinition t, IndentStringBuilder sb)
         {
             if (t.HasAttribute<CustomIncClassDefinitionAttribute>())
             {
@@ -766,7 +766,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public void CppAddType(TypeDefinition t, IndentStringBuilder sb)
+        public void CppAddType(AbstractTypeDefinition t, IndentStringBuilder sb)
         {
             if (t.HasAttribute<CustomCppClassDefinitionAttribute>())
             {
@@ -878,7 +878,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("};\n");
         }
 
-        private void IncAddSharedPtrType(TypeDefinition type, IndentStringBuilder sb)
+        private void IncAddSharedPtrType(AbstractTypeDefinition type, IndentStringBuilder sb)
         {
             if (!type.Name.EndsWith("Ptr"))
                 throw new Exception("SharedPtr class that doesn't have a name ending to 'Ptr'");
@@ -893,7 +893,7 @@ namespace AutoWrap.Meta
             int e = basename.LastIndexOf(">");
             string baseClass = basename.Substring(s + 1, e - s - 1).Trim();
             //string nativeClass = _nativePrefix + "::" + baseClass;
-            TypeDefinition baseType = type.FindType<TypeDefinition>(baseClass);
+            AbstractTypeDefinition baseType = type.FindType<AbstractTypeDefinition>(baseClass);
             string nativeClass = baseType.FullNativeName;
 
             string className = type.FullCLRName;
@@ -1380,12 +1380,12 @@ namespace AutoWrap.Meta
             sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
         }
 
-        private void IncAddIncludeFiles(string include, List<TypeDefinition> usedTypes, IndentStringBuilder sb)
+        private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, IndentStringBuilder sb)
         {
             sb.AppendFormat("#include \"{0}\"\n", include);
             List<string> added = new List<string>();
 
-            foreach (TypeDefinition type in usedTypes)
+            foreach (AbstractTypeDefinition type in usedTypes)
             {
                 if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
                     continue;
@@ -1400,13 +1400,13 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        private void CppAddIncludeFiles(string include, List<TypeDefinition> usedTypes, IndentStringBuilder sb)
+        private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, IndentStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
             sb.AppendFormat("#include \"{0}\"\n", GetManagedIncludeFileName(include));
             List<string> added = new List<string>();
 
-            foreach (TypeDefinition type in usedTypes)
+            foreach (AbstractTypeDefinition type in usedTypes)
             {
                 if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
                     continue;
@@ -1421,7 +1421,7 @@ namespace AutoWrap.Meta
             sb.AppendLine();
         }
 
-        public virtual void AddTypeDependancy(TypeDefinition type)
+        public virtual void AddTypeDependancy(AbstractTypeDefinition type)
         {
             if (!UsedTypes.Contains(type))
                 this.UsedTypes.Add(type);
@@ -1433,13 +1433,13 @@ namespace AutoWrap.Meta
                 PreDeclarations.Add(decl);
         }
 
-        public virtual void AddPragmaMakePublicForType(TypeDefinition type)
+        public virtual void AddPragmaMakePublicForType(AbstractTypeDefinition type)
         {
             if (!PragmaMakePublicTypes.Contains(type))
                 PragmaMakePublicTypes.Add(type);
         }
 
-        public virtual void CheckTypeForDependancy(TypeDefinition type)
+        public virtual void CheckTypeForDependancy(AbstractTypeDefinition type)
         {
             if (type is EnumDefinition
                 || (!(type is IDefString) && type is TypedefDefinition && (type as TypedefDefinition).BaseType is DefInternal)
@@ -1455,7 +1455,7 @@ namespace AutoWrap.Meta
                 AddPragmaMakePublicForType(type);
         }
 
-        public virtual void CppCheckTypeForDependancy(TypeDefinition type)
+        public virtual void CppCheckTypeForDependancy(AbstractTypeDefinition type)
         {
             if (!(type is EnumDefinition)
                 && !type.IsNested

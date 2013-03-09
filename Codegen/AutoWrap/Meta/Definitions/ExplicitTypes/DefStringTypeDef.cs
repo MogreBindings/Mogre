@@ -17,7 +17,7 @@ namespace AutoWrap.Meta
 
         public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, 
                                                         out string conversion, out string postConversion,
-                                                        out TypeDefinition dependancyType)
+                                                        out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -39,7 +39,7 @@ namespace AutoWrap.Meta
                         }
 
                         string name = conversion.Substring(0, conversion.LastIndexOf("::"));
-                        dependancyType = FindType<TypeDefinition>(name);
+                        dependancyType = FindType<AbstractTypeDefinition>(name);
                     }
                     break;
                 default:

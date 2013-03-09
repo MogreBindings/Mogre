@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
             return true;
         }
 
-        protected virtual TypeDefinition CreateExplicitContainerType(string container, string key, string val)
+        protected virtual AbstractTypeDefinition CreateExplicitContainerType(string container, string key, string val)
         {
             string stdcont = "std::" + container;
             XmlDocument doc = new XmlDocument();
@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
                 elem.InsertAfter(te, null);
             }
 
-            return TypedefDefinition.CreateExplicitType((TypedefDefinition)TypeDefinition.CreateType(elem));
+            return TypedefDefinition.CreateExplicitType((TypedefDefinition)AbstractTypeDefinition.CreateType(elem));
         }
 
         protected virtual string NameToPrivate(string name)
@@ -121,7 +121,7 @@ namespace AutoWrap.Meta
             return NameToPrivate(name);
         }
 
-        protected virtual void AddTypeDependancy(TypeDefinition type)
+        protected virtual void AddTypeDependancy(AbstractTypeDefinition type)
         {
         }
 

@@ -19,7 +19,7 @@ namespace AutoWrap.Meta
             get { throw new Exception("Unexpected"); }
         }
 
-        TypeDefinition ITypeMember.MemberType
+        AbstractTypeDefinition ITypeMember.MemberType
         {
             get { return _type; }
         }
@@ -57,10 +57,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected TypeDefinition _type;
+        protected AbstractTypeDefinition _type;
         protected PassedByType _passed;
 
-        public TypeMemberDefinition(TypeDefinition type, PassedByType passed, bool isConst)
+        public TypeMemberDefinition(AbstractTypeDefinition type, PassedByType passed, bool isConst)
         {
             _type = type;
             _passed = passed;

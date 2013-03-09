@@ -39,7 +39,7 @@ namespace AutoWrap.Meta
             //}
         }
 
-        protected override void AddTypeDependancy(TypeDefinition type)
+        protected override void AddTypeDependancy(AbstractTypeDefinition type)
         {
             _wrapper.CppCheckTypeForDependancy(type);
         }
@@ -250,13 +250,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddNestedTypeBeforeMainType(TypeDefinition nested)
+        protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
             base.AddNestedType(nested);
             _wrapper.CppAddType(nested, _sb);
         }
 
-        protected override void AddNestedType(TypeDefinition nested)
+        protected override void AddNestedType(AbstractTypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {
@@ -339,7 +339,7 @@ namespace AutoWrap.Meta
                             hasPostConversions = true;
 
                         string n1, n2, n3;
-                        TypeDefinition dependancy;
+                        AbstractTypeDefinition dependancy;
                         p.Type.ProduceDefaultParamValueConversionCode(p, out n1, out n2, out n3, out dependancy);
                         if (dependancy != null)
                             AddTypeDependancy(dependancy);

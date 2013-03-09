@@ -11,7 +11,7 @@
         /// The member's type. For fields and properties this is the data type.
         /// For methods this is the return type.
         /// </summary>
-        TypeDefinition MemberType { get; }
+        AbstractTypeDefinition MemberType { get; }
 
         /// <summary>
         /// The name of this member's type - valid for both C++ and C++/CLI. May be different from 

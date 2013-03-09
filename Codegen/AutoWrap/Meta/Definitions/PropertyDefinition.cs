@@ -61,7 +61,7 @@
 
         #region ITypeMember Implementations
 
-        public TypeDefinition MemberType
+        public AbstractTypeDefinition MemberType
         {
             get { return (CanRead) ? GetterFunction.Type : SetterFunction.Parameters[0].Type; }
         }

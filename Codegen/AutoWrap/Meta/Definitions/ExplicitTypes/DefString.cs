@@ -2,7 +2,7 @@
 
 namespace AutoWrap.Meta
 {
-    class DefString : TypeDefinition, IDefString
+    class DefString : AbstractTypeDefinition, IDefString
     {
         public override string FullNativeName
         {
@@ -14,7 +14,7 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
                         }
 
                         string name = conversion.Substring(0, conversion.LastIndexOf("::"));
-                        dependancyType = FindType<TypeDefinition>(name);
+                        dependancyType = FindType<AbstractTypeDefinition>(name);
                     }
                     break;
                 default:

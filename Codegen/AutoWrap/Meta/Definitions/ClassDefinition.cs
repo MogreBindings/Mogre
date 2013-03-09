@@ -5,385 +5,16 @@ using System.Collections;
 
 namespace AutoWrap.Meta
 {
-    public class ClassDefinition : TypeDefinition
+    /// <summary>
+    /// Describes a class.
+    /// </summary>
+    /// <seealso cref="StructDefinition"/>
+    public class ClassDefinition : AbstractTypeDefinition
     {
         public List<AbstractMemberDefinition> Members = new List<AbstractMemberDefinition>();
-        public List<TypeDefinition> NestedTypes = new List<TypeDefinition>();
+        public List<AbstractTypeDefinition> NestedTypes = new List<AbstractTypeDefinition>();
         public string[] Derives;
         public string[] Inherits;
-
-        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
-        {
-            switch (param.PassedByType)
-            {
-                case PassedByType.PointerPointer:
-                    preConversion = FullCLRName + "^ out_" + param.Name + ";";
-                    conversion = "out_" + param.Name;
-                    postConversion = "if (" + param.Name + ") *" + param.Name + " = out_" + param.Name + ";";
-                    return;
-            }
-
-            base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
-        }
-
-        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
-        {
-            if (param.DefaultValue == null)
-                throw new Exception("Unexpected");
-
-            preConversion = postConversion = "";
-            dependancyType = null;
-            switch (param.PassedByType)
-            {
-                case PassedByType.Pointer:
-                    if (param.DefaultValue == "NULL" || param.DefaultValue == "0")
-                    {
-                        conversion = "nullptr";
-                        return;
-                    }
-                    else
-                        throw new Exception("Unexpected");
-                case PassedByType.PointerPointer:
-                    throw new Exception("Unexpected");
-                default:
-                    conversion = param.DefaultValue;
-                    break;
-            }
-        }
-
-        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
-        {
-            if (param.Type.IsSharedPtr)
-            {
-                newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
-                return String.Empty;
-            }
-
-            if (HasAttribute<NativeValueContainerAttribute>())
-            {
-                switch (param.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        newname = "o_" + param.Name;
-                        return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
-                }
-            }
-
-            string nativetype = FullNativeName;
-
-            if (HasAttribute<PureManagedClassAttribute>())
-            {
-                string first = GetAttribute<PureManagedClassAttribute>().FirstMember;
-                if (String.IsNullOrEmpty(first))
-                {
-                    switch (param.PassedByType)
-                    {
-                        case PassedByType.Reference:
-                        case PassedByType.Value:
-                            newname = "(" + nativetype + ")" + param.Name;
-                            return null;
-                        default:
-                            throw new Exception("Unexpected");
-                    }
-                }
-                else
-                {
-                    switch (param.PassedByType)
-                    {
-                        case PassedByType.Reference:
-                        case PassedByType.Value:
-                            newname = "*p_" + param.Name;
-                            return "pin_ptr<" + nativetype + "> p_" + param.Name + " = interior_ptr<" + nativetype + ">(&" + param.Name + "->" + first + ");\n";
-                        case PassedByType.Pointer:
-                            if (param.IsConst)
-                            {
-                                string name = param.Name;
-                                string expr = nativetype + "* arr_" + name + " = new " + nativetype + "[" + name + "->Length];\n";
-                                expr += "for (int i=0; i < " + name + "->Length; i++)\n";
-                                expr += "{\n";
-                                expr += "\tarr_" + name + "[i] = *(reinterpret_cast<interior_ptr<" + nativetype + "&>>(&" + name + "[i]->" + first + "));\n";
-                                expr += "}\n";
-                                newname = "arr_" + name;
-                                return expr;
-                            }
-                            else
-                                throw new Exception("Unexpected");
-                        default:
-                            throw new Exception("Unexpected");
-                    }
-                }
-            }
-
-            switch (param.PassedByType)
-            {
-                case PassedByType.Pointer:
-                    if (IsValueType)
-                    {
-                        if (!param.HasAttribute<ArrayTypeAttribute>()
-                            && !HasWrapType(WrapTypes.NativePtrValueType))
-                        {
-                            newname = "o_" + param.Name;
-                            return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
-                        }
-                        else
-                            return base.ProducePreCallParamConversionCode(param, out newname);
-                    }
-                    else
-                        return base.ProducePreCallParamConversionCode(param, out newname);
-                case PassedByType.PointerPointer:
-                    newname = "&out_" + param.Name;
-                    return (param.IsConst ? "const " : "") + FullNativeName + "* out_" + param.Name + ";\n";
-                default:
-                    return base.ProducePreCallParamConversionCode(param, out newname);
-            }
-        }
-
-        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
-        {
-            if (HasAttribute<NativeValueContainerAttribute>())
-            {
-                switch (param.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        return "";
-                }
-            }
-
-            if (param.Type.HasAttribute<PureManagedClassAttribute>())
-            {
-                switch (param.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        if (param.IsConst)
-                        {
-                            return "delete[] arr_" + param.Name + ";\n";
-                        }
-                        else
-                            throw new Exception("Unexpected");
-                    default:
-                        return base.ProducePostCallParamConversionCleanupCode(param);
-                }
-            }
-
-            switch (param.PassedByType)
-            {
-                case PassedByType.PointerPointer:
-                    return param.Name + " = out_" + param.Name + ";\n";
-                default:
-                    return base.ProducePostCallParamConversionCleanupCode(param);
-            }
-        }
-
-        public override string GetCLRParamTypeName(ParamDefinition param)
-        {
-            if (HasAttribute<NativeValueContainerAttribute>())
-            {
-                switch (param.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        //return "array<" + FullCLRName + "^>^";
-                        return GetCLRTypeName(param);
-                }
-            }
-
-            switch (param.PassedByType)
-            {
-                case PassedByType.PointerPointer:
-                    return "[Out] " + FullCLRName + (IsValueType ? "%" : "^%");
-                default:
-                    return GetCLRTypeName(param);
-            }
-        }
-
-        public override string GetCLRTypeName(ITypeMember m)
-        {
-            if (HasAttribute<NativeValueContainerAttribute>())
-            {
-                switch (m.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        //return "array<" + FullCLRName + "^>^";
-                        string name = FullCLRName + "::NativeValue*";
-                        if (m.IsConst)
-                            name = "const " + name;
-                        return name;
-                }
-            }
-
-            switch (m.PassedByType)
-            {
-                case PassedByType.Pointer:
-                    if (IsValueType)
-                    {
-                        if (m.HasAttribute<ArrayTypeAttribute>())
-                        {
-                            return "array<" + FullCLRName + ">^";
-                        }
-                        else if (HasWrapType(WrapTypes.NativePtrValueType))
-                        {
-                            return FullCLRName;
-                        }
-                        else
-                        {
-                            string name = FullCLRName + "*";
-                            if (m.IsConst)
-                                name = "const " + name;
-                            return name;
-                        }
-                    }
-                    else
-                        return FullCLRName + "^";
-                case PassedByType.Reference:
-                case PassedByType.Value:
-                    if (IsSharedPtr)
-                        return FullCLRName + "^";
-                    else if (IsValueType)
-                        return FullCLRName;
-                    else
-                        return FullCLRName + "^";
-                case PassedByType.PointerPointer:
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
-        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
-        {
-            if (HasAttribute<NativeValueContainerAttribute>())
-            {
-                switch (m.PassedByType)
-                {
-                    case PassedByType.Pointer:
-                        return "reinterpret_cast<" + GetCLRTypeName(m) + ">(" + expr + ")";
-                }
-            }
-
-            switch (m.PassedByType)
-            {
-                case PassedByType.Pointer:
-                    if (IsValueType)
-                    {
-                        if (m.HasAttribute<ArrayTypeAttribute>())
-                        {
-                            int len = m.GetAttribute<ArrayTypeAttribute>().Length;
-                            return "GetValueArrayFromNativeArray<" + FullCLRName + ", " + FullNativeName + ">( " + expr + " , " + len + " )";
-                        }
-                        else if (HasWrapType(WrapTypes.NativePtrValueType))
-                        {
-                            return expr;
-                        }
-                        else
-                            return "reinterpret_cast<" + GetCLRTypeName(m) + ">(" + expr + ")";
-                    }
-                    else
-                        return base.ProduceNativeCallConversionCode(expr, m);
-                default:
-                    return base.ProduceNativeCallConversionCode(expr, m);
-            }
-        }
-
-        #region Function & Fields
-
-        public IEnumerable PublicNestedTypes
-        {
-            get
-            {
-                foreach (TypeDefinition type in NestedTypes)
-                {
-                    if (type.ProtectionLevel == ProtectionLevel.Public)
-                        yield return type;
-                }
-            }
-        }
-
-        public IEnumerable Functions
-        {
-            get
-            {
-                foreach (AbstractMemberDefinition m in Members)
-                {
-                    if (m is MemberMethodDefinition)
-                        yield return m;
-                }
-            }
-        }
-
-        public IEnumerable Fields
-        {
-            get
-            {
-                foreach (AbstractMemberDefinition m in Members)
-                {
-                    if (m is MemberFieldDefinition)
-                        yield return m;
-                }
-            }
-        }
-
-        public IEnumerable PublicMethods
-        {
-            get
-            {
-                foreach (MemberMethodDefinition func in Functions)
-                {
-                    if (!func.IsProperty
-                        && func.ProtectionType == ProtectionLevel.Public)
-                        yield return func;
-                }
-            }
-        }
-
-        public IEnumerable DeclarableMethods
-        {
-            get
-            {
-                foreach (MemberMethodDefinition func in Functions)
-                {
-                    if (func.IsDeclarableFunction
-                        && !func.IsProperty)
-                        yield return func;
-                }
-            }
-        }
-
-        public IEnumerable ProtectedMethods
-        {
-            get
-            {
-                foreach (MemberMethodDefinition func in Functions)
-                {
-                    if (!func.IsProperty
-                        && func.ProtectionType == ProtectionLevel.Protected)
-                        yield return func;
-                }
-            }
-        }
-
-        public IEnumerable PublicFields
-        {
-            get
-            {
-                foreach (MemberFieldDefinition f in Fields)
-                {
-                    if (f.ProtectionType == ProtectionLevel.Public)
-                        yield return f;
-                }
-            }
-        }
-
-        public IEnumerable ProtectedFields
-        {
-            get
-            {
-                foreach (MemberFieldDefinition f in Fields)
-                {
-                    if (f.ProtectionType == ProtectionLevel.Protected)
-                        yield return f;
-                }
-            }
-        }
-
-        #endregion
 
         public override bool AllowVirtuals
         {
@@ -392,13 +23,12 @@ namespace AutoWrap.Meta
 
         public override bool AllowSubClassing
         {
-            get
-            {
-                return base.AllowSubClassing ||
-                    (BaseClass != null && BaseClass.AllowSubClassing);
-            }
+            get { return base.AllowSubClassing || (BaseClass != null && BaseClass.AllowSubClassing); }
         }
 
+        /// <summary>
+        /// Denotes whether the native class is an abstract class.
+        /// </summary>
         public virtual bool IsNativeAbstractClass
         {
             get { return AllAbstractFunctions.Length > 0; }
@@ -573,6 +203,380 @@ namespace AutoWrap.Meta
 
             return null;
         }
+
+        public IEnumerable PublicNestedTypes
+        {
+            get
+            {
+                foreach (AbstractTypeDefinition type in NestedTypes)
+                {
+                    if (type.ProtectionLevel == ProtectionLevel.Public)
+                        yield return type;
+                }
+            }
+        }
+
+        public IEnumerable Functions
+        {
+            get
+            {
+                foreach (AbstractMemberDefinition m in Members)
+                {
+                    if (m is MemberMethodDefinition)
+                        yield return m;
+                }
+            }
+        }
+
+        public IEnumerable Fields
+        {
+            get
+            {
+                foreach (AbstractMemberDefinition m in Members)
+                {
+                    if (m is MemberFieldDefinition)
+                        yield return m;
+                }
+            }
+        }
+
+        public IEnumerable PublicMethods
+        {
+            get
+            {
+                foreach (MemberMethodDefinition func in Functions)
+                {
+                    if (!func.IsProperty
+                        && func.ProtectionType == ProtectionLevel.Public)
+                        yield return func;
+                }
+            }
+        }
+
+        public IEnumerable DeclarableMethods
+        {
+            get
+            {
+                foreach (MemberMethodDefinition func in Functions)
+                {
+                    if (func.IsDeclarableFunction
+                        && !func.IsProperty)
+                        yield return func;
+                }
+            }
+        }
+
+        public IEnumerable ProtectedMethods
+        {
+            get
+            {
+                foreach (MemberMethodDefinition func in Functions)
+                {
+                    if (!func.IsProperty
+                        && func.ProtectionType == ProtectionLevel.Protected)
+                        yield return func;
+                }
+            }
+        }
+
+        public IEnumerable PublicFields
+        {
+            get
+            {
+                foreach (MemberFieldDefinition f in Fields)
+                {
+                    if (f.ProtectionType == ProtectionLevel.Public)
+                        yield return f;
+                }
+            }
+        }
+
+        public IEnumerable ProtectedFields
+        {
+            get
+            {
+                foreach (MemberFieldDefinition f in Fields)
+                {
+                    if (f.ProtectionType == ProtectionLevel.Protected)
+                        yield return f;
+                }
+            }
+        }
+
+        #region Code Producing Methods
+
+        public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
+        {
+            switch (param.PassedByType)
+            {
+                case PassedByType.PointerPointer:
+                    preConversion = FullCLRName + "^ out_" + param.Name + ";";
+                    conversion = "out_" + param.Name;
+                    postConversion = "if (" + param.Name + ") *" + param.Name + " = out_" + param.Name + ";";
+                    return;
+            }
+
+            base.ProduceNativeParamConversionCode(param, out preConversion, out conversion, out postConversion);
+        }
+
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
+        {
+            if (param.DefaultValue == null)
+                throw new Exception("Unexpected");
+
+            preConversion = postConversion = "";
+            dependancyType = null;
+            switch (param.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (param.DefaultValue == "NULL" || param.DefaultValue == "0")
+                    {
+                        conversion = "nullptr";
+                        return;
+                    }
+                    else
+                        throw new Exception("Unexpected");
+                case PassedByType.PointerPointer:
+                    throw new Exception("Unexpected");
+                default:
+                    conversion = param.DefaultValue;
+                    break;
+            }
+        }
+
+        public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
+        {
+            if (param.Type.IsSharedPtr)
+            {
+                newname = "(" + param.MemberTypeNativeName + ")" + param.Name;
+                return String.Empty;
+            }
+
+            if (HasAttribute<NativeValueContainerAttribute>())
+            {
+                switch (param.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        newname = "o_" + param.Name;
+                        return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
+                }
+            }
+
+            string nativetype = FullNativeName;
+
+            if (HasAttribute<PureManagedClassAttribute>())
+            {
+                string first = GetAttribute<PureManagedClassAttribute>().FirstMember;
+                if (String.IsNullOrEmpty(first))
+                {
+                    switch (param.PassedByType)
+                    {
+                        case PassedByType.Reference:
+                        case PassedByType.Value:
+                            newname = "(" + nativetype + ")" + param.Name;
+                            return null;
+                        default:
+                            throw new Exception("Unexpected");
+                    }
+                }
+                else
+                {
+                    switch (param.PassedByType)
+                    {
+                        case PassedByType.Reference:
+                        case PassedByType.Value:
+                            newname = "*p_" + param.Name;
+                            return "pin_ptr<" + nativetype + "> p_" + param.Name + " = interior_ptr<" + nativetype + ">(&" + param.Name + "->" + first + ");\n";
+                        case PassedByType.Pointer:
+                            if (param.IsConst)
+                            {
+                                string name = param.Name;
+                                string expr = nativetype + "* arr_" + name + " = new " + nativetype + "[" + name + "->Length];\n";
+                                expr += "for (int i=0; i < " + name + "->Length; i++)\n";
+                                expr += "{\n";
+                                expr += "\tarr_" + name + "[i] = *(reinterpret_cast<interior_ptr<" + nativetype + "&>>(&" + name + "[i]->" + first + "));\n";
+                                expr += "}\n";
+                                newname = "arr_" + name;
+                                return expr;
+                            }
+                            else
+                                throw new Exception("Unexpected");
+                        default:
+                            throw new Exception("Unexpected");
+                    }
+                }
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (IsValueType)
+                    {
+                        if (!param.HasAttribute<ArrayTypeAttribute>()
+                            && !HasWrapType(WrapTypes.NativePtrValueType))
+                        {
+                            newname = "o_" + param.Name;
+                            return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
+                        }
+                        else
+                            return base.ProducePreCallParamConversionCode(param, out newname);
+                    }
+                    else
+                        return base.ProducePreCallParamConversionCode(param, out newname);
+                case PassedByType.PointerPointer:
+                    newname = "&out_" + param.Name;
+                    return (param.IsConst ? "const " : "") + FullNativeName + "* out_" + param.Name + ";\n";
+                default:
+                    return base.ProducePreCallParamConversionCode(param, out newname);
+            }
+        }
+
+        public override string ProducePostCallParamConversionCleanupCode(ParamDefinition param)
+        {
+            if (HasAttribute<NativeValueContainerAttribute>())
+            {
+                switch (param.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        return "";
+                }
+            }
+
+            if (param.Type.HasAttribute<PureManagedClassAttribute>())
+            {
+                switch (param.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        if (param.IsConst)
+                        {
+                            return "delete[] arr_" + param.Name + ";\n";
+                        }
+                        else
+                            throw new Exception("Unexpected");
+                    default:
+                        return base.ProducePostCallParamConversionCleanupCode(param);
+                }
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.PointerPointer:
+                    return param.Name + " = out_" + param.Name + ";\n";
+                default:
+                    return base.ProducePostCallParamConversionCleanupCode(param);
+            }
+        }
+
+        public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
+        {
+            if (HasAttribute<NativeValueContainerAttribute>())
+            {
+                switch (m.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        return "reinterpret_cast<" + GetCLRTypeName(m) + ">(" + expr + ")";
+                }
+            }
+
+            switch (m.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (IsValueType)
+                    {
+                        if (m.HasAttribute<ArrayTypeAttribute>())
+                        {
+                            int len = m.GetAttribute<ArrayTypeAttribute>().Length;
+                            return "GetValueArrayFromNativeArray<" + FullCLRName + ", " + FullNativeName + ">( " + expr + " , " + len + " )";
+                        }
+                        else if (HasWrapType(WrapTypes.NativePtrValueType))
+                        {
+                            return expr;
+                        }
+                        else
+                            return "reinterpret_cast<" + GetCLRTypeName(m) + ">(" + expr + ")";
+                    }
+                    else
+                        return base.ProduceNativeCallConversionCode(expr, m);
+                default:
+                    return base.ProduceNativeCallConversionCode(expr, m);
+            }
+        }
+
+        #endregion
+
+        public override string GetCLRParamTypeName(ParamDefinition param)
+        {
+            if (HasAttribute<NativeValueContainerAttribute>())
+            {
+                switch (param.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        //return "array<" + FullCLRName + "^>^";
+                        return GetCLRTypeName(param);
+                }
+            }
+
+            switch (param.PassedByType)
+            {
+                case PassedByType.PointerPointer:
+                    return "[Out] " + FullCLRName + (IsValueType ? "%" : "^%");
+                default:
+                    return GetCLRTypeName(param);
+            }
+        }
+
+        public override string GetCLRTypeName(ITypeMember m)
+        {
+            if (HasAttribute<NativeValueContainerAttribute>())
+            {
+                switch (m.PassedByType)
+                {
+                    case PassedByType.Pointer:
+                        //return "array<" + FullCLRName + "^>^";
+                        string name = FullCLRName + "::NativeValue*";
+                        if (m.IsConst)
+                            name = "const " + name;
+                        return name;
+                }
+            }
+
+            switch (m.PassedByType)
+            {
+                case PassedByType.Pointer:
+                    if (IsValueType)
+                    {
+                        if (m.HasAttribute<ArrayTypeAttribute>())
+                        {
+                            return "array<" + FullCLRName + ">^";
+                        }
+                        else if (HasWrapType(WrapTypes.NativePtrValueType))
+                        {
+                            return FullCLRName;
+                        }
+                        else
+                        {
+                            string name = FullCLRName + "*";
+                            if (m.IsConst)
+                                name = "const " + name;
+                            return name;
+                        }
+                    }
+                    else
+                        return FullCLRName + "^";
+                case PassedByType.Reference:
+                case PassedByType.Value:
+                    if (IsSharedPtr)
+                        return FullCLRName + "^";
+                    else if (IsValueType)
+                        return FullCLRName;
+                    else
+                        return FullCLRName + "^";
+                case PassedByType.PointerPointer:
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
 
         /// <summary>
         /// Indicates whether a method with the specified signature is part of this class.
@@ -931,14 +935,14 @@ namespace AutoWrap.Meta
             return func;
         }
 
-        public TypeDefinition GetNestedType(string name)
+        public AbstractTypeDefinition GetNestedType(string name)
         {
             return GetNestedType(name, true);
         }
 
-        public TypeDefinition GetNestedType(string name, bool raiseException)
+        public AbstractTypeDefinition GetNestedType(string name, bool raiseException)
         {
-            foreach (TypeDefinition t in NestedTypes)
+            foreach (AbstractTypeDefinition t in NestedTypes)
             {
                 if (t.Name == name)
                     return t;
@@ -1030,9 +1034,9 @@ namespace AutoWrap.Meta
                 return GetNameSpace().FindType<T>(name, raiseException);
             }
 
-            List<TypeDefinition> list = new List<TypeDefinition>();
+            List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
 
-            foreach (TypeDefinition t in NestedTypes)
+            foreach (AbstractTypeDefinition t in NestedTypes)
             {
                 if (t is T && t.Name == name)
                 {
@@ -1121,7 +1125,7 @@ namespace AutoWrap.Meta
                         break;
 
                     default:
-                        TypeDefinition type = CreateType(child);
+                        AbstractTypeDefinition type = CreateType(child);
                         type.SurroundingClass = this;
                         type.NameSpace = this.NameSpace;
                         NestedTypes.Add(type);

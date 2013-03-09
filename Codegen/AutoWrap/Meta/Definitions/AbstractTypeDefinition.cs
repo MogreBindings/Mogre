@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
     /// classes: <see cref="ClassDefinition"/>, <see cref="EnumDefinition"/>, <see cref="DefInternal"/>,
     /// <see cref="TypedefDefinition"/>, <see cref="DefString"/>, and <see cref="DefUtfString"/>.
     /// </summary>
-    public abstract class TypeDefinition : AttributeHolder
+    public abstract class AbstractTypeDefinition : AttributeHolder
     {
         public bool IsSTLContainer
         {
@@ -99,8 +99,8 @@ namespace AutoWrap.Meta
             get { return HasAttribute<ValueTypeAttribute>(); }
         }
 
-        private TypeDefinition _replaceByType;
-        public virtual TypeDefinition ReplaceByType
+        private AbstractTypeDefinition _replaceByType;
+        public virtual AbstractTypeDefinition ReplaceByType
         {
             get
             {
@@ -108,9 +108,9 @@ namespace AutoWrap.Meta
                 {
                     string name = GetAttribute<ReplaceByAttribute>().Name;
                     if (SurroundingClass != null)
-                        _replaceByType = SurroundingClass.FindType<TypeDefinition>(name, false);
+                        _replaceByType = SurroundingClass.FindType<AbstractTypeDefinition>(name, false);
                     else
-                        _replaceByType = NameSpace.FindType<TypeDefinition>(name, false);
+                        _replaceByType = NameSpace.FindType<AbstractTypeDefinition>(name, false);
                 }
 
                 return _replaceByType;
@@ -122,7 +122,7 @@ namespace AutoWrap.Meta
         /// create an instance from an apropriate subclass (e.g. <see cref="ClassDefinition"/> for a class).
         /// </summary>
         /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
-        public static TypeDefinition CreateType(XmlElement elem)
+        public static AbstractTypeDefinition CreateType(XmlElement elem)
         {
             switch (elem.Name)
             {
@@ -142,7 +142,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public TypeDefinition CreateExplicitType()
+        public AbstractTypeDefinition CreateExplicitType()
         {
             if (this.ReplaceByType != null)
             {
@@ -198,7 +198,7 @@ namespace AutoWrap.Meta
             conversion = param.Type.ProduceNativeCallConversionCode(param.Name, param);
         }
 
-        public virtual void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
+        public virtual void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             throw new Exception("Unexpected");
         }
@@ -396,11 +396,11 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        protected TypeDefinition()
+        protected AbstractTypeDefinition()
         {
         }
 
-        protected TypeDefinition(XmlElement elem)
+        protected AbstractTypeDefinition(XmlElement elem)
         {
             this._elem = elem;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));

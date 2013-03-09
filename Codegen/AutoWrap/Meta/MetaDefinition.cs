@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInType(TypeDefinition type, XmlElement elem)
+        private void AddAttributesInType(AbstractTypeDefinition type, XmlElement elem)
         {
             foreach (XmlAttribute attr in elem.Attributes)
             {

@@ -2,7 +2,7 @@
 
 namespace AutoWrap.Meta
 {
-    class DefInternal : TypeDefinition
+    class DefInternal : AbstractTypeDefinition 
     {
         public override void ProduceNativeParamConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion)
         {
@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType) 
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;

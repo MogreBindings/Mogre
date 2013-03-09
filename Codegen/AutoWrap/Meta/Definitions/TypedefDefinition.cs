@@ -6,9 +6,9 @@ namespace AutoWrap.Meta
     /// <summary>
     /// Describes a C++ <c>typedef</c>.
     /// </summary>
-    public class TypedefDefinition : TypeDefinition
+    public class TypedefDefinition : AbstractTypeDefinition
     {
-        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out TypeDefinition dependancyType)
+        public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
             dependancyType = null;
@@ -148,8 +148,8 @@ namespace AutoWrap.Meta
             get { return BaseType.IsValueType; }
         }
 
-        private TypeDefinition _baseType;
-        public virtual TypeDefinition BaseType
+        private AbstractTypeDefinition _baseType;
+        public virtual AbstractTypeDefinition BaseType
         {
             get
             {
@@ -159,7 +159,7 @@ namespace AutoWrap.Meta
                     if (basename.Contains("<"))
                         basename = basename.Substring(0, basename.IndexOf("<")).Trim();
 
-                    _baseType = FindType<TypeDefinition>(basename, false);
+                    _baseType = FindType<AbstractTypeDefinition>(basename, false);
                 }
 
                 return _baseType;
@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
                             isConst = true;
                             name = name.Substring("const ".Length);
                         }
-                        _types[i] = new TypeMemberDefinition(FindType<TypeDefinition>(name, false), _passed[i], isConst);
+                        _types[i] = new TypeMemberDefinition(FindType<AbstractTypeDefinition>(name, false), _passed[i], isConst);
                     }
                 }
 

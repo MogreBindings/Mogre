@@ -20,7 +20,7 @@ namespace AutoWrap.Meta
             get { return Function.Class; }
         }
 
-        TypeDefinition ITypeMember.MemberType
+        AbstractTypeDefinition ITypeMember.MemberType
         {
             get { return Type; }
         }
@@ -52,7 +52,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                TypeDefinition depend;
+                AbstractTypeDefinition depend;
                 if (_CLRDefaultValuePreConversion == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                TypeDefinition depend;
+                AbstractTypeDefinition depend;
                 if (_CLRDefaultValue == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                TypeDefinition depend;
+                AbstractTypeDefinition depend;
                 if (_CLRDefaultValuePostConversion == null)
                     Type.ProduceDefaultParamValueConversionCode(this, out _CLRDefaultValuePreConversion, out _CLRDefaultValue, out _CLRDefaultValuePostConversion, out depend);
 
@@ -91,8 +91,8 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        TypeDefinition _type;
-        public virtual TypeDefinition Type
+        AbstractTypeDefinition _type;
+        public virtual AbstractTypeDefinition Type
         {
             get
             {
@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
                         _type.SurroundingClass = Function.Class;
                     }
                     else
-                        _type = Function.Class.FindType<TypeDefinition>(TypeName, false);
+                        _type = Function.Class.FindType<AbstractTypeDefinition>(TypeName, false);
                 }
 
                 return _type;

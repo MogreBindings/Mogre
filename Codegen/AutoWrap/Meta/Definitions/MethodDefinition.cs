@@ -291,7 +291,7 @@ namespace AutoWrap.Meta
                             {
                                 string pname = name.Substring(3);
                                 //check if property name collides with a nested type
-                                TypeDefinition type = Class.GetNestedType(pname, false);
+                                AbstractTypeDefinition type = Class.GetNestedType(pname, false);
                                 if (type != null)
                                     _isGetProperty = false;
                                 else

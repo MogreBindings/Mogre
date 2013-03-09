@@ -112,7 +112,7 @@
     </Compile>
     <Compile Include="Meta\Definitions\AbstractMemberDefinition.cs" />
     <Compile Include="Meta\Definitions\NamespaceDefinition.cs" />
-    <Compile Include="Meta\Definitions\TypeDefinition.cs" />
+    <Compile Include="Meta\Definitions\AbstractTypeDefinition.cs" />
     <Compile Include="Meta\IncClassProducer.cs" />
     <Compile Include="Meta\IncInterfaceClassProducer.cs" />
     <Compile Include="Meta\IncNativeDirectorClassProducer.cs" />

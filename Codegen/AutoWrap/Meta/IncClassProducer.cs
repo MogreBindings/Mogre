@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddTypeDependancy(TypeDefinition type)
+        protected override void AddTypeDependancy(AbstractTypeDefinition type)
         {
             base.AddTypeDependancy(type);
             _wrapper.AddTypeDependancy(type);
@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void CheckTypeForDependancy(TypeDefinition type)
+        protected virtual void CheckTypeForDependancy(AbstractTypeDefinition type)
         {
             _wrapper.CheckTypeForDependancy(type);
         }
@@ -533,7 +533,7 @@ namespace AutoWrap.Meta
             _sb.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.Type.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
-        protected override void AddNestedTypeBeforeMainType(TypeDefinition nested)
+        protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
             base.AddNestedType(nested);
             _wrapper.IncAddType(nested, _sb);
@@ -542,12 +542,12 @@ namespace AutoWrap.Meta
         protected override void AddAllNestedTypes()
         {
             //Predeclare all nested classes in case there are classes referencing their "siblings"
-            foreach (TypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    TypeDefinition expl = _t.FindType<TypeDefinition>(nested.Name);
+                    AbstractTypeDefinition expl = _t.FindType<AbstractTypeDefinition>(nested.Name);
 
                     if (expl.IsSTLContainer
                         || ( !nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
@@ -562,7 +562,7 @@ namespace AutoWrap.Meta
             base.AddAllNestedTypes();
         }
 
-        protected override void AddNestedType(TypeDefinition nested)
+        protected override void AddNestedType(AbstractTypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {

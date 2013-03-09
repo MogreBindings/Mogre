@@ -29,7 +29,7 @@ namespace AutoWrap.Meta
 {
     class NativeProtectedTypesProxy : ClassProducer
     {
-        public static string GetProtectedTypesProxyName(TypeDefinition type)
+        public static string GetProtectedTypesProxyName(AbstractTypeDefinition type)
         {
             string name = type.FullNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
@@ -68,9 +68,9 @@ namespace AutoWrap.Meta
 
                 _sb.AppendLine("friend ref class " + className + ";");
 
-                foreach (TypeDefinition nested in _t.NestedTypes)
+                foreach (AbstractTypeDefinition nested in _t.NestedTypes)
                 {
-                    TypeDefinition type = nested.FindType<TypeDefinition>(nested.Name);
+                    AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
 
                     if (type.ProtectionLevel == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
@@ -86,9 +86,9 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedTypes()
         {
-            foreach (TypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
             {
-                TypeDefinition type = nested.FindType<TypeDefinition>(nested.Name);
+                AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
 
                 if (type.ProtectionLevel == ProtectionLevel.Protected
                     && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )
@@ -115,7 +115,7 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected override void AddNestedType(TypeDefinition nested)
+        protected override void AddNestedType(AbstractTypeDefinition nested)
         {
             if (nested.IsSTLContainer)
             {
@@ -183,7 +183,7 @@ namespace AutoWrap.Meta
 
     class NativeProtectedStaticsProxy : ClassProducer
     {
-        public static string GetProtectedStaticsProxyName(TypeDefinition type)
+        public static string GetProtectedStaticsProxyName(AbstractTypeDefinition type)
         {
             string name = type.FullNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
