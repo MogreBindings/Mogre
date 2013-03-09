@@ -14,6 +14,34 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
+        public override string GetCLRParamTypeName(ParamDefinition param)
+        {
+            switch (param.PassedByType)
+            {
+                case PassedByType.Value:
+                case PassedByType.Reference:
+                    return "String^";
+                case PassedByType.Pointer:
+                    return "array<String^>^";
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        public override string GetCLRTypeName(ITypeMember m)
+        {
+            switch (m.PassedByType)
+            {
+                case PassedByType.Value:
+                case PassedByType.Reference:
+                    return "String^";
+                default:
+                    throw new Exception("Unexpected");
+            }
+        }
+
+        #region Code Producing Methods
+
         public override void ProduceDefaultParamValueConversionCode(ParamDefinition param, out string preConversion, out string conversion, out string postConversion, out AbstractTypeDefinition dependancyType)
         {
             preConversion = postConversion = "";
@@ -38,20 +66,6 @@ namespace AutoWrap.Meta
                         dependancyType = FindType<AbstractTypeDefinition>(name);
                     }
                     break;
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
-        public override string GetCLRParamTypeName(ParamDefinition param)
-        {
-            switch (param.PassedByType)
-            {
-                case PassedByType.Value:
-                case PassedByType.Reference:
-                    return "String^";
-                case PassedByType.Pointer:
-                    return "array<String^>^";
                 default:
                     throw new Exception("Unexpected");
             }
@@ -93,18 +107,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string GetCLRTypeName(ITypeMember m)
-        {
-            switch (m.PassedByType)
-            {
-                case PassedByType.Value:
-                case PassedByType.Reference:
-                    return "String^";
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
         public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             switch (m.PassedByType)
@@ -116,5 +118,7 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
             }
         }
+
+        #endregion
     }
 }

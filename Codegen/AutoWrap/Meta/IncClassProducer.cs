@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    abstract class IncClassProducer : ClassProducer
+    internal abstract class IncClassProducer : ClassProducer
     {
         public IncClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
@@ -276,15 +276,15 @@ namespace AutoWrap.Meta
 
         protected override void AddPreNestedTypes()
         {
-          base.AddPreNestedTypes();
+            base.AddPreNestedTypes();
 
-          if( _t.HasAttribute<CustomIncPreDeclarationAttribute>() )
-          {
-            string txt = _t.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
-            txt = ReplaceCustomVariables( txt );
-            _sb.AppendLine( txt );
-            _sb.AppendLine();
-          }
+            if (_t.HasAttribute<CustomIncPreDeclarationAttribute>())
+            {
+                string txt = _t.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
+                txt = ReplaceCustomVariables(txt);
+                _sb.AppendLine(txt);
+                _sb.AppendLine();
+            }
         }
 
         protected override void AddPostNestedTypes()
@@ -300,36 +300,36 @@ namespace AutoWrap.Meta
             }
         }
 
-		protected virtual void AddPublicConstructors()
-		{
-			if (_t.IsNativeAbstractClass && !_t.IsInterface)
-				return;
+        protected virtual void AddPublicConstructors()
+        {
+            if (_t.IsNativeAbstractClass && !_t.IsInterface)
+                return;
 
-			if (_t.Constructors.Length > 0)
-			{
-				foreach (MemberMethodDefinition func in _t.Constructors)
-				{
-					if (func.ProtectionType == ProtectionLevel.Public && 
-						!func.HasAttribute<IgnoreAttribute>())
-					{
-						AddPublicConstructor(func);
-					}
-				}
-			}
-			else
-			{
-				AddPublicConstructor(null);
-			}
-		}
+            if (_t.Constructors.Length > 0)
+            {
+                foreach (MemberMethodDefinition func in _t.Constructors)
+                {
+                    if (func.ProtectionType == ProtectionLevel.Public &&
+                        !func.HasAttribute<IgnoreAttribute>())
+                    {
+                        AddPublicConstructor(func);
+                    }
+                }
+            }
+            else
+            {
+                AddPublicConstructor(null);
+            }
+        }
 
         protected virtual void AddPublicConstructor(MemberMethodDefinition function)
         {
             string className = (_t.IsInterface) ? _t.Name : _t.CLRName;
 
             if (function == null)
-			{
+            {
                 _sb.AppendLine(className + "();");
-			}
+            }
             else
             {
                 int defcount = 0;
@@ -341,11 +341,11 @@ namespace AutoWrap.Meta
                             defcount++;
                 }
 
-            	bool hideParams = function.HasAttribute<HideParamsWithDefaultValuesAttribute>();
+                bool hideParams = function.HasAttribute<HideParamsWithDefaultValuesAttribute>();
                 // The overloads (because of default values)
                 for (int dc = 0; dc <= defcount; dc++)
                 {
-					if (dc < defcount && hideParams)
+                    if (dc < defcount && hideParams)
                         continue;
 
 
@@ -353,7 +353,6 @@ namespace AutoWrap.Meta
                     AddMethodParameters(function, function.Parameters.Count - dc);
                     _sb.Append(";\n");
                 }
-
             }
         }
 
@@ -374,13 +373,15 @@ namespace AutoWrap.Meta
                         _sb.Append(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName + "\n");
                         _sb.AppendLine("{");
                         _sb.AppendIndent("\t");
-                        if (f.TypeName != "void") _sb.Append("return ");
+                        if (f.TypeName != "void")
+                            _sb.Append("return ");
                         _sb.Append(f.CLRName + "(");
                         for (int i = 0; i < f.Parameters.Count; i++)
                         {
                             ParamDefinition param = f.Parameters[i];
                             _sb.Append(" " + param.Name);
-                            if (i < f.Parameters.Count - 1) _sb.Append(",");
+                            if (i < f.Parameters.Count - 1)
+                                _sb.Append(",");
                         }
                         _sb.Append(" );\n");
                         _sb.AppendLine("}\n");
@@ -476,7 +477,8 @@ namespace AutoWrap.Meta
                             {
                                 ParamDefinition param = f.Parameters[i];
                                 _sb.Append(" " + param.Name);
-                                if (i < f.Parameters.Count - 1) _sb.Append(",");
+                                if (i < f.Parameters.Count - 1)
+                                    _sb.Append(",");
                             }
                             _sb.Append(" );\n");
                             _sb.AppendLine("if (mp_return == " + stopret + ") break;");
@@ -491,13 +493,15 @@ namespace AutoWrap.Meta
                         {
                             _sb.AppendLine("\tif (" + privField + ")");
                             _sb.AppendIndent("\t\t");
-                            if (f.TypeName != "void") _sb.Append("return ");
+                            if (f.TypeName != "void")
+                                _sb.Append("return ");
                             _sb.Append(privField + "->Invoke(");
                             for (int i = 0; i < f.Parameters.Count; i++)
                             {
                                 ParamDefinition param = f.Parameters[i];
                                 _sb.Append(" " + param.Name);
-                                if (i < f.Parameters.Count - 1) _sb.Append(",");
+                                if (i < f.Parameters.Count - 1)
+                                    _sb.Append(",");
                             }
                             _sb.Append(" );\n");
                         }
@@ -528,8 +532,10 @@ namespace AutoWrap.Meta
         {
             base.AddStaticField(field);
             _sb.AppendIndent("");
-            if (field.IsConst) _sb.Append("const ");
-            if (field.IsStatic) _sb.Append("static ");
+            if (field.IsConst)
+                _sb.Append("const ");
+            if (field.IsStatic)
+                _sb.Append("static ");
             _sb.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.Type.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
@@ -550,7 +556,7 @@ namespace AutoWrap.Meta
                     AbstractTypeDefinition expl = _t.FindType<AbstractTypeDefinition>(nested.Name);
 
                     if (expl.IsSTLContainer
-                        || ( !nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested) ) )
+                        || (!nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested)))
                     {
                         _sb.AppendLine(nested.ProtectionLevel.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
                     }
@@ -568,7 +574,7 @@ namespace AutoWrap.Meta
             {
                 //Interface and native director are already declared before the declaration of this class.
                 //Just declare the method handlers of the class.
-                IncNativeDirectorClassProducer.AddMethodHandlersClass((ClassDefinition)nested, _sb);
+                IncNativeDirectorClassProducer.AddMethodHandlersClass((ClassDefinition) nested, _sb);
                 return;
             }
 
@@ -603,13 +609,15 @@ namespace AutoWrap.Meta
 
             if (_interfaces.Count > 0)
             {
-                if (baseclass != "") baseclass += ", ";
+                if (baseclass != "")
+                    baseclass += ", ";
 
                 foreach (ClassDefinition it in _interfaces)
                 {
                     AddTypeDependancy(it);
                     string itname = it.CLRName;
-                    if (it.IsNested) itname = it.SurroundingClass.FullCLRName + "::" + itname;
+                    if (it.IsNested)
+                        itname = it.SurroundingClass.FullCLRName + "::" + itname;
                     baseclass += "public " + itname + ", ";
                 }
                 baseclass = baseclass.Substring(0, baseclass.Length - ", ".Length);
@@ -617,7 +625,8 @@ namespace AutoWrap.Meta
 
             if (_listeners.Count > 0)
             {
-                if (baseclass != "") baseclass += ", ";
+                if (baseclass != "")
+                    baseclass += ", ";
 
                 foreach (ClassDefinition it in _listeners)
                 {
@@ -659,8 +668,10 @@ namespace AutoWrap.Meta
                 AddMethodIndexAttribute(f);
 
             _sb.AppendIndent("");
-            if (f.IsStatic) _sb.Append("static ");
-            if (methodIsVirtual) _sb.Append("virtual ");
+            if (f.IsStatic)
+                _sb.Append("static ");
+            if (methodIsVirtual)
+                _sb.Append("virtual ");
             _sb.Append(GetCLRTypeName(f) + " " + f.CLRName);
             AddMethodParameters(f, f.Parameters.Count);
             if (DeclareAsOverride(f))
@@ -684,7 +695,8 @@ namespace AutoWrap.Meta
 
                     AddComments(f);
                     _sb.AppendIndent("");
-                    if (f.IsStatic) _sb.Append("static ");
+                    if (f.IsStatic)
+                        _sb.Append("static ");
                     _sb.Append(GetCLRTypeName(f) + " " + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count - dc);
                     _sb.Append(";\n");
@@ -706,10 +718,12 @@ namespace AutoWrap.Meta
 
                 _sb.Append(" " + GetCLRParamTypeName(param));
                 _sb.Append(" " + param.Name);
-                if (i < count - 1) _sb.Append(",");
+                if (i < count - 1)
+                    _sb.Append(",");
             }
             _sb.Append(" )");
         }
+
         protected void AddMethodParameters(MemberMethodDefinition f)
         {
             AddMethodParameters(f, f.Parameters.Count);
@@ -726,7 +740,7 @@ namespace AutoWrap.Meta
                 MemberMethodDefinition f = p.GetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
-                if (p.GetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionLevel.Protected) )
+                if (p.GetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionType == ProtectionLevel.Protected))
                 {
                     _sb.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 
@@ -737,7 +751,8 @@ namespace AutoWrap.Meta
                     }
 
                     _sb.AppendIndent("\t");
-                    if (p.GetterFunction.IsStatic) _sb.Append("static ");
+                    if (p.GetterFunction.IsStatic)
+                        _sb.Append("static ");
                     if (methodIsVirtual)
                         _sb.Append("virtual ");
                     _sb.Append(ptype + " get()");
@@ -757,7 +772,7 @@ namespace AutoWrap.Meta
                 MemberMethodDefinition f = p.SetterFunction;
                 bool methodIsVirtual = DeclareAsVirtual(f);
 
-                if (p.SetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionLevel.Protected) )
+                if (p.SetterFunction.ProtectionType == ProtectionLevel.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionType == ProtectionLevel.Protected))
                 {
                     _sb.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
 
@@ -768,7 +783,8 @@ namespace AutoWrap.Meta
                     }
 
                     _sb.AppendIndent("\t");
-                    if (p.SetterFunction.IsStatic) _sb.Append("static ");
+                    if (p.SetterFunction.IsStatic)
+                        _sb.Append("static ");
                     if (methodIsVirtual)
                         _sb.Append("virtual ");
                     _sb.Append("void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ")");
@@ -813,7 +829,8 @@ namespace AutoWrap.Meta
 
                     ptype = tmpParam.MemberTypeCLRName;
                     _sb.AppendIndent("");
-                    if (field.IsStatic) _sb.Append("static ");
+                    if (field.IsStatic)
+                        _sb.Append("static ");
                     _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
                     _sb.AppendLine("{");
 
@@ -826,7 +843,8 @@ namespace AutoWrap.Meta
                 {
                     ptype = field.MemberTypeCLRName;
                     _sb.AppendIndent("");
-                    if (field.IsStatic) _sb.Append("static ");
+                    if (field.IsStatic)
+                        _sb.Append("static ");
                     _sb.AppendFormat("property {0} {1}[int]\n", ptype, field.Name);
                     _sb.AppendLine("{");
 
@@ -841,7 +859,8 @@ namespace AutoWrap.Meta
             {
                 ptype = field.MemberTypeCLRName;
                 _sb.AppendIndent("");
-                if (field.IsStatic) _sb.Append("static ");
+                if (field.IsStatic)
+                    _sb.Append("static ");
                 _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
                 _sb.AppendLine("{");
 
@@ -854,12 +873,15 @@ namespace AutoWrap.Meta
             {
                 ptype = GetCLRTypeName(field);
                 _sb.AppendIndent("");
-                if (field.IsStatic) _sb.Append("static ");
-                if (field.HasAttribute<RenameAttribute> ()) {
-                    _sb.AppendFormat ("property {0} {1}\n", ptype, field.GetAttribute<RenameAttribute> ().Name);
+                if (field.IsStatic)
+                    _sb.Append("static ");
+                if (field.HasAttribute<RenameAttribute>())
+                {
+                    _sb.AppendFormat("property {0} {1}\n", ptype, field.GetAttribute<RenameAttribute>().Name);
                 }
-                else {
-                    _sb.AppendFormat ("property {0} {1}\n", ptype, field.Name);
+                else
+                {
+                    _sb.AppendFormat("property {0} {1}\n", ptype, field.Name);
                 }
                 _sb.AppendLine("{");
 
@@ -870,7 +892,7 @@ namespace AutoWrap.Meta
                     !IsReadOnly && !field.Type.HasAttribute<ReadOnlyForFieldsAttribute>()
                     && !field.IsConst)
                 {
-                  _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
+                    _sb.AppendLine(field.ProtectionType.GetCLRProtectionName() + ":");
                     _sb.AppendLine("\tvoid set(" + ptype + " value);");
                 }
 
@@ -889,6 +911,7 @@ namespace AutoWrap.Meta
         {
             //TODO
         }
+
         protected virtual void AddComments(MemberMethodDefinition f)
         {
             //TODO
