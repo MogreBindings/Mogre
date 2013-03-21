@@ -115,8 +115,8 @@ namespace AutoWrap.Meta
         public List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
         public SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
         public List<ClassDefinition> Overridables = new List<ClassDefinition>();
-        public List<ClassProducer> PostClassProducers = new List<ClassProducer>();
-        public List<ClassProducer> PreClassProducers = new List<ClassProducer>();
+        public List<ClassCodeProducer> PostClassProducers = new List<ClassCodeProducer>();
+        public List<ClassCodeProducer> PreClassProducers = new List<ClassCodeProducer>();
 
         public Wrapper(MetaDefinition meta, string includePath, string sourcePath)
         {
@@ -509,12 +509,12 @@ namespace AutoWrap.Meta
                 IncAddType(t, sbTypes);
             }
 
-            foreach (ClassProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in PostClassProducers)
             {
                 producer.Add();
             }
 
-            foreach (ClassProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in PreClassProducers)
             {
                 producer.AddFirst();
             }
@@ -548,12 +548,12 @@ namespace AutoWrap.Meta
                 CppAddType(t, contentsb);
             }
 
-            foreach (ClassProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in PostClassProducers)
             {
                 producer.Add();
             }
 
-            foreach (ClassProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in PreClassProducers)
             {
                 producer.AddFirst();
             }
@@ -600,14 +600,14 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (ClassProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in PostClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
                     producer.Add();
             }
 
-            foreach (ClassProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in PreClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
@@ -652,14 +652,14 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (ClassProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in PostClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
                     producer.Add();
             }
 
-            foreach (ClassProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in PreClassProducers)
             {
                 if ( !(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))

@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class ClassProducer : CodeProducer 
+    public class ClassCodeProducer : CodeProducer 
     {
         protected Wrapper _wrapper;
         protected ClassDefinition _t;
@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
         protected List<AbstractMemberDefinition> _cachedMembers = new List<AbstractMemberDefinition>();
 
-        public ClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
         {
             this._wrapper = wrapper;
             this._t = t;

@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class IncNonOverridableClassProducer : IncClassProducer
+    class IncNonOverridableClassProducer : ClassInclCodeProducer
     {
         protected override string GetTopBaseClassName()
         {

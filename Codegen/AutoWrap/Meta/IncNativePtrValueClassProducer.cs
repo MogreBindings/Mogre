@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncNativePtrValueClassProducer : IncClassProducer
+    class IncNativePtrValueClassProducer : ClassInclCodeProducer
     {
         protected override string GetTopBaseClassName()
         {

@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppNativeDirectorClassProducer : CppClassProducer
+    class CppNativeDirectorClassProducer : ClassCppCodeProducer
     {
         public override bool IsNativeClass
         {

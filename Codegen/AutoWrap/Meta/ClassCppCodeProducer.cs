@@ -28,9 +28,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    abstract class CppClassProducer : ClassProducer
+    abstract class ClassCppCodeProducer : ClassCodeProducer
     {
-        public CppClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassCppCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             //if (AllowSubclassing)

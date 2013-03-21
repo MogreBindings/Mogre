@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppPlainWrapperClassProducer : CppClassProducer
+    class CppPlainWrapperClassProducer : ClassCppCodeProducer
     {
         public CppPlainWrapperClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)

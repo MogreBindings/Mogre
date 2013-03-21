@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncNativeDirectorClassProducer : IncClassProducer
+    class IncNativeDirectorClassProducer : ClassInclCodeProducer
     {
         public override bool IsNativeClass
         {

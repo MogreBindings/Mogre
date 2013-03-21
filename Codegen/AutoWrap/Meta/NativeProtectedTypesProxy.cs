@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class NativeProtectedTypesProxy : ClassProducer
+    class NativeProtectedTypesProxy : ClassCodeProducer
     {
         public static string GetProtectedTypesProxyName(AbstractTypeDefinition type)
         {
@@ -181,7 +181,7 @@ namespace AutoWrap.Meta
     //    }
     }
 
-    class NativeProtectedStaticsProxy : ClassProducer
+    class NativeProtectedStaticsProxy : ClassCodeProducer
     {
         public static string GetProtectedStaticsProxyName(AbstractTypeDefinition type)
         {

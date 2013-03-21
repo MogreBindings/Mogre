@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppNativePtrValueClassProducer : CppClassProducer
+    class CppNativePtrValueClassProducer : ClassCppCodeProducer
     {
         protected override string GetNativeInvokationTarget(bool isConst)
         {

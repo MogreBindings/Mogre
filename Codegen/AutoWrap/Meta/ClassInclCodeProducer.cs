@@ -28,9 +28,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    internal abstract class IncClassProducer : ClassProducer
+    abstract class ClassInclCodeProducer : ClassCodeProducer 
     {
-        public IncClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassInclCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
             AddPreDeclarations();
