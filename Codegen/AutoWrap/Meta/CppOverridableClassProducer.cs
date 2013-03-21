@@ -245,14 +245,14 @@ namespace AutoWrap.Meta
     {
         public override void Add()
         {
-            if (_t.IsInterface)
+            if (_definition.IsInterface)
             {
                 IndentStringBuilder tempsb = _sb;
                 _sb = new IndentStringBuilder();
                 base.Add();
-                string fname = _t.FullCLRName.Replace(_t.CLRName, _t.Name);
-                string res = _sb.ToString().Replace(_t.FullCLRName + "::", fname + "::");
-                fname = GetClassName().Replace(_t.CLRName, _t.Name);
+                string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
+                string res = _sb.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
+                fname = GetClassName().Replace(_definition.CLRName, _definition.Name);
                 res = res.Replace(GetClassName() + "::", fname + "::");
 
                 _sb = tempsb;
@@ -281,7 +281,7 @@ namespace AutoWrap.Meta
         public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _t, _sb));
+            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _definition, _sb));
         }
 
         private string _proxyName;
@@ -290,7 +290,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_proxyName == null)
-                    _proxyName = NativeProxyClassProducer.GetProxyName(_t);
+                    _proxyName = NativeProxyClassProducer.GetProxyName(_definition);
 
                 return _proxyName;
             }
@@ -311,7 +311,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _t.FullNativeName + "::" + field.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.Name;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)
@@ -340,7 +340,7 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
-            _sb.AppendIndent(GetClassName() + "::" + _t.Name);
+            _sb.AppendIndent(GetClassName() + "::" + _definition.Name);
             if (f == null)
                 _sb.Append("()");
             else
@@ -353,8 +353,8 @@ namespace AutoWrap.Meta
             _sb.AppendLine("_createdByCLR = true;");
             _sb.AppendLine("Type^ thisType = this->GetType();");
 
-            if (!IsAbstractClass && !_t.IsInterface)
-                _sb.AppendLine("_isOverriden = (thisType != " + _t.CLRName + "::typeid);");
+            if (!IsAbstractClass && !_definition.IsInterface)
+                _sb.AppendLine("_isOverriden = (thisType != " + _definition.CLRName + "::typeid);");
             else
                 _sb.AppendLine("_isOverriden = true;  //it's abstract or interface so it must be overriden");
 
@@ -371,14 +371,14 @@ namespace AutoWrap.Meta
                     _sb.AppendLine(preCall);
             }
 
-            if (!IsAbstractClass && !_t.IsInterface)
+            if (!IsAbstractClass && !_definition.IsInterface)
             {
                 _sb.AppendLine("if (_isOverriden)");
                 _sb.AppendLine("{");
                 _sb.IncreaseIndent();
             }
 
-            string proxyName = NativeProxyClassProducer.GetProxyName(_t);
+            string proxyName = NativeProxyClassProducer.GetProxyName(_definition);
             _sb.AppendIndent(proxyName + "* proxy = new " + proxyName + "(this");
 
             if (count > 0)
@@ -396,15 +396,15 @@ namespace AutoWrap.Meta
 
             _sb.Append(");\n");
 
-            _sb.AppendLine("proxy->_overriden = Implementation::SubclassingManager::Instance->GetOverridenMethodsArrayPointer(thisType, " + _t.Name + "::typeid, " + _methodIndicesCount + ");");
+            _sb.AppendLine("proxy->_overriden = Implementation::SubclassingManager::Instance->GetOverridenMethodsArrayPointer(thisType, " + _definition.Name + "::typeid, " + _methodIndicesCount + ");");
             _sb.AppendLine("_native = proxy;");
 
-            if (!IsAbstractClass && !_t.IsInterface)
+            if (!IsAbstractClass && !_definition.IsInterface)
             {
                 _sb.DecreaseIndent();
                 _sb.AppendLine("}");
                 _sb.AppendLine("else");
-                _sb.AppendIndent("\t_native = new " + _t.FullNativeName + "(");
+                _sb.AppendIndent("\t_native = new " + _definition.FullNativeName + "(");
 
                 if (count > 0)
                 {
@@ -479,9 +479,9 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            if (_t.Constructors.Length > 0)
+            if (_definition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _definition.Constructors)
                     AddPublicConstructor(func);
             }
             else

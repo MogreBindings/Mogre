@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
 
         protected override bool DoCleanupInFinalizer
         {
-            get { return _t.HasAttribute<DoCleanupInFinalizerAttribute>(); }
+            get { return _definition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
         }
 
         protected override void AddPrivateDeclarations()

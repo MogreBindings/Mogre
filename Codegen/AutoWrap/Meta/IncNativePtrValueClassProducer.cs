@@ -37,33 +37,33 @@ namespace AutoWrap.Meta
         protected override void AddDefinition()
         {
             _sb.AppendIndent("");
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.AppendFormat("value class {0}\n", _t.CLRName);
+                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _sb.AppendFormat("value class {0}\n", _definition.CLRName);
         }
 
         protected override void AddPreDeclarations()
         {
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
             {
-                _wrapper.AddPreDeclaration("value class " + _t.CLRName + ";");
-                _wrapper.AddPragmaMakePublicForType(_t);
+                _wrapper.AddPreDeclaration("value class " + _definition.CLRName + ";");
+                _wrapper.AddPragmaMakePublicForType(_definition);
             }
         }
 
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _sb.AppendLine(_t.FullNativeName + "* _native;");
+            _sb.AppendLine(_definition.FullNativeName + "* _native;");
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
 
-            _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _t.FullNativeName + " )");
+            _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullNativeName + " )");
             _sb.AppendLine();
 
             _sb.AppendLine();
@@ -97,12 +97,12 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreators()
         {
-            if (_t.IsNativeAbstractClass)
+            if (_definition.IsNativeAbstractClass)
                 return;
 
-            if (_t.Constructors.Length > 0)
+            if (_definition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _definition.Constructors)
                     if (func.ProtectionType == ProtectionLevel.Public)
                         AddCreator(func);
             }
@@ -113,7 +113,7 @@ namespace AutoWrap.Meta
         protected virtual void AddCreator(MemberMethodDefinition f)
         {
             if (f == null)
-                _sb.AppendLine("static " + _t.CLRName + " Create();");
+                _sb.AppendLine("static " + _definition.CLRName + " Create();");
             else
             {
                 int defcount = 0;
@@ -131,7 +131,7 @@ namespace AutoWrap.Meta
                     if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                         continue;
 
-                    _sb.AppendIndent("static " + _t.CLRName + " Create");
+                    _sb.AppendIndent("static " + _definition.CLRName + " Create");
                     AddMethodParameters(f, f.Parameters.Count - dc);
                     _sb.Append(";\n");
                 }

@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_proxyName == null)
-                    _proxyName = GetProxyName(_t);
+                    _proxyName = GetProxyName(_definition);
 
                 return _proxyName;
             }
@@ -110,9 +110,9 @@ namespace AutoWrap.Meta
             AddFields();
 
             _sb.AppendLine();
-            if (_t.Constructors.Length > 0)
+            if (_definition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _definition.Constructors)
                     AddConstructor(func);
             }
             else

@@ -35,13 +35,13 @@ namespace AutoWrap.Meta
         {
             AddPreDeclarations();
 
-            if (_t.BaseClass != null)
-                AddTypeDependancy(_t.BaseClass);
+            if (_definition.BaseClass != null)
+                AddTypeDependancy(_definition.BaseClass);
 
             if (AllowSubclassing)
             {
-                _wrapper.PreClassProducers.Add(new NativeProtectedTypesProxy(_wrapper, _t, _sb));
-                _wrapper.PostClassProducers.Add(new NativeProtectedStaticsProxy(_wrapper, _t, _sb));
+                _wrapper.PreClassProducers.Add(new NativeProtectedTypesProxy(_wrapper, _definition, _sb));
+                _wrapper.PostClassProducers.Add(new NativeProtectedStaticsProxy(_wrapper, _definition, _sb));
                 //_wrapper.PreClassProducers.Add(new IncNativeProtectedTypesProxy(_wrapper, _t, _sb));
             }
         }
@@ -54,10 +54,10 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPreDeclarations()
         {
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
             {
-                _wrapper.AddPreDeclaration("ref class " + _t.CLRName + ";");
-                _wrapper.AddPragmaMakePublicForType(_t);
+                _wrapper.AddPreDeclaration("ref class " + _definition.CLRName + ";");
+                _wrapper.AddPragmaMakePublicForType(_definition);
             }
         }
 
@@ -81,15 +81,15 @@ namespace AutoWrap.Meta
         protected virtual void AddDefinition()
         {
             _sb.AppendIndent("");
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
+                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
             string baseclass = GetBaseAndInterfaces();
             if (baseclass != "")
-                _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
+                _sb.AppendFormat("ref class {0}{1} : {2}\n", _definition.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
             else
-                _sb.AppendFormat("ref class {0}{1}\n", _t.CLRName, (IsAbstractClass) ? " abstract" : "");
+                _sb.AppendFormat("ref class {0}{1}\n", _definition.CLRName, (IsAbstractClass) ? " abstract" : "");
         }
 
         protected override void AddInterfaceMethod(MemberMethodDefinition f)
@@ -148,10 +148,10 @@ namespace AutoWrap.Meta
 
         protected override void AddStaticConstructor()
         {
-            if (_t.IsInterface)
-                _sb.AppendLine("static " + _t.Name + "();");
+            if (_definition.IsInterface)
+                _sb.AppendLine("static " + _definition.Name + "();");
             else
-                _sb.AppendLine("static " + _t.CLRName + "();");
+                _sb.AppendLine("static " + _definition.CLRName + "();");
         }
 
         protected virtual void AddEventFields()
@@ -180,7 +180,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool DoCleanupInFinalizer
         {
-            get { return _t.HasAttribute<DoCleanupInFinalizerAttribute>(); }
+            get { return _definition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
         }
 
         protected override void AddInternalDeclarations()
@@ -196,13 +196,13 @@ namespace AutoWrap.Meta
             {
                 if (DoCleanupInFinalizer)
                 {
-                    _sb.AppendLine("~" + _t.CLRName + "()\n{");
-                    _sb.AppendLine("\tthis->!" + _t.CLRName + "();");
+                    _sb.AppendLine("~" + _definition.CLRName + "()\n{");
+                    _sb.AppendLine("\tthis->!" + _definition.CLRName + "();");
                     _sb.AppendLine("}");
-                    _sb.AppendLine("!" + _t.CLRName + "()\n{");
+                    _sb.AppendLine("!" + _definition.CLRName + "()\n{");
                 }
                 else
-                    _sb.AppendLine("~" + _t.CLRName + "()\n{");
+                    _sb.AppendLine("~" + _definition.CLRName + "()\n{");
                 _sb.IncreaseIndent();
                 AddDisposerBody();
                 _sb.DecreaseIndent();
@@ -227,16 +227,16 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDisposerBody()
         {
-            if (_t.HasAttribute<CustomDisposingAttribute>())
+            if (_definition.HasAttribute<CustomDisposingAttribute>())
             {
-                string text = _t.GetAttribute<CustomDisposingAttribute>().Text;
+                string text = _definition.GetAttribute<CustomDisposingAttribute>().Text;
                 _sb.AppendLine(text);
             }
 
             foreach (ClassDefinition cls in _listeners)
             {
                 MemberMethodDefinition removerFunc = null;
-                foreach (MemberMethodDefinition func in _t.PublicMethods)
+                foreach (MemberMethodDefinition func in _definition.PublicMethods)
                 {
                     if (func.IsListenerRemover && func.Parameters[0].Type == cls)
                     {
@@ -278,9 +278,9 @@ namespace AutoWrap.Meta
         {
             base.AddPreNestedTypes();
 
-            if (_t.HasAttribute<CustomIncPreDeclarationAttribute>())
+            if( _definition.HasAttribute<CustomIncPreDeclarationAttribute>())
             {
-                string txt = _t.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
+                string txt = _definition.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
                 _sb.AppendLine();
@@ -291,9 +291,9 @@ namespace AutoWrap.Meta
         {
             base.AddPostNestedTypes();
 
-            if (_t.HasAttribute<CustomIncDeclarationAttribute>())
+            if (_definition.HasAttribute<CustomIncDeclarationAttribute>())
             {
-                string txt = _t.GetAttribute<CustomIncDeclarationAttribute>().DeclarationText;
+                string txt = _definition.GetAttribute<CustomIncDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
                 _sb.AppendLine();
@@ -302,12 +302,12 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicConstructors()
         {
-            if (_t.IsNativeAbstractClass && !_t.IsInterface)
+            if (_definition.IsNativeAbstractClass && !_definition.IsInterface)
                 return;
 
-            if (_t.Constructors.Length > 0)
+            if (_definition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _t.Constructors)
+                foreach (MemberMethodDefinition func in _definition.Constructors)
                 {
                     if (func.ProtectionType == ProtectionLevel.Public &&
                         !func.HasAttribute<IgnoreAttribute>())
@@ -324,7 +324,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicConstructor(MemberMethodDefinition function)
         {
-            string className = (_t.IsInterface) ? _t.Name : _t.CLRName;
+            string className = (_definition.IsInterface) ? _definition.Name : _definition.CLRName;
 
             if (function == null)
             {
@@ -397,7 +397,7 @@ namespace AutoWrap.Meta
             foreach (ClassDefinition cls in _listeners)
             {
                 MemberMethodDefinition adderFunc = null;
-                foreach (MemberMethodDefinition func in _t.PublicMethods)
+                foreach (MemberMethodDefinition func in _definition.PublicMethods)
                 {
                     if (func.IsListenerAdder && func.Parameters[0].Type == cls)
                     {
@@ -548,12 +548,12 @@ namespace AutoWrap.Meta
         protected override void AddAllNestedTypes()
         {
             //Predeclare all nested classes in case there are classes referencing their "siblings"
-            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    AbstractTypeDefinition expl = _t.FindType<AbstractTypeDefinition>(nested.Name);
+                    AbstractTypeDefinition expl = _definition.FindType<AbstractTypeDefinition>(nested.Name);
 
                     if (expl.IsSTLContainer
                         || (!nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested)))
@@ -919,7 +919,7 @@ namespace AutoWrap.Meta
 
         protected override void AddPredefinedMethods(PredefinedMethods pm)
         {
-            string clrType = _t.CLRName + (_t.IsValueType ? "" : "^");
+            string clrType = _definition.CLRName + (_definition.IsValueType ? "" : "^");
 
             // For operator ==
             if ((PredefinedMethods.Equals & pm) != 0)
@@ -937,9 +937,9 @@ namespace AutoWrap.Meta
                 _sb.AppendLine("{");
                 _sb.IncreaseIndent();
                 _sb.AppendLine("if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
-                _sb.AppendLine("if (dest" + (_t.IsValueType ? "." : "->") + "_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'dest' is null.\");");
+                _sb.AppendLine("if (dest" + (_definition.IsValueType ? "." : "->") + "_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'dest' is null.\");");
                 _sb.AppendLine();
-                _sb.AppendLine("*(dest" + (_t.IsValueType ? "." : "->") + "_native) = *_native;");
+                _sb.AppendLine("*(dest" + (_definition.IsValueType ? "." : "->") + "_native) = *_native;");
                 _sb.DecreaseIndent();
                 _sb.AppendLine("}");
             }

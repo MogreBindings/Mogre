@@ -36,23 +36,23 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            if (_t.HasAttribute<SequentialLayoutAttribute> ()) {
+            if (_definition.HasAttribute<SequentialLayoutAttribute> ()) {
                 _sb.AppendIndent ("");
                 _sb.Append ("[StructLayout(LayoutKind::Sequential)]\n");
             }
 
             _sb.AppendIndent("");
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.AppendFormat("value class {0}\n", _t.CLRName);
+                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _sb.AppendFormat("value class {0}\n", _definition.CLRName);
         }
 
         protected override void AddPreDeclarations()
         {
-            if (!_t.IsNested)
-                _wrapper.AddPragmaMakePublicForType(_t);
+            if (!_definition.IsNested)
+                _wrapper.AddPragmaMakePublicForType(_definition);
         }
 
         protected override void AddInternalDeclarations()
@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
 
             if (IsReadOnly)
             {
-                foreach (MemberFieldDefinition field in _t.PublicFields)
+                foreach (MemberFieldDefinition field in _definition.PublicFields)
                 {
                     _sb.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
                 }

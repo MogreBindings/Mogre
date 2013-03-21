@@ -57,11 +57,11 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreators()
         {
-            if (!_t.IsNativeAbstractClass)
+            if (!_definition.IsNativeAbstractClass)
             {
-                if (_t.Constructors.Length > 0)
+                if (_definition.Constructors.Length > 0)
                 {
-                    foreach (MemberMethodDefinition func in _t.Constructors)
+                    foreach (MemberMethodDefinition func in _definition.Constructors)
                         if (func.ProtectionType == ProtectionLevel.Public)
                             AddCreator(func);
                 }
@@ -101,7 +101,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreatorOverload(MemberMethodDefinition f, int count)
         {
-            _sb.AppendIndent(_t.FullCLRName + " " + GetClassName() + "::Create");
+            _sb.AppendIndent(_definition.FullCLRName + " " + GetClassName() + "::Create");
             if (f == null)
                 _sb.Append("()");
             else
@@ -122,8 +122,8 @@ namespace AutoWrap.Meta
                     _sb.AppendLine(preCall);
             }
 
-            _sb.AppendLine(_t.CLRName + " ptr;");
-            _sb.AppendIndent("ptr._native = new " + _t.FullNativeName + "(");
+            _sb.AppendLine(_definition.CLRName + " ptr;");
+            _sb.AppendIndent("ptr._native = new " + _definition.FullNativeName + "(");
 
             if (count > 0)
             {

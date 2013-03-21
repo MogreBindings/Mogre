@@ -49,26 +49,26 @@ namespace AutoWrap.Meta
 
             if (HasProtectedTypes() || HasProtectedStaticFields())
             {
-                string className = GetProtectedTypesProxyName(_t);
+                string className = GetProtectedTypesProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _sb.AppendLine("class " + className + " : public " + _t.FullNativeName);
+                _sb.AppendLine("class " + className + " : public " + _definition.FullNativeName);
                 _sb.AppendLine("{");
                 _sb.AppendLine("public:");
                 _sb.IncreaseIndent();
 
-                className = _t.FullCLRName;
+                className = _definition.FullCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
-                if (_t.IsInterface)
+                if (_definition.IsInterface)
                 {
-                    className = className.Replace(_t.CLRName, _t.Name);
+                    className = className.Replace(_definition.CLRName, _definition.Name);
                 }
 
                 className = _wrapper.ManagedNamespace + "::" + className;
 
                 _sb.AppendLine("friend ref class " + className + ";");
 
-                foreach (AbstractTypeDefinition nested in _t.NestedTypes)
+                foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
                 {
                     AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
 
@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedTypes()
         {
-            foreach (AbstractTypeDefinition nested in _t.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
             {
                 AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
 
@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedStaticFields()
         {
-            foreach (MemberFieldDefinition field in _t.Fields)
+            foreach (MemberFieldDefinition field in _definition.Fields)
             {
                 if (field.ProtectionType == ProtectionLevel.Protected
                     && field.IsStatic
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
         {
             if (nested.IsSTLContainer)
             {
-                _sb.AppendLine("typedef " + _t.FullNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
+                _sb.AppendLine("typedef " + _definition.FullNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
             }
             else
                 throw new Exception("Unexpected");
@@ -203,30 +203,30 @@ namespace AutoWrap.Meta
 
             if (HasProtectedStatics())
             {
-                string className = GetProtectedStaticsProxyName(_t);
+                string className = GetProtectedStaticsProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _sb.AppendLine("class " + className + " : public " + _t.FullNativeName);
+                _sb.AppendLine("class " + className + " : public " + _definition.FullNativeName);
                 _sb.AppendLine("{");
                 _sb.AppendLine("public:");
                 _sb.IncreaseIndent();
 
-                className = _t.FullCLRName;
+                className = _definition.FullCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
-                if (_t.IsInterface)
+                if (_definition.IsInterface)
                 {
-                    className = className.Replace(_t.CLRName, _t.Name);
+                    className = className.Replace(_definition.CLRName, _definition.Name);
                 }
 
                 className = _wrapper.ManagedNamespace + "::" + className;
 
                 _sb.AppendLine("friend ref class " + className + ";");
 
-                AddFriends(className, _t);
+                AddFriends(className, _definition);
 
                 foreach (ClassDefinition iface in _interfaces)
                 {
-                    if (iface == _t)
+                    if (iface == _definition)
                         continue;
 
                     AddFriends(className, iface);
@@ -242,7 +242,7 @@ namespace AutoWrap.Meta
             foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
-                    && !(field.IsStatic && type != _t) )
+                    && !(field.IsStatic && type != _definition) )
                 {
                     _sb.AppendLine("friend ref class " + className + "::" + field.Name + ";");
                 }
@@ -252,7 +252,7 @@ namespace AutoWrap.Meta
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionType == ProtectionLevel.Protected
-                    && !(func.IsStatic && type != _t)
+                    && !(func.IsStatic && type != _definition)
                     && func.IsProperty
                     && !func.IsVirtual)
                 {
@@ -263,12 +263,12 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedStatics()
         {
-            if (HasProtectedStatics(_t))
+            if (HasProtectedStatics(_definition))
                 return true;
 
             foreach (ClassDefinition iface in _interfaces)
             {
-                if (iface == _t)
+                if (iface == _definition)
                     continue;
 
                 if (HasProtectedStatics(iface))
@@ -283,7 +283,7 @@ namespace AutoWrap.Meta
             foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
-                    && !(field.IsStatic && type != _t))
+                    && !(field.IsStatic && type != _definition))
                 {
                     return true;
                 }
@@ -293,7 +293,7 @@ namespace AutoWrap.Meta
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionType == ProtectionLevel.Protected
-                    && !(func.IsStatic && type != _t)
+                    && !(func.IsStatic && type != _definition)
                     && !func.IsVirtual)
                 {
                     return true;

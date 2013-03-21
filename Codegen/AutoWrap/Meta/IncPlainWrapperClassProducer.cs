@@ -37,21 +37,21 @@ namespace AutoWrap.Meta
 
         protected override bool RequiresCleanUp
         {
-            get { return _t.BaseClass == null; }
+            get { return _definition.BaseClass == null; }
         }
 
         protected override bool DoCleanupInFinalizer
         {
-            get { return !_t.HasAttribute<NoFinalizerAttribute>(); }
+            get { return !_definition.HasAttribute<NoFinalizerAttribute>(); }
         }
 
         protected override void AddInternalDeclarations()
         {
             base.AddInternalDeclarations();
 
-            if (_t.BaseClass == null)
+            if (_definition.BaseClass == null)
             {
-                _sb.AppendLine(_t.FullNativeName + "* _native;");
+                _sb.AppendLine(_definition.FullNativeName + "* _native;");
                 _sb.AppendLine("bool _createdByCLR;");
                 _sb.AppendLine();
             }
@@ -65,12 +65,12 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            if (_t.Name == _t.CLRName)
+            if (_definition.Name == _definition.CLRName)
                 _sb.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
             else
             {
-                string clrName = _t.FullCLRName.Substring(_t.FullCLRName.IndexOf("::") + 2);
-                string nativeName = _t.FullNativeName.Substring(_t.FullNativeName.IndexOf("::") + 2);
+                string clrName = _definition.FullCLRName.Substring(_definition.FullCLRName.IndexOf("::") + 2);
+                string nativeName = _definition.FullNativeName.Substring(_definition.FullNativeName.IndexOf("::") + 2);
                 _sb.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
             }
         }
@@ -79,14 +79,14 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
 
-            if (_t.BaseClass == null)
+            if (_definition.BaseClass == null)
             {
-                _sb.AppendFormatIndent("{0}( " + _t.FullNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _t.CLRName);
+                _sb.AppendFormatIndent("{0}( " + _definition.FullNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _definition.CLRName);
             }
             else
             {
-                ClassDefinition topclass = GetTopClass(_t);
-                _sb.AppendFormatIndent("{0}( " + topclass.FullNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _t.CLRName);
+                ClassDefinition topclass = GetTopClass(_definition);
+                _sb.AppendFormatIndent("{0}( " + topclass.FullNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _definition.CLRName);
             }
             _sb.AppendLine("{");
             _sb.IncreaseIndent();

@@ -64,10 +64,10 @@ namespace AutoWrap.Meta
             base.AddPostBody();
             _sb.AppendLine();
 
-            if (_t.HasAttribute<CLRObjectAttribute>(true)) {
-                _sb.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_t));
+            if (_definition.HasAttribute<CLRObjectAttribute>(true)) {
+                _sb.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_definition));
                 _sb.AppendLine("{");
-                _sb.AppendLine("\t*pClrObj = gcnew " + _t.FullCLRName + "(pClrObj);");
+                _sb.AppendLine("\t*pClrObj = gcnew " + _definition.FullCLRName + "(pClrObj);");
                 _sb.AppendLine("}");
             }
 
@@ -90,12 +90,12 @@ namespace AutoWrap.Meta
 
 		protected override void AddPublicDeclarations()
 		{
-			if ((!_t.IsNativeAbstractClass || _t.IsInterface)
+			if ((!_definition.IsNativeAbstractClass || _definition.IsInterface)
 					&& IsConstructable)
 			{
-				if (_t.Constructors.Length > 0)
+				if (_definition.Constructors.Length > 0)
 				{
-					foreach (MemberMethodDefinition function in _t.Constructors)
+					foreach (MemberMethodDefinition function in _definition.Constructors)
 					{
 						if (function.ProtectionType == ProtectionLevel.Public &&
 							!function.HasAttribute<IgnoreAttribute>())
@@ -147,13 +147,13 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicConstructorOverload(MemberMethodDefinition f, int count)
         {
-            _sb.AppendIndent(GetClassName() + "::" + _t.CLRName);
+            _sb.AppendIndent(GetClassName() + "::" + _definition.CLRName);
             if (f == null)
                 _sb.Append("()");
             else
                 AddMethodParameters(f, count);
 
-            string nativeType = GetTopClass(_t).FullNativeName;
+            string nativeType = GetTopClass(_definition).FullNativeName;
             if (GetTopBaseClassName() == "Wrapper")
                 nativeType = "CLRObject";
 
@@ -164,7 +164,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
 
-            if (!_t.IsInterface)
+            if (!_definition.IsInterface)
                 _sb.AppendLine("_createdByCLR = true;");
 
             string preCall = null, postCall = null;
@@ -178,7 +178,7 @@ namespace AutoWrap.Meta
                     _sb.AppendLine(preCall);
             }
 
-            _sb.AppendIndent("_native = new " + _t.FullNativeName + "(");
+            _sb.AppendIndent("_native = new " + _definition.FullNativeName + "(");
 
             if (count > 0)
             {
@@ -209,10 +209,10 @@ namespace AutoWrap.Meta
 
         protected override void AddStaticConstructor()
         {
-            if (_t.IsInterface)
-                _sb.AppendLine("static " + _t.Name + "::" + _t.Name + "()");
+            if (_definition.IsInterface)
+                _sb.AppendLine("static " + _definition.Name + "::" + _definition.Name + "()");
             else
-                _sb.AppendLine("static " + _t.CLRName + "::" + _t.CLRName + "()");
+                _sb.AppendLine("static " + _definition.CLRName + "::" + _definition.CLRName + "()");
 
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
@@ -241,9 +241,9 @@ namespace AutoWrap.Meta
         {
             base.AddPostNestedTypes();
 
-            if (_t.HasAttribute<CustomCppDeclarationAttribute>())
+            if (_definition.HasAttribute<CustomCppDeclarationAttribute>())
             {
-                string txt = _t.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
+                string txt = _definition.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
                 _sb.AppendLine();
@@ -472,12 +472,12 @@ namespace AutoWrap.Meta
             {
                 if (f.ProtectionType == ProtectionLevel.Protected)
                 {
-                    string classname = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_t);
+                    string classname = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
                     invoke = classname + "::" + f.Name + "(";
                 }
                 else
                 {
-                    invoke = _t.FullNativeName + "::" + f.Name + "(";
+                    invoke = _definition.FullNativeName + "::" + f.Name + "(";
                 }
             }
             else
@@ -715,10 +715,10 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                     _sb.AppendLine("    if (clr->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
                     _sb.AppendLine();
-                    _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _t.FullNativeName + "*>(clr->_native));");
+                    _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullNativeName + "*>(clr->_native));");
                     _sb.AppendLine("}\n");
 
-                    if (!_t.HasWrapType(WrapTypes.NativePtrValueType))
+                    if (!_definition.HasWrapType(WrapTypes.NativePtrValueType))
                     {
                         _sb.AppendLine("bool " + cls + "::Equals(" + cls + "^ obj)");
                         _sb.AppendLine("{");

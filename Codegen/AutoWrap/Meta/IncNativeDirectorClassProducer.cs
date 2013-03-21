@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return GetNativeDirectorReceiverInterfaceName(_t);
+                return GetNativeDirectorReceiverInterfaceName(_definition);
             }
         }
 
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return GetNativeDirectorName(_t);
+                return GetNativeDirectorName(_definition);
             }
         }
 
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
         {
             _sb.AppendLine("interface class " + ReceiverInterfaceName + "\n{");
             _sb.IncreaseIndent();
-            foreach (MemberMethodDefinition f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _definition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -84,9 +84,9 @@ namespace AutoWrap.Meta
             _sb.DecreaseIndent();
             _sb.AppendLine("};\n");
 
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
             {
-                AddMethodHandlersClass(_t, _sb);
+                AddMethodHandlersClass(_definition, _sb);
             }
 
             base.AddPreBody();
@@ -170,7 +170,7 @@ namespace AutoWrap.Meta
         {
             _sb.AppendLine(DirectorName + "( " + ReceiverInterfaceName + "^ recv )");
             _sb.AppendIndent("\t: _receiver(recv)");
-            foreach (MemberMethodDefinition f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _definition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -185,7 +185,7 @@ namespace AutoWrap.Meta
         protected override void AddPublicFields()
         {
             base.AddPublicFields();
-            foreach (MemberMethodDefinition f in _t.PublicMethods)
+            foreach (MemberMethodDefinition f in _definition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
@@ -214,7 +214,7 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _sb.AppendLine("class " + DirectorName + " : public " + _t.FullNativeName);
+            _sb.AppendLine("class " + DirectorName + " : public " + _definition.FullNativeName);
         }
 
         protected override void AddProtectedDeclarations()

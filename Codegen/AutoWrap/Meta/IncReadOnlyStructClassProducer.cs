@@ -37,11 +37,11 @@ namespace AutoWrap.Meta
         protected override void AddDefinition()
         {
             _sb.AppendIndent("");
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
                 _sb.Append("public ");
             else
-                _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.AppendFormat("ref class {0}\n", _t.CLRName);
+                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _sb.AppendFormat("ref class {0}\n", _definition.CLRName);
         }
 
         protected override void AddPublicConstructors()
@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _sb.AppendLine(_t.CLRName + "()");
+            _sb.AppendLine(_definition.CLRName + "()");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
             base.AddConstructorBody();
@@ -62,18 +62,18 @@ namespace AutoWrap.Meta
         protected override void AddInternalDeclarations()
         {
             base.AddInternalDeclarations();
-            foreach (MemberFieldDefinition field in _t.PublicFields)
+            foreach (MemberFieldDefinition field in _definition.PublicFields)
             {
                 if (!field.IsIgnored)
                     _sb.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
             }
             _sb.AppendLine();
 
-            _sb.AppendLine("static operator " + _t.CLRName + "^ (const " + _t.FullNativeName + "& obj)");
+            _sb.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "& obj)");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
-            _sb.AppendLine(_t.CLRName + "^ clr = gcnew " + _t.CLRName + ";");
-            foreach (MemberFieldDefinition field in _t.PublicFields)
+            _sb.AppendLine(_definition.CLRName + "^ clr = gcnew " + _definition.CLRName + ";");
+            foreach (MemberFieldDefinition field in _definition.PublicFields)
             {
                 if (!field.IsIgnored)
                 {
@@ -87,7 +87,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
 
             _sb.AppendLine();
-            _sb.AppendLine("static operator " + _t.CLRName + "^ (const " + _t.FullNativeName + "* pObj)");
+            _sb.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "* pObj)");
             _sb.AppendLine("{");
             _sb.AppendLine("\treturn *pObj;");
             _sb.AppendLine("}");

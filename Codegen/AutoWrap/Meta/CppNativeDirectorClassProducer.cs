@@ -46,26 +46,26 @@ namespace AutoWrap.Meta
 
         protected override string GetClassName()
         {
-            string full = _t.FullCLRName;
+            string full = _definition.FullCLRName;
             int index = full.IndexOf("::");
             string name = full.Substring(index + 2);
 
             index = name.LastIndexOf("::");
             if (index == -1)
-                return GetNativeDirectorName(_t);
+                return GetNativeDirectorName(_definition);
 
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
             {
-                return name.Substring(0, index + 2) + GetNativeDirectorName(_t);
+                return name.Substring(0, index + 2) + GetNativeDirectorName(_definition);
             }
             else
             {
                 name = name.Substring(0, index);
                 index = name.LastIndexOf("::");
                 if (index == -1)
-                    return GetNativeDirectorName(_t);
+                    return GetNativeDirectorName(_definition);
                 else
-                    return name.Substring(0, index + 2) + GetNativeDirectorName(_t);
+                    return name.Substring(0, index + 2) + GetNativeDirectorName(_definition);
             }
         }
 

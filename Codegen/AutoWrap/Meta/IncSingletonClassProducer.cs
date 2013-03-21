@@ -58,7 +58,7 @@ namespace AutoWrap.Meta
 
         protected override void AddDisposerBody()
         {
-            _sb.AppendLine("_native = " + _t.FullNativeName + "::getSingletonPtr();");
+            _sb.AppendLine("_native = " + _definition.FullNativeName + "::getSingletonPtr();");
 
             base.AddDisposerBody();
 
@@ -69,11 +69,11 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _sb.AppendLine("static " + _t.CLRName + "^ _singleton;");
+            _sb.AppendLine("static " + _definition.CLRName + "^ _singleton;");
 
-            if (_t.BaseClass == null)
+            if (_definition.BaseClass == null)
             {
-                _sb.AppendLine(_t.FullNativeName + "* _native;");
+                _sb.AppendLine(_definition.FullNativeName + "* _native;");
                 _sb.AppendLine("bool _createdByCLR;");
             }
         }
@@ -82,10 +82,10 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
 
-            if (_t.BaseClass == null)
-                _sb.AppendLine(_t.CLRName + "( " + _t.FullNativeName + "* obj ) : _native(obj)");
+            if (_definition.BaseClass == null)
+                _sb.AppendLine(_definition.CLRName + "( " + _definition.FullNativeName + "* obj ) : _native(obj)");
             else
-                _sb.AppendLine(_t.CLRName + "( " + _t.FullNativeName + "* obj ) : " + _t.BaseClass.CLRName + "(obj)");
+                _sb.AppendLine(_definition.CLRName + "( " + _definition.FullNativeName + "* obj ) : " + _definition.BaseClass.CLRName + "(obj)");
 
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
@@ -96,14 +96,14 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicFields()
         {
-            _sb.AppendLine("static property " + _t.CLRName + "^ Singleton");
+            _sb.AppendLine("static property " + _definition.CLRName + "^ Singleton");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
-            _sb.AppendLine(_t.CLRName + "^ get()");
+            _sb.AppendLine(_definition.CLRName + "^ get()");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
                 
-            _sb.AppendLine(_t.FullNativeName + "* ptr = " + _t.FullNativeName + "::getSingletonPtr();");
+            _sb.AppendLine(_definition.FullNativeName + "* ptr = " + _definition.FullNativeName + "::getSingletonPtr();");
             _sb.AppendLine("if (_singleton == CLR_NULL || _singleton->_native != ptr)");
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
@@ -115,7 +115,7 @@ namespace AutoWrap.Meta
             _sb.DecreaseIndent();
             _sb.AppendLine("}");
 
-            _sb.AppendLine("if ( ptr ) _singleton = gcnew " + _t.CLRName + "( ptr );");
+            _sb.AppendLine("if ( ptr ) _singleton = gcnew " + _definition.CLRName + "( ptr );");
             _sb.DecreaseIndent();
             _sb.AppendLine("}");
             _sb.AppendLine("return _singleton;");

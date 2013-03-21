@@ -49,7 +49,7 @@ namespace AutoWrap.Meta
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _sb.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _t.Name);
+            _sb.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _definition.Name);
             _sb.AppendLine("{");
             _sb.IncreaseIndent();
             base.AddConstructorBody();
@@ -67,11 +67,11 @@ namespace AutoWrap.Meta
         {
             if (IsAbstractClass)
             {
-                _sb.AppendLine("ref class " + _t.CLRName + "_Default : public " + _t.CLRName);
+                _sb.AppendLine("ref class " + _definition.CLRName + "_Default : public " + _definition.CLRName);
                 _sb.AppendLine("{");
                 _sb.AppendLine("public protected:");
                 _sb.IncreaseIndent();
-                _sb.AppendFormatIndent("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _t.CLRName);
+                _sb.AppendFormatIndent("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _definition.CLRName);
                 _sb.AppendLine("{");
                 _sb.AppendLine("}\n");
                 _sb.DecreaseIndent();

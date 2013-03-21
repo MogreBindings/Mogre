@@ -37,8 +37,8 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _sb.AppendIndent("class " + ProxyName + " : public " + _t.FullNativeName);
-            if (_t.IsInterface)
+            _sb.AppendIndent("class " + ProxyName + " : public " + _definition.FullNativeName);
+            if (_definition.IsInterface)
                 _sb.Append(", public CLRObject");
             _sb.Append("\n");
         }
@@ -65,13 +65,13 @@ namespace AutoWrap.Meta
         protected override void AddFields()
         {
             string className;
-            if (_t.IsNested)
+            if (_definition.IsNested)
             {
-                className = _t.SurroundingClass.FullCLRName + "::" + _t.Name;
+                className = _definition.SurroundingClass.FullCLRName + "::" + _definition.Name;
             }
             else
             {
-                className = _wrapper.ManagedNamespace + "::" + _t.Name;
+                className = _wrapper.ManagedNamespace + "::" + _definition.Name;
             }
 
             _sb.AppendLine("friend ref class " + className + ";");
@@ -86,9 +86,9 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }
 
-            if (_t.IsInterface)
+            if (_definition.IsInterface)
             {
-                foreach (MemberFieldDefinition field in _t.Fields)
+                foreach (MemberFieldDefinition field in _definition.Fields)
                 {
                     if (!field.IsIgnored
                         && field.ProtectionType == ProtectionLevel.Protected
@@ -116,13 +116,13 @@ namespace AutoWrap.Meta
         protected override void AddConstructor(MemberMethodDefinition f)
         {
             string className;
-            if (_t.IsNested)
+            if (_definition.IsNested)
             {
-                className = _t.SurroundingClass.FullCLRName + "::" + _t.Name;
+                className = _definition.SurroundingClass.FullCLRName + "::" + _definition.Name;
             }
             else
             {
-                className = _wrapper.ManagedNamespace + "::" + _t.Name;
+                className = _wrapper.ManagedNamespace + "::" + _definition.Name;
             }
             _sb.AppendIndent(ProxyName + "( " + className + "^ managedObj");
             if (f != null)
@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
 
             if (f != null)
             {
-                _sb.AppendIndent("\t" + _t.FullNativeName + "(");
+                _sb.AppendIndent("\t" + _definition.FullNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -187,13 +187,13 @@ namespace AutoWrap.Meta
     {
         public override void Add()
         {
-            if (_t.IsInterface)
+            if (_definition.IsInterface)
             {
                 IndentStringBuilder tempsb = _sb;
                 _sb = new IndentStringBuilder();
                 base.Add();
-                string fname = _t.FullCLRName.Replace(_t.CLRName, _t.Name);
-                string res = _sb.ToString().Replace(_t.FullCLRName + "::", fname + "::");
+                string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
+                string res = _sb.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
                 _sb = tempsb;
                 _sb.AppendLine(res);
             }
@@ -203,29 +203,29 @@ namespace AutoWrap.Meta
 
         protected override void AddPreDeclarations()
         {
-            if (!_t.IsNested)
+            if (!_definition.IsNested)
             {
-                _wrapper.AddPreDeclaration("ref class " + _t.Name + ";");
-                _wrapper.AddPragmaMakePublicForType(_t);
+                _wrapper.AddPreDeclaration("ref class " + _definition.Name + ";");
+                _wrapper.AddPragmaMakePublicForType(_definition);
 
             }
         }
 
         protected override void AddDefinition()
         {
-            if (_t.IsInterface)
+            if (_definition.IsInterface)
             {
                 //put _t.Name instead of _t.CLRName
                 _sb.AppendIndent("");
-                if (!_t.IsNested)
+                if (!_definition.IsNested)
                     _sb.Append("public ");
                 else
-                    _sb.Append(_t.ProtectionLevel.GetCLRProtectionName() + ": ");
+                    _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
-                    _sb.AppendFormat("ref class {0}{1} : {2}\n", _t.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
+                    _sb.AppendFormat("ref class {0}{1} : {2}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
                 else
-                    _sb.AppendFormat("ref class {0}{1}\n", _t.Name, (IsAbstractClass) ? " abstract" : "");
+                    _sb.AppendFormat("ref class {0}{1}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "");
             }
             else
                 base.AddDefinition();
@@ -258,7 +258,7 @@ namespace AutoWrap.Meta
         public IncOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
             : base(wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _t, _sb));
+            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _definition, _sb));
         }
 
         private string _proxyName;
@@ -267,7 +267,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_proxyName == null)
-                    _proxyName = NativeProxyClassProducer.GetProxyName(_t);
+                    _proxyName = NativeProxyClassProducer.GetProxyName(_definition);
 
                 return _proxyName;
             }
@@ -288,7 +288,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _t.FullNativeName + "::" + field.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.Name;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)
@@ -371,8 +371,8 @@ namespace AutoWrap.Meta
 
         protected override void AddPreDeclarations()
         {
-            if (!_t.IsNested)
-                _wrapper.AddPragmaMakePublicForType(_t);
+            if (!_definition.IsNested)
+                _wrapper.AddPragmaMakePublicForType(_definition);
         }
 
         protected override void AddAllNestedTypes()
@@ -389,7 +389,7 @@ namespace AutoWrap.Meta
 
         protected override string GetBaseAndInterfaces()
         {
-            return _t.FullCLRName;
+            return _definition.FullCLRName;
         }
 
         protected override void AddPrivateDeclarations()
