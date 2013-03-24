@@ -64,9 +64,9 @@ namespace AutoWrap.Meta
             base.AddPublicDeclarations();
 
             _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullNativeName + " )");
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("property IntPtr NativePtr");
             _sb.AppendLine("{");
             _sb.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
@@ -74,17 +74,17 @@ namespace AutoWrap.Meta
 
             if (!IsReadOnly && IsConstructable)
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 AddCreators();
 
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 _sb.AppendLine("void DestroyNativePtr()");
                 _sb.AppendLine("{");
                 _sb.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
                 _sb.AppendLine("}");
             }
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("property bool IsNull");
             _sb.AppendLine("{");
             _sb.AppendLine("\tbool get() { return (_native == 0); }");

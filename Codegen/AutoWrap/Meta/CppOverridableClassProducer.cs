@@ -424,12 +424,12 @@ namespace AutoWrap.Meta
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 _sb.AppendLine(postCall);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             AddConstructorBody();
 
             _sb.DecreaseIndent();
@@ -487,11 +487,11 @@ namespace AutoWrap.Meta
             else
                 AddPublicConstructor(null);
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             foreach (PropertyDefinition prop in _overridableProperties)
             {
                 AddProperty(prop);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
@@ -499,7 +499,7 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public)
                 {
                     AddMethod(func);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
         }
@@ -511,7 +511,7 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
         }

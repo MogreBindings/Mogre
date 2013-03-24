@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
             if (!IsReadOnly && IsConstructable)
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 AddCreators();
             }
         }
@@ -68,7 +68,7 @@ namespace AutoWrap.Meta
                 else
                     AddCreator(null);
 
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -141,9 +141,9 @@ namespace AutoWrap.Meta
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 _sb.AppendLine(postCall);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
 
             _sb.AppendLine("return ptr;");

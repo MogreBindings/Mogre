@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
                 {
                     _sb.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
                 }
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 

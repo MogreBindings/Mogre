@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
                 if (!field.IsIgnored)
                     _sb.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
             }
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
 
             _sb.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "& obj)");
             _sb.AppendLine("{");
@@ -81,12 +81,12 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("clr->" + NameToPrivate(field) + " = " + conv + ";");
                 }
             }
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("return clr;");
             _sb.DecreaseIndent();
             _sb.AppendLine("}");
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "* pObj)");
             _sb.AppendLine("{");
             _sb.AppendLine("\treturn *pObj;");

@@ -97,10 +97,10 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("bool* _overriden;");
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("gcroot<" + className + "^> _managed;");
 
             //_sb.AppendLine();
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
             //    _sb.AppendLine(field.NativeTypeName + "& ref_" + field.Name + ";");
             //}
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
         }
 
@@ -407,13 +407,13 @@ namespace AutoWrap.Meta
 
             AddPublicConstructors();
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             foreach (PropertyDefinition prop in _overridableProperties)
             {
                 if (!prop.IsAbstract)
                 {
                     AddProperty(prop);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
 
@@ -423,7 +423,7 @@ namespace AutoWrap.Meta
                     && !func.IsAbstract)
                 {
                     AddMethod(func);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
         }
@@ -439,7 +439,7 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
         }

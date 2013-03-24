@@ -53,7 +53,7 @@ namespace AutoWrap.Meta
             {
                 _sb.AppendLine(_definition.FullNativeName + "* _native;");
                 _sb.AppendLine("bool _createdByCLR;");
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 

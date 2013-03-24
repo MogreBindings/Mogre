@@ -45,8 +45,8 @@ namespace AutoWrap.Meta
         {
             _builder.Append(_curIndention + str);
         }
-    
-        public void AppendLine()
+
+        public void AppendEmptyLine()
         {
             _builder.AppendLine("");
         }

@@ -859,12 +859,12 @@ namespace AutoWrap.Meta
             sb.AppendLine("public protected:");
             sb.IncreaseIndent();
             sb.AppendLine("\t" + type.FullNativeName + "* _sharedPtr;");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine(type.Name + "(" + type.FullNativeName + "& sharedPtr) : " + baseClass + "( sharedPtr.getPointer() )");
             sb.AppendLine("{");
             sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "(sharedPtr);");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("!" + type.Name + "()");
             sb.AppendLine("{");
             sb.IncreaseIndent();
@@ -875,18 +875,18 @@ namespace AutoWrap.Meta
             sb.AppendLine("}");
             sb.DecreaseIndent();
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("~" + type.Name + "()");
             sb.AppendLine("{");
             sb.AppendLine("\tthis->!" + type.Name + "();");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.DecreaseIndent();
             sb.AppendLine("public:");
             sb.IncreaseIndent();
 
             sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_SHAREDPTR( " + className + " )");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
 
             if (type is ClassDefinition)
             {
@@ -901,7 +901,7 @@ namespace AutoWrap.Meta
                     sb.AppendLine("{");
                     sb.AppendLine("\treturn (" + type.Name + "^) ptr;");
                     sb.AppendLine("}");
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
 
                     sb.AppendLine("static operator " + type.Name + "^ ( ResourcePtr^ ptr )");
                     sb.AppendLine("{");
@@ -912,7 +912,7 @@ namespace AutoWrap.Meta
                     sb.AppendLine("return gcnew " + type.Name + "( (" + type.FullNativeName + ") *(ptr->_sharedPtr) );");
                     sb.DecreaseIndent();
                     sb.AppendLine("}");
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
                 }
             }
 
@@ -928,7 +928,7 @@ namespace AutoWrap.Meta
                 sb.AppendLine("{");
                 sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
                 sb.AppendLine("}");
-                sb.AppendLine();
+                sb.AppendEmptyLine();
             }
             else
             {
@@ -936,7 +936,7 @@ namespace AutoWrap.Meta
                 sb.AppendLine("{");
                 sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "( static_cast<" + nativeClass + "*>(obj->_native) );");
                 sb.AppendLine("}");
-                sb.AppendLine();
+                sb.AppendEmptyLine();
             }
             //sb.AppendLine("void Bind(" + baseClass + "^ obj)");
             //sb.AppendLine("{");
@@ -952,7 +952,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("{");
             sb.AppendLine("\treturn false;");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("return (_native == clr->_native);");
             sb.DecreaseIndent();
             sb.AppendLine("}");
@@ -963,11 +963,11 @@ namespace AutoWrap.Meta
             sb.AppendLine("{");
             sb.AppendLine("\treturn false;");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("return (_native == obj->_native);");
             sb.DecreaseIndent();
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
 
             sb.AppendLine("static bool operator == (" + type.Name + "^ val1, " + type.Name + "^ val2)");
             sb.AppendLine("{");
@@ -977,24 +977,24 @@ namespace AutoWrap.Meta
             sb.AppendLine("return (val1->_native == val2->_native);");
             sb.DecreaseIndent();
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("static bool operator != (" + type.Name + "^ val1, " + type.Name + "^ val2)");
             sb.AppendLine("{");
             sb.AppendLine("\treturn !(val1 == val2);");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
 
             sb.AppendLine("virtual int GetHashCode() override");
             sb.AppendLine("{");
             sb.AppendLine("\treturn reinterpret_cast<int>( _native );");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
 
             sb.AppendLine("property IntPtr NativePtr");
             sb.AppendLine("{");
             sb.AppendLine("\tIntPtr get() { return (IntPtr)_sharedPtr; }");
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
 
             sb.AppendLine("property bool Unique");
             sb.AppendLine("{");
@@ -1005,7 +1005,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("}");
             sb.DecreaseIndent();
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             sb.AppendLine("property int UseCount");
             sb.AppendLine("{");
             sb.IncreaseIndent();
@@ -1015,7 +1015,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("}");
             sb.DecreaseIndent();
             sb.AppendLine("}");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
             //sb.AppendLine("void SetNull()");
             //sb.AppendLine("{");
             //sb.AppendLine("\t(*_sharedPtr).setNull();");
@@ -1068,7 +1068,7 @@ namespace AutoWrap.Meta
                 {
                     sb.AppendLine("#undef INC_STLLIST_DEFINE_REMOVE_AND_UNIQUE");
                     sb.AppendLine("#define INC_STLLIST_DEFINE_REMOVE_AND_UNIQUE(M)");
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
                 }
 
                 sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].MemberTypeCLRName);
@@ -1120,7 +1120,7 @@ namespace AutoWrap.Meta
 
                 if (t.HasAttribute<STLListNoRemoveAndUniqueAttribute>())
                 {
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
                     sb.AppendLine("#undef INC_STLLIST_DEFINE_REMOVE_AND_UNIQUE");
                     sb.AppendLine("#define INC_STLLIST_DEFINE_REMOVE_AND_UNIQUE(M)    INC_STLLIST_REMOVE_AND_UNIQUE_DEFINITIONS(M)");
                 }
@@ -1133,7 +1133,7 @@ namespace AutoWrap.Meta
                 sb.AppendLine("#undef STLDECL_NATIVEVALUE");
             }
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         public void CppAddSTLContainer(TypedefDefinition t, IndentStringBuilder sb)
@@ -1149,7 +1149,7 @@ namespace AutoWrap.Meta
                 {
                     sb.AppendLine("#undef CPP_STLLIST_DEFINE_REMOVE_AND_UNIQUE");
                     sb.AppendLine("#define CPP_STLLIST_DEFINE_REMOVE_AND_UNIQUE(PREFIX,CLASS_NAME,M,N)");
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
                 }
 
                 sb.AppendLine("#define STLDECL_MANAGEDTYPE " + t.TypeMembers[0].MemberTypeCLRName);
@@ -1203,7 +1203,7 @@ namespace AutoWrap.Meta
 
                 if (t.HasAttribute<STLListNoRemoveAndUniqueAttribute>())
                 {
-                    sb.AppendLine();
+                    sb.AppendEmptyLine();
                     sb.AppendLine("#undef CPP_STLLIST_DEFINE_REMOVE_AND_UNIQUE");
                     sb.AppendLine("#define CPP_STLLIST_DEFINE_REMOVE_AND_UNIQUE(PREFIX,CLASS_NAME,M,N)    CPP_STLLIST_REMOVE_AND_UNIQUE_DEFINITIONS(PREFIX,CLASS_NAME,M,N)");
                 }
@@ -1216,7 +1216,7 @@ namespace AutoWrap.Meta
                 sb.AppendLine("#undef STLDECL_NATIVEVALUE");
             }
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         public void IncAddIterator(DefIterator t, IndentStringBuilder sb)
@@ -1252,7 +1252,7 @@ namespace AutoWrap.Meta
             else
                 sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )\n");
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         public void CppAddIterator(DefIterator t, IndentStringBuilder sb)
@@ -1305,7 +1305,7 @@ namespace AutoWrap.Meta
 
             AddTypeDependancy(t.TypeMembers[0].MemberType);
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         public void IncAddInternalTypeDef(TypedefDefinition t, IndentStringBuilder sb)
@@ -1341,7 +1341,7 @@ namespace AutoWrap.Meta
                 added.Add(type.IncludeFile);
             }
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, IndentStringBuilder sb)
@@ -1362,7 +1362,7 @@ namespace AutoWrap.Meta
                 added.Add(type.IncludeFile);
             }
 
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         public virtual void AddTypeDependancy(AbstractTypeDefinition type)

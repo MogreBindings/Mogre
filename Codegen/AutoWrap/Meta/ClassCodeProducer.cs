@@ -596,7 +596,7 @@ namespace AutoWrap.Meta
             if (HasStaticCachedFields())
             {
                 AddStaticConstructor();
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -746,7 +746,7 @@ namespace AutoWrap.Meta
                     //else
                         AddPropertyField(field);
 
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                 }
             }
 
@@ -770,13 +770,13 @@ namespace AutoWrap.Meta
                     {
                       if( !f.IsIgnored )
                         AddPredefinedMethods( PredefinedMethods.Equals );
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                     }
                     else if (f.Name.EndsWith("="))
                     {
                       if(!f.IsIgnored)
                         AddPredefinedMethods(PredefinedMethods.CopyTo);
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                     }
                 }
                 else if (f.IsDeclarableFunction)
@@ -789,7 +789,7 @@ namespace AutoWrap.Meta
             if (_definition.HasAttribute<IncludePredefinedMethodAttribute>())
             {
                 AddPredefinedMethods(_definition.GetAttribute<IncludePredefinedMethodAttribute>().Methods);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
 
             foreach (ClassDefinition cls in _interfaces)
@@ -857,7 +857,7 @@ namespace AutoWrap.Meta
                         //else
                             AddInterfacePropertyField(field);
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                     }
                 }
             }
@@ -896,7 +896,7 @@ namespace AutoWrap.Meta
                         //else
                             AddPropertyField(field);
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                     }
                 }
 

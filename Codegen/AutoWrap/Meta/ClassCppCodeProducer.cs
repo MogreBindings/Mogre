@@ -62,7 +62,7 @@ namespace AutoWrap.Meta
         protected override void AddPostBody()
         {
             base.AddPostBody();
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
 
             if (_definition.HasAttribute<CLRObjectAttribute>(true)) {
                 _sb.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_definition));
@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
                 _sb.AppendLine("}");
             }
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
         }
 
         protected override void AddInternalDeclarations()
@@ -84,7 +84,7 @@ namespace AutoWrap.Meta
                 _sb.AppendLine("{");
                 _sb.AppendLine("\treturn static_cast<" + cls.FullNativeName + "*>( " + GetNativeInvokationTarget() + " );");
                 _sb.AppendLine("}");
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
 					AddPublicConstructor(null);
 				}
 
-				_sb.AppendLine();
+				_sb.AppendEmptyLine();
 			}
 
 			base.AddPublicDeclarations();
@@ -196,9 +196,9 @@ namespace AutoWrap.Meta
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 _sb.AppendLine(postCall);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
 
             AddConstructorBody();
@@ -246,7 +246,7 @@ namespace AutoWrap.Meta
                 string txt = _definition.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -281,7 +281,7 @@ namespace AutoWrap.Meta
                     string txt = f.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
                     txt = ReplaceCustomVariables(txt, f);
                     _sb.AppendLine(txt);
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                     return;
                 }
             }
@@ -714,7 +714,7 @@ namespace AutoWrap.Meta
                     _sb.AppendLine("    }\n");
                     _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                     _sb.AppendLine("    if (clr->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                    _sb.AppendLine();
+                    _sb.AppendEmptyLine();
                     _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullNativeName + "*>(clr->_native));");
                     _sb.AppendLine("}\n");
 
@@ -728,22 +728,22 @@ namespace AutoWrap.Meta
                         _sb.AppendLine("    }\n");
                         _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                         _sb.AppendLine("    if (obj->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _wrapper.NativeNamespace + "::" + cls + "*>(obj->_native));");
                         _sb.AppendLine("}");
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("bool " + cls + "::operator ==(" + cls + "^ obj1, " + cls + "^ obj2)");
                         _sb.AppendLine("{");
                         _sb.IncreaseIndent();
                         _sb.AppendLine("if ((Object^)obj1 == (Object^)obj2) return true;");
                         _sb.AppendLine("if ((Object^)obj1 == nullptr || (Object^)obj2 == nullptr) return false;");
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("return obj1->Equals(obj2);");
                         _sb.DecreaseIndent();
                         _sb.AppendLine("}");
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("bool " + cls + "::operator !=(" + cls + "^ obj1, " + cls + "^ obj2)");
                         _sb.AppendLine("{");
                         _sb.AppendLine("\treturn !(obj1 == obj2);");
@@ -755,17 +755,17 @@ namespace AutoWrap.Meta
                         _sb.AppendLine("{");
                         _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                         _sb.AppendLine("    if (obj._native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("    return *_native == *obj._native;");
                         _sb.AppendLine("}");
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("bool " + cls + "::operator ==(" + cls + " obj1, " + cls + " obj2)");
                         _sb.AppendLine("{");
                         _sb.AppendLine("\treturn obj1.Equals(obj2);");
                         _sb.AppendLine("}");
 
-                        _sb.AppendLine();
+                        _sb.AppendEmptyLine();
                         _sb.AppendLine("bool " + cls + "::operator !=(" + cls + " obj1, " + cls + " obj2)");
                         _sb.AppendLine("{");
                         _sb.AppendLine("\treturn !obj1.Equals(obj2);");

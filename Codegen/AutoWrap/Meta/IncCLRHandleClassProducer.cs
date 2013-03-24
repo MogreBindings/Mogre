@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
             _sb.AppendLine("{");
             _sb.AppendLine("\t_native = 0;");

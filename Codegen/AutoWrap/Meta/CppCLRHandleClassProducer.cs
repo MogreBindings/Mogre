@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
         protected override void AddConstructorBody()
         {
             base.AddConstructorBody();
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             _sb.AppendLine("_native->_CLRHandle._MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }
 

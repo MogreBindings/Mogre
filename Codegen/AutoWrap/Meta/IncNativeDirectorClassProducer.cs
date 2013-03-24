@@ -129,7 +129,7 @@ namespace AutoWrap.Meta
 
             sb.DecreaseIndent();
             sb.AppendLine("};");
-            sb.AppendLine();
+            sb.AppendEmptyLine();
         }
 
         //protected static void AddEventArgsClass(DefFunction func, IndentStringBuilder sb)

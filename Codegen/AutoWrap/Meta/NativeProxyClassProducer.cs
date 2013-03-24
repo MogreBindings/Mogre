@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
         {
             AddFields();
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
             if (_definition.Constructors.Length > 0)
             {
                 foreach (MemberMethodDefinition func in _definition.Constructors)
@@ -120,7 +120,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 AddOverridableFunction(func);
             }
 

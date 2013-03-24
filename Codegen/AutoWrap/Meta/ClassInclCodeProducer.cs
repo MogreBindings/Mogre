@@ -212,7 +212,7 @@ namespace AutoWrap.Meta
             foreach (ClassDefinition cls in _interfaces)
             {
                 _sb.AppendLine("virtual " + cls.FullNativeName + "* _" + cls.CLRName + "_GetNativePtr() = " + cls.CLRName + "::_GetNativePtr;");
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -283,7 +283,7 @@ namespace AutoWrap.Meta
                 string txt = _definition.GetAttribute<CustomIncPreDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -296,7 +296,7 @@ namespace AutoWrap.Meta
                 string txt = _definition.GetAttribute<CustomIncDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
                 _sb.AppendLine(txt);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -563,7 +563,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _sb.AppendLine();
+            _sb.AppendEmptyLine();
 
             base.AddAllNestedTypes();
         }
@@ -646,7 +646,7 @@ namespace AutoWrap.Meta
                 string txt = f.GetAttribute<CustomIncDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt, f);
                 _sb.AppendLine(txt);
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 return;
             }
 
@@ -938,7 +938,7 @@ namespace AutoWrap.Meta
                 _sb.IncreaseIndent();
                 _sb.AppendLine("if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                 _sb.AppendLine("if (dest" + (_definition.IsValueType ? "." : "->") + "_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'dest' is null.\");");
-                _sb.AppendLine();
+                _sb.AppendEmptyLine();
                 _sb.AppendLine("*(dest" + (_definition.IsValueType ? "." : "->") + "_native) = *_native;");
                 _sb.DecreaseIndent();
                 _sb.AppendLine("}");
