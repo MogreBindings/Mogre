@@ -30,37 +30,58 @@ namespace AutoWrap.Meta
 
         public void InsertAt(uint pos, string str, bool indent = true)
         {
-            _builder.Insert((int)pos, str);
+            _builder.Insert((int)pos, CreateAppendableString(str, indent, indent));
         }
 
         /// <summary>
-        /// Appends the specified string to this builder.
+        /// Appends the specified string with no indention of the first line.
         /// </summary>
+        /// <param name="otherLinesIndent">if this is true (default), all lines
+        /// of <paramref name="str"/> (except for the first one) will be indented.</param>
+        /// <see cref="AppendIndent"/>
         public void Append(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
         }
 
+        /// <summary>
+        /// Appends the specified string with indention added to the first line.
+        /// </summary>
+        /// <param name="otherLinesIndent">if this is true (default), all lines
+        /// of <paramref name="str"/> will be indented. If it is false, only the
+        /// first line will be indented.</param>
         public void AppendIndent(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
         }
 
-        public void AppendEmptyLine(bool addIndentition = false)
+        /// <summary>
+        /// Adds an empty line.
+        /// </summary>
+        public void AppendEmptyLine()
         {
             _builder.Append(NEWLINE_STRING);
-            if (addIndentition)
-                _builder.Append(_curIndention);
         }
     
-        public void AppendLine(string str)
+        /// <summary>
+        /// Appends the specified string and adds a new line at the end of the string.
+        /// </summary>
+        /// <param name="otherLinesIndent">if this is true (default), all lines
+        /// of <paramref name="str"/> will be indented. If it is false, only the
+        /// first line will be indented.</param>
+        /// <param name="firstLineIndent">if this is true (default) the first line will
+        /// be indented</param>
+        /// <param name="otherLinesIndent">if this is true (default), all lines
+        /// of <paramref name="str"/> (except for the first one) will be indented.</param>
+        /// <see cref="AppendIndent"/>
+        public void AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
         {
-            _builder.AppendLine(CreateAppendableString(str, true, true));
+            _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(NEWLINE_STRING);
         }
     
         public void AppendFormat(string str, params object[] args)
         {
-            _builder.AppendFormat(str, args);
+            _builder.AppendFormat(CreateAppendableString(str, false, true), args);
         }
     
         public void AppendFormatIndent(string str, params object[] args)
