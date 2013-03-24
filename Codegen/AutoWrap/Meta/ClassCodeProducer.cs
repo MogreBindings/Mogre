@@ -479,7 +479,7 @@ namespace AutoWrap.Meta
 
             Add();
 
-            orig.sb.Insert(0, _sb.ToString());
+            orig.InsertAt(0, _sb.ToString());
             _sb = orig;
         }
 

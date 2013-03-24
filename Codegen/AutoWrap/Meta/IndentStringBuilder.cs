@@ -5,60 +5,78 @@ namespace AutoWrap.Meta
 {
     public class IndentStringBuilder
     {
-        private string indstr = "";
+        public const string INDENT_STRING = "\t";
 
-        public StringBuilder sb = new StringBuilder();
+        private readonly StringBuilder _builder = new StringBuilder();
+        private string _curIndention = "";
 
+        /// <summary>
+        /// Increases the indention by one level.
+        /// </summary>
         public void IncreaseIndent()
         {
-            indstr += "\t";
+            _curIndention += INDENT_STRING;
         }
 
+        /// <summary>
+        /// Decreases the indention by one level.
+        /// </summary>
         public void DecreaseIndent()
         {
-            indstr = indstr.Substring(1);
+            // Strip one indention level
+            _curIndention = _curIndention.Substring(INDENT_STRING.Length);
         }
 
+        public void InsertAt(uint pos, string str, bool indent = true)
+        {
+            _builder.Insert((int)pos, str);
+        }
+
+        /// <summary>
+        /// Appends the specified string to this builder.
+        /// </summary>
         public void Append(string str)
         {
-            sb.Append(str);
+            _builder.Append(str);
         }
-
+    
         public void AppendIndent(string str)
         {
-            sb.Append(indstr + str);
+            _builder.Append(_curIndention + str);
         }
-
+    
         public void AppendLine()
         {
-            sb.AppendLine("");
+            _builder.AppendLine("");
         }
-
+    
         public void AppendLine(string str)
         {
-            sb.AppendLine(AddIndentation(str));
+            _builder.AppendLine(CreateIndentedString(str));
         }
-
+    
         public void AppendFormat(string str, params object[] args)
         {
-            sb.AppendFormat(str, args);
+            _builder.AppendFormat(str, args);
         }
-
+    
         public void AppendFormatIndent(string str, params object[] args)
         {
-            sb.AppendFormat(AddIndentation(str), args);
+            _builder.AppendFormat(CreateIndentedString(str), args);
         }
-
+    
         public override string ToString()
         {
-            return sb.ToString();
+            return _builder.ToString();
         }
-
-        private string AddIndentation(string str)
+    
+        private string CreateIndentedString(string str)
         {
-            string res = indstr + String.Join("\n" + indstr, str.Replace("\r\n", "\n").Split('\n'));
-            if (res.EndsWith(indstr))
-                res = res.Substring(0, res.Length - indstr.Length);
+            string res = _curIndention + String.Join("\n" + _curIndention, str.Replace("\r\n", "\n").Split('\n'));
+          
+            if (res.EndsWith(_curIndention))
+                res = res.Substring(0, res.Length - _curIndention.Length);
+    
             return res;
         }
     }
