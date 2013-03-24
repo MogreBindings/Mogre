@@ -6,6 +6,7 @@ namespace AutoWrap.Meta
     public class IndentStringBuilder
     {
         public const string INDENT_STRING = "\t";
+        public const string NEWLINE_STRING = "\n";
 
         private readonly StringBuilder _builder = new StringBuilder();
         private string _curIndention = "";
@@ -52,7 +53,7 @@ namespace AutoWrap.Meta
     
         public void AppendLine(string str)
         {
-            _builder.AppendLine(CreateIndentedString(str));
+            _builder.AppendLine(CreateAppendableString(str, true));
         }
     
         public void AppendFormat(string str, params object[] args)
@@ -62,7 +63,7 @@ namespace AutoWrap.Meta
     
         public void AppendFormatIndent(string str, params object[] args)
         {
-            _builder.AppendFormat(CreateIndentedString(str), args);
+            _builder.AppendFormat(CreateAppendableString(str, true), args);
         }
     
         public override string ToString()
@@ -70,14 +71,23 @@ namespace AutoWrap.Meta
             return _builder.ToString();
         }
     
-        private string CreateIndentedString(string str)
+        private string CreateAppendableString(string str, bool indent)
         {
-            string res = _curIndention + String.Join("\n" + _curIndention, str.Replace("\r\n", "\n").Split('\n'));
-          
-            if (res.EndsWith(_curIndention))
-                res = res.Substring(0, res.Length - _curIndention.Length);
+            string[] lines = str.Replace("\r\n", "\n").Split('\n');
+            string result;
+
+            if (indent)
+            {
+                result = _curIndention + String.Join(NEWLINE_STRING + _curIndention, lines);
+
+                // Remove indention at the end of the new string when the 
+                // original string ended with an empty line.
+                if (result.EndsWith(_curIndention))
+                    result = result.Substring(0, result.Length - _curIndention.Length);
+            } else
+                result = String.Join(NEWLINE_STRING, lines);
     
-            return res;
+            return result;
         }
     }
 }
