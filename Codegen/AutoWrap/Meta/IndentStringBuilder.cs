@@ -41,14 +41,16 @@ namespace AutoWrap.Meta
             _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
         }
 
-        public void AppendIndent(string str, bool otherLinesIndent = false)
+        public void AppendIndent(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
         }
 
-        public void AppendEmptyLine()
+        public void AppendEmptyLine(bool addIndentition = false)
         {
             _builder.Append(NEWLINE_STRING);
+            if (addIndentition)
+                _builder.Append(_curIndention);
         }
     
         public void AppendLine(string str)

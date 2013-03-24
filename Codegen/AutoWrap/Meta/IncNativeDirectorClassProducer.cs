@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
                     base.AddMethod(f);
-                    _sb.AppendLine("");
+                    _sb.AppendEmptyLine();
                 }
             }
             _sb.DecreaseIndent();

@@ -174,7 +174,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                _sb.AppendLine("");
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -263,9 +263,9 @@ namespace AutoWrap.Meta
                 AddPublicConstructors();
             }
 
-            _sb.AppendLine("");
+            _sb.AppendEmptyLine();
             AddPublicFields();
-            _sb.AppendLine("");
+            _sb.AppendEmptyLine();
 
             if (_listeners.Count > 0)
             {
@@ -388,7 +388,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                _sb.AppendLine("");
+                _sb.AppendEmptyLine();
             }
         }
 
@@ -511,7 +511,7 @@ namespace AutoWrap.Meta
                         _sb.AppendLine("}\n");
                     }
                 }
-                _sb.AppendLine("");
+                _sb.AppendEmptyLine();
             }
         }
 
