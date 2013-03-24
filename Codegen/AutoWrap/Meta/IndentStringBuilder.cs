@@ -36,24 +36,24 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Appends the specified string to this builder.
         /// </summary>
-        public void Append(string str)
+        public void Append(string str, bool otherLinesIndent = true)
         {
-            _builder.Append(str);
+            _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
         }
-    
-        public void AppendIndent(string str)
+
+        public void AppendIndent(string str, bool otherLinesIndent = false)
         {
-            _builder.Append(_curIndention + str);
+            _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
         }
 
         public void AppendEmptyLine()
         {
-            _builder.AppendLine("");
+            _builder.Append(NEWLINE_STRING);
         }
     
         public void AppendLine(string str)
         {
-            _builder.AppendLine(CreateAppendableString(str, true));
+            _builder.AppendLine(CreateAppendableString(str, true, true));
         }
     
         public void AppendFormat(string str, params object[] args)
@@ -63,7 +63,7 @@ namespace AutoWrap.Meta
     
         public void AppendFormatIndent(string str, params object[] args)
         {
-            _builder.AppendFormat(CreateAppendableString(str, true), args);
+            _builder.AppendFormat(CreateAppendableString(str, true, true), args);
         }
     
         public override string ToString()
@@ -71,14 +71,22 @@ namespace AutoWrap.Meta
             return _builder.ToString();
         }
     
-        private string CreateAppendableString(string str, bool indent)
+        private string CreateAppendableString(string str, bool firstLineIndent, bool otherLinesIndent)
         {
             string[] lines = str.Replace("\r\n", "\n").Split('\n');
             string result;
 
-            if (indent)
+            if (firstLineIndent)
+                result = _curIndention;
+            else
+                result = "";
+
+            if (lines.Length == 1)
+                return result + lines[0];
+
+            if (otherLinesIndent)
             {
-                result = _curIndention + String.Join(NEWLINE_STRING + _curIndention, lines);
+                result += String.Join(NEWLINE_STRING + _curIndention, lines);
 
                 // Remove indention at the end of the new string when the 
                 // original string ended with an empty line.
