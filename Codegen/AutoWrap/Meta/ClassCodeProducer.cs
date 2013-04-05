@@ -88,7 +88,7 @@ namespace AutoWrap.Meta
                 {
                     MemberMethodDefinition tf = _definition.GetFunctionWithSignature(f.Signature);
                     if (tf != null)
-                        tf.Attributes.AddRange(f.Attributes);
+                        tf.AddAttributes(f.Attributes);
                 }
 
                 //Store properties of interface classes. They have precedence over type's properties.

@@ -29,11 +29,25 @@ namespace AutoWrap.Meta
 {
     public class AttributeSet : AbstractCodeProducer
     {
-        public List<AutoWrapAttribute> Attributes = new List<AutoWrapAttribute>();
+        private List<AutoWrapAttribute> _attributes = new List<AutoWrapAttribute>();
+
+        public IEnumerable<AutoWrapAttribute> Attributes
+        {
+            get { return _attributes; }
+        }
+
+        public virtual void AddAttribute(AutoWrapAttribute attrib)
+        {
+            _attributes.Add(attrib);
+        }
+
+        public virtual void AddAttributes(IEnumerable<AutoWrapAttribute> attribs) {
+            _attributes.AddRange(attribs);
+        }
 
         public virtual bool HasAttribute<T>() where T : AutoWrapAttribute
         {
-            foreach (AutoWrapAttribute attr in Attributes)
+            foreach (AutoWrapAttribute attr in _attributes)
             {
                 if (attr is T)
                     return true;
@@ -44,13 +58,21 @@ namespace AutoWrap.Meta
 
         public virtual T GetAttribute<T>()
         {
-            foreach (AutoWrapAttribute attr in Attributes)
+            foreach (AutoWrapAttribute attr in _attributes)
             {
                 if (attr is T)
                     return (T)(object)attr;
             }
 
             return default(T);
+        }
+
+        // FIXME: Check whether this is really necessary.
+        public void LinkAttributes(AttributeSet set)
+        {
+            // NOTE: This is needed at one location and it's not enough to copy the elements.
+            //   We need to use the same reference.
+            _attributes = set._attributes;
         }
     }
 }

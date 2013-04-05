@@ -50,7 +50,7 @@ namespace AutoWrap.Meta
             }
 
             if (!hasit)
-                type.Attributes.Add(attr);
+                type.AddAttribute(attr);
 
             if (type.BaseClass != null)
                 AddAttributeToInheritanceChain(type.BaseClass, attr);
@@ -66,7 +66,7 @@ namespace AutoWrap.Meta
                 case WrapTypes.NativePtrValueType:
                 case WrapTypes.ValueType:
                     if (!holder.HasAttribute<ValueTypeAttribute>())
-                        holder.Attributes.Add(new ValueTypeAttribute());
+                        holder.AddAttribute(new ValueTypeAttribute());
                     break;
                 case WrapTypes.Overridable:
                     ClassDefinition type = (ClassDefinition)holder;

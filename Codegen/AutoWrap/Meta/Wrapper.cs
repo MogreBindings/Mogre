@@ -143,7 +143,7 @@ namespace AutoWrap.Meta
 
             if (type.IsSharedPtr)
             {
-                type.Attributes.Add(new WrapTypeAttribute(WrapTypes.SharedPtr));
+                type.AddAttribute(new WrapTypeAttribute(WrapTypes.SharedPtr));
                 return true;
             }
             else if (type is ClassDefinition)
@@ -152,15 +152,15 @@ namespace AutoWrap.Meta
                 if (cls.HasAttribute<CLRObjectAttribute>(true))
                 {
                     if (cls.HasAttribute<OverridableAttribute>(true))
-                        cls.Attributes.Add(new WrapTypeAttribute(WrapTypes.Overridable));
+                        cls.AddAttribute(new WrapTypeAttribute(WrapTypes.Overridable));
                     else
-                        cls.Attributes.Add(new WrapTypeAttribute(WrapTypes.NonOverridable));
+                        cls.AddAttribute(new WrapTypeAttribute(WrapTypes.NonOverridable));
                     return true;
                 }
 
                 if (cls.IsSingleton)
                 {
-                    cls.Attributes.Add(new WrapTypeAttribute(WrapTypes.Singleton));
+                    cls.AddAttribute(new WrapTypeAttribute(WrapTypes.Singleton));
                     return true;
                 }
 

@@ -121,7 +121,7 @@ namespace AutoWrap.Meta
             {
                 expl.SurroundingClass = typedef.SurroundingClass;
                 expl.NameSpace = typedef.NameSpace;
-                expl.Attributes = typedef.Attributes;
+                expl.LinkAttributes(typedef);
                 return expl;
             }
 

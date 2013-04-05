@@ -1114,7 +1114,7 @@ namespace AutoWrap.Meta
                             {
                                 if (sub.InnerText == "CLRObject")
                                 {
-                                    this.Attributes.Add(new CLRObjectAttribute());
+                                    this.AddAttribute(new CLRObjectAttribute());
                                     this._isDirectSubclassOfCLRObject = true;
                                 }
                                 else

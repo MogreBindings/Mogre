@@ -189,7 +189,7 @@ namespace AutoWrap.Meta
 
         private void AddAttributeInHolder(AttributeSet holder, AutoWrapAttribute attr)
         {
-            holder.Attributes.Add(attr);
+            holder.AddAttribute(attr);
             _holders.Add(new KeyValuePair<AttributeSet, AutoWrapAttribute>(holder, attr));
         }
 
