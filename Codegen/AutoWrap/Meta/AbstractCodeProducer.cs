@@ -32,7 +32,7 @@ namespace AutoWrap.Meta
     /// <summary>
     /// Base class for all classes that generate some kind of source code.
     /// </summary>
-    public class CodeProducer
+    public abstract class AbstractCodeProducer
     {
         protected virtual string GetNativeDirectorReceiverInterfaceName(ClassDefinition type)
         {
