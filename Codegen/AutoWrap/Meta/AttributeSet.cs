@@ -23,48 +23,60 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AutoWrap.Meta
 {
     public class AttributeSet : AbstractCodeProducer
     {
-        private List<AutoWrapAttribute> _attributes = new List<AutoWrapAttribute>();
+        private Dictionary<Type, AutoWrapAttribute> _attributes = new Dictionary<Type, AutoWrapAttribute>();
 
+        /// <summary>
+        /// The attributes in this attribute set.
+        /// </summary>
         public IEnumerable<AutoWrapAttribute> Attributes
         {
-            get { return _attributes; }
+            get
+            {
+                foreach (AutoWrapAttribute attrib in _attributes.Values)
+                    yield return attrib;
+            }
         }
 
+        /// <summary>
+        /// Adds an attribute to this set. If this attribute has already been added then it's
+        /// overwritten.
+        /// </summary>
         public virtual void AddAttribute(AutoWrapAttribute attrib)
         {
-            _attributes.Add(attrib);
+            _attributes[attrib.GetType()] = attrib;
         }
 
-        public virtual void AddAttributes(IEnumerable<AutoWrapAttribute> attribs) {
-            _attributes.AddRange(attribs);
+        /// <summary>
+        /// Adds multiple attributes to this set.
+        /// </summary>
+        public void AddAttributes(IEnumerable<AutoWrapAttribute> attribs)
+        {
+            foreach (AutoWrapAttribute attrib in attribs)
+                AddAttribute(attrib);
         }
 
+        /// <summary>
+        /// Checks whether this set contains the specified attribute.
+        /// </summary>
+        /// <typeparam name="T">the attribute to look for (specified by its type)</typeparam>
         public virtual bool HasAttribute<T>() where T : AutoWrapAttribute
         {
-            foreach (AutoWrapAttribute attr in _attributes)
-            {
-                if (attr is T)
-                    return true;
-            }
-
-            return false;
+            return _attributes.ContainsKey(typeof(T));
         }
 
+        /// <summary>
+        /// Returns the attribute with the specified type T.
+        /// </summary>
+        /// <typeparam name="T">The attribute's type (i.e. the kind of attribute); if this
+        /// attribute isn't part of this set a <c>KeyNotFoundException</c> will be thrown.</typeparam>
         public virtual T GetAttribute<T>()
         {
-            foreach (AutoWrapAttribute attr in _attributes)
-            {
-                if (attr is T)
-                    return (T)(object)attr;
-            }
-
-            return default(T);
+            return (T)(object)_attributes[typeof(T)];
         }
 
         // FIXME: Check whether this is really necessary.
