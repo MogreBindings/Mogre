@@ -101,7 +101,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncValueClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public IncValueClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

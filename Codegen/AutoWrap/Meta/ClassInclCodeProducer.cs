@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     abstract class ClassInclCodeProducer : ClassCodeProducer 
     {
-        public ClassInclCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassInclCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
             AddPreDeclarations();

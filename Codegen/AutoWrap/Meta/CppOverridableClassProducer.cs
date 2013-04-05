@@ -36,7 +36,7 @@ namespace AutoWrap.Meta
                 && (f.Type.IsValueType || f.Type.IsPureManagedClass));
         }
 
-        public static void AddNativeProxyMethodBody(MemberMethodDefinition f, string managedTarget, IndentStringBuilder sb)
+        public static void AddNativeProxyMethodBody(MemberMethodDefinition f, string managedTarget, SourceCodeStringBuilder sb)
         {
             string managedCall;
             string fullPostConv = null;
@@ -151,7 +151,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public CppNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -247,8 +247,8 @@ namespace AutoWrap.Meta
         {
             if (_definition.IsInterface)
             {
-                IndentStringBuilder tempsb = _sb;
-                _sb = new IndentStringBuilder();
+                SourceCodeStringBuilder tempsb = _sb;
+                _sb = new SourceCodeStringBuilder();
                 base.Add();
                 string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
                 string res = _sb.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
@@ -278,7 +278,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
             _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _definition, _sb));
@@ -441,7 +441,7 @@ namespace AutoWrap.Meta
     {
         protected ClassDefinition[] _additionalInterfaces;
 
-        public CppSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb, ClassDefinition[] additionalInterfaces)
+        public CppSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb, ClassDefinition[] additionalInterfaces)
             : base(wrapper, t, sb)
         {
             this._additionalInterfaces = additionalInterfaces;

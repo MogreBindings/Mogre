@@ -108,7 +108,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncNonOverridableClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public IncNonOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

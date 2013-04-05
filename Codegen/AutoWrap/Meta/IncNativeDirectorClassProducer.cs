@@ -44,7 +44,7 @@ namespace AutoWrap.Meta
             get { return false; }
         }
 
-        public IncNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public IncNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -92,7 +92,7 @@ namespace AutoWrap.Meta
             base.AddPreBody();
         }
 
-        public static void AddMethodHandlersClass(ClassDefinition type, IndentStringBuilder sb)
+        public static void AddMethodHandlersClass(ClassDefinition type, SourceCodeStringBuilder sb)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
                 throw new Exception("Unexpected");

@@ -3,7 +3,10 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class IndentStringBuilder
+    /// <summary>
+    /// This string builder is used to create all generated source code files.
+    /// </summary>
+    public class SourceCodeStringBuilder
     {
         /// <summary>
         /// The string to be used to indent a line by one level.
@@ -45,7 +48,7 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> (except for the first one) will be indented.</param>
         /// <see cref="AppendIndent"/>
-        public IndentStringBuilder Append(string str, bool otherLinesIndent = true)
+        public SourceCodeStringBuilder Append(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
             return this;
@@ -57,7 +60,7 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> will be indented. If it is false, only the
         /// first line will be indented.</param>
-        public IndentStringBuilder AppendIndent(string str, bool otherLinesIndent = true)
+        public SourceCodeStringBuilder AppendIndent(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
             return this;
@@ -82,19 +85,19 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> (except for the first one) will be indented.</param>
         /// <see cref="AppendIndent"/>
-        public IndentStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
+        public SourceCodeStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true) 
         {
             _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(NEWLINE_STRING);
             return this;
         }
 
-        public IndentStringBuilder AppendFormat(string str, params object[] args)
+        public SourceCodeStringBuilder AppendFormat(string str, params object[] args) 
         {
             _builder.AppendFormat(CreateAppendableString(str, false, true), args);
             return this;
         }
-    
-        public IndentStringBuilder AppendFormatIndent(string str, params object[] args)
+
+        public SourceCodeStringBuilder AppendFormatIndent(string str, params object[] args)
         {
             _builder.AppendFormat(CreateAppendableString(str, true, true), args);
             return this;

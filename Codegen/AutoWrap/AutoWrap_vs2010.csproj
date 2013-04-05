@@ -91,7 +91,7 @@
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
     <Compile Include="Meta\IncCLRHandleClassProducer.cs" />
-    <Compile Include="Meta\IndentStringBuilder.cs" />
+    <Compile Include="Meta\SourceCodeStringBuilder.cs" />
     <Compile Include="Meta\Mogre17.cs" />
     <Compile Include="Meta\NativeProtectedTypesProxy.cs" />
     <Compile Include="Meta\CppNativeProtectedTypesProxy.cs" />

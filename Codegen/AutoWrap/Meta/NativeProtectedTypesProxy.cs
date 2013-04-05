@@ -38,7 +38,7 @@ namespace AutoWrap.Meta
             return name;
         }
 
-        public NativeProtectedTypesProxy(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public NativeProtectedTypesProxy(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
@@ -192,7 +192,7 @@ namespace AutoWrap.Meta
             return name;
         }
 
-        public NativeProtectedStaticsProxy(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public NativeProtectedStaticsProxy(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

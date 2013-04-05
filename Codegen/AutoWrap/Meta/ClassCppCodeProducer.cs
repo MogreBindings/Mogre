@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     abstract class ClassCppCodeProducer : ClassCodeProducer
     {
-        public ClassCppCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassCppCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
             //if (AllowSubclassing)

@@ -55,7 +55,7 @@ namespace AutoWrap.Meta
             _sb.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
         }
 
-        public IncCLRHandleClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public IncCLRHandleClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

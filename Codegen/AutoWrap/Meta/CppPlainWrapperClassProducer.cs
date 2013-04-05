@@ -30,7 +30,7 @@ namespace AutoWrap.Meta
 {
     class CppPlainWrapperClassProducer : ClassCppCodeProducer
     {
-        public CppPlainWrapperClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public CppPlainWrapperClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

@@ -152,7 +152,7 @@ namespace AutoWrap.Meta
             _sb.AppendLine("}");
         }
 
-        public CppNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public CppNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }

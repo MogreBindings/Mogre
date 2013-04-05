@@ -31,7 +31,7 @@ namespace AutoWrap.Meta
     {
         protected Wrapper _wrapper;
         protected ClassDefinition _definition;
-        protected IndentStringBuilder _sb;
+        protected SourceCodeStringBuilder _sb;
         protected List<ClassDefinition> _listeners = new List<ClassDefinition>();
         protected List<PropertyDefinition> _interfaceProperties = new List<PropertyDefinition>();
         protected List<MemberMethodDefinition> _abstractFunctions = new List<MemberMethodDefinition>();
@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
         protected List<AbstractMemberDefinition> _cachedMembers = new List<AbstractMemberDefinition>();
 
-        public ClassCodeProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public ClassCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
         {
             this._wrapper = wrapper;
             this._definition = t;
@@ -474,8 +474,8 @@ namespace AutoWrap.Meta
 
         public virtual void AddFirst()
         {
-            IndentStringBuilder orig = _sb;
-            _sb = new IndentStringBuilder();
+            SourceCodeStringBuilder orig = _sb;
+            _sb = new SourceCodeStringBuilder();
 
             Add();
 

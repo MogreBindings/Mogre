@@ -447,7 +447,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            IndentStringBuilder sbTypes = new IndentStringBuilder();
+            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder();
             foreach (AbstractTypeDefinition t in IncludeFiles[includeFile])
             {
                 IncAddType(t, sbTypes);
@@ -463,7 +463,7 @@ namespace AutoWrap.Meta
                 producer.AddFirst();
             }
 
-            IndentStringBuilder sb = new IndentStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
             sb.AppendLine("#pragma once\n");
 
             IncAddIncludeFiles(includeFile, UsedTypes, sb);
@@ -486,7 +486,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            IndentStringBuilder contentsb = new IndentStringBuilder();
+            SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder();
             foreach (AbstractTypeDefinition t in IncludeFiles[include])
             {
                 CppAddType(t, contentsb);
@@ -502,7 +502,7 @@ namespace AutoWrap.Meta
                 producer.AddFirst();
             }
 
-            IndentStringBuilder sb = new IndentStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
             hasContent = false;
 
             CppAddIncludeFiles(include, UsedTypes, sb);
@@ -532,7 +532,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            IndentStringBuilder sbTypes = new IndentStringBuilder();
+            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder();
 
             new IncSubclassingClassProducer(this, type, sbTypes, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
@@ -558,7 +558,7 @@ namespace AutoWrap.Meta
                     producer.AddFirst();
             }
 
-            IndentStringBuilder sb = new IndentStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
             sb.AppendLine("#pragma once\n");
 
             sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
@@ -574,7 +574,7 @@ namespace AutoWrap.Meta
 
         public string GenerateCppFileCodeForOverridable(ClassDefinition type)
         {
-            IndentStringBuilder sb = new IndentStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
 
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
@@ -617,7 +617,7 @@ namespace AutoWrap.Meta
             return sb.ToString();
         }
 
-        public void IncAddType(AbstractTypeDefinition t, IndentStringBuilder sb)
+        public void IncAddType(AbstractTypeDefinition t, SourceCodeStringBuilder sb)
         {
             if (t.HasAttribute<CustomIncClassDefinitionAttribute>())
             {
@@ -710,7 +710,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public void CppAddType(AbstractTypeDefinition t, IndentStringBuilder sb)
+        public void CppAddType(AbstractTypeDefinition t, SourceCodeStringBuilder sb)
         {
             if (t.HasAttribute<CustomCppClassDefinitionAttribute>())
             {
@@ -780,7 +780,7 @@ namespace AutoWrap.Meta
         //{
         //    IncAddEnum(enm, sb, false);
         //}
-        public void IncAddEnum(EnumDefinition enm, IndentStringBuilder sb) //, bool inProtectedTypesProxy)
+        public void IncAddEnum(EnumDefinition enm, SourceCodeStringBuilder sb) //, bool inProtectedTypesProxy)
         {
             if (enm.Name[0] == '@')
                 return;
@@ -822,7 +822,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("};\n");
         }
 
-        private void IncAddSharedPtrType(AbstractTypeDefinition type, IndentStringBuilder sb)
+        private void IncAddSharedPtrType(AbstractTypeDefinition type, SourceCodeStringBuilder sb)
         {
             if (!type.Name.EndsWith("Ptr"))
                 throw new Exception("SharedPtr class that doesn't have a name ending to 'Ptr'");
@@ -1045,7 +1045,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("};\n\n");
         }
 
-        public void IncAddSTLContainer(TypedefDefinition t, IndentStringBuilder sb)
+        public void IncAddSTLContainer(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
             if (t is DefStdPair)
             {
@@ -1136,7 +1136,7 @@ namespace AutoWrap.Meta
             sb.AppendEmptyLine();
         }
 
-        public void CppAddSTLContainer(TypedefDefinition t, IndentStringBuilder sb)
+        public void CppAddSTLContainer(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
             if (t is DefStdPair)
             {
@@ -1219,7 +1219,7 @@ namespace AutoWrap.Meta
             sb.AppendEmptyLine();
         }
 
-        public void IncAddIterator(DefIterator t, IndentStringBuilder sb)
+        public void IncAddIterator(DefIterator t, SourceCodeStringBuilder sb)
         {
             if (!t.IsNested)
             {
@@ -1255,7 +1255,7 @@ namespace AutoWrap.Meta
             sb.AppendEmptyLine();
         }
 
-        public void CppAddIterator(DefIterator t, IndentStringBuilder sb)
+        public void CppAddIterator(DefIterator t, SourceCodeStringBuilder sb)
         {
             string prefix;
             if (!t.IsNested)
@@ -1308,7 +1308,7 @@ namespace AutoWrap.Meta
             sb.AppendEmptyLine();
         }
 
-        public void IncAddInternalTypeDef(TypedefDefinition t, IndentStringBuilder sb)
+        public void IncAddInternalTypeDef(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
             sb.AppendIndent("");
             if (t.IsNested)
@@ -1316,7 +1316,7 @@ namespace AutoWrap.Meta
             sb.Append("typedef " + t.FullNativeName + " " + t.CLRName + ";\n\n");
         }
 
-        public void IncAddValueTypeTypeDef(TypedefDefinition t, IndentStringBuilder sb)
+        public void IncAddValueTypeTypeDef(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
             sb.AppendIndent("");
             if (t.IsNested)
@@ -1324,7 +1324,7 @@ namespace AutoWrap.Meta
             sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
         }
 
-        private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, IndentStringBuilder sb)
+        private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
             sb.AppendFormat("#include \"{0}\"\n", include);
             List<string> added = new List<string>();
@@ -1344,7 +1344,7 @@ namespace AutoWrap.Meta
             sb.AppendEmptyLine();
         }
 
-        private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, IndentStringBuilder sb)
+        private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
             sb.AppendFormat("#include \"{0}\"\n", GetManagedIncludeFileName(include));
@@ -1418,6 +1418,6 @@ namespace AutoWrap.Meta
         public static readonly string HEADER_TEXT = 
             (  "/*  This file is produced by the C++/CLI AutoWrapper utility.\n"
              + "          Copyright (c) 2006 by Argiris Kirtzidis  */\n\n")
-            .Replace("\n", IndentStringBuilder.NEWLINE_STRING);
+            .Replace("\n", SourceCodeStringBuilder.NEWLINE_STRING);
     }
 }

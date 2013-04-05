@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
 
         //protected List<DefFunction> _protectedFunctions = new List<DefFunction>();
 
-        public NativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public NativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
             //SearchProtectedFunctions(_t);

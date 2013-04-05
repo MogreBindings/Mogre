@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
             base.AddPublicFields();
         }
 
-        public IncSingletonClassProducer(Wrapper wrapper, ClassDefinition t, IndentStringBuilder sb)
+        public IncSingletonClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
         }
