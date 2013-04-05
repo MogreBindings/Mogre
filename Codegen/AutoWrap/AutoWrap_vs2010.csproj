@@ -52,7 +52,7 @@
     <Compile Include="AutoWrap.Designer.cs">
       <DependentUpon>AutoWrap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meta\AttributeHolder.cs" />
+    <Compile Include="Meta\AttributeSet.cs" />
     <Compile Include="Meta\ClassCodeProducer.cs" />
     <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\Definitions\ClassDefinition.cs" />

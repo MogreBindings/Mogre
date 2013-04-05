@@ -32,7 +32,7 @@ namespace AutoWrap.Meta
     /// Describes a class or struct member, i.e. a field (see <see cref="MemberFieldDefinition"/>) or a 
     /// method (<see cref="MemberMethodDefinition"/>).
     /// </summary>
-    public abstract class AbstractMemberDefinition : AttributeHolder, ITypeMember
+    public abstract class AbstractMemberDefinition : AttributeSet, ITypeMember
     {
         string ITypeMember.MemberTypeName
         {

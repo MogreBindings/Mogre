@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class AttributeHolder : AbstractCodeProducer
+    public class AttributeSet : AbstractCodeProducer
     {
         public List<AutoWrapAttribute> Attributes = new List<AutoWrapAttribute>();
 

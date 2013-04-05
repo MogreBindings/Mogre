@@ -34,7 +34,7 @@ namespace AutoWrap.Meta
     {
         XmlDocument _doc = new XmlDocument();
         string _managedNamespace;
-        List<KeyValuePair<AttributeHolder, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeHolder, AutoWrapAttribute>>();
+        List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
         public List<NamespaceDefinition> NameSpaces = new List<NamespaceDefinition>();
 
@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
                     AddAttributesInNamespace(GetNameSpace((elem as XmlElement).GetAttribute("name")), elem as XmlElement);
             }
 
-            foreach (KeyValuePair<AttributeHolder, AutoWrapAttribute> pair in _holders)
+            foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in _holders)
             {
                 pair.Value.ProcessHolder(pair.Key);
             }
@@ -187,10 +187,10 @@ namespace AutoWrap.Meta
             return CreateAttribute(elem);
         }
 
-        private void AddAttributeInHolder(AttributeHolder holder, AutoWrapAttribute attr)
+        private void AddAttributeInHolder(AttributeSet holder, AutoWrapAttribute attr)
         {
             holder.Attributes.Add(attr);
-            _holders.Add(new KeyValuePair<AttributeHolder, AutoWrapAttribute>(holder, attr));
+            _holders.Add(new KeyValuePair<AttributeSet, AutoWrapAttribute>(holder, attr));
         }
 
         public NamespaceDefinition GetNameSpace(string name)

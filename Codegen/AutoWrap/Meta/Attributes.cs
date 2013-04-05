@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
 
     public class AutoWrapAttribute : Attribute
     {
-        public virtual void ProcessHolder(AttributeHolder holder)
+        public virtual void ProcessHolder(AttributeSet holder)
         {
         }
 
@@ -59,7 +59,7 @@ namespace AutoWrap.Meta
 
     public class WrapTypeAttribute : AutoWrapAttribute
     {
-        public override void ProcessHolder(AttributeHolder holder)
+        public override void ProcessHolder(AttributeSet holder)
         {
             switch (WrapType)
             {
@@ -411,7 +411,7 @@ namespace AutoWrap.Meta
 
     public class BaseForSubclassingAttribute : AutoWrapAttribute
     {
-        public override void ProcessHolder(AttributeHolder holder)
+        public override void ProcessHolder(AttributeSet holder)
         {
             ClassDefinition type = (ClassDefinition)holder;
             AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
@@ -429,7 +429,7 @@ namespace AutoWrap.Meta
 
         private List<string[]> _interfaceNames = new List<string[]>();
 
-        public override void ProcessHolder(AttributeHolder holder)
+        public override void ProcessHolder(AttributeSet holder)
         {
             ClassDefinition type = (ClassDefinition)holder;
 

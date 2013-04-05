@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class ParamDefinition : AttributeHolder, ITypeMember
+    public class ParamDefinition : AttributeSet, ITypeMember
     {
         string ITypeMember.MemberTypeName
         {

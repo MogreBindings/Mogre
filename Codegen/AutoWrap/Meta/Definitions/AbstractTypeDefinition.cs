@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
     /// classes: <see cref="ClassDefinition"/>, <see cref="EnumDefinition"/>, <see cref="DefInternal"/>,
     /// <see cref="TypedefDefinition"/>, <see cref="DefString"/>, and <see cref="DefUtfString"/>.
     /// </summary>
-    public abstract class AbstractTypeDefinition : AttributeHolder
+    public abstract class AbstractTypeDefinition : AttributeSet
     {
         public bool IsSTLContainer
         {
