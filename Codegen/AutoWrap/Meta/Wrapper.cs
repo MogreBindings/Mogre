@@ -476,7 +476,7 @@ namespace AutoWrap.Meta
 
             sb.AppendLine("}");
 
-            return sb.ToString().Replace("\r","");
+            return sb.ToString();
         }
 
         public string GenerateCppFileCodeForIncludeFile(string include, out bool hasContent)
@@ -522,7 +522,7 @@ namespace AutoWrap.Meta
 
             sb.AppendLine("}");
 
-            return sb.ToString().Replace("\r", "");
+            return sb.ToString();
         }
 
         public string GenerateIncludeFileCodeForOverridable(ClassDefinition type)
@@ -569,7 +569,7 @@ namespace AutoWrap.Meta
 
             sb.AppendLine("}");
 
-            return sb.ToString().Replace("\r", "");
+            return sb.ToString();
         }
 
         public string GenerateCppFileCodeForOverridable(ClassDefinition type)
@@ -614,7 +614,7 @@ namespace AutoWrap.Meta
 
             sb.AppendLine("}");
 
-            return sb.ToString().Replace("\r", "");
+            return sb.ToString();
         }
 
         public void IncAddType(AbstractTypeDefinition t, IndentStringBuilder sb)
@@ -1415,9 +1415,9 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Header text for all auto-generated source files.
         /// </summary>
-        public static readonly string HEADER_TEXT = @"/*  This file is produced by the C++/CLI AutoWrapper utility.
-        Copyright (c) 2006 by Argiris Kirtzidis  */
-
-".Replace("\r", "");
+        public static readonly string HEADER_TEXT = 
+            (  "/*  This file is produced by the C++/CLI AutoWrapper utility.\n"
+             + "          Copyright (c) 2006 by Argiris Kirtzidis  */\n\n")
+            .Replace("\n", IndentStringBuilder.NEWLINE_STRING);
     }
 }

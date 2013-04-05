@@ -5,8 +5,14 @@ namespace AutoWrap.Meta
 {
     public class IndentStringBuilder
     {
-        public const string INDENT_STRING = "\t";
-        public const string NEWLINE_STRING = "\n";
+        /// <summary>
+        /// The string to be used to indent a line by one level.
+        /// </summary>
+        public const string INDENT_STRING = "  ";
+        /// <summary>
+        /// The line ending used for all lines in the file.
+        /// </summary>
+        public const string NEWLINE_STRING = "\r\n";
 
         private readonly StringBuilder _builder = new StringBuilder();
         private string _curIndention = "";
@@ -39,9 +45,10 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> (except for the first one) will be indented.</param>
         /// <see cref="AppendIndent"/>
-        public void Append(string str, bool otherLinesIndent = true)
+        public IndentStringBuilder Append(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
+            return this;
         }
 
         /// <summary>
@@ -50,9 +57,10 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> will be indented. If it is false, only the
         /// first line will be indented.</param>
-        public void AppendIndent(string str, bool otherLinesIndent = true)
+        public IndentStringBuilder AppendIndent(string str, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
+            return this;
         }
 
         /// <summary>
@@ -74,19 +82,22 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> (except for the first one) will be indented.</param>
         /// <see cref="AppendIndent"/>
-        public void AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
+        public IndentStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(NEWLINE_STRING);
+            return this;
         }
-    
-        public void AppendFormat(string str, params object[] args)
+
+        public IndentStringBuilder AppendFormat(string str, params object[] args)
         {
             _builder.AppendFormat(CreateAppendableString(str, false, true), args);
+            return this;
         }
     
-        public void AppendFormatIndent(string str, params object[] args)
+        public IndentStringBuilder AppendFormatIndent(string str, params object[] args)
         {
             _builder.AppendFormat(CreateAppendableString(str, true, true), args);
+            return this;
         }
     
         public override string ToString()
