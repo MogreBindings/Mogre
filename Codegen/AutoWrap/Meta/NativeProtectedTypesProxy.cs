@@ -51,10 +51,10 @@ namespace AutoWrap.Meta
             {
                 string className = GetProtectedTypesProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _sb.AppendLine("class " + className + " : public " + _definition.FullNativeName);
-                _sb.AppendLine("{");
-                _sb.AppendLine("public:");
-                _sb.IncreaseIndent();
+                _code.AppendLine("class " + className + " : public " + _definition.FullNativeName);
+                _code.AppendLine("{");
+                _code.AppendLine("public:");
+                _code.IncreaseIndent();
 
                 className = _definition.FullCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
@@ -66,7 +66,7 @@ namespace AutoWrap.Meta
 
                 className = _wrapper.ManagedNamespace + "::" + className;
 
-                _sb.AppendLine("friend ref class " + className + ";");
+                _code.AppendLine("friend ref class " + className + ";");
 
                 foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
                 {
@@ -79,8 +79,8 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                _sb.DecreaseIndent();
-                _sb.AppendLine("};\n");
+                _code.DecreaseIndent();
+                _code.AppendLine("};\n");
             }
         }
 
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
         {
             if (nested.IsSTLContainer)
             {
-                _sb.AppendLine("typedef " + _definition.FullNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
+                _code.AppendLine("typedef " + _definition.FullNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
             }
             else
                 throw new Exception("Unexpected");
@@ -205,10 +205,10 @@ namespace AutoWrap.Meta
             {
                 string className = GetProtectedStaticsProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _sb.AppendLine("class " + className + " : public " + _definition.FullNativeName);
-                _sb.AppendLine("{");
-                _sb.AppendLine("public:");
-                _sb.IncreaseIndent();
+                _code.AppendLine("class " + className + " : public " + _definition.FullNativeName);
+                _code.AppendLine("{");
+                _code.AppendLine("public:");
+                _code.IncreaseIndent();
 
                 className = _definition.FullCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
@@ -220,7 +220,7 @@ namespace AutoWrap.Meta
 
                 className = _wrapper.ManagedNamespace + "::" + className;
 
-                _sb.AppendLine("friend ref class " + className + ";");
+                _code.AppendLine("friend ref class " + className + ";");
 
                 AddFriends(className, _definition);
 
@@ -232,8 +232,8 @@ namespace AutoWrap.Meta
                     AddFriends(className, iface);
                 }
 
-                _sb.DecreaseIndent();
-                _sb.AppendLine("};\n");
+                _code.DecreaseIndent();
+                _code.AppendLine("};\n");
             }
         }
 
@@ -244,7 +244,7 @@ namespace AutoWrap.Meta
                 if (!field.IsIgnored
                     && !(field.IsStatic && type != _definition) )
                 {
-                    _sb.AppendLine("friend ref class " + className + "::" + field.Name + ";");
+                    _code.AppendLine("friend ref class " + className + "::" + field.Name + ";");
                 }
             }
 
@@ -256,7 +256,7 @@ namespace AutoWrap.Meta
                     && func.IsProperty
                     && !func.IsVirtual)
                 {
-                    _sb.AppendLine("friend ref class " + className + "::" + func.CLRName + ";");
+                    _code.AppendLine("friend ref class " + className + "::" + func.CLRName + ";");
                 }
             }
         }

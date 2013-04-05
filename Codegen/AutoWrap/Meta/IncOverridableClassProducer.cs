@@ -37,10 +37,10 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _sb.AppendIndent("class " + ProxyName + " : public " + _definition.FullNativeName);
+            _code.AppendIndent("class " + ProxyName + " : public " + _definition.FullNativeName);
             if (_definition.IsInterface)
-                _sb.Append(", public CLRObject");
-            _sb.Append("\n");
+                _code.Append(", public CLRObject");
+            _code.Append("\n");
         }
 
         protected override void AddPreBody()
@@ -49,17 +49,17 @@ namespace AutoWrap.Meta
 
             AddDefinition();
 
-            _sb.AppendLine("{");
-            _sb.AppendLine("public:");
-            _sb.IncreaseIndent();
+            _code.AppendLine("{");
+            _code.AppendLine("public:");
+            _code.IncreaseIndent();
         }
 
         protected override void AddPostBody()
         {
             base.AddPostBody();
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("};\n");
+            _code.DecreaseIndent();
+            _code.AppendLine("};\n");
         }
 
         protected override void AddFields()
@@ -74,7 +74,7 @@ namespace AutoWrap.Meta
                 className = _wrapper.ManagedNamespace + "::" + _definition.Name;
             }
 
-            _sb.AppendLine("friend ref class " + className + ";");
+            _code.AppendLine("friend ref class " + className + ";");
 
             //Because of a possible compiler bug, in order for properties to access
             //protected members of a native class, they must be explicitely declared
@@ -83,7 +83,7 @@ namespace AutoWrap.Meta
             {
                 if (prop.GetterFunction.ProtectionType == ProtectionLevel.Protected
                     || (prop.CanWrite && prop.SetterFunction.ProtectionType == ProtectionLevel.Protected))
-                    _sb.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
+                    _code.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }
 
             if (_definition.IsInterface)
@@ -93,15 +93,15 @@ namespace AutoWrap.Meta
                     if (!field.IsIgnored
                         && field.ProtectionType == ProtectionLevel.Protected
                         && !field.IsStatic)
-                        _sb.AppendLine("friend ref class " + className + "::" + field.Name + ";");
+                        _code.AppendLine("friend ref class " + className + "::" + field.Name + ";");
                 }
             }
 
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("bool* _overriden;");
+            _code.AppendEmptyLine();
+            _code.AppendLine("bool* _overriden;");
 
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("gcroot<" + className + "^> _managed;");
+            _code.AppendEmptyLine();
+            _code.AppendLine("gcroot<" + className + "^> _managed;");
 
             //_sb.AppendLine();
             //foreach (DefField field in _protectedFields)
@@ -109,8 +109,8 @@ namespace AutoWrap.Meta
             //    _sb.AppendLine(field.NativeTypeName + "& ref_" + field.Name + ";");
             //}
 
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
+            _code.AppendEmptyLine();
+            _code.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
         }
 
         protected override void AddConstructor(MemberMethodDefinition f)
@@ -124,51 +124,51 @@ namespace AutoWrap.Meta
             {
                 className = _wrapper.ManagedNamespace + "::" + _definition.Name;
             }
-            _sb.AppendIndent(ProxyName + "( " + className + "^ managedObj");
+            _code.AppendIndent(ProxyName + "( " + className + "^ managedObj");
             if (f != null)
             {
                 foreach (ParamDefinition param in f.Parameters)
-                    _sb.Append(", " + param.MemberTypeNativeName + " " + param.Name);
+                    _code.Append(", " + param.MemberTypeNativeName + " " + param.Name);
             }
 
-            _sb.Append(" ) :\n");
+            _code.Append(" ) :\n");
 
             if (f != null)
             {
-                _sb.AppendIndent("\t" + _definition.FullNativeName + "(");
+                _code.AppendIndent("\t" + _definition.FullNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
-                    _sb.Append(" " + param.Name);
+                    _code.Append(" " + param.Name);
                     if (i < f.Parameters.Count - 1)
-                        _sb.Append(",");
+                        _code.Append(",");
                 }
-                _sb.Append(" ),\n");
+                _code.Append(" ),\n");
             }
 
-            _sb.AppendIndent("\t_managed(managedObj)");
+            _code.AppendIndent("\t_managed(managedObj)");
 
             //foreach (DefField field in _protectedFields)
             //{
             //    _sb.Append(",\n");
             //    _sb.AppendIndent("\tref_" + field.Name + "(" + field.Name + ")");
             //}
-            _sb.Append("\n");
-            _sb.AppendLine("{");
-            _sb.AppendLine("}");
+            _code.Append("\n");
+            _code.AppendLine("{");
+            _code.AppendLine("}");
         }
 
         protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
-            _sb.AppendIndent("");
+            _code.AppendIndent("");
             if (f.IsVirtual)
-                _sb.Append("virtual ");
-            _sb.Append(f.MemberTypeNativeName + " " + f.Name + "(");
+                _code.Append("virtual ");
+            _code.Append(f.MemberTypeNativeName + " " + f.Name + "(");
             AddNativeMethodParams(f);
-            _sb.Append(" ) ");
+            _code.Append(" ) ");
             if (f.IsConstFunctionCall)
-                _sb.Append("const ");
-            _sb.Append("override;\n");
+                _code.Append("const ");
+            _code.Append("override;\n");
         }
 
         //protected override void AddProtectedFunction(DefFunction f)
@@ -189,13 +189,13 @@ namespace AutoWrap.Meta
         {
             if (_definition.IsInterface)
             {
-                SourceCodeStringBuilder tempsb = _sb;
-                _sb = new SourceCodeStringBuilder();
+                SourceCodeStringBuilder tempsb = _code;
+                _code = new SourceCodeStringBuilder();
                 base.Add();
                 string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
-                string res = _sb.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
-                _sb = tempsb;
-                _sb.AppendLine(res);
+                string res = _code.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
+                _code = tempsb;
+                _code.AppendLine(res);
             }
             else
                 base.Add();
@@ -216,16 +216,16 @@ namespace AutoWrap.Meta
             if (_definition.IsInterface)
             {
                 //put _t.Name instead of _t.CLRName
-                _sb.AppendIndent("");
+                _code.AppendIndent("");
                 if (!_definition.IsNested)
-                    _sb.Append("public ");
+                    _code.Append("public ");
                 else
-                    _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+                    _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
-                    _sb.AppendFormat("ref class {0}{1} : {2}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
+                    _code.AppendFormat("ref class {0}{1} : {2}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
                 else
-                    _sb.AppendFormat("ref class {0}{1}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "");
+                    _code.AppendFormat("ref class {0}{1}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "");
             }
             else
                 base.AddDefinition();
@@ -258,7 +258,7 @@ namespace AutoWrap.Meta
         public IncOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _definition, _sb));
+            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _definition, _code));
         }
 
         private string _proxyName;
@@ -337,8 +337,6 @@ namespace AutoWrap.Meta
 
         protected override void Init()
         {
-            _interfaces = new List<ClassDefinition>();
-
             if (_additionalInterfaces != null)
                 _interfaces.AddRange(_additionalInterfaces);
 
@@ -401,19 +399,19 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            _sb.DecreaseIndent();
-            _sb.AppendLine("public:");
-            _sb.IncreaseIndent();
+            _code.DecreaseIndent();
+            _code.AppendLine("public:");
+            _code.IncreaseIndent();
 
             AddPublicConstructors();
 
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
             foreach (PropertyDefinition prop in _overridableProperties)
             {
                 if (!prop.IsAbstract)
                 {
                     AddProperty(prop);
-                    _sb.AppendEmptyLine();
+                    _code.AppendEmptyLine();
                 }
             }
 
@@ -423,23 +421,23 @@ namespace AutoWrap.Meta
                     && !func.IsAbstract)
                 {
                     AddMethod(func);
-                    _sb.AppendEmptyLine();
+                    _code.AppendEmptyLine();
                 }
             }
         }
 
         protected override void AddProtectedDeclarations()
         {
-            _sb.DecreaseIndent();
-            _sb.AppendLine("protected public:");
-            _sb.IncreaseIndent();
+            _code.DecreaseIndent();
+            _code.AppendLine("protected public:");
+            _code.IncreaseIndent();
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
-                    _sb.AppendEmptyLine();
+                    _code.AppendEmptyLine();
                 }
             }
         }

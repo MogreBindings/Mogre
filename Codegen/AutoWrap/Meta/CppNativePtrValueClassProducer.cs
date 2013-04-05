@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
             if (!IsReadOnly && IsConstructable)
             {
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
                 AddCreators();
             }
         }
@@ -68,7 +68,7 @@ namespace AutoWrap.Meta
                 else
                     AddCreator(null);
 
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
             }
         }
 
@@ -101,15 +101,15 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreatorOverload(MemberMethodDefinition f, int count)
         {
-            _sb.AppendIndent(_definition.FullCLRName + " " + GetClassName() + "::Create");
+            _code.AppendIndent(_definition.FullCLRName + " " + GetClassName() + "::Create");
             if (f == null)
-                _sb.Append("()");
+                _code.Append("()");
             else
                 AddMethodParameters(f, count);
 
-            _sb.Append("\n");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.Append("\n");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
             string preCall = null, postCall = null;
 
@@ -119,11 +119,11 @@ namespace AutoWrap.Meta
                 postCall = GetMethodPostNativeCall(f, count);
 
                 if (!String.IsNullOrEmpty(preCall))
-                    _sb.AppendLine(preCall);
+                    _code.AppendLine(preCall);
             }
 
-            _sb.AppendLine(_definition.CLRName + " ptr;");
-            _sb.AppendIndent("ptr._native = new " + _definition.FullNativeName + "(");
+            _code.AppendLine(_definition.CLRName + " ptr;");
+            _code.AppendIndent("ptr._native = new " + _definition.FullNativeName + "(");
 
             if (count > 0)
             {
@@ -132,24 +132,24 @@ namespace AutoWrap.Meta
                     ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
-                    _sb.Append(" " + newname);
-                    if (i < count - 1) _sb.Append(",");
+                    _code.Append(" " + newname);
+                    if (i < count - 1) _code.Append(",");
                 }
             }
 
-            _sb.Append(");\n");
+            _code.Append(");\n");
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendEmptyLine();
-                _sb.AppendLine(postCall);
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
+                _code.AppendLine(postCall);
+                _code.AppendEmptyLine();
             }
 
-            _sb.AppendLine("return ptr;");
+            _code.AppendLine("return ptr;");
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         public CppNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

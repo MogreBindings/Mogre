@@ -37,16 +37,16 @@ namespace AutoWrap.Meta
         protected override void AddDefinition()
         {
             if (_definition.HasAttribute<SequentialLayoutAttribute> ()) {
-                _sb.AppendIndent ("");
-                _sb.Append ("[StructLayout(LayoutKind::Sequential)]\n");
+                _code.AppendIndent ("");
+                _code.Append ("[StructLayout(LayoutKind::Sequential)]\n");
             }
 
-            _sb.AppendIndent("");
+            _code.AppendIndent("");
             if (!_definition.IsNested)
-                _sb.Append("public ");
+                _code.Append("public ");
             else
-                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.AppendFormat("value class {0}\n", _definition.CLRName);
+                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _code.AppendFormat("value class {0}\n", _definition.CLRName);
         }
 
         protected override void AddPreDeclarations()
@@ -63,16 +63,16 @@ namespace AutoWrap.Meta
             {
                 foreach (MemberFieldDefinition field in _definition.PublicFields)
                 {
-                    _sb.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
+                    _code.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
                 }
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
             }
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
-            _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
+            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
         }
 
         protected override void AddPublicConstructors()
@@ -87,17 +87,17 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _sb.AppendFormatIndent("property {0} {1}\n{{\n", ptype, ToCamelCase(field.Name));
-                _sb.IncreaseIndent();
-                _sb.AppendLine(ptype + " get()\n{");
-                _sb.AppendLine("\treturn " + NameToPrivate(field) + ";");
-                _sb.AppendLine("}");
-                _sb.DecreaseIndent();
-                _sb.AppendLine("}");
+                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, ToCamelCase(field.Name));
+                _code.IncreaseIndent();
+                _code.AppendLine(ptype + " get()\n{");
+                _code.AppendLine("\treturn " + NameToPrivate(field) + ";");
+                _code.AppendLine("}");
+                _code.DecreaseIndent();
+                _code.AppendLine("}");
             }
             else
             {
-                _sb.AppendLine(field.Type.FullCLRName + " " + field.Name + ";");
+                _code.AppendLine(field.Type.FullCLRName + " " + field.Name + ";");
             }
         }
 

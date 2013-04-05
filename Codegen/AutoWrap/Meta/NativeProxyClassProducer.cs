@@ -89,27 +89,27 @@ namespace AutoWrap.Meta
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
-                _sb.Append(" ");
+                _code.Append(" ");
 
-                _sb.Append(param.MemberTypeNativeName);
-                _sb.Append(" " + param.Name);
+                _code.Append(param.MemberTypeNativeName);
+                _code.Append(" " + param.Name);
 
-                if (i < f.Parameters.Count - 1) _sb.Append(",");
+                if (i < f.Parameters.Count - 1) _code.Append(",");
             }
         }
 
         protected override void AddPreBody()
         {
-            _sb.AppendLine("//################################################################");
-            _sb.AppendLine("//" + ProxyName);
-            _sb.AppendLine("//################################################################\n");
+            _code.AppendLine("//################################################################");
+            _code.AppendLine("//" + ProxyName);
+            _code.AppendLine("//################################################################\n");
         }
 
         protected override void AddBody()
         {
             AddFields();
 
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
             if (_definition.Constructors.Length > 0)
             {
                 foreach (MemberMethodDefinition func in _definition.Constructors)
@@ -120,7 +120,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
                 AddOverridableFunction(func);
             }
 

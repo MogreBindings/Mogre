@@ -43,18 +43,18 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            _sb.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )\n", GetClassName());
+            _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )\n", GetClassName());
         }
 
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _sb.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _definition.Name);
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _definition.Name);
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
             base.AddConstructorBody();
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}\n");
+            _code.DecreaseIndent();
+            _code.AppendLine("}\n");
         }
 
         protected override void AddPostBody()
@@ -67,44 +67,44 @@ namespace AutoWrap.Meta
         {
             if (IsAbstractClass)
             {
-                _sb.AppendLine("ref class " + _definition.CLRName + "_Default : public " + _definition.CLRName);
-                _sb.AppendLine("{");
-                _sb.AppendLine("public protected:");
-                _sb.IncreaseIndent();
-                _sb.AppendFormatIndent("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _definition.CLRName);
-                _sb.AppendLine("{");
-                _sb.AppendLine("}\n");
-                _sb.DecreaseIndent();
-                _sb.AppendLine("public:");
-                _sb.IncreaseIndent();
+                _code.AppendLine("ref class " + _definition.CLRName + "_Default : public " + _definition.CLRName);
+                _code.AppendLine("{");
+                _code.AppendLine("public protected:");
+                _code.IncreaseIndent();
+                _code.AppendFormatIndent("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _definition.CLRName);
+                _code.AppendLine("{");
+                _code.AppendLine("}\n");
+                _code.DecreaseIndent();
+                _code.AppendLine("public:");
+                _code.IncreaseIndent();
 
                 foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
-                    _sb.AppendIndent("virtual ");
-                    _sb.Append(GetCLRTypeName(f) + " " + f.CLRName);
+                    _code.AppendIndent("virtual ");
+                    _code.Append(GetCLRTypeName(f) + " " + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
-                    _sb.Append(" override;\n");
+                    _code.Append(" override;\n");
                 }
 
                 foreach (PropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
-                    _sb.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
+                    _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
                     if (p.CanRead)
                     {
-                        _sb.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
-                        _sb.AppendLine("\tvirtual " + ptype + " get() override;");
+                        _code.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
+                        _code.AppendLine("\tvirtual " + ptype + " get() override;");
                     }
                     if (p.CanWrite)
                     {
-                        _sb.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
-                        _sb.AppendLine("\tvirtual void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ") override;");
+                        _code.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
+                        _code.AppendLine("\tvirtual void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ") override;");
                     }
-                    _sb.AppendLine("}");
+                    _code.AppendLine("}");
                 }
 
-                _sb.DecreaseIndent();
-                _sb.AppendLine("};\n");
+                _code.DecreaseIndent();
+                _code.AppendLine("};\n");
             }
         }
 

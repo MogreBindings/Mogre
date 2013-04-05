@@ -62,16 +62,16 @@ namespace AutoWrap.Meta
         protected override void AddPostBody()
         {
             base.AddPostBody();
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
 
             if (_definition.HasAttribute<CLRObjectAttribute>(true)) {
-                _sb.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_definition));
-                _sb.AppendLine("{");
-                _sb.AppendLine("\t*pClrObj = gcnew " + _definition.FullCLRName + "(pClrObj);");
-                _sb.AppendLine("}");
+                _code.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_definition));
+                _code.AppendLine("{");
+                _code.AppendLine("\t*pClrObj = gcnew " + _definition.FullCLRName + "(pClrObj);");
+                _code.AppendLine("}");
             }
 
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
         }
 
         protected override void AddInternalDeclarations()
@@ -80,11 +80,11 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition cls in _interfaces)
             {
-                _sb.AppendLine(cls.FullNativeName + "* " + GetClassName() + "::_" + cls.CLRName + "_GetNativePtr()");
-                _sb.AppendLine("{");
-                _sb.AppendLine("\treturn static_cast<" + cls.FullNativeName + "*>( " + GetNativeInvokationTarget() + " );");
-                _sb.AppendLine("}");
-                _sb.AppendEmptyLine();
+                _code.AppendLine(cls.FullNativeName + "* " + GetClassName() + "::_" + cls.CLRName + "_GetNativePtr()");
+                _code.AppendLine("{");
+                _code.AppendLine("\treturn static_cast<" + cls.FullNativeName + "*>( " + GetNativeInvokationTarget() + " );");
+                _code.AppendLine("}");
+                _code.AppendEmptyLine();
             }
         }
 
@@ -109,7 +109,7 @@ namespace AutoWrap.Meta
 					AddPublicConstructor(null);
 				}
 
-				_sb.AppendEmptyLine();
+				_code.AppendEmptyLine();
 			}
 
 			base.AddPublicDeclarations();
@@ -147,9 +147,9 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicConstructorOverload(MemberMethodDefinition f, int count)
         {
-            _sb.AppendIndent(GetClassName() + "::" + _definition.CLRName);
+            _code.AppendIndent(GetClassName() + "::" + _definition.CLRName);
             if (f == null)
-                _sb.Append("()");
+                _code.Append("()");
             else
                 AddMethodParameters(f, count);
 
@@ -158,14 +158,14 @@ namespace AutoWrap.Meta
                 nativeType = "CLRObject";
 
             if (GetBaseClassName() != null)
-                _sb.Append(" : " + GetBaseClassName() + "((" + nativeType + "*) 0)");
+                _code.Append(" : " + GetBaseClassName() + "((" + nativeType + "*) 0)");
 
-            _sb.Append("\n");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.Append("\n");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
             if (!_definition.IsInterface)
-                _sb.AppendLine("_createdByCLR = true;");
+                _code.AppendLine("_createdByCLR = true;");
 
             string preCall = null, postCall = null;
 
@@ -175,10 +175,10 @@ namespace AutoWrap.Meta
                 postCall = GetMethodPostNativeCall(f, count);
 
                 if (!String.IsNullOrEmpty(preCall))
-                    _sb.AppendLine(preCall);
+                    _code.AppendLine(preCall);
             }
 
-            _sb.AppendIndent("_native = new " + _definition.FullNativeName + "(");
+            _code.AppendIndent("_native = new " + _definition.FullNativeName + "(");
 
             if (count > 0)
             {
@@ -187,54 +187,54 @@ namespace AutoWrap.Meta
                     ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
-                    _sb.Append(" " + newname);
-                    if (i < count - 1) _sb.Append(",");
+                    _code.Append(" " + newname);
+                    if (i < count - 1) _code.Append(",");
                 }
             }
 
-            _sb.Append(");\n");
+            _code.Append(");\n");
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendEmptyLine();
-                _sb.AppendLine(postCall);
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
+                _code.AppendLine(postCall);
+                _code.AppendEmptyLine();
             }
 
             AddConstructorBody();
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         protected override void AddStaticConstructor()
         {
             if (_definition.IsInterface)
-                _sb.AppendLine("static " + _definition.Name + "::" + _definition.Name + "()");
+                _code.AppendLine("static " + _definition.Name + "::" + _definition.Name + "()");
             else
-                _sb.AppendLine("static " + _definition.CLRName + "::" + _definition.CLRName + "()");
+                _code.AppendLine("static " + _definition.CLRName + "::" + _definition.CLRName + "()");
 
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
             foreach (AbstractMemberDefinition m in _cachedMembers)
             {
                 if (m.IsStatic)
                 {
-                    _sb.AppendIndent(NameToPrivate(m) + " = ");
+                    _code.AppendIndent(NameToPrivate(m) + " = ");
                     if (m.ProtectionType == ProtectionLevel.Protected)
                     {
-                        _sb.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.Class));
-                        _sb.Append("::" + m.Name + ";\n");
+                        _code.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.Class));
+                        _code.Append("::" + m.Name + ";\n");
                     }
                     else
                     {
-                        _sb.Append(m.Class.FullNativeName);
-                        _sb.Append("::" + m.Name + ";\n");
+                        _code.Append(m.Class.FullNativeName);
+                        _code.Append("::" + m.Name + ";\n");
                     }
                 }
             }
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         protected override void AddPostNestedTypes()
@@ -245,15 +245,15 @@ namespace AutoWrap.Meta
             {
                 string txt = _definition.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt);
-                _sb.AppendLine(txt);
-                _sb.AppendEmptyLine();
+                _code.AppendLine(txt);
+                _code.AppendEmptyLine();
             }
         }
 
         protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
             base.AddNestedType(nested);
-            _wrapper.CppAddType(nested, _sb);
+            _wrapper.CppAddType(nested, _code);
         }
 
         protected override void AddNestedType(AbstractTypeDefinition nested)
@@ -265,7 +265,7 @@ namespace AutoWrap.Meta
             }
 
             base.AddNestedType(nested);
-            _wrapper.CppAddType(nested, _sb);
+            _wrapper.CppAddType(nested, _code);
         }
 
         protected override void AddMethod(MemberMethodDefinition f)
@@ -280,8 +280,8 @@ namespace AutoWrap.Meta
                 {
                     string txt = f.GetAttribute<CustomCppDeclarationAttribute>().DeclarationText;
                     txt = ReplaceCustomVariables(txt, f);
-                    _sb.AppendLine(txt);
-                    _sb.AppendEmptyLine();
+                    _code.AppendLine(txt);
+                    _code.AppendEmptyLine();
                     return;
                 }
             }
@@ -311,11 +311,11 @@ namespace AutoWrap.Meta
                 if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                     continue;
 
-                _sb.AppendIndent(GetCLRTypeName(f) + " " + GetClassName() + "::" + f.CLRName);
+                _code.AppendIndent(GetCLRTypeName(f) + " " + GetClassName() + "::" + f.CLRName);
                 AddMethodParameters(f, f.Parameters.Count - dc);
-                _sb.Append("\n");
-                _sb.AppendLine("{");
-                _sb.IncreaseIndent();
+                _code.Append("\n");
+                _code.AppendLine("{");
+                _code.IncreaseIndent();
 
                 bool isVirtualOverload = dc > 0 && methodIsVirtual && AllowVirtualMethods;
 
@@ -325,16 +325,16 @@ namespace AutoWrap.Meta
                     // main method is virtual, call it with CLR default values if _isOverriden=true,
                     // else do a normal native call
 
-                    _sb.AppendLine("if (_isOverriden)");
-                    _sb.AppendLine("{");
-                    _sb.IncreaseIndent();
+                    _code.AppendLine("if (_isOverriden)");
+                    _code.AppendLine("{");
+                    _code.IncreaseIndent();
 
                     bool hasPostConversions = false;
                     for (int i = f.Parameters.Count - dc; i < f.Parameters.Count; i++)
                     {
                         ParamDefinition p = f.Parameters[i];
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePreConversion))
-                            _sb.AppendLine(p.CLRDefaultValuePreConversion);
+                            _code.AppendLine(p.CLRDefaultValuePreConversion);
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePostConversion))
                             hasPostConversions = true;
 
@@ -345,76 +345,76 @@ namespace AutoWrap.Meta
                             AddTypeDependancy(dependancy);
                     }
 
-                    _sb.AppendIndent("");
+                    _code.AppendIndent("");
                     if (!f.IsVoid)
                     {
                         if (hasPostConversions)
                         {
-                            _sb.Append(GetCLRTypeName(f) + " mp_return = ");
+                            _code.Append(GetCLRTypeName(f) + " mp_return = ");
                         }
                         else
                         {
-                            _sb.Append("return ");
+                            _code.Append("return ");
                         }
                     }
 
-                    _sb.Append(f.CLRName + "(");
+                    _code.Append(f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         ParamDefinition p = f.Parameters[i];
-                        _sb.Append(" ");
+                        _code.Append(" ");
                         if (i < f.Parameters.Count - dc)
-                            _sb.Append(p.Name);
+                            _code.Append(p.Name);
                         else
                         {
-                            _sb.Append(p.CLRDefaultValue);
+                            _code.Append(p.CLRDefaultValue);
                         }
-                        if (i < f.Parameters.Count - 1) _sb.Append(",");
+                        if (i < f.Parameters.Count - 1) _code.Append(",");
                     }
-                    _sb.Append(" );\n");
+                    _code.Append(" );\n");
 
                     for (int i = f.Parameters.Count - dc; i < f.Parameters.Count; i++)
                     {
                         ParamDefinition p = f.Parameters[i];
                         if (!String.IsNullOrEmpty(p.CLRDefaultValuePostConversion))
-                            _sb.AppendLine(p.CLRDefaultValuePostConversion);
+                            _code.AppendLine(p.CLRDefaultValuePostConversion);
                     }
 
                     if (!f.IsVoid && hasPostConversions)
                     {
-                        _sb.AppendLine("return mp_return;");
+                        _code.AppendLine("return mp_return;");
                     }
 
-                    _sb.DecreaseIndent();
-                    _sb.AppendLine("}");
-                    _sb.AppendLine("else");
-                    _sb.AppendLine("{");
-                    _sb.IncreaseIndent();
+                    _code.DecreaseIndent();
+                    _code.AppendLine("}");
+                    _code.AppendLine("else");
+                    _code.AppendLine("{");
+                    _code.IncreaseIndent();
                 }
 
                 AddMethodBody(f, f.Parameters.Count - dc);
 
                 if (isVirtualOverload)
                 {
-                    _sb.DecreaseIndent();
-                    _sb.AppendLine("}");
+                    _code.DecreaseIndent();
+                    _code.AppendLine("}");
                 }
 
-                _sb.DecreaseIndent();
-                _sb.AppendLine("}");
+                _code.DecreaseIndent();
+                _code.AppendLine("}");
             }
         }
 
         protected virtual void AddMethodParameters(MemberMethodDefinition f, int count)
         {
-            _sb.Append("(");
+            _code.Append("(");
             for (int i = 0; i < count; i++)
             {
                 ParamDefinition p = f.Parameters[i];
-                _sb.Append(" " + GetCLRParamTypeName(p) + " " + p.Name);
-                if (i < count - 1) _sb.Append(",");
+                _code.Append(" " + GetCLRParamTypeName(p) + " " + p.Name);
+                if (i < count - 1) _code.Append(",");
             }
-            _sb.Append(" )");
+            _code.Append(" )");
         }
         protected void AddMethodParameters(MemberMethodDefinition f)
         {
@@ -428,25 +428,25 @@ namespace AutoWrap.Meta
             string postCall = GetMethodPostNativeCall(f, count);
 
             if (!String.IsNullOrEmpty(preCall))
-                _sb.AppendLine(preCall);
+                _code.AppendLine(preCall);
 
             if (f.IsVoid)
             {
-                _sb.AppendLine(nativeCall + ";");
+                _code.AppendLine(nativeCall + ";");
                 if (!String.IsNullOrEmpty(postCall))
-                    _sb.AppendLine(postCall);
+                    _code.AppendLine(postCall);
             }
             else
             {
                 if (String.IsNullOrEmpty(postCall))
                 {
-                    _sb.AppendLine("return " + nativeCall + ";");
+                    _code.AppendLine("return " + nativeCall + ";");
                 }
                 else
                 {
-                    _sb.AppendLine(GetCLRTypeName(f) + " retres = " + nativeCall + ";");
-                    _sb.AppendLine(postCall);
-                    _sb.AppendLine("return retres;");
+                    _code.AppendLine(GetCLRTypeName(f) + " retres = " + nativeCall + ";");
+                    _code.AppendLine(postCall);
+                    _code.AppendLine("return retres;");
                 }
             }
         }
@@ -524,7 +524,7 @@ namespace AutoWrap.Meta
                 throw new Exception("Unexpected");
 
             if (!String.IsNullOrEmpty(expr))
-                _sb.AppendLine(expr);
+                _code.AppendLine(expr);
 
             return newname;
         }
@@ -541,18 +541,18 @@ namespace AutoWrap.Meta
                     {
                         string managedType = GetMethodNativeCall(p.GetterFunction, 0);
 
-                        _sb.AppendLine(ptype + " " + pname + "::get()");
-                        _sb.AppendLine("{");
+                        _code.AppendLine(ptype + " " + pname + "::get()");
+                        _code.AppendLine("{");
                         if (_cachedMembers.Contains(p.GetterFunction))
                         {
                             string priv = NameToPrivate(p.Name);
-                            _sb.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
+                            _code.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
                         }
                         else
                         {
-                            _sb.AppendLine("\treturn " + managedType + ";");
+                            _code.AppendLine("\treturn " + managedType + ";");
                         }
-                        _sb.AppendLine("}");
+                        _code.AppendLine("}");
                     }
                 }
             }
@@ -563,24 +563,24 @@ namespace AutoWrap.Meta
                 {
                     if (AllowProtectedMembers || p.SetterFunction.ProtectionType != ProtectionLevel.Protected)
                     {
-                        _sb.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
-                        _sb.AppendLine("{");
-                        _sb.IncreaseIndent();
+                        _code.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
+                        _code.AppendLine("{");
+                        _code.IncreaseIndent();
 
                         string preCall = GetMethodPreNativeCall(p.SetterFunction, 1);
                         string nativeCall = GetMethodNativeCall(p.SetterFunction, 1);
                         string postCall = GetMethodPostNativeCall(p.SetterFunction, 1);
 
                         if (!String.IsNullOrEmpty(preCall))
-                            _sb.AppendLine(preCall);
+                            _code.AppendLine(preCall);
 
-                        _sb.AppendLine(nativeCall + ";");
+                        _code.AppendLine(nativeCall + ";");
 
                         if (!String.IsNullOrEmpty(postCall))
-                            _sb.AppendLine(postCall);
+                            _code.AppendLine(postCall);
 
-                        _sb.DecreaseIndent();
-                        _sb.AppendLine("}");
+                        _code.DecreaseIndent();
+                        _code.AppendLine("}");
                     }
                 }
             }
@@ -612,28 +612,28 @@ namespace AutoWrap.Meta
                     ptype = GetCLRTypeName(tmpParam);
                     string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), tmpParam);
 
-                    _sb.AppendLine(ptype + " " + pname + "::get()");
-                    _sb.AppendLine("{");
-                    _sb.AppendLine("\treturn " + managedType + ";");
-                    _sb.AppendLine("}");
+                    _code.AppendLine(ptype + " " + pname + "::get()");
+                    _code.AppendLine("{");
+                    _code.AppendLine("\treturn " + managedType + ";");
+                    _code.AppendLine("}");
                 }
                 else
                 {
                     string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field) + "[index]", field);
 
-                    _sb.AppendLine(ptype + " " + pname + "::get(int index)");
-                    _sb.AppendLine("{");
-                    _sb.AppendLine("\tif (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
-                    _sb.AppendLine("\treturn " + managedType + ";");
-                    _sb.AppendLine("}");
-                    _sb.AppendLine("void " + pname + "::set(int index, " + ptype + " value )");
-                    _sb.AppendLine("{");
-                    _sb.IncreaseIndent();
-                    _sb.AppendLine("if (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
+                    _code.AppendLine(ptype + " " + pname + "::get(int index)");
+                    _code.AppendLine("{");
+                    _code.AppendLine("\tif (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
+                    _code.AppendLine("\treturn " + managedType + ";");
+                    _code.AppendLine("}");
+                    _code.AppendLine("void " + pname + "::set(int index, " + ptype + " value )");
+                    _code.AppendLine("{");
+                    _code.IncreaseIndent();
+                    _code.AppendLine("if (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
                     string param = AddParameterConversion(new ParamDefinition(field, "value"));
-                    _sb.AppendLine(GetNativeInvokationTarget(field) + "[index] = " + param + ";");
-                    _sb.DecreaseIndent();
-                    _sb.AppendLine("}");
+                    _code.AppendLine(GetNativeInvokationTarget(field) + "[index] = " + param + ";");
+                    _code.DecreaseIndent();
+                    _code.AppendLine("}");
                 }
             }
             else if (_cachedMembers.Contains(field))
@@ -649,34 +649,34 @@ namespace AutoWrap.Meta
                 }
                 string priv = NameToPrivate(field);
 
-                _sb.AppendLine(ptype + " " + pname + "::get()");
-                _sb.AppendLine("{");
+                _code.AppendLine(ptype + " " + pname + "::get()");
+                _code.AppendLine("{");
                 if (!field.IsStatic)
-                    _sb.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
+                    _code.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
                 else
-                    _sb.AppendLine("\treturn " + priv + ";");
-                _sb.AppendLine("}");
+                    _code.AppendLine("\treturn " + priv + ";");
+                _code.AppendLine("}");
             }
             else
             {
                 string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
-                _sb.AppendLine(ptype + " " + pname + "::get()");
-                _sb.AppendLine("{");
-                _sb.AppendLine("\treturn " + managedType + ";");
-                _sb.AppendLine("}");
+                _code.AppendLine(ptype + " " + pname + "::get()");
+                _code.AppendLine("{");
+                _code.AppendLine("\treturn " + managedType + ";");
+                _code.AppendLine("}");
 
                 if ( // SharedPtrs can be copied by value. Let all be copied by value just to be sure (field.PassedByType == PassedByType.Pointer || field.Type.IsValueType)
                     !IsReadOnly && !field.Type.HasAttribute<ReadOnlyForFieldsAttribute>()
                     && !field.IsConst)
                 {
-                    _sb.AppendLine("void " + pname + "::set( " + ptype + " value )");
-                    _sb.AppendLine("{");
-                    _sb.IncreaseIndent();
+                    _code.AppendLine("void " + pname + "::set( " + ptype + " value )");
+                    _code.AppendLine("{");
+                    _code.IncreaseIndent();
                     string param = AddParameterConversion(new ParamDefinition(field, "value"));
-                    _sb.AppendLine(GetNativeInvokationTarget(field) + " = " + param + ";");
-                    _sb.DecreaseIndent();
-                    _sb.AppendLine("}");
+                    _code.AppendLine(GetNativeInvokationTarget(field) + " = " + param + ";");
+                    _code.DecreaseIndent();
+                    _code.AppendLine("}");
                 }
             }
         }
@@ -685,18 +685,18 @@ namespace AutoWrap.Meta
         {
             string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
-            _sb.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.Name + "()");
-            _sb.AppendLine("{");
-            _sb.AppendLine("\treturn " + managedType + ";");
-            _sb.AppendLine("}");
+            _code.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.Name + "()");
+            _code.AppendLine("{");
+            _code.AppendLine("\treturn " + managedType + ";");
+            _code.AppendLine("}");
 
             ParamDefinition param = new ParamDefinition(field, "value");
-            _sb.AppendLine("void " + GetClassName() + "::set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
-            _sb.AppendLine(GetNativeInvokationTarget(field) + " = " + AddParameterConversion(param) + ";");
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.AppendLine("void " + GetClassName() + "::set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
+            _code.AppendLine(GetNativeInvokationTarget(field) + " = " + AddParameterConversion(param) + ";");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         protected override void AddPredefinedMethods(PredefinedMethods pm)
@@ -705,71 +705,71 @@ namespace AutoWrap.Meta
             switch (pm)
             {
                 case PredefinedMethods.Equals:
-                    _sb.AppendLine("bool " + cls + "::Equals(Object^ obj)");
-                    _sb.AppendLine("{");
-                    _sb.AppendLine("    " + cls + "^ clr = dynamic_cast<" + cls + "^>(obj);");
-                    _sb.AppendLine("    if (clr == CLR_NULL)");
-                    _sb.AppendLine("    {");
-                    _sb.AppendLine("        return false;");
-                    _sb.AppendLine("    }\n");
-                    _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
-                    _sb.AppendLine("    if (clr->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                    _sb.AppendEmptyLine();
-                    _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullNativeName + "*>(clr->_native));");
-                    _sb.AppendLine("}\n");
+                    _code.AppendLine("bool " + cls + "::Equals(Object^ obj)");
+                    _code.AppendLine("{");
+                    _code.AppendLine("    " + cls + "^ clr = dynamic_cast<" + cls + "^>(obj);");
+                    _code.AppendLine("    if (clr == CLR_NULL)");
+                    _code.AppendLine("    {");
+                    _code.AppendLine("        return false;");
+                    _code.AppendLine("    }\n");
+                    _code.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
+                    _code.AppendLine("    if (clr->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
+                    _code.AppendEmptyLine();
+                    _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullNativeName + "*>(clr->_native));");
+                    _code.AppendLine("}\n");
 
                     if (!_definition.HasWrapType(WrapTypes.NativePtrValueType))
                     {
-                        _sb.AppendLine("bool " + cls + "::Equals(" + cls + "^ obj)");
-                        _sb.AppendLine("{");
-                        _sb.AppendLine("    if (obj == CLR_NULL)");
-                        _sb.AppendLine("    {");
-                        _sb.AppendLine("        return false;");
-                        _sb.AppendLine("    }\n");
-                        _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
-                        _sb.AppendLine("    if (obj->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _wrapper.NativeNamespace + "::" + cls + "*>(obj->_native));");
-                        _sb.AppendLine("}");
+                        _code.AppendLine("bool " + cls + "::Equals(" + cls + "^ obj)");
+                        _code.AppendLine("{");
+                        _code.AppendLine("    if (obj == CLR_NULL)");
+                        _code.AppendLine("    {");
+                        _code.AppendLine("        return false;");
+                        _code.AppendLine("    }\n");
+                        _code.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
+                        _code.AppendLine("    if (obj->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _wrapper.NativeNamespace + "::" + cls + "*>(obj->_native));");
+                        _code.AppendLine("}");
 
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("bool " + cls + "::operator ==(" + cls + "^ obj1, " + cls + "^ obj2)");
-                        _sb.AppendLine("{");
-                        _sb.IncreaseIndent();
-                        _sb.AppendLine("if ((Object^)obj1 == (Object^)obj2) return true;");
-                        _sb.AppendLine("if ((Object^)obj1 == nullptr || (Object^)obj2 == nullptr) return false;");
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("return obj1->Equals(obj2);");
-                        _sb.DecreaseIndent();
-                        _sb.AppendLine("}");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("bool " + cls + "::operator ==(" + cls + "^ obj1, " + cls + "^ obj2)");
+                        _code.AppendLine("{");
+                        _code.IncreaseIndent();
+                        _code.AppendLine("if ((Object^)obj1 == (Object^)obj2) return true;");
+                        _code.AppendLine("if ((Object^)obj1 == nullptr || (Object^)obj2 == nullptr) return false;");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("return obj1->Equals(obj2);");
+                        _code.DecreaseIndent();
+                        _code.AppendLine("}");
 
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("bool " + cls + "::operator !=(" + cls + "^ obj1, " + cls + "^ obj2)");
-                        _sb.AppendLine("{");
-                        _sb.AppendLine("\treturn !(obj1 == obj2);");
-                        _sb.AppendLine("}");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("bool " + cls + "::operator !=(" + cls + "^ obj1, " + cls + "^ obj2)");
+                        _code.AppendLine("{");
+                        _code.AppendLine("\treturn !(obj1 == obj2);");
+                        _code.AppendLine("}");
                     }
                     else
                     {
-                        _sb.AppendLine("bool " + cls + "::Equals(" + cls + " obj)");
-                        _sb.AppendLine("{");
-                        _sb.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
-                        _sb.AppendLine("    if (obj._native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("    return *_native == *obj._native;");
-                        _sb.AppendLine("}");
+                        _code.AppendLine("bool " + cls + "::Equals(" + cls + " obj)");
+                        _code.AppendLine("{");
+                        _code.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
+                        _code.AppendLine("    if (obj._native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("    return *_native == *obj._native;");
+                        _code.AppendLine("}");
 
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("bool " + cls + "::operator ==(" + cls + " obj1, " + cls + " obj2)");
-                        _sb.AppendLine("{");
-                        _sb.AppendLine("\treturn obj1.Equals(obj2);");
-                        _sb.AppendLine("}");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("bool " + cls + "::operator ==(" + cls + " obj1, " + cls + " obj2)");
+                        _code.AppendLine("{");
+                        _code.AppendLine("\treturn obj1.Equals(obj2);");
+                        _code.AppendLine("}");
 
-                        _sb.AppendEmptyLine();
-                        _sb.AppendLine("bool " + cls + "::operator !=(" + cls + " obj1, " + cls + " obj2)");
-                        _sb.AppendLine("{");
-                        _sb.AppendLine("\treturn !obj1.Equals(obj2);");
-                        _sb.AppendLine("}");
+                        _code.AppendEmptyLine();
+                        _code.AppendLine("bool " + cls + "::operator !=(" + cls + " obj1, " + cls + " obj2)");
+                        _code.AppendLine("{");
+                        _code.AppendLine("\treturn !obj1.Equals(obj2);");
+                        _code.AppendLine("}");
                     }
                     break;
             }

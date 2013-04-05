@@ -44,8 +44,8 @@ namespace AutoWrap.Meta
         protected override void AddConstructorBody()
         {
             base.AddConstructorBody();
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("_native->_MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
+            _code.AppendEmptyLine();
+            _code.AppendLine("_native->_MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }
 
         protected virtual void AddDefaultImplementationClass()
@@ -55,14 +55,14 @@ namespace AutoWrap.Meta
                 string className = GetClassName() + "_Default";
                 foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
-                    _sb.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
+                    _code.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
-                    _sb.Append("\n");
-                    _sb.AppendLine("{");
-                    _sb.IncreaseIndent();
+                    _code.Append("\n");
+                    _code.AppendLine("{");
+                    _code.IncreaseIndent();
                     AddMethodBody(f, f.Parameters.Count);
-                    _sb.DecreaseIndent();
-                    _sb.AppendLine("}\n");
+                    _code.DecreaseIndent();
+                    _code.AppendLine("}\n");
                 }
 
                 foreach (PropertyDefinition p in _abstractProperties)
@@ -73,34 +73,34 @@ namespace AutoWrap.Meta
                     {
                         string managedType = GetMethodNativeCall(p.GetterFunction, 0);
 
-                        _sb.AppendLine(ptype + " " + pname + "::get()");
-                        _sb.AppendLine("{");
+                        _code.AppendLine(ptype + " " + pname + "::get()");
+                        _code.AppendLine("{");
                         if (_cachedMembers.Contains(p.GetterFunction))
                         {
                             string priv = NameToPrivate(p.Name);
-                            _sb.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
+                            _code.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
                         }
                         else
                         {
-                            _sb.AppendLine("\treturn " + managedType + ";");
+                            _code.AppendLine("\treturn " + managedType + ";");
                         }
-                        _sb.AppendLine("}\n");
+                        _code.AppendLine("}\n");
                     }
 
                     if (p.CanWrite)
                     {
-                        _sb.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
-                        _sb.AppendLine("{");
-                        _sb.IncreaseIndent();
+                        _code.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
+                        _code.AppendLine("{");
+                        _code.IncreaseIndent();
 
                         AddMethodBody(p.SetterFunction, 1);
 
-                        _sb.DecreaseIndent();
-                        _sb.AppendLine("}\n");
+                        _code.DecreaseIndent();
+                        _code.AppendLine("}\n");
                     }
                 }
 
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
             }
         }
 

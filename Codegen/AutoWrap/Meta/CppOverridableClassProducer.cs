@@ -162,53 +162,53 @@ namespace AutoWrap.Meta
             foreach (ParamDefinition param in f.Parameters)
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
-            _sb.AppendIndent("");
-            _sb.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.Name + "(");
+            _code.AppendIndent("");
+            _code.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.Name + "(");
             AddNativeMethodParams(f);
-            _sb.Append(" )");
+            _code.Append(" )");
             if (f.IsConstFunctionCall)
-                _sb.Append(" const");
-            _sb.Append("\n");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+                _code.Append(" const");
+            _code.Append("\n");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
             if (!f.IsAbstract)
             {
-                _sb.AppendLine("if (_overriden[ " + _methodIndices[f] + " ])");
-                _sb.AppendLine("{");
-                _sb.IncreaseIndent();
+                _code.AppendLine("if (_overriden[ " + _methodIndices[f] + " ])");
+                _code.AppendLine("{");
+                _code.IncreaseIndent();
             }
 
             if (f.HasAttribute<CustomNativeProxyDeclarationAttribute>())
             {
                 string txt = f.GetAttribute<CustomNativeProxyDeclarationAttribute>().DeclarationText;
                 txt = ReplaceCustomVariables(txt, f).Replace("@MANAGED@", "_managed");
-                _sb.AppendLine(txt);
+                _code.AppendLine(txt);
             }
             else
             {
-                AddNativeProxyMethodBody(f, "_managed", _sb);
+                AddNativeProxyMethodBody(f, "_managed", _code);
             }
 
             if (!f.IsAbstract)
             {
-                _sb.DecreaseIndent();
-                _sb.AppendLine("}");
-                _sb.AppendLine("else");
-                _sb.AppendIndent("\t");
-                if (!f.IsVoid) _sb.Append("return ");
-                _sb.Append(f.Class.Name + "::" + f.Name + "(");
+                _code.DecreaseIndent();
+                _code.AppendLine("}");
+                _code.AppendLine("else");
+                _code.AppendIndent("\t");
+                if (!f.IsVoid) _code.Append("return ");
+                _code.Append(f.Class.Name + "::" + f.Name + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
-                    _sb.Append(" " + param.Name);
-                    if (i < f.Parameters.Count - 1) _sb.Append(",");
+                    _code.Append(" " + param.Name);
+                    if (i < f.Parameters.Count - 1) _code.Append(",");
                 }
-                _sb.Append(" );\n");
+                _code.Append(" );\n");
             }
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         //protected override void AddProtectedFunction(DefFunction f)
@@ -247,16 +247,16 @@ namespace AutoWrap.Meta
         {
             if (_definition.IsInterface)
             {
-                SourceCodeStringBuilder tempsb = _sb;
-                _sb = new SourceCodeStringBuilder();
+                SourceCodeStringBuilder tempsb = _code;
+                _code = new SourceCodeStringBuilder();
                 base.Add();
                 string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
-                string res = _sb.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
+                string res = _code.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
                 fname = GetClassName().Replace(_definition.CLRName, _definition.Name);
                 res = res.Replace(GetClassName() + "::", fname + "::");
 
-                _sb = tempsb;
-                _sb.AppendLine(res);
+                _code = tempsb;
+                _code.AppendLine(res);
             }
             else
                 base.Add();
@@ -281,7 +281,7 @@ namespace AutoWrap.Meta
         public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _definition, _sb));
+            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _definition, _code));
         }
 
         private string _proxyName;
@@ -340,23 +340,23 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
-            _sb.AppendIndent(GetClassName() + "::" + _definition.Name);
+            _code.AppendIndent(GetClassName() + "::" + _definition.Name);
             if (f == null)
-                _sb.Append("()");
+                _code.Append("()");
             else
                 AddMethodParameters(f);
-            _sb.Append(" : " + GetBaseClassName() + "( (CLRObject*)0 )");
-            _sb.Append("\n");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.Append(" : " + GetBaseClassName() + "( (CLRObject*)0 )");
+            _code.Append("\n");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
-            _sb.AppendLine("_createdByCLR = true;");
-            _sb.AppendLine("Type^ thisType = this->GetType();");
+            _code.AppendLine("_createdByCLR = true;");
+            _code.AppendLine("Type^ thisType = this->GetType();");
 
             if (!IsAbstractClass && !_definition.IsInterface)
-                _sb.AppendLine("_isOverriden = (thisType != " + _definition.CLRName + "::typeid);");
+                _code.AppendLine("_isOverriden = (thisType != " + _definition.CLRName + "::typeid);");
             else
-                _sb.AppendLine("_isOverriden = true;  //it's abstract or interface so it must be overriden");
+                _code.AppendLine("_isOverriden = true;  //it's abstract or interface so it must be overriden");
 
             int count = 0;
             string preCall = null, postCall = null;
@@ -368,72 +368,72 @@ namespace AutoWrap.Meta
                 postCall = GetMethodPostNativeCall(f, count);
 
                 if (!String.IsNullOrEmpty(preCall))
-                    _sb.AppendLine(preCall);
+                    _code.AppendLine(preCall);
             }
 
             if (!IsAbstractClass && !_definition.IsInterface)
             {
-                _sb.AppendLine("if (_isOverriden)");
-                _sb.AppendLine("{");
-                _sb.IncreaseIndent();
+                _code.AppendLine("if (_isOverriden)");
+                _code.AppendLine("{");
+                _code.IncreaseIndent();
             }
 
             string proxyName = NativeProxyClassProducer.GetProxyName(_definition);
-            _sb.AppendIndent(proxyName + "* proxy = new " + proxyName + "(this");
+            _code.AppendIndent(proxyName + "* proxy = new " + proxyName + "(this");
 
             if (count > 0)
             {
-                _sb.Append(",");
+                _code.Append(",");
                 for (int i = 0; i < count; i++)
                 {
                     ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
-                    _sb.Append(" " + newname);
-                    if (i < count - 1) _sb.Append(",");
+                    _code.Append(" " + newname);
+                    if (i < count - 1) _code.Append(",");
                 }
             }
 
-            _sb.Append(");\n");
+            _code.Append(");\n");
 
-            _sb.AppendLine("proxy->_overriden = Implementation::SubclassingManager::Instance->GetOverridenMethodsArrayPointer(thisType, " + _definition.Name + "::typeid, " + _methodIndicesCount + ");");
-            _sb.AppendLine("_native = proxy;");
+            _code.AppendLine("proxy->_overriden = Implementation::SubclassingManager::Instance->GetOverridenMethodsArrayPointer(thisType, " + _definition.Name + "::typeid, " + _methodIndicesCount + ");");
+            _code.AppendLine("_native = proxy;");
 
             if (!IsAbstractClass && !_definition.IsInterface)
             {
-                _sb.DecreaseIndent();
-                _sb.AppendLine("}");
-                _sb.AppendLine("else");
-                _sb.AppendIndent("\t_native = new " + _definition.FullNativeName + "(");
+                _code.DecreaseIndent();
+                _code.AppendLine("}");
+                _code.AppendLine("else");
+                _code.AppendIndent("\t_native = new " + _definition.FullNativeName + "(");
 
                 if (count > 0)
                 {
-                    _sb.Append(",");
+                    _code.Append(",");
                     for (int i = 0; i < count; i++)
                     {
                         ParamDefinition p = f.Parameters[i];
                         string newname;
                         p.Type.ProducePreCallParamConversionCode(p, out newname);
-                        _sb.Append(" " + newname);
-                        if (i < count - 1) _sb.Append(",");
+                        _code.Append(" " + newname);
+                        if (i < count - 1) _code.Append(",");
                     }
                 }
 
-                _sb.Append(");\n");
+                _code.Append(");\n");
             }
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _sb.AppendEmptyLine();
-                _sb.AppendLine(postCall);
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
+                _code.AppendLine(postCall);
+                _code.AppendEmptyLine();
             }
 
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
             AddConstructorBody();
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
     }
 
@@ -449,8 +449,6 @@ namespace AutoWrap.Meta
 
         protected override void Init()
         {
-            _interfaces = new List<ClassDefinition>();
-
             if (_additionalInterfaces != null)
                 _interfaces.AddRange(_additionalInterfaces);
 
@@ -487,11 +485,11 @@ namespace AutoWrap.Meta
             else
                 AddPublicConstructor(null);
 
-            _sb.AppendEmptyLine();
+            _code.AppendEmptyLine();
             foreach (PropertyDefinition prop in _overridableProperties)
             {
                 AddProperty(prop);
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
             }
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
@@ -499,7 +497,7 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public)
                 {
                     AddMethod(func);
-                    _sb.AppendEmptyLine();
+                    _code.AppendEmptyLine();
                 }
             }
         }
@@ -511,7 +509,7 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
-                    _sb.AppendEmptyLine();
+                    _code.AppendEmptyLine();
                 }
             }
         }

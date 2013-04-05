@@ -58,8 +58,8 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _definition.CLRName + ", " + _definition.FullNativeName + " )\n");
-            _sb.AppendLine("virtual " + _definition.FullNativeName + "* _GetNativePtr();\n");
+            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _definition.CLRName + ", " + _definition.FullNativeName + " )\n");
+            _code.AppendLine("virtual " + _definition.FullNativeName + "* _GetNativePtr();\n");
             base.AddPublicDeclarations();
         }
 
@@ -77,12 +77,12 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _sb.AppendIndent("");
+            _code.AppendIndent("");
             if (!_definition.IsNested)
-                _sb.Append("public ");
+                _code.Append("public ");
             else
-                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.Append("interface class " + _definition.CLRName + "\n");
+                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _code.Append("interface class " + _definition.CLRName + "\n");
         }
 
         protected override void AddProtectedDeclarations()

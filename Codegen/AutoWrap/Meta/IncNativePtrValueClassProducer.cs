@@ -36,12 +36,12 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _sb.AppendIndent("");
+            _code.AppendIndent("");
             if (!_definition.IsNested)
-                _sb.Append("public ");
+                _code.Append("public ");
             else
-                _sb.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _sb.AppendFormat("value class {0}\n", _definition.CLRName);
+                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _code.AppendFormat("value class {0}\n", _definition.CLRName);
         }
 
         protected override void AddPreDeclarations()
@@ -56,39 +56,39 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _sb.AppendLine(_definition.FullNativeName + "* _native;");
+            _code.AppendLine(_definition.FullNativeName + "* _native;");
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
 
-            _sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullNativeName + " )");
-            _sb.AppendEmptyLine();
+            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullNativeName + " )");
+            _code.AppendEmptyLine();
 
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("property IntPtr NativePtr");
-            _sb.AppendLine("{");
-            _sb.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
-            _sb.AppendLine("}");
+            _code.AppendEmptyLine();
+            _code.AppendLine("property IntPtr NativePtr");
+            _code.AppendLine("{");
+            _code.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
+            _code.AppendLine("}");
 
             if (!IsReadOnly && IsConstructable)
             {
-                _sb.AppendEmptyLine();
+                _code.AppendEmptyLine();
                 AddCreators();
 
-                _sb.AppendEmptyLine();
-                _sb.AppendLine("void DestroyNativePtr()");
-                _sb.AppendLine("{");
-                _sb.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
-                _sb.AppendLine("}");
+                _code.AppendEmptyLine();
+                _code.AppendLine("void DestroyNativePtr()");
+                _code.AppendLine("{");
+                _code.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
+                _code.AppendLine("}");
             }
 
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("property bool IsNull");
-            _sb.AppendLine("{");
-            _sb.AppendLine("\tbool get() { return (_native == 0); }");
-            _sb.AppendLine("}");
+            _code.AppendEmptyLine();
+            _code.AppendLine("property bool IsNull");
+            _code.AppendLine("{");
+            _code.AppendLine("\tbool get() { return (_native == 0); }");
+            _code.AppendLine("}");
         }
 
         protected override void AddPublicConstructors()
@@ -113,7 +113,7 @@ namespace AutoWrap.Meta
         protected virtual void AddCreator(MemberMethodDefinition f)
         {
             if (f == null)
-                _sb.AppendLine("static " + _definition.CLRName + " Create();");
+                _code.AppendLine("static " + _definition.CLRName + " Create();");
             else
             {
                 int defcount = 0;
@@ -131,9 +131,9 @@ namespace AutoWrap.Meta
                     if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                         continue;
 
-                    _sb.AppendIndent("static " + _definition.CLRName + " Create");
+                    _code.AppendIndent("static " + _definition.CLRName + " Create");
                     AddMethodParameters(f, f.Parameters.Count - dc);
-                    _sb.Append(";\n");
+                    _code.Append(";\n");
                 }
 
             }

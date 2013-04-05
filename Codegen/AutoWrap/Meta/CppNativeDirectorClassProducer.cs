@@ -74,44 +74,44 @@ namespace AutoWrap.Meta
             string def = f.Definition.Replace(f.Class.FullNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
                 def = def.Substring("virtual ".Length);
-            _sb.AppendIndent(def);
+            _code.AppendIndent(def);
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
-                _sb.Append(" ");
+                _code.Append(" ");
                 AddNativeMethodParam(param);
-                if (i < f.Parameters.Count - 1) _sb.Append(",");
+                if (i < f.Parameters.Count - 1) _code.Append(",");
             }
-            _sb.Append(" )\n");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.Append(" )\n");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
-            _sb.AppendLine("if (doCallFor" + f.CLRName + ")");
-            _sb.AppendLine("{");
-            _sb.IncreaseIndent();
+            _code.AppendLine("if (doCallFor" + f.CLRName + ")");
+            _code.AppendLine("{");
+            _code.IncreaseIndent();
 
-            CppNativeProxyClassProducer.AddNativeProxyMethodBody(f, "_receiver", _sb);
+            CppNativeProxyClassProducer.AddNativeProxyMethodBody(f, "_receiver", _code);
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
             if (!f.IsVoid)
             {
-                _sb.AppendLine("else");
+                _code.AppendLine("else");
                 string ret = null;
                 if (f.HasAttribute<DefaultReturnValueAttribute>())
                     ret = f.GetAttribute<DefaultReturnValueAttribute>().Name;
                 else
                     throw new Exception("Default return value not set.");
-                _sb.AppendLine("\treturn " + ret + ";");
+                _code.AppendLine("\treturn " + ret + ";");
             }
 
-            _sb.DecreaseIndent();
-            _sb.AppendLine("}");
+            _code.DecreaseIndent();
+            _code.AppendLine("}");
         }
 
         protected virtual void AddNativeMethodParam(ParamDefinition param)
         {
-            _sb.Append(param.MemberTypeNativeName + " " + param.Name);
+            _code.Append(param.MemberTypeNativeName + " " + param.Name);
         }
     }
 }

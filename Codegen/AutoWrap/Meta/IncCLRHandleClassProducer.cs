@@ -43,16 +43,16 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _sb.AppendEmptyLine();
-            _sb.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
-            _sb.AppendLine("{");
-            _sb.AppendLine("\t_native = 0;");
-            _sb.AppendLine("}");
+            _code.AppendEmptyLine();
+            _code.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
+            _code.AppendLine("{");
+            _code.AppendLine("\t_native = 0;");
+            _code.AppendLine("}");
         }
 
         protected override void AddManagedNativeConversionsDefinition()
         {
-            _sb.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
+            _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
         }
 
         public IncCLRHandleClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
