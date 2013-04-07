@@ -31,7 +31,7 @@ namespace AutoWrap.Meta
     public enum WrapTypes { NonOverridable, Overridable, NativeDirector, Interface,
         Singleton, SharedPtr, ReadOnlyStruct, ValueType, NativePtrValueType, CLRHandle, PlainWrapper }
 
-    public class AutoWrapAttribute : Attribute
+    public class AutoWrapAttribute
     {
         public virtual void ProcessHolder(AttributeSet holder)
         {
