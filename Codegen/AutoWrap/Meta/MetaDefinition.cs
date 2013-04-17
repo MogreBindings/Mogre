@@ -23,18 +23,20 @@
 
 using System;
 using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Holds the information from the <c>meta.xml</c> file, i.e. information about the 
+    /// original C++ source code.
+    /// </summary>
     public class MetaDefinition
     {
-        XmlDocument _doc = new XmlDocument();
-        string _managedNamespace;
-        List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
+        private XmlDocument _doc = new XmlDocument();
+        private string _managedNamespace;
+        private List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
         public List<NamespaceDefinition> NameSpaces = new List<NamespaceDefinition>();
 
@@ -154,7 +156,7 @@ namespace AutoWrap.Meta
                             }
                         }
                         if (param == null)
-                        	return;
+                            return;
                             //throw new Exception("Wrong param name");
 
                         foreach (XmlAttribute attr in child.Attributes)
@@ -175,8 +177,8 @@ namespace AutoWrap.Meta
             string typename = elem.Name.Substring(1);
             string nameSpace = typeof(WrapTypeAttribute).Namespace;
 
-            Type type = Assembly.GetExecutingAssembly().GetType( nameSpace + "."+typename + "Attribute", true, true);
-            return (AutoWrapAttribute)type.GetMethod("FromElement").Invoke(null, new object[] { elem });
+            Type type = Assembly.GetExecutingAssembly().GetType(nameSpace + "." + typename + "Attribute", true, true);
+            return (AutoWrapAttribute) type.GetMethod("FromElement").Invoke(null, new object[] {elem});
         }
 
         private AutoWrapAttribute CreateAttribute(XmlAttribute attr)
