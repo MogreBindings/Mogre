@@ -34,16 +34,16 @@ namespace AutoWrap.Meta
     /// </summary>
     public class MetaDefinition
     {
-        private XmlDocument _doc = new XmlDocument();
-        private string _managedNamespace;
-        private List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
+        private readonly XmlDocument _doc = new XmlDocument();
+        private readonly string _managedNamespace;
+        private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
         public List<NamespaceDefinition> NameSpaces = new List<NamespaceDefinition>();
 
-        public MetaDefinition(string file)
+        public MetaDefinition(string file, string managedNamespace)
         {
             _doc.Load(file);
-            this._managedNamespace = Globals.ManagedNamespace;
+            this._managedNamespace = managedNamespace;
 
             XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
 
