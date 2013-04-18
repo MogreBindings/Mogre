@@ -38,7 +38,22 @@ namespace AutoWrap.Meta
         private readonly string _managedNamespace;
         private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
-        public List<NamespaceDefinition> NameSpaces = new List<NamespaceDefinition>();
+        /// <summary>
+        /// Contains all namespace definitions for the specified sources. Contains elements
+        /// for root namespaces (like "Ogre") as well as elements for child namespaces
+        /// (like "Ogre::OverlayElementCommands").
+        /// </summary>
+        private readonly Dictionary<string, NamespaceDefinition> _namespaces = new Dictionary<string, NamespaceDefinition>();
+        public IEnumerable<NamespaceDefinition> Namespaces
+        {
+            get
+            {
+                foreach (NamespaceDefinition space in _namespaces.Values)
+                {
+                    yield return space;
+                }
+            }
+        }
 
         public MetaDefinition(string file, string managedNamespace)
         {
@@ -54,17 +69,27 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Adds an attributes files (i.e. "Attributes.xml" as described in the readme) to the meta 
+        /// information.
+        /// </summary>
+        /// <param name="file">the path to the xml file</param>
         public void AddAttributes(string file)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(file);
 
+            // Find the root tag.
             XmlElement root = (XmlElement)doc.GetElementsByTagName("meta")[0];
 
-            foreach (XmlNode elem in root.ChildNodes)
+            foreach (XmlNode node in root.ChildNodes)
             {
-                if (elem is XmlElement)
-                    AddAttributesInNamespace(GetNameSpace((elem as XmlElement).GetAttribute("name")), elem as XmlElement);
+                XmlElement elem = node as XmlElement;
+                if (elem == null)
+                    // Not an XML element, but something else.
+                    continue;
+    
+                AddAttributesInNamespace(GetNameSpace(elem.GetAttribute("name")), elem);
             }
 
             foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in _holders)
@@ -195,46 +220,41 @@ namespace AutoWrap.Meta
             _holders.Add(new KeyValuePair<AttributeSet, AutoWrapAttribute>(holder, attr));
         }
 
-        public NamespaceDefinition GetNameSpace(string name)
+
+        /// <summary>
+        /// Returns the namespace definition for the specified name.
+        /// </summary>
+        /// <param name="nativeNamespaceName">the native name of the namespace to be looked up; 
+        /// if this name could not be found, a <see cref="KeyNotFoundException"/> will be thrown</param>
+        public NamespaceDefinition GetNameSpace(string nativeNamespaceName)
         {
-            NamespaceDefinition spc = null;
-            foreach (NamespaceDefinition ns in NameSpaces)
-            {
-                if (ns.NativeName == name)
-                {
-                    spc = ns;
-                    break;
-                }
-            }
-
-            if (spc == null)
-                throw new Exception("couldn't find namespace");
-
-            return spc;
+            return _namespaces[nativeNamespaceName];
         }
-
+    
+        /// <summary>
+        /// Adds a namespace to the namespace list. IMPORTANT: Child namespaces must be added
+        /// after their parent namespaces. Otherwise a <see cref="KeyNotFoundException"/> will
+        /// be thrown.
+        /// </summary>
+        /// <param name="elem">the XML element holding the namespace definition</param>
         private void AddNamespace(XmlElement elem)
         {
             if (elem.Name != "namespace")
-                throw new Exception("Wrong element; expected 'namespace'.");
+                throw new InvalidOperationException("Wrong element; expected 'namespace'.");
 
             NamespaceDefinition spc = new NamespaceDefinition(elem, _managedNamespace);
 
             if (spc.NativeName.Contains("::"))
             {
-                string pname = spc.NativeName.Substring(0, spc.NativeName.LastIndexOf("::"));
-                foreach (NamespaceDefinition fns in NameSpaces)
-                {
-                    if (fns.NativeName == pname)
-                    {
-                        spc.ParentNameSpace = fns;
-                        fns.ChildNameSpaces.Add(spc);
-                        break;
-                    }
-                }
+                // Is a child namespace.
+                string parentNamespaceName = spc.NativeName.Substring(0, spc.NativeName.LastIndexOf("::"));
+                NamespaceDefinition parentNamespace = _namespaces[parentNamespaceName];
+        
+                parentNamespace.ChildNameSpaces.Add(spc);
+                spc.ParentNameSpace = parentNamespace;
             }
 
-            NameSpaces.Add(spc);
+            _namespaces[spc.NativeName] = spc;
         }
     }
 }

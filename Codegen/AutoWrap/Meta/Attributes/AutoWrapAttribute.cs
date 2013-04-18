@@ -23,11 +23,11 @@
 
 namespace AutoWrap.Meta
 {
-    public class AutoWrapAttribute
+    /// <summary>
+    /// Base class for all auto wrap attributes.
+    /// </summary>
+    public abstract class AutoWrapAttribute
     {
-        public virtual void ProcessHolder(AttributeSet holder)
-        {
-        }
 
         protected void AddAttributeToInheritanceChain(ClassDefinition type, AutoWrapAttribute attr)
         {
@@ -46,6 +46,10 @@ namespace AutoWrap.Meta
 
             if (type.BaseClass != null)
                 AddAttributeToInheritanceChain(type.BaseClass, attr);
+        }
+
+        public virtual void ProcessHolder(AttributeSet holder)
+        {
         }
     }
 }

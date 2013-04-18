@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             this.ManagedNamespace = Globals.ManagedNamespace;
             this.NativeNamespace = Globals.NativeNamespace;
 
-            foreach (NamespaceDefinition space in meta.NameSpaces)
+            foreach (NamespaceDefinition space in meta.Namespaces)
             {
                 foreach (AbstractTypeDefinition type in space.Types)
                 {
@@ -236,7 +236,7 @@ namespace AutoWrap.Meta
                 builder.Clear();
                 builder.Append(HEADER_TEXT);
                 builder.Append(GenerateIncludeFileCodeForIncludeFile(includeFile));
-				if (includeFile == "OgrePrerequisites.h")
+                if (includeFile == "OgrePrerequisites.h")
                 {
                     builder.Append("#include \"MogrePagingPrerequisites.h\"");
                 }

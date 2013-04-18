@@ -412,20 +412,21 @@ namespace AutoWrap.Meta
                 case PassedByType.Pointer:
                     if (IsValueType)
                     {
-                        if (!param.HasAttribute<ArrayTypeAttribute>()
-                            && !HasWrapType(WrapTypes.NativePtrValueType))
+                        if (!param.HasAttribute<ArrayTypeAttribute>() && !HasWrapType(WrapTypes.NativePtrValueType))
                         {
                             newname = "o_" + param.Name;
                             return param.MemberTypeNativeName + " o_" + param.Name + " = reinterpret_cast<" + param.MemberTypeNativeName + ">(" + param.Name + ");\n";
                         }
-                        else
-                            return base.ProducePreCallParamConversionCode(param, out newname);
-                    }
-                    else
+
                         return base.ProducePreCallParamConversionCode(param, out newname);
+                    }
+
+                    return base.ProducePreCallParamConversionCode(param, out newname);
+
                 case PassedByType.PointerPointer:
                     newname = "&out_" + param.Name;
                     return (param.IsConst ? "const " : "") + FullNativeName + "* out_" + param.Name + ";\n";
+
                 default:
                     return base.ProducePreCallParamConversionCode(param, out newname);
             }

@@ -27,15 +27,15 @@ namespace AutoWrap.Meta
 {
     public class BaseForSubclassingAttribute : AutoWrapAttribute
     {
-        public override void ProcessHolder(AttributeSet holder)
-        {
-            ClassDefinition type = (ClassDefinition) holder;
-            AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
-        }
-
         public static BaseForSubclassingAttribute FromElement(XmlElement elem)
         {
             return new BaseForSubclassingAttribute();
+        }
+
+        public override void ProcessHolder(AttributeSet holder)
+        {
+            ClassDefinition type = (ClassDefinition)holder;
+            AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
         }
     }
 }
