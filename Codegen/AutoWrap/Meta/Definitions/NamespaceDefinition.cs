@@ -22,17 +22,15 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 
 namespace AutoWrap.Meta
 {
     public class NamespaceDefinition
     {
-        XmlElement _elem;
-        string _managedNamespace;
+        private XmlElement _elem;
+        private string _managedNamespace;
 
         public NamespaceDefinition ParentNameSpace = null;
         public List<NamespaceDefinition> ChildNameSpaces = new List<NamespaceDefinition>();
@@ -44,7 +42,7 @@ namespace AutoWrap.Meta
 
         public string NativeName
         {
-            get { return NamespaceDefinition.GetFullName(_elem); }
+            get { return GetFullName(_elem); }
         }
 
         public string CLRName;
@@ -55,6 +53,7 @@ namespace AutoWrap.Meta
         {
             return FindType<T>(name, true);
         }
+
         public T FindType<T>(string name, bool raiseException)
         {
             if (name.EndsWith(" std::string"))
@@ -64,7 +63,7 @@ namespace AutoWrap.Meta
                 return (T)(object)new DefString();
 
             if (name == "DisplayString")
-                return (T)(object)new DefUtfString ();
+                return (T)(object)new DefUtfString();
 
             if (name.StartsWith(Globals.NativeNamespace + "::"))
                 name = name.Substring(name.IndexOf("::") + 2);
@@ -76,18 +75,18 @@ namespace AutoWrap.Meta
                 {
                     if (raiseException)
                         throw new Exception("Could not find type");
-                    else
-                        return (T)(object)new DefInternal(name);
+
+                    return (T) (object) new DefInternal(name);
                 }
-                else
-                    return ParentNameSpace.FindType<T>(name, raiseException);
+
+                return ParentNameSpace.FindType<T>(name, raiseException);
             }
 
-            if(type is AbstractTypeDefinition) {
+            if (type is AbstractTypeDefinition)
+            {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
-                if(((AbstractTypeDefinition)(object)type).IsIgnored) {
-                    return (T)(object)type;
-                }
+                if (((AbstractTypeDefinition) (object) type).IsIgnored)
+                    return type;
             }
 
             return (T)(object)((AbstractTypeDefinition)(object)type).CreateExplicitType();
@@ -118,35 +117,36 @@ namespace AutoWrap.Meta
             {
                 if (raiseException)
                     throw new Exception("Could not find type");
-                else
-                    return default(T);
+
+                return default(T);
             }
-            else if (list.Count > 1)
+
+            if (list.Count > 1)
                 throw new Exception("Found more than one type");
 
-            T type = (T)(object)list[0];
+            T type = (T) (object) list[0];
 
             if (nextnames == null)
                 return type;
-            else
-                return FindTypeInList<T>(nextnames, ((ClassDefinition)(object)type).NestedTypes, raiseException);
+
+            return FindTypeInList<T>(nextnames, ((ClassDefinition)(object)type).NestedTypes, raiseException);
         }
 
         public NamespaceDefinition(XmlElement elem, string managedNamespace)
         {
-            this._elem = elem;
-            this._managedNamespace = managedNamespace;
+            _elem = elem;
+            _managedNamespace = managedNamespace;
 
             string second = elem.GetAttribute("second");
             string third = elem.GetAttribute("third");
 
-            this.CLRName = managedNamespace;
+            CLRName = managedNamespace;
 
             if (second != "")
-                this.CLRName += "::" + second;
+                CLRName += "::" + second;
 
             if (third != "")
-                this.CLRName += "::" + third;
+                CLRName += "::" + third;
 
             foreach (XmlElement child in elem.ChildNodes)
             {
@@ -154,7 +154,7 @@ namespace AutoWrap.Meta
                 if (type != null)
                 {
                     type.NameSpace = this;
-                    this.Types.Add(type);
+                    Types.Add(type);
                 }
             }
         }
