@@ -27,34 +27,90 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Contains the definition of a C++ namespace (i.e. its name) along with the name of its
+    /// managed counter part.
+    /// </summary>
     public class NamespaceDefinition
     {
-        private XmlElement _elem;
-        private string _managedNamespace;
+        private readonly NamespaceDefinition _parentNamespace;
+        private readonly List<NamespaceDefinition> _childNamespaces = new List<NamespaceDefinition>();
 
-        public NamespaceDefinition ParentNameSpace = null;
-        public List<NamespaceDefinition> ChildNameSpaces = new List<NamespaceDefinition>();
+        /// <summary>
+        /// The native (C++) name of this namespace.
+        /// </summary>
+        /// <seealso cref="CLRName"/>
+        public readonly string NativeName;
 
-        public XmlElement Element
+        /// <summary>
+        /// The managed (C++/CLI) name of this namespace. May differ from <see cref="NativeName"/>.
+        /// </summary>
+        public readonly string CLRName;
+        
+        private readonly List<AbstractTypeDefinition> _containedTypes = new List<AbstractTypeDefinition>();
+        /// <summary>
+        /// Contains the type definitions (mostly class definitions) contained in this namespace.
+        /// </summary>
+        public IEnumerable<AbstractTypeDefinition> ContainedTypes
         {
-            get { return _elem; }
+            get
+            {
+                foreach (AbstractTypeDefinition def in _containedTypes)
+                {
+                    yield return def;
+                }
+            }
         }
 
-        public string NativeName
+        public NamespaceDefinition(XmlElement elem, string managedRootNamespaceName, MetaDefinition metaDef)
         {
-            get { return GetFullName(_elem); }
+            // The child namespace names are stored in the attributes "second" and "third". Thus
+            // we can only support up to three namespace levels (like "Level1::Level2::Level3").
+            string second = elem.GetAttribute("second");
+            string third = elem.GetAttribute("third");
+            
+            NativeName = elem.GetAttribute("name");
+            CLRName = managedRootNamespaceName;
+            
+            if (second != "")
+            {
+                NativeName += "::" + second;
+                CLRName += "::" + second;
+            }
+            
+            if (third != "")
+            {
+                NativeName += "::" + third;
+                CLRName += "::" + third;
+            }
+            
+            // If this is a child namespace, set parent and add itself to the parent.
+            if (NativeName.Contains("::"))
+            {
+                // Is a child namespace.
+                string parentNamespaceName = NativeName.Substring(0, NativeName.LastIndexOf("::"));
+                _parentNamespace = metaDef.GetNameSpace(parentNamespaceName);
+            
+                _parentNamespace._childNamespaces.Add(this);
+            }
+            else
+                _parentNamespace = null;
+            
+            //
+            // Add types contained in this namespace.
+            //
+            foreach (XmlElement child in elem.ChildNodes)
+            {
+                AbstractTypeDefinition type = AbstractTypeDefinition.CreateType(child);
+                if (type != null)
+                {
+                    type.NameSpace = this;
+                    _containedTypes.Add(type);
+                }
+            }
         }
 
-        public string CLRName;
-
-        public List<AbstractTypeDefinition> Types = new List<AbstractTypeDefinition>();
-
-        public T FindType<T>(string name)
-        {
-            return FindType<T>(name, true);
-        }
-
-        public T FindType<T>(string name, bool raiseException)
+        public T FindType<T>(string name, bool raiseException = true)
         {
             if (name.EndsWith(" std::string"))
                 name = "std::string";
@@ -68,10 +124,10 @@ namespace AutoWrap.Meta
             if (name.StartsWith(Globals.NativeNamespace + "::"))
                 name = name.Substring(name.IndexOf("::") + 2);
 
-            T type = FindTypeInList<T>(name, Types, false);
+            T type = FindTypeInList<T>(name, _containedTypes, false);
             if (type == null)
             {
-                if (ParentNameSpace == null)
+                if (_parentNamespace == null)
                 {
                     if (raiseException)
                         throw new Exception("Could not find type");
@@ -79,7 +135,7 @@ namespace AutoWrap.Meta
                     return (T) (object) new DefInternal(name);
                 }
 
-                return ParentNameSpace.FindType<T>(name, raiseException);
+                return _parentNamespace.FindType<T>(name, raiseException);
             }
 
             if (type is AbstractTypeDefinition)
@@ -132,37 +188,10 @@ namespace AutoWrap.Meta
             return FindTypeInList<T>(nextnames, ((ClassDefinition)(object)type).NestedTypes, raiseException);
         }
 
-        public NamespaceDefinition(XmlElement elem, string managedNamespace)
-        {
-            _elem = elem;
-            _managedNamespace = managedNamespace;
-
-            string second = elem.GetAttribute("second");
-            string third = elem.GetAttribute("third");
-
-            CLRName = managedNamespace;
-
-            if (second != "")
-                CLRName += "::" + second;
-
-            if (third != "")
-                CLRName += "::" + third;
-
-            foreach (XmlElement child in elem.ChildNodes)
-            {
-                AbstractTypeDefinition type = AbstractTypeDefinition.CreateType(child);
-                if (type != null)
-                {
-                    type.NameSpace = this;
-                    Types.Add(type);
-                }
-            }
-        }
-
         public AbstractTypeDefinition GetDefType(string name)
         {
             AbstractTypeDefinition type = null;
-            foreach (AbstractTypeDefinition t in Types)
+            foreach (AbstractTypeDefinition t in _containedTypes)
             {
                 if (t.Name == name)
                 {
@@ -175,26 +204,6 @@ namespace AutoWrap.Meta
                 throw new Exception(String.Format("DefType not found for '{0}'", name));
 
             return type;
-        }
-
-        public static string GetFullName(XmlElement elem)
-        {
-            if (elem.Name != "namespace")
-                throw new Exception("Wrong element; expected 'namespace'.");
-
-            string first, second, third;
-            first = elem.GetAttribute("name");
-            second = elem.GetAttribute("second");
-            third = elem.GetAttribute("third");
-
-            string name = first;
-            if (second != "")
-                name += "::" + second;
-
-            if (third != "")
-                name += "::" + third;
-
-            return name;
         }
     }
 }

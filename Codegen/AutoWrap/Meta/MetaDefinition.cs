@@ -243,17 +243,7 @@ namespace AutoWrap.Meta
             if (elem.Name != "namespace")
                 throw new InvalidOperationException("Wrong element; expected 'namespace'.");
 
-            NamespaceDefinition spc = new NamespaceDefinition(elem, _managedNamespace);
-
-            if (spc.NativeName.Contains("::"))
-            {
-                // Is a child namespace.
-                string parentNamespaceName = spc.NativeName.Substring(0, spc.NativeName.LastIndexOf("::"));
-                NamespaceDefinition parentNamespace = _namespaces[parentNamespaceName];
-        
-                parentNamespace.ChildNameSpaces.Add(spc);
-                spc.ParentNameSpace = parentNamespace;
-            }
+            NamespaceDefinition spc = new NamespaceDefinition(elem, _managedNamespace, this);
 
             _namespaces[spc.NativeName] = spc;
         }

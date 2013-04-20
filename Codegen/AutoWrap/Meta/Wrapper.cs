@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
 
             foreach (NamespaceDefinition space in meta.Namespaces)
             {
-                foreach (AbstractTypeDefinition type in space.Types)
+                foreach (AbstractTypeDefinition type in space.ContainedTypes)
                 {
 
                     if (TypeIsWrappable(type))
@@ -107,7 +107,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                foreach (AbstractTypeDefinition type in space.Types)
+                foreach (AbstractTypeDefinition type in space.ContainedTypes)
                 {
                     if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFile))
                         if (!IncludeFiles[type.IncludeFile].Contains(type))

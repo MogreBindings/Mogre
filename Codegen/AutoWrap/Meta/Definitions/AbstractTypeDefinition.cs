@@ -329,7 +329,7 @@ namespace AutoWrap.Meta
                     case "class":
                         return ClassDefinition.GetName(_elem.ParentNode as XmlElement);
                     case "namespace":
-                        return NamespaceDefinition.GetFullName(_elem.ParentNode as XmlElement);
+                        return this.NameSpace.NativeName;
                     default:
                         throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
                 }
@@ -345,7 +345,7 @@ namespace AutoWrap.Meta
                     case "class":
                         return ClassDefinition.GetFullName(_elem.ParentNode as XmlElement);
                     case "namespace":
-                        return NamespaceDefinition.GetFullName(_elem.ParentNode as XmlElement);
+                        return this.NameSpace.CLRName;
                     default:
                         throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
                 }
