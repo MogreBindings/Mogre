@@ -38,12 +38,13 @@ namespace AutoWrap.Meta
         private readonly string _managedNamespace;
         private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
+        private readonly Dictionary<string, NamespaceDefinition> _namespaces = new Dictionary<string, NamespaceDefinition>();
         /// <summary>
         /// Contains all namespace definitions for the specified sources. Contains elements
         /// for root namespaces (like "Ogre") as well as elements for child namespaces
-        /// (like "Ogre::OverlayElementCommands").
+        /// (like "Ogre::OverlayElementCommands"). Note that the elements come in no specific
+        /// order.
         /// </summary>
-        private readonly Dictionary<string, NamespaceDefinition> _namespaces = new Dictionary<string, NamespaceDefinition>();
         public IEnumerable<NamespaceDefinition> Namespaces
         {
             get
