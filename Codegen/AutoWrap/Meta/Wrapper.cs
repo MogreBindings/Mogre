@@ -1415,7 +1415,9 @@ namespace AutoWrap.Meta
         /// Header text for all auto-generated source files.
         /// </summary>
         public static readonly string HEADER_TEXT =
-            ("/*  This file is produced by the C++/CLI AutoWrapper utility.\n"
-             + "          Copyright (c) 2006 by Argiris Kirtzidis  */\n\n");
+             "/*  This file was produced by the C++/CLI AutoWrapper utility.\n"
+            +" *          Copyright (c) 2006 by Argiris Kirtzidis\n"
+            +" *          Copyright (c) 2010 by Manski\n"
+            +" */\n\n";
     }
 }
