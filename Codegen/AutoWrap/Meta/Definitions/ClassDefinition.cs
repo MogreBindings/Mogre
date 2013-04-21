@@ -1154,8 +1154,8 @@ namespace AutoWrap.Meta
 
             if (prevf != null)
             {
-                if ((prevf.IsConstFunctionCall && func.IsConstFunctionCall)
-                    || (!prevf.IsConstFunctionCall && !func.IsConstFunctionCall))
+                if ((prevf.IsConstMethod && func.IsConstMethod)
+                    || (!prevf.IsConstMethod && !func.IsConstMethod))
                 {
                     //throw new Exception("couldn't pick a function to keep");
                     //Add it and sort them out later
@@ -1163,9 +1163,9 @@ namespace AutoWrap.Meta
                 }
 
                 if ((prevf.ProtectionLevel == func.ProtectionLevel
-                     && prevf.IsConstFunctionCall)
+                    && prevf.IsConstMethod)
                     || (prevf.ProtectionLevel == ProtectionLevel.Protected
-                        && func.ProtectionLevel == ProtectionLevel.Public))
+                    && func.ProtectionLevel == ProtectionLevel.Public))
                 {
                     Members.Remove(prevf);
                     Members.Add(func);

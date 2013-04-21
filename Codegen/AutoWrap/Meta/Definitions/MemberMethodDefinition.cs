@@ -9,26 +9,33 @@ namespace AutoWrap.Meta
         public List<ParamDefinition> Parameters = new List<ParamDefinition>();
         public VirtualLevel VirtualLevel;
 
-        private bool? _isConst;
+        private bool _isConst;
+        /// <summary>
+        /// Denotes whether the return value of this method is C++ <c>const.</c> Note:
+        /// Don't confuse this with <see cref="IsConstMethod"/>.
+        /// </summary>
         public override bool IsConst
         {
-            get
-            {
-                if (_isConst == null)
-                {
-                    string def = " " + Definition.Substring(0, Definition.IndexOf(Name));
-                    _isConst = def.Contains(" const ");
-                }
-
-                return (bool) _isConst;
-            }
+            get { return _isConst; }
         }
 
-        private bool _isConstFunctionCall;
-        public bool IsConstFunctionCall
+        public bool IsVirtual
         {
-            get { return _isConstFunctionCall; }
+            get { return VirtualLevel != VirtualLevel.NotVirtual; }
         }
+
+        public bool IsAbstract
+        {
+            get { return VirtualLevel == VirtualLevel.Abstract; }
+        }
+
+        /// <summary>
+        /// Denotes whether this method is C++ <c>const</c>, i.e. whether it can change
+        /// the inner state of the containing class or not. Note that this value is
+        /// different from <see cref="IsConst"/> in that <c>IsConst</c> describes whether
+        /// the <i>return value</i> is <c>const</c> or not.
+        /// </summary>
+        public readonly bool IsConstMethod;
 
         private MethodSignature _signature;
         public MethodSignature Signature
@@ -136,8 +143,8 @@ namespace AutoWrap.Meta
 
             if (BaseMethod != null)
                 return BaseMethod.GetAttribute<T>();
-            
-            return default(T);
+
+            return null;
         }
 
         private bool? _isVirtualInterfaceMethod;
@@ -161,16 +168,6 @@ namespace AutoWrap.Meta
 
                 return (bool) _isVirtualInterfaceMethod;
             }
-        }
-
-        public bool IsVirtual
-        {
-            get { return VirtualLevel != VirtualLevel.NotVirtual; }
-        }
-
-        public bool IsAbstract
-        {
-            get { return VirtualLevel == VirtualLevel.Abstract; }
         }
 
         private bool? _isDeclarableFunction;
@@ -373,7 +370,9 @@ namespace AutoWrap.Meta
                 default:
                     throw new Exception("unexpected");
             }
-            _isConstFunctionCall = bool.Parse(elem.GetAttribute("const"));
+
+            IsConstMethod = bool.Parse(elem.GetAttribute("const"));
+            _isConst = (" " + Definition.Substring(0, Definition.IndexOf(Name))).Contains(" const ");
         }
 
         protected override void InterpretChildElement(XmlElement child)

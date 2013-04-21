@@ -166,7 +166,7 @@ namespace AutoWrap.Meta
             _code.Append(f.MemberTypeNativeName + " " + f.Name + "(");
             AddNativeMethodParams(f);
             _code.Append(" ) ");
-            if (f.IsConstFunctionCall)
+            if (f.IsConstMethod)
                 _code.Append("const ");
             _code.Append("override;\n");
         }

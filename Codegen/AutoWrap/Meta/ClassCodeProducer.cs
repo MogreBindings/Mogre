@@ -342,7 +342,7 @@ namespace AutoWrap.Meta
             {
                 if (f.ProtectionLevel == ProtectionLevel.Public)
                 {
-                    return GetNativeInvokationTarget(f.IsConstFunctionCall) + "->" + f.Name;
+                    return GetNativeInvokationTarget(f.IsConstMethod) + "->" + f.Name;
                 }
                 else if (f.ProtectionLevel == ProtectionLevel.Protected)
                 {
