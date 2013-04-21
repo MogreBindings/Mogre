@@ -121,7 +121,7 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        private ClassDefinition _containingClass;
+        private readonly ClassDefinition _containingClass;
         /// <summary>
         /// The class this member is contained in.
         /// </summary>
@@ -134,16 +134,16 @@ namespace AutoWrap.Meta
         /// <summary>
         /// The native (C++) protection level of this member (e.g. "public", "protected", ...).
         /// </summary>
-        public ProtectionLevel ProtectionLevel;
+        public readonly ProtectionLevel ProtectionLevel;
+
+        private readonly PassedByType _passedByType;
     
         /// <summary>
         /// Describes how this member is accessed (e.g. pointer or copy). The actual interpretation
         /// depends on whether this member is a method or a field.
         /// </summary>
-        public PassedByType PassedByType;
-        PassedByType ITypeMember.PassedByType
-        {
-            get { return PassedByType; }
+        public PassedByType PassedByType {
+            get { return _passedByType; }
         }
 
         private readonly string _container;
@@ -158,7 +158,7 @@ namespace AutoWrap.Meta
             _containingClass = containingClass;
             IsStatic = elem.GetAttribute("static") == "yes";
             ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
-            PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
+            _passedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)
             {
