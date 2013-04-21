@@ -529,7 +529,7 @@ namespace AutoWrap.Meta
             return newname;
         }
 
-        protected override void AddProperty(PropertyDefinition p)
+        protected override void AddProperty(MemberPropertyDefinition p)
         {
             string ptype = GetCLRTypeName(p);
             string pname =  GetClassName() + "::" + p.Name;

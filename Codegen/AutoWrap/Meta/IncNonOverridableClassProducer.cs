@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
                     _code.Append(" override;\n");
                 }
 
-                foreach (PropertyDefinition p in _abstractProperties)
+                foreach (MemberPropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
                     _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);

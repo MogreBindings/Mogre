@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override bool IsPropertyAllowed(PropertyDefinition p)
+        protected override bool IsPropertyAllowed(MemberPropertyDefinition p)
         {
             if (base.IsPropertyAllowed(p))
             {

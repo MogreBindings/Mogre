@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
             //Because of a possible compiler bug, in order for properties to access
             //protected members of a native class, they must be explicitely declared
             //with 'friend' specifier
-            foreach (PropertyDefinition prop in _overridableProperties)
+            foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
                 if (prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected
                     || (prop.CanWrite && prop.SetterFunction.ProtectionLevel == ProtectionLevel.Protected))
@@ -406,7 +406,7 @@ namespace AutoWrap.Meta
             AddPublicConstructors();
 
             _code.AppendEmptyLine();
-            foreach (PropertyDefinition prop in _overridableProperties)
+            foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
                 if (!prop.IsAbstract)
                 {

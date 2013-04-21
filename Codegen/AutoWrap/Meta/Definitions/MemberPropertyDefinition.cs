@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a CLR property (inside of a CLR class).
     /// </summary>
-    public class PropertyDefinition : ITypeMember
+    public class MemberPropertyDefinition : ITypeMember
     {
         /// <summary>
         /// The name of this property.
@@ -117,14 +117,14 @@
 
         #endregion
 
-        public PropertyDefinition(string name)
+        public MemberPropertyDefinition(string name)
         {
             Name = name;
         }
 
-        public PropertyDefinition Clone()
+        public MemberPropertyDefinition Clone()
         {
-            return (PropertyDefinition)MemberwiseClone();
+            return (MemberPropertyDefinition)MemberwiseClone();
         }
     
         /// <summary>

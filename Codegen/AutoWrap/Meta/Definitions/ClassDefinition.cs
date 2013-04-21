@@ -167,26 +167,25 @@ namespace AutoWrap.Meta
             }
         }
 
-        private PropertyDefinition[] _abstractProperties = null;
-
-        public virtual PropertyDefinition[] AbstractProperties
+        private MemberPropertyDefinition[] _abstractProperties = null;
+        public virtual MemberPropertyDefinition[] AbstractProperties
         {
             get
             {
                 if (_abstractProperties == null)
                 {
-                    List<PropertyDefinition> list = new List<PropertyDefinition>();
+                    List<MemberPropertyDefinition> list = new List<MemberPropertyDefinition>();
 
                     if (BaseClass != null)
                     {
-                        foreach (PropertyDefinition prop in BaseClass.AbstractProperties)
+                        foreach (MemberPropertyDefinition prop in BaseClass.AbstractProperties)
                         {
                             if (!prop.IsContainedIn(this, false))
                                 list.Add(prop);
                         }
                     }
 
-                    foreach (PropertyDefinition prop in this.GetProperties())
+                    foreach (MemberPropertyDefinition prop in GetProperties())
                     {
                         if (prop.IsAbstract)
                             list.Add(prop);
@@ -772,10 +771,10 @@ namespace AutoWrap.Meta
             return _derives;
         }
 
-        public virtual PropertyDefinition GetProperty(string name, bool inherit)
+        public virtual MemberPropertyDefinition GetProperty(string name, bool inherit)
         {
-            PropertyDefinition prop = null;
-            foreach (PropertyDefinition p in this.GetProperties())
+            MemberPropertyDefinition prop = null;
+            foreach (MemberPropertyDefinition p in this.GetProperties())
             {
                 if (p.Name == name)
                 {
@@ -812,26 +811,25 @@ namespace AutoWrap.Meta
             }
         }
 
-        private PropertyDefinition[] _properties;
-
-        public virtual PropertyDefinition[] GetProperties()
+        private MemberPropertyDefinition[] _properties;
+        public virtual MemberPropertyDefinition[] GetProperties()
         {
             if (_properties != null)
                 return _properties;
 
-            SortedList<string, PropertyDefinition> props = new SortedList<string, PropertyDefinition>();
+            SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
 
             foreach (MemberMethodDefinition f in this.Functions)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
-                    PropertyDefinition p = null;
+                    MemberPropertyDefinition p = null;
 
                     if (props.ContainsKey(f.CLRName))
                         p = props[f.CLRName];
                     else
                     {
-                        p = new PropertyDefinition(f.CLRName);
+                        p = new MemberPropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
                             p.MemberTypeName = f.MemberTypeName;
@@ -855,13 +853,13 @@ namespace AutoWrap.Meta
 
             if (GetInterfaces().Length > 0)
             {
-                foreach (PropertyDefinition prop in props.Values)
+                foreach (MemberPropertyDefinition prop in props.Values)
                 {
                     if (!prop.CanWrite)
                     {
                         foreach (ClassDefinition iface in GetInterfaces())
                         {
-                            PropertyDefinition ip = iface.GetProperty(prop.Name, true);
+                            MemberPropertyDefinition ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanWrite)
                             {
                                 prop.SetterFunction = ip.SetterFunction;
@@ -874,7 +872,7 @@ namespace AutoWrap.Meta
                     {
                         foreach (ClassDefinition iface in GetInterfaces())
                         {
-                            PropertyDefinition ip = iface.GetProperty(prop.Name, true);
+                            MemberPropertyDefinition ip = iface.GetProperty(prop.Name, true);
                             if (ip != null && ip.CanRead)
                             {
                                 prop.GetterFunction = ip.GetterFunction;
@@ -885,7 +883,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            PropertyDefinition[] parr = new PropertyDefinition[props.Count];
+            MemberPropertyDefinition[] parr = new MemberPropertyDefinition[props.Count];
             for (int i = 0; i < props.Count; i++)
                 parr[i] = props.Values[i];
 

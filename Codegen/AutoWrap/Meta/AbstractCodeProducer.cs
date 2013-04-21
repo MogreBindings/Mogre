@@ -62,7 +62,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Checks whether the specified property can be added to the generated source code.
         /// </summary>
-        protected virtual bool IsPropertyAllowed(PropertyDefinition p)
+        protected virtual bool IsPropertyAllowed(MemberPropertyDefinition p)
         {
             // If the property is ignored or the property is unhandled
             if (p.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())

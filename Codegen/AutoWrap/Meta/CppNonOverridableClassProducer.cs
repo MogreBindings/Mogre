@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
                     _code.AppendLine("}\n");
                 }
 
-                foreach (PropertyDefinition p in _abstractProperties)
+                foreach (MemberPropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
                     string pname = className + "::" + p.Name;

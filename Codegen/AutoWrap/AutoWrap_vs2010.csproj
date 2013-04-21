@@ -102,7 +102,7 @@
     <Compile Include="Meta\Definitions\MemberFieldDefinition.cs" />
     <Compile Include="Meta\Definitions\MemberMethodDefinition.cs" />
     <Compile Include="Meta\Definitions\ParamDefinition.cs" />
-    <Compile Include="Meta\Definitions\PropertyDefinition.cs" />
+    <Compile Include="Meta\Definitions\MemberPropertyDefinition.cs" />
     <Compile Include="Meta\Definitions\StructDefinition.cs" />
     <Compile Include="Meta\Definitions\TypedefDefinition.cs" />
     <Compile Include="Meta\Definitions\TypeMemberDefinition.cs" />

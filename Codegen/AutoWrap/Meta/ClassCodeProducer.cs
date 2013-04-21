@@ -33,13 +33,13 @@ namespace AutoWrap.Meta
         protected readonly ClassDefinition _definition;
         protected SourceCodeStringBuilder _code;
         protected readonly List<ClassDefinition> _listeners = new List<ClassDefinition>();
-        protected readonly List<PropertyDefinition> _interfaceProperties = new List<PropertyDefinition>();
+        protected readonly List<MemberPropertyDefinition> _interfaceProperties = new List<MemberPropertyDefinition>();
         protected readonly List<MemberMethodDefinition> _abstractFunctions = new List<MemberMethodDefinition>();
-        protected readonly List<PropertyDefinition> _abstractProperties = new List<PropertyDefinition>();
+        protected readonly List<MemberPropertyDefinition> _abstractProperties = new List<MemberPropertyDefinition>();
         protected readonly List<ClassDefinition> _interfaces = new List<ClassDefinition>();
 
         protected readonly List<MemberMethodDefinition> _overridableFunctions = new List<MemberMethodDefinition>();
-        protected PropertyDefinition[] _overridableProperties;
+        protected MemberPropertyDefinition[] _overridableProperties;
         //protected List<DefField> _protectedFields = new List<DefField>();
         protected readonly Dictionary<MemberMethodDefinition, int> _methodIndices = new Dictionary<MemberMethodDefinition, int>();
         protected int _methodIndicesCount = 0;
@@ -92,7 +92,7 @@ namespace AutoWrap.Meta
                 }
 
                 //Store properties of interface classes. They have precedence over type's properties.
-                foreach (PropertyDefinition ip in iface.GetProperties())
+                foreach (MemberPropertyDefinition ip in iface.GetProperties())
                 {
                     if (IsPropertyAllowed(ip) &&
                         (ip.ProtectionLevel == ProtectionLevel.Public
@@ -143,7 +143,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (PropertyDefinition prop in _definition.AbstractProperties)
+            foreach (MemberPropertyDefinition prop in _definition.AbstractProperties)
             {
                 if (IsPropertyAllowed(prop) && (prop.ContainingClass.AllowSubClassing
                     || (prop.ContainingClass == _definition && AllowSubclassing)))
@@ -195,21 +195,21 @@ namespace AutoWrap.Meta
         /// </summary>
         /// <param name="funcs">The methods to convert. Must only contain getter and setter
         /// methods.</param>
-        public static PropertyDefinition[] GetPropertiesFromFunctions(List<MemberMethodDefinition> funcs)
+        public static MemberPropertyDefinition[] GetPropertiesFromFunctions(List<MemberMethodDefinition> funcs)
         {
-            SortedList<string, PropertyDefinition> props = new SortedList<string, PropertyDefinition>();
+            SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
 
             foreach (MemberMethodDefinition f in funcs)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
-                    PropertyDefinition p = null;
+                    MemberPropertyDefinition p = null;
 
                     if (props.ContainsKey(f.CLRName))
                         p = props[f.CLRName];
                     else
                     {
-                        p = new PropertyDefinition(f.CLRName);
+                        p = new MemberPropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
                             p.MemberTypeName = f.MemberTypeName;
@@ -235,7 +235,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            PropertyDefinition[] parr = new PropertyDefinition[props.Count];
+            MemberPropertyDefinition[] parr = new MemberPropertyDefinition[props.Count];
             for (int i = 0; i < props.Count; i++)
                 parr[i] = props.Values[i];
 
@@ -750,7 +750,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (PropertyDefinition p in _definition.GetProperties())
+            foreach (MemberPropertyDefinition p in _definition.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
                     ( p.ProtectionLevel == ProtectionLevel.Public
@@ -807,7 +807,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("// Implementation for " + iface.CLRName);
             _code.AppendLine("//------------------------------------------------------------\n");
 
-            foreach (PropertyDefinition ip in iface.GetProperties())
+            foreach (MemberPropertyDefinition ip in iface.GetProperties())
             {
                 if (ip.IsStatic)
                     continue;
@@ -863,7 +863,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddInterfaceProperty(PropertyDefinition prop)
+        protected virtual void AddInterfaceProperty(MemberPropertyDefinition prop)
         {
             AddProperty(prop);
         }
@@ -912,9 +912,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected PropertyDefinition EnhanceProperty(PropertyDefinition property)
+        protected MemberPropertyDefinition EnhanceProperty(MemberPropertyDefinition property)
         {
-            PropertyDefinition prop = property.Clone();
+            MemberPropertyDefinition prop = property.Clone();
             if (_definition.BaseClass != null)
             {
                 if (!prop.CanWrite)
@@ -929,7 +929,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.GetterFunction))
                     {
-                        PropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
+                        MemberPropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanWrite)
                         {
                             prop.SetterFunction = bp.SetterFunction;
@@ -949,7 +949,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.SetterFunction))
                     {
-                        PropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
+                        MemberPropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanRead)
                         {
                             prop.GetterFunction = bp.GetterFunction;
@@ -981,7 +981,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected virtual void AddProperty(PropertyDefinition prop)
+        protected virtual void AddProperty(MemberPropertyDefinition prop)
         {
         }
 

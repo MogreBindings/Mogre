@@ -486,7 +486,7 @@ namespace AutoWrap.Meta
                 AddPublicConstructor(null);
 
             _code.AppendEmptyLine();
-            foreach (PropertyDefinition prop in _overridableProperties)
+            foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
                 AddProperty(prop);
                 _code.AppendEmptyLine();

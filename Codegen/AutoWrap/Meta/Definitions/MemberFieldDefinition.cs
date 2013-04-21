@@ -3,6 +3,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Describes a field (i.e. a variable or constant; either static or not) of a class. Note that
+    /// this doesn't describe a CLR property. This is done with <see cref="MemberPropertyDefinition"/>.
+    /// </summary>
     public class MemberFieldDefinition : MemberDefinitionBase
     {
         public override bool IsConst

@@ -95,7 +95,7 @@ namespace AutoWrap.Meta
                 base.AddMethod(f);
         }
 
-        protected override void AddProperty(PropertyDefinition p)
+        protected override void AddProperty(MemberPropertyDefinition p)
         {
             if (p.IsVirtual)
                 base.AddProperty(p);

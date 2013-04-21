@@ -729,7 +729,7 @@ namespace AutoWrap.Meta
             AddMethodParameters(f, f.Parameters.Count);
         }
 
-        protected override void AddProperty(PropertyDefinition p)
+        protected override void AddProperty(MemberPropertyDefinition p)
         {
             //TODO comments for properties
             //AddComments(p);
