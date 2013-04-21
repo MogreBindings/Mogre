@@ -190,7 +190,7 @@ namespace AutoWrap.Meta
             if (_definition.IsInterface)
             {
                 SourceCodeStringBuilder tempsb = _code;
-                _code = new SourceCodeStringBuilder();
+                _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
                 base.Add();
                 string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
                 string res = _code.ToString().Replace(_definition.FullCLRName + "::", fname + "::");

@@ -475,7 +475,7 @@ namespace AutoWrap.Meta
         public virtual void AddFirst()
         {
             SourceCodeStringBuilder orig = _code;
-            _code = new SourceCodeStringBuilder();
+            _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
 
             Add();
 

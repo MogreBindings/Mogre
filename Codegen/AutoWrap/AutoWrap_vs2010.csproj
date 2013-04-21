@@ -96,6 +96,7 @@
     <Compile Include="Meta\Attributes\ValueTypeAttribute.cs" />
     <Compile Include="Meta\Attributes\WrapTypeAttribute.cs" />
     <Compile Include="Meta\ClassCodeProducer.cs" />
+    <Compile Include="Meta\CodeStyleDefinition.cs" />
     <Compile Include="Meta\CppPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\Definitions\ClassDefinition.cs" />
     <Compile Include="Meta\Definitions\EnumDefinition.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Meta\NativeProxyClassProducer.cs" />
     <Compile Include="Meta\Wrapper.cs" />
     <Compile Include="Meta\Attributes\AutoWrapAttribute.cs" />
+    <Compile Include="Mogre\MogreCodeStyleDef.cs" />
     <Compile Include="Mogre\MogreConstructFactory.cs" />
     <Compile Include="Mogre\MogreNamespaceDefinition.cs" />
     <Compile Include="Program.cs" />

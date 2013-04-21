@@ -20,8 +20,12 @@ namespace AutoWrap.Meta
 
                     if (name.StartsWith("set"))
                     return name.Substring(3);
+                    
+                    if (!MetaDef.CodeStyleDef.AllowIsInPropertyName && name.StartsWith("is"))
+                        return name.Substring(2);
 
-                    return ToCamelCase(base.CLRName);
+                    // For properties named like "hasEnabledAnimationState".
+                    return MetaDef.CodeStyleDef.ConvertPropertyName(base.CLRName, this);
                 
                 } else if (IsOperatorOverload) 
                 {
@@ -30,7 +34,7 @@ namespace AutoWrap.Meta
                 } else
                 {
                     // regular method
-                    return ToCamelCase(base.CLRName);
+                    return MetaDef.CodeStyleDef.ConvertMethodName(base.CLRName, this);
                 }
             }
         }

@@ -44,6 +44,8 @@ namespace AutoWrap.Meta
         /// </summary>
         public readonly MetaConstructFactory Factory;
 
+        public readonly CodeStyleDefinition CodeStyleDef;
+
         private readonly Dictionary<string, NamespaceDefinition> _namespaces = new Dictionary<string, NamespaceDefinition>();
         /// <summary>
         /// Contains all namespace definitions for the specified sources. Contains elements
@@ -62,12 +64,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MetaDefinition(string file, string managedNamespace, MetaConstructFactory factory)
+        public MetaDefinition(string file, string managedNamespace, MetaConstructFactory factory, CodeStyleDefinition codeStyleDef)
         {
             _doc.Load(file);
             _managedNamespace = managedNamespace;
             Factory = factory;
             Factory.MetaDef = this;
+            CodeStyleDef = codeStyleDef;
 
             XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
 

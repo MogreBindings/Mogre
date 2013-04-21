@@ -18,14 +18,20 @@ namespace AutoWrap.Meta
         public const string NEWLINE_STRING = "\r\n";
 
         private readonly StringBuilder _builder = new StringBuilder();
+        private readonly CodeStyleDefinition _codeStyleDef;
         private string _curIndention = "";
+
+        public SourceCodeStringBuilder(CodeStyleDefinition codeStyleDef)
+        {
+            _codeStyleDef = codeStyleDef;
+        }
 
         /// <summary>
         /// Increases the indention by one level.
         /// </summary>
         public void IncreaseIndent()
         {
-            _curIndention += INDENT_STRING;
+            _curIndention += _codeStyleDef.IndentionLevelString;
         }
 
         /// <summary>
@@ -34,7 +40,7 @@ namespace AutoWrap.Meta
         public void DecreaseIndent()
         {
             // Strip one indention level
-            _curIndention = _curIndention.Substring(INDENT_STRING.Length);
+            _curIndention = _curIndention.Substring(_codeStyleDef.IndentionLevelString.Length);
         }
 
         public void InsertAt(uint pos, string str, bool indent = true)
@@ -71,7 +77,7 @@ namespace AutoWrap.Meta
         /// </summary>
         public void AppendEmptyLine()
         {
-            _builder.Append(NEWLINE_STRING);
+            _builder.Append(_codeStyleDef.NewLineCharacters);
         }
     
         /// <summary>
@@ -87,7 +93,7 @@ namespace AutoWrap.Meta
         /// <see cref="AppendIndent"/>
         public SourceCodeStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true) 
         {
-            _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(NEWLINE_STRING);
+            _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(_codeStyleDef.NewLineCharacters);
             return this;
         }
 
@@ -123,14 +129,14 @@ namespace AutoWrap.Meta
 
             if (otherLinesIndent)
             {
-                result += String.Join(NEWLINE_STRING + _curIndention, lines);
+                result += String.Join(_codeStyleDef.NewLineCharacters + _curIndention, lines);
 
                 // Remove indention at the end of the new string when the 
                 // original string ended with an empty line.
                 if (result.EndsWith(_curIndention))
                     result = result.Substring(0, result.Length - _curIndention.Length);
             } else
-                result = String.Join(NEWLINE_STRING, lines);
+                result += String.Join(_codeStyleDef.NewLineCharacters, lines);
     
             return result;
         }

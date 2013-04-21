@@ -243,7 +243,7 @@ namespace AutoWrap.Meta
                 {
                     builder.Append("#include \"MogrePagingPrerequisites.h\"");
                 }
-                WriteToFile(incFile, builder.ToString());
+                WriteToFile(incFile, builder.ToString(), true);
 
                 // Source file
                 bool hasContent;
@@ -251,10 +251,7 @@ namespace AutoWrap.Meta
                 if (hasContent)
                 {
                     // There is a .cpp file for the .h file.
-                    builder.Clear();
-                    builder.Append(HEADER_TEXT);
-                    builder.Append(txt);
-                    WriteToFile(cppFile, builder.ToString());
+                    WriteToFile(cppFile, txt, true);
                 }
 
                 IncludeFileWrapped(this, new IncludeFileWrapEventArgs(includeFile));
@@ -269,7 +266,7 @@ namespace AutoWrap.Meta
                 builder.AppendLine(decl);
             }
 
-            WriteToFile(_includePath + "\\PreDeclarations.h", builder.ToString());
+            WriteToFile(_includePath + "\\PreDeclarations.h", builder.ToString(), true);
 
             //
             // Create MakePublicDeclarations.h
@@ -315,7 +312,7 @@ namespace AutoWrap.Meta
                 builder.AppendLine("#pragma make_public( " + type.FullNativeName + " )");
             }
 
-            WriteToFile(_includePath + "\\MakePublicDeclarations.h", builder.ToString());
+            WriteToFile(_includePath + "\\MakePublicDeclarations.h", builder.ToString(), true);
             
             //
             // Create CLRObjects.inc
@@ -342,7 +339,7 @@ namespace AutoWrap.Meta
                 builder.AppendLine("CLROBJECT( " + name + " )");
             }
 
-            WriteToFile(_includePath + "\\CLRObjects.inc", builder.ToString());
+            WriteToFile(_includePath + "\\CLRObjects.inc", builder.ToString(), true);
         }
 
         public string GetInitCLRObjectFuncSignature(ClassDefinition cls) {
@@ -389,15 +386,9 @@ namespace AutoWrap.Meta
                 string incFile = _includePath + "\\" + wrapFile + ".h";
                 string cppFile = _sourcePath + "\\" + wrapFile + ".cpp";
 
-                builder.Clear();
-                builder.Append(HEADER_TEXT);
-                builder.Append(GenerateIncludeFileCodeForOverridable(type));
-                WriteToFile(incFile, builder.ToString());
+                WriteToFile(incFile, GenerateIncludeFileCodeForOverridable(type), true);
 
-                builder.Clear();
-                builder.Append(HEADER_TEXT);
-                builder.Append(GenerateCppFileCodeForOverridable(type));
-                WriteToFile(cppFile, builder.ToString());
+                WriteToFile(cppFile, GenerateCppFileCodeForOverridable(type), true);
 
                 bar.Value++;
                 bar.Refresh();
@@ -408,8 +399,11 @@ namespace AutoWrap.Meta
         /// Writes the contents to the specified file. Checks whether the content has actually
         /// changed to prevent unnecessary rebuilds.
         /// </summary>
-        protected void WriteToFile(string file, string contents)
+        protected void WriteToFile(string file, string contents, bool addHeader)
         {
+            if (addHeader)
+                contents = HEADER_TEXT.Replace("\n", this._metaDef.CodeStyleDef.NewLineCharacters) + contents;
+
             if (File.Exists(file))
             {
                 string filecontent;
@@ -450,7 +444,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             foreach (AbstractTypeDefinition t in IncludeFiles[includeFile])
             {
                 IncAddType(t, sbTypes);
@@ -466,7 +460,7 @@ namespace AutoWrap.Meta
                 producer.AddFirst();
             }
 
-            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
             IncAddIncludeFiles(includeFile, UsedTypes, sb);
@@ -489,7 +483,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             foreach (AbstractTypeDefinition t in IncludeFiles[include])
             {
                 CppAddType(t, contentsb);
@@ -505,7 +499,7 @@ namespace AutoWrap.Meta
                 producer.AddFirst();
             }
 
-            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             hasContent = false;
 
             CppAddIncludeFiles(include, UsedTypes, sb);
@@ -535,7 +529,7 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
 
             new IncSubclassingClassProducer(this._metaDef, this, type, sbTypes, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
@@ -561,7 +555,7 @@ namespace AutoWrap.Meta
                     producer.AddFirst();
             }
 
-            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
             sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
@@ -577,7 +571,7 @@ namespace AutoWrap.Meta
 
         public string GenerateCppFileCodeForOverridable(ClassDefinition type)
         {
-            SourceCodeStringBuilder sb = new SourceCodeStringBuilder();
+            SourceCodeStringBuilder sb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
 
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
@@ -1420,9 +1414,8 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Header text for all auto-generated source files.
         /// </summary>
-        public static readonly string HEADER_TEXT = 
-            (  "/*  This file is produced by the C++/CLI AutoWrapper utility.\n"
-             + "          Copyright (c) 2006 by Argiris Kirtzidis  */\n\n")
-            .Replace("\n", SourceCodeStringBuilder.NEWLINE_STRING);
+        public static readonly string HEADER_TEXT =
+            ("/*  This file is produced by the C++/CLI AutoWrapper utility.\n"
+             + "          Copyright (c) 2006 by Argiris Kirtzidis  */\n\n");
     }
 }

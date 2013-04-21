@@ -87,7 +87,7 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, ToCamelCase(field.Name));
+                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.Name));
                 _code.IncreaseIndent();
                 _code.AppendLine(ptype + " get()\n{");
                 _code.AppendLine("\treturn " + NameToPrivate(field) + ";");
