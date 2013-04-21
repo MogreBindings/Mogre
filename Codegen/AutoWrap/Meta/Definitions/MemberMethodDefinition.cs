@@ -42,24 +42,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        private string _signatureNameAndParams;
-        public string SignatureNameAndParams
-        {
-            get
-            {
-                if (_signatureNameAndParams == null)
-                {
-                    _signatureNameAndParams = Name;
-                    foreach (ParamDefinition param in Parameters)
-                    {
-                        _signatureNameAndParams += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
-                    }
-                }
-
-                return _signatureNameAndParams;
-            }
-        }
-
         public override bool IsIgnored
         {
             get

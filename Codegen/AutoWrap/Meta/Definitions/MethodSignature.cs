@@ -2,15 +2,18 @@
 {
     public class MethodSignature
     {
-        private string _signature;
+        private readonly string _partialSignature;
+        private readonly string _completeSignature;
 
         public MethodSignature(MemberMethodDefinition methodDef)
         {
-            _signature = methodDef.IsVirtual.ToString() + methodDef.ProtectionLevel + methodDef.Name;
+            _partialSignature = methodDef.Name;
             foreach (ParamDefinition param in methodDef.Parameters)
             {
-                _signature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
+                _partialSignature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
             }
+
+            _completeSignature = methodDef.IsVirtual.ToString() + methodDef.ProtectionLevel + _partialSignature;
         }
 
         public override bool Equals(object obj)
@@ -18,7 +21,7 @@
             return Equals(obj as MethodSignature);
         }
 
-        public bool Equals(MethodSignature obj)
+        public bool Equals(MethodSignature obj, bool strictCompare = true)
         {
             if (ReferenceEquals(this, obj))
                 return true;
@@ -26,12 +29,15 @@
             if (obj == null)
                 return false;
 
-            return _signature == obj._signature;
+            if (strictCompare)
+                return _completeSignature == obj._completeSignature;
+            
+            return _partialSignature == obj._partialSignature;
         }
 
         public override int GetHashCode()
         {
-            return _signature.GetHashCode();
+            return _completeSignature.GetHashCode();
         }
 
         public static bool operator ==(MethodSignature a, MethodSignature b)
@@ -41,16 +47,22 @@
                 return true;
 
             // If one is null, but not both, return false.
-            if (a == null || b == null)
+            // IMPORTANT: Convert to "object" to avoid endless recursion of this operator.
+            if ((object)a == null || (object)b == null)
                 return false;
 
             // Return true if the fields match:
-            return a._signature == b._signature;
+            return a._completeSignature == b._completeSignature;
         }
 
         public static bool operator !=(MethodSignature a, MethodSignature b)
         {
             return !(a == b);
+        }
+
+        public override string ToString()
+        {
+            return _completeSignature;
         }
     }
 }

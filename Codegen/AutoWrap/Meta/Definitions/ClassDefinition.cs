@@ -1144,7 +1144,7 @@ namespace AutoWrap.Meta
             {
                 if (m is MemberMethodDefinition)
                 {
-                    if ((m as MemberMethodDefinition).SignatureNameAndParams == func.SignatureNameAndParams)
+                    if (((MemberMethodDefinition)m).Signature.Equals(func.Signature, false))
                     {
                         prevf = m as MemberMethodDefinition;
                         break;
