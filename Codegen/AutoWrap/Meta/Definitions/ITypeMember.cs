@@ -50,7 +50,19 @@
         /// </summary>
         bool IsConst { get; }
 
+        /// <summary>
+        /// Checks whether this set contains the specified attribute.
+        /// </summary>
+        /// <typeparam name="T">the attribute to look for (specified by its type)</typeparam>
+        /// <remarks>This method is usually implemented by subclassing <see cref="AttributeSet"/>.</remarks>
         bool HasAttribute<T>() where T : AutoWrapAttribute;
+
+        /// <summary>
+        /// Returns the attribute with the specified type T.
+        /// </summary>
+        /// <typeparam name="T">The attribute's type (i.e. the kind of attribute); if this
+        /// attribute isn't part of this set a <c>KeyNotFoundException</c> will be thrown.</typeparam>
+        /// <remarks>This method is usually implemented by subclassing <see cref="AttributeSet"/>.</remarks>
         T GetAttribute<T>() where T : AutoWrapAttribute;
     }
 
