@@ -253,7 +253,7 @@ namespace AutoWrap.Meta
                 foreach (MemberMethodDefinition func in Functions)
                 {
                     if (!func.IsProperty
-                        && func.ProtectionType == ProtectionLevel.Public)
+                        && func.ProtectionLevel == ProtectionLevel.Public)
                         yield return func;
                 }
             }
@@ -279,7 +279,7 @@ namespace AutoWrap.Meta
                 foreach (MemberMethodDefinition func in Functions)
                 {
                     if (!func.IsProperty
-                        && func.ProtectionType == ProtectionLevel.Protected)
+                        && func.ProtectionLevel == ProtectionLevel.Protected)
                         yield return func;
                 }
             }
@@ -291,7 +291,7 @@ namespace AutoWrap.Meta
             {
                 foreach (MemberFieldDefinition f in Fields)
                 {
-                    if (f.ProtectionType == ProtectionLevel.Public)
+                    if (f.ProtectionLevel == ProtectionLevel.Public)
                         yield return f;
                 }
             }
@@ -303,7 +303,7 @@ namespace AutoWrap.Meta
             {
                 foreach (MemberFieldDefinition f in Fields)
                 {
-                    if (f.ProtectionType == ProtectionLevel.Protected)
+                    if (f.ProtectionLevel == ProtectionLevel.Protected)
                         yield return f;
                 }
             }
@@ -1017,7 +1017,7 @@ namespace AutoWrap.Meta
                 return local;
         }
 
-        public virtual T GetAttribute<T>(bool inherit)
+        public virtual T GetAttribute<T>(bool inherit) where T : AutoWrapAttribute
         {
             T attr = GetAttribute<T>();
 
@@ -1167,10 +1167,10 @@ namespace AutoWrap.Meta
                     Members.Add(func);
                 }
 
-                if ((prevf.ProtectionType == func.ProtectionType
+                if ((prevf.ProtectionLevel == func.ProtectionLevel
                      && prevf.IsConstFunctionCall)
-                    || (prevf.ProtectionType == ProtectionLevel.Protected
-                        && func.ProtectionType == ProtectionLevel.Public))
+                    || (prevf.ProtectionLevel == ProtectionLevel.Protected
+                        && func.ProtectionLevel == ProtectionLevel.Public))
                 {
                     Members.Remove(prevf);
                     Members.Add(func);

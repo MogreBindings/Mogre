@@ -23,49 +23,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 
 namespace AutoWrap.Meta
 {
     /// <summary>
-    /// Describes a class or struct member, i.e. a field (see <see cref="MemberFieldDefinition"/>) or a 
-    /// method (<see cref="MemberMethodDefinition"/>).
+    /// Describes a native class or struct member, i.e. a field (see <see cref="MemberFieldDefinition"/>) or a 
+    /// method (<see cref="MemberMethodDefinition"/>). Note that only native (C++) members will be derived
+    /// from this class; i.e. CLR properties aren't derived from this class.
     /// </summary>
     // NOTE: Don't call this class "AbstractMemberDefintion" to avoid confusion about whether the 
     //   described member is an "abstract" member (i.e. an abstract method).
     public abstract class MemberDefinitionBase : AttributeSet, ITypeMember
     {
-        string ITypeMember.MemberTypeName
+        /// <summary>
+        /// The managed (C++/CLI) name of this member.
+        /// </summary>
+        public virtual string CLRName
         {
-            get { return this.TypeName; }
-        }
-        PassedByType ITypeMember.PassedByType
-        {
-            get { return this.PassedByType; }
-        }
-        ClassDefinition ITypeMember.ContainingClass
-        {
-            get { return this.Class; }
-        }
-        AbstractTypeDefinition ITypeMember.MemberType
-        {
-            get { return this.Type; }
-        }
-        bool ITypeMember.HasAttribute<T>()
-        {
-            return HasAttribute<T>();
-        }
-        T ITypeMember.GetAttribute<T>()
-        {
-            return this.GetAttribute<T>();
-        }
-
-        public abstract bool IsProperty { get; }
-
-        public virtual bool IsConst
-        {
-            get { return false; }
+            get
+            {
+                if (HasAttribute<RenameAttribute>())
+                {
+                    return GetAttribute<RenameAttribute>().Name;
+                }
+                
+                return Name;
+            }
         }
 
         public virtual bool IsIgnored
@@ -76,30 +60,20 @@ namespace AutoWrap.Meta
                 if (Definition.StartsWith("Controller<"))
                     return true;
 
-                return (Type.IsIgnored || this.HasAttribute<IgnoreAttribute>());
+                return (this.MemberType.IsIgnored || this.HasAttribute<IgnoreAttribute>());
             }
         }
 
-        private string _clrTypeName;
+        public readonly bool IsStatic;
 
-        public virtual string MemberTypeCLRName
-        {
-            get
-            {
-                if (_clrTypeName == null)
-                    _clrTypeName = Type.GetCLRTypeName(this);
-
-                return _clrTypeName;
-            }
-        }
-
-        public virtual string MemberTypeNativeName
-        {
-            get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
-        }
+        /// <summary>
+        /// Indicates whether this member is C++ <c>const</c>.
+        /// </summary>
+        /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
+        public abstract bool IsConst { get; }
 
         AbstractTypeDefinition _type = null;
-        public virtual AbstractTypeDefinition Type
+        public virtual AbstractTypeDefinition MemberType
         {
             get
             {
@@ -118,12 +92,23 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void InterpretChildElement(XmlElement child)
+        /// <summary>
+        /// The fully qualified name of this member's CLR type (i.e. with CLR (dest) namespace).
+        /// </summary>
+        /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
+        public virtual string MemberTypeCLRName
         {
-            throw new Exception("Unknown child of member: '" + child.Name + "'");
+            get { return this.MemberType.GetCLRTypeName(this);  }
         }
 
-        protected XmlElement _elem;
+        /// <summary>
+        /// The fully qualified name of this member's native type (i.e. with native (source) namespace).
+        /// </summary>
+        /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
+        public virtual string MemberTypeNativeName
+        {
+            get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
+        }
 
         public ClassDefinition Class;
 
@@ -153,41 +138,38 @@ namespace AutoWrap.Meta
 
         public string TypeName = null;
         public string Definition;
-        public ProtectionLevel ProtectionType;
+    
+        /// <summary>
+        /// The native (C++) protection level of this member (e.g. "public", "protected", ...).
+        /// </summary>
+        public ProtectionLevel ProtectionLevel;
+    
+        /// <summary>
+        /// Describes how this member is accessed (e.g. pointer or copy). The actual interpretation
+        /// depends on whether this member is a method or a field.
+        /// </summary>
         public PassedByType PassedByType;
 
-        public virtual bool IsVoid
+        string ITypeMember.MemberTypeName
         {
-            get { return (TypeName == "void" || TypeName == "const void")
-                && PassedByType == PassedByType.Value; }
+            get { return this.TypeName; }
         }
 
-        public virtual string CLRName
+        PassedByType ITypeMember.PassedByType
         {
-            get
-            {
-                if (HasAttribute<RenameAttribute>())
-                    return GetAttribute<RenameAttribute>().Name;
-                else
-                    return Name;
-            }
+            get { return this.PassedByType; }
         }
 
-        public bool IsStatic
+        ClassDefinition ITypeMember.ContainingClass
         {
-            get { return _elem.GetAttribute("static") == "yes"; }
-        }
-
-        public XmlElement Element
-        {
-            get { return _elem; }
+            get { return this.Class; }
         }
 
         public MemberDefinitionBase(MetaDefinition metaDef, XmlElement elem)
             : base(metaDef)
         {
-            this._elem = elem;
-            this.ProtectionType = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
+            this.IsStatic = elem.GetAttribute("static") == "yes";
+            this.ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
             this.PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)
@@ -197,20 +179,35 @@ namespace AutoWrap.Meta
                     case "name":
                         _name = child.InnerText;
                         break;
+
                     case "type":
                         this.TypeName = child.InnerText;
                         this._container = child.GetAttribute("container");
                         this._containerKey = child.GetAttribute("containerKey");
                         this._containerValue = child.GetAttribute("containerValue");
                         break;
+
                     case "definition":
                         this.Definition = child.InnerText;
                         break;
+
                     default:
+                        // Let the subclass decide what to do with this.
                         InterpretChildElement(child);
                         break;
                 }
             }
+        }
+
+
+        /// <summary>
+        /// This method allows subclasses to interpret XML child elements other than
+        /// "name", "type", and "definition" (which are already interpreted in the constructor).
+        /// </summary>
+        /// <param name="child">the child element to be interpreted</param>
+        protected virtual void InterpretChildElement(XmlElement child)
+        {
+            throw new Exception("Unsupported child element: '" + child.Name + "'");
         }
     }
 }

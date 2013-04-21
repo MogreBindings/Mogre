@@ -94,7 +94,7 @@ namespace AutoWrap.Meta
 
             _code.DecreaseIndent();
             _code.AppendLine("}");
-            if (!f.IsVoid)
+            if (!f.HasReturnValue)
             {
                 _code.AppendLine("else");
                 string ret = null;

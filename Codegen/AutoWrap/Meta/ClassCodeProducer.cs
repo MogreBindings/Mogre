@@ -105,10 +105,10 @@ namespace AutoWrap.Meta
 
             foreach (MemberFieldDefinition field in _definition.Fields)
             {
-                if (!field.IsIgnored && field.Type.IsSTLContainer)
+                if (!field.IsIgnored && field.MemberType.IsSTLContainer)
                 {
-                    if (field.ProtectionType == ProtectionLevel.Public
-                        || ( (AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionLevel.Protected))
+                    if (field.ProtectionLevel == ProtectionLevel.Public
+                        || ( (AllowSubclassing || AllowProtectedMembers) && field.ProtectionLevel == ProtectionLevel.Protected))
                         MarkCachedMember(field);
                 }
             }
@@ -120,11 +120,11 @@ namespace AutoWrap.Meta
 
                 foreach (MemberFieldDefinition field in iface.Fields)
                 {
-                    if (!field.IsIgnored && field.Type.IsSTLContainer
+                    if (!field.IsIgnored && field.MemberType.IsSTLContainer
                         && !field.IsStatic)
                     {
-                        if (field.ProtectionType == ProtectionLevel.Public
-                            || ((AllowSubclassing || AllowProtectedMembers) && field.ProtectionType == ProtectionLevel.Protected))
+                        if (field.ProtectionLevel == ProtectionLevel.Public
+                            || ((AllowSubclassing || AllowProtectedMembers) && field.ProtectionLevel == ProtectionLevel.Protected))
                             MarkCachedMember(field);
                     }
                 }
@@ -132,8 +132,8 @@ namespace AutoWrap.Meta
 
             foreach (MemberMethodDefinition func in _definition.AbstractFunctions)
             {
-                if (func.ProtectionType == ProtectionLevel.Public
-                        || (AllowProtectedMembers && func.ProtectionType == ProtectionLevel.Protected))
+                if (func.ProtectionLevel == ProtectionLevel.Public
+                        || (AllowProtectedMembers && func.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if ((func.Class.AllowSubClassing || (func.Class == _definition && AllowSubclassing)) && !func.IsProperty)
                     {
@@ -340,11 +340,11 @@ namespace AutoWrap.Meta
         {
             if (!f.IsStatic)
             {
-                if (f.ProtectionType == ProtectionLevel.Public)
+                if (f.ProtectionLevel == ProtectionLevel.Public)
                 {
                     return GetNativeInvokationTarget(f.IsConstFunctionCall) + "->" + f.Name;
                 }
-                else if (f.ProtectionType == ProtectionLevel.Protected)
+                else if (f.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     if (!f.IsVirtual)
                     {
@@ -359,7 +359,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                if (f.ProtectionType == ProtectionLevel.Public)
+                if (f.ProtectionLevel == ProtectionLevel.Public)
                     return f.Class.FullNativeName + "::" + f.Name;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.Class) + "::" + f.Name;
@@ -369,11 +369,11 @@ namespace AutoWrap.Meta
         {
             if (!field.IsStatic)
             {
-                if (field.ProtectionType == ProtectionLevel.Public)
+                if (field.ProtectionLevel == ProtectionLevel.Public)
                 {
                     return GetNativeInvokationTarget() + "->" + field.Name;
                 }
-                else if (field.ProtectionType == ProtectionLevel.Protected)
+                else if (field.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
                     return "static_cast<" + proxyName + "*>(_native)->" + field.Name;
@@ -383,7 +383,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                if (field.ProtectionType == ProtectionLevel.Public)
+                if (field.ProtectionLevel == ProtectionLevel.Public)
                     return field.Class.FullNativeName + "::" + field.Name;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.Class) + "::" + field.Name;
@@ -696,14 +696,14 @@ namespace AutoWrap.Meta
             {
                 if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                     && !m.IsIgnored
-                    && ( m.ProtectionType == ProtectionLevel.Public
-                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)) )
+                    && ( m.ProtectionLevel == ProtectionLevel.Public
+                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionLevel == ProtectionLevel.Protected)) )
                 {
-                    if (m.Type.IsUnnamedSTLContainer
-                        && !stls.Contains(m.Type.CLRName))
+                    if (m.MemberType.IsUnnamedSTLContainer
+                        && !stls.Contains(m.MemberType.CLRName))
                     {
-                        AddNestedType(m.Type);
-                        stls.Add(m.Type.CLRName);
+                        AddNestedType(m.MemberType);
+                        stls.Add(m.MemberType.CLRName);
                     }
                 }
             }
@@ -717,14 +717,14 @@ namespace AutoWrap.Meta
                 {
                     if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                         && !m.IsIgnored
-                        && (m.ProtectionType == ProtectionLevel.Public
-                            || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionType == ProtectionLevel.Protected)))
+                        && (m.ProtectionLevel == ProtectionLevel.Public
+                            || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionLevel == ProtectionLevel.Protected)))
                     {
-                        if (m.Type.IsUnnamedSTLContainer
-                            && !stls.Contains(m.Type.CLRName))
+                        if (m.MemberType.IsUnnamedSTLContainer
+                            && !stls.Contains(m.MemberType.CLRName))
                         {
-                            AddNestedType(m.Type);
-                            stls.Add(m.Type.CLRName);
+                            AddNestedType(m.MemberType);
+                            stls.Add(m.MemberType.CLRName);
                         }
                     }
                 }
@@ -829,9 +829,9 @@ namespace AutoWrap.Meta
                 if (inf.IsStatic)
                     continue;
 
-                if (inf.ProtectionType == ProtectionLevel.Public
+                if (inf.ProtectionLevel == ProtectionLevel.Public
                     || (AllowSubclassing && !inf.IsVirtual)
-                    || (AllowProtectedMembers && inf.ProtectionType == ProtectionLevel.Protected))
+                    || (AllowProtectedMembers && inf.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if (!_definition.ContainsFunctionSignature(inf.Signature, false))
                     {
@@ -848,9 +848,9 @@ namespace AutoWrap.Meta
                     if (field.IsStatic)
                         continue;
 
-                    if (field.ProtectionType == ProtectionLevel.Public
+                    if (field.ProtectionLevel == ProtectionLevel.Public
                         || AllowSubclassing
-                        || (AllowProtectedMembers && field.ProtectionType == ProtectionLevel.Protected))
+                        || (AllowProtectedMembers && field.ProtectionLevel == ProtectionLevel.Protected))
                     {
                         //if (CheckTypeMemberForGetProperty(field) == false)
                         //    AddInterfaceMethodsForField(field);

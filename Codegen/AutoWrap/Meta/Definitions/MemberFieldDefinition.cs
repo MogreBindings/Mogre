@@ -5,11 +5,6 @@ namespace AutoWrap.Meta
 {
     public class MemberFieldDefinition : MemberDefinitionBase
     {
-        public override bool IsProperty
-        {
-            get { return false; }
-        }
-
         public override bool IsConst
         {
             get { return Definition.StartsWith("const "); }

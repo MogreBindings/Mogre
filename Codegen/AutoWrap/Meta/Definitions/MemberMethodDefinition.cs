@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
             {
                 if (_signature == null)
                 {
-                    _signature = IsVirtual.ToString() + ProtectionType + Name;
+                    _signature = IsVirtual.ToString() + ProtectionLevel + Name;
                     foreach (ParamDefinition param in Parameters)
                     {
                         _signature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
@@ -231,7 +231,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override bool IsProperty
+        public bool IsProperty
         {
             get { return IsGetProperty || IsSetProperty; }
         }
@@ -257,6 +257,17 @@ namespace AutoWrap.Meta
                     return base.CLRName;
                 
                 return ToCamelCase(base.CLRName);
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether this method returns something (i.e. whether its return type is 
+        /// <c>void</c> - but not a <c>void*</c>).
+        /// </summary>
+        public virtual bool HasReturnValue {
+            get
+            {
+                return (TypeName == "void" || TypeName == "const void") && PassedByType == PassedByType.Value;
             }
         }
 

@@ -40,7 +40,7 @@
 
         public ProtectionLevel ProtectionLevel
         {
-            get { return _accessorFunction.ProtectionType; }
+            get { return _accessorFunction.ProtectionLevel; }
         }
     
         public bool IsVirtual
@@ -63,7 +63,7 @@
 
         public AbstractTypeDefinition MemberType
         {
-            get { return (CanRead) ? GetterFunction.Type : SetterFunction.Parameters[0].Type; }
+            get { return (CanRead) ? GetterFunction.MemberType : SetterFunction.Parameters[0].Type; }
         }
 
         /// <summary>

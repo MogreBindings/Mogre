@@ -84,9 +84,9 @@ namespace AutoWrap.Meta
         /// </summary>
         /// <typeparam name="T">The attribute's type (i.e. the kind of attribute); if this
         /// attribute isn't part of this set a <c>KeyNotFoundException</c> will be thrown.</typeparam>
-        public virtual T GetAttribute<T>()
+        public virtual T GetAttribute<T>() where T : AutoWrapAttribute
         {
-            return (T)(object)_attributes[typeof(T)];
+            return (T)_attributes[typeof(T)];
         }
 
         // FIXME: Check whether this is really necessary.

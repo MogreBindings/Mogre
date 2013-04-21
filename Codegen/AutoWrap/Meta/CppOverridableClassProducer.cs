@@ -33,7 +33,7 @@ namespace AutoWrap.Meta
         private static bool IsCachedFunction(MemberMethodDefinition f)
         {
             return (f.PassedByType == PassedByType.Reference
-                && (f.Type.IsValueType || f.Type.IsPureManagedClass));
+                && (f.MemberType.IsValueType || f.MemberType.IsPureManagedClass));
         }
 
         public static void AddNativeProxyMethodBody(MemberMethodDefinition f, string managedTarget, SourceCodeStringBuilder sb)
@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
 
                 bool explicitCast = f.HasAttribute<ExplicitCastingForParamsAttribute>();
 
-                if (!f.IsVoid)
+                if (!f.HasReturnValue)
                 {
                     sb.AppendIndent(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
@@ -101,9 +101,9 @@ namespace AutoWrap.Meta
                 }
             }
 
-            if (!f.IsVoid)
+            if (!f.HasReturnValue)
             {
-                if (f.Type is IDefString)
+                if (f.MemberType is IDefString)
                 {
                     sb.AppendLine("SET_NATIVE_STRING( Mogre::Implementation::cachedReturnString, " + managedCall + " )");
                     sb.AppendLine("return Mogre::Implementation::cachedReturnString;");
@@ -113,8 +113,8 @@ namespace AutoWrap.Meta
                     string returnExpr;
                     string newname, expr, postcall;
                     ParamDefinition param = new ParamDefinition(f.MetaDef, f, managedCall);
-                    expr = f.Type.ProducePreCallParamConversionCode(param, out newname);
-                    postcall = f.Type.ProducePostCallParamConversionCleanupCode(param);
+                    expr = f.MemberType.ProducePreCallParamConversionCode(param, out newname);
+                    postcall = f.MemberType.ProducePostCallParamConversionCleanupCode(param);
                     if (!String.IsNullOrEmpty(expr))
                     {
                         sb.AppendLine(expr);
@@ -132,9 +132,9 @@ namespace AutoWrap.Meta
 
                     if (IsCachedFunction(f))
                     {
-                        sb.AppendLine("STATIC_ASSERT( sizeof(" + f.Type.FullNativeName + ") <= CACHED_RETURN_SIZE )");
-                        sb.AppendLine("memcpy( Mogre::Implementation::cachedReturn, &" + returnExpr + ", sizeof(" + f.Type.FullNativeName + ") );");
-                        sb.AppendLine("return *reinterpret_cast<" + f.Type.FullNativeName + "*>(Mogre::Implementation::cachedReturn);");
+                        sb.AppendLine("STATIC_ASSERT( sizeof(" + f.MemberType.FullNativeName + ") <= CACHED_RETURN_SIZE )");
+                        sb.AppendLine("memcpy( Mogre::Implementation::cachedReturn, &" + returnExpr + ", sizeof(" + f.MemberType.FullNativeName + ") );");
+                        sb.AppendLine("return *reinterpret_cast<" + f.MemberType.FullNativeName + "*>(Mogre::Implementation::cachedReturn);");
                     }
                     else
                     {
@@ -158,7 +158,7 @@ namespace AutoWrap.Meta
 
         protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
-            _wrapper.CppCheckTypeForDependancy(f.Type);
+            _wrapper.CppCheckTypeForDependancy(f.MemberType);
             foreach (ParamDefinition param in f.Parameters)
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
@@ -196,7 +196,7 @@ namespace AutoWrap.Meta
                 _code.AppendLine("}");
                 _code.AppendLine("else");
                 _code.AppendIndent("\t");
-                if (!f.IsVoid) _code.Append("return ");
+                if (!f.HasReturnValue) _code.Append("return ");
                 _code.Append(f.Class.Name + "::" + f.Name + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
@@ -494,7 +494,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Public)
+                if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Public)
                 {
                     AddMethod(func);
                     _code.AppendEmptyLine();
@@ -506,7 +506,7 @@ namespace AutoWrap.Meta
         {
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
-                if (!func.IsProperty && func.ProtectionType == ProtectionLevel.Protected)
+                if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
                     _code.AppendEmptyLine();

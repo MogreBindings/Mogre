@@ -63,7 +63,7 @@ namespace AutoWrap.Meta
             {
                 foreach (MemberFieldDefinition field in _definition.PublicFields)
                 {
-                    _code.AppendLine(field.Type.FullCLRName + " " + NameToPrivate(field) + ";");
+                    _code.AppendLine(field.MemberType.FullCLRName + " " + NameToPrivate(field) + ";");
                 }
                 _code.AppendEmptyLine();
             }
@@ -97,7 +97,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                _code.AppendLine(field.Type.FullCLRName + " " + field.Name + ";");
+                _code.AppendLine(field.MemberType.FullCLRName + " " + field.Name + ";");
             }
         }
 

@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
         {
             foreach (MemberFieldDefinition field in _definition.Fields)
             {
-                if (field.ProtectionType == ProtectionLevel.Protected
+                if (field.ProtectionLevel == ProtectionLevel.Protected
                     && field.IsStatic
                     && !field.IsIgnored)
                 {
@@ -251,7 +251,7 @@ namespace AutoWrap.Meta
             foreach (MemberMethodDefinition func in type.Functions)
             {
                 if (func.IsDeclarableFunction
-                    && func.ProtectionType == ProtectionLevel.Protected
+                    && func.ProtectionLevel == ProtectionLevel.Protected
                     && !(func.IsStatic && type != _definition)
                     && func.IsProperty
                     && !func.IsVirtual)
@@ -292,7 +292,7 @@ namespace AutoWrap.Meta
             foreach (MemberMethodDefinition func in type.Functions)
             {
                 if (func.IsDeclarableFunction
-                    && func.ProtectionType == ProtectionLevel.Protected
+                    && func.ProtectionLevel == ProtectionLevel.Protected
                     && !(func.IsStatic && type != _definition)
                     && !func.IsVirtual)
                 {

@@ -92,12 +92,12 @@ namespace AutoWrap.Meta
                     _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
                     if (p.CanRead)
                     {
-                        _code.AppendLine(p.GetterFunction.ProtectionType.GetCLRProtectionName() + ":");
+                        _code.AppendLine(p.GetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
                         _code.AppendLine("\tvirtual " + ptype + " get() override;");
                     }
                     if (p.CanWrite)
                     {
-                        _code.AppendLine(p.SetterFunction.ProtectionType.GetCLRProtectionName() + ":");
+                        _code.AppendLine(p.SetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
                         _code.AppendLine("\tvirtual void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ") override;");
                     }
                     _code.AppendLine("}");

@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
             if (_definition.Constructors.Length > 0)
             {
                 foreach (MemberMethodDefinition func in _definition.Constructors)
-                    if (func.ProtectionType == ProtectionLevel.Public)
+                    if (func.ProtectionLevel == ProtectionLevel.Public)
                         AddCreator(func);
             }
             else

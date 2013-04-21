@@ -97,7 +97,7 @@ namespace AutoWrap.Meta
 				{
 					foreach (MemberMethodDefinition function in _definition.Constructors)
 					{
-						if (function.ProtectionType == ProtectionLevel.Public &&
+						if (function.ProtectionLevel == ProtectionLevel.Public &&
 							!function.HasAttribute<IgnoreAttribute>())
 						{
 							AddPublicConstructor(function);
@@ -221,7 +221,7 @@ namespace AutoWrap.Meta
                 if (m.IsStatic)
                 {
                     _code.AppendIndent(NameToPrivate(m) + " = ");
-                    if (m.ProtectionType == ProtectionLevel.Protected)
+                    if (m.ProtectionLevel == ProtectionLevel.Protected)
                     {
                         _code.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.Class));
                         _code.Append("::" + m.Name + ";\n");
@@ -346,7 +346,7 @@ namespace AutoWrap.Meta
                     }
 
                     _code.AppendIndent("");
-                    if (!f.IsVoid)
+                    if (!f.HasReturnValue)
                     {
                         if (hasPostConversions)
                         {
@@ -380,7 +380,7 @@ namespace AutoWrap.Meta
                             _code.AppendLine(p.CLRDefaultValuePostConversion);
                     }
 
-                    if (!f.IsVoid && hasPostConversions)
+                    if (!f.HasReturnValue && hasPostConversions)
                     {
                         _code.AppendLine("return mp_return;");
                     }
@@ -430,7 +430,7 @@ namespace AutoWrap.Meta
             if (!String.IsNullOrEmpty(preCall))
                 _code.AppendLine(preCall);
 
-            if (f.IsVoid)
+            if (f.HasReturnValue)
             {
                 _code.AppendLine(nativeCall + ";");
                 if (!String.IsNullOrEmpty(postCall))
@@ -470,7 +470,7 @@ namespace AutoWrap.Meta
             string invoke;
             if (f.IsStatic)
             {
-                if (f.ProtectionType == ProtectionLevel.Protected)
+                if (f.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     string classname = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
                     invoke = classname + "::" + f.Name + "(";
@@ -496,10 +496,10 @@ namespace AutoWrap.Meta
 
             invoke += " )";
 
-            if (f.IsVoid)
+            if (f.HasReturnValue)
                 return invoke;
             else
-                return f.Type.ProduceNativeCallConversionCode(invoke, f);
+                return f.MemberType.ProduceNativeCallConversionCode(invoke, f);
         }
 
         protected virtual string GetMethodPostNativeCall(MemberMethodDefinition f, int paramCount)
@@ -537,7 +537,7 @@ namespace AutoWrap.Meta
             {
                 if (!(p.GetterFunction.IsAbstract && AllowSubclassing))
                 {
-                    if (AllowProtectedMembers || p.GetterFunction.ProtectionType != ProtectionLevel.Protected)
+                    if (AllowProtectedMembers || p.GetterFunction.ProtectionLevel != ProtectionLevel.Protected)
                     {
                         string managedType = GetMethodNativeCall(p.GetterFunction, 0);
 
@@ -561,7 +561,7 @@ namespace AutoWrap.Meta
             {
                 if (!(p.SetterFunction.IsAbstract && AllowSubclassing))
                 {
-                    if (AllowProtectedMembers || p.SetterFunction.ProtectionType != ProtectionLevel.Protected)
+                    if (AllowProtectedMembers || p.SetterFunction.ProtectionLevel != ProtectionLevel.Protected)
                     {
                         _code.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
                         _code.AppendLine("{");
@@ -593,8 +593,8 @@ namespace AutoWrap.Meta
 
             if (field.IsNativeArray)
             {
-                if (field.Type.HasAttribute<NativeValueContainerAttribute>()
-                    || (field.Type.IsValueType && !field.Type.HasWrapType(WrapTypes.NativePtrValueType)))
+                if (field.MemberType.HasAttribute<NativeValueContainerAttribute>()
+                    || (field.MemberType.IsValueType && !field.MemberType.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
                     ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.Name + "_array");
                     switch (field.PassedByType)
@@ -610,7 +610,7 @@ namespace AutoWrap.Meta
                     }
 
                     ptype = GetCLRTypeName(tmpParam);
-                    string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), tmpParam);
+                    string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), tmpParam);
 
                     _code.AppendLine(ptype + " " + pname + "::get()");
                     _code.AppendLine("{");
@@ -619,7 +619,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field) + "[index]", field);
+                    string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field) + "[index]", field);
 
                     _code.AppendLine(ptype + " " + pname + "::get(int index)");
                     _code.AppendLine("{");
@@ -639,13 +639,13 @@ namespace AutoWrap.Meta
             else if (_cachedMembers.Contains(field))
             {
                 string managedType;
-                if (field.Type.IsSTLContainer)
+                if (field.MemberType.IsSTLContainer)
                 {
                     managedType = GetNativeInvokationTarget(field);
                 }
                 else
                 {
-                    managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
+                    managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
                 }
                 string priv = NameToPrivate(field);
 
@@ -659,7 +659,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
+                string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
                 _code.AppendLine(ptype + " " + pname + "::get()");
                 _code.AppendLine("{");
@@ -667,7 +667,7 @@ namespace AutoWrap.Meta
                 _code.AppendLine("}");
 
                 if ( // SharedPtrs can be copied by value. Let all be copied by value just to be sure (field.PassedByType == PassedByType.Pointer || field.Type.IsValueType)
-                    !IsReadOnly && !field.Type.HasAttribute<ReadOnlyForFieldsAttribute>()
+                    !IsReadOnly && !field.MemberType.HasAttribute<ReadOnlyForFieldsAttribute>()
                     && !field.IsConst)
                 {
                     _code.AppendLine("void " + pname + "::set( " + ptype + " value )");
@@ -683,7 +683,7 @@ namespace AutoWrap.Meta
 
         protected override void AddMethodsForField(MemberFieldDefinition field)
         {
-            string managedType = field.Type.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
+            string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
             _code.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.Name + "()");
             _code.AppendLine("{");
