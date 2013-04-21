@@ -196,6 +196,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="development-notes.txt" />
     <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup />

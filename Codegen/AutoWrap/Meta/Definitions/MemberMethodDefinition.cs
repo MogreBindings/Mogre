@@ -49,6 +49,7 @@ namespace AutoWrap.Meta
                 if (base.IsIgnored)
                     return true;
 
+                // If one of the parameters is ignore, then so is this methods.
                 foreach (ParamDefinition param in Parameters)
                 {
                     if (param.Type.IsIgnored)
@@ -62,6 +63,9 @@ namespace AutoWrap.Meta
         private bool? _isOverride;
         private MemberMethodDefinition _baseFunc;
 
+        /// <summary>
+        /// Denotes whether this method overrides a
+        /// </summary>
         public bool IsOverride
         {
             get

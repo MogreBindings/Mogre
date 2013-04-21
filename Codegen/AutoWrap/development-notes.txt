@@ -1,0 +1,34 @@
+﻿Notes for developing AutoWrap
+=============================
+This file contains some notes on how to understand and how to extend
+AutoWrap's code. It also contains some warnings and design issues.
+
+Lazy-evaluating of properties
+-----------------------------
+Many properties of the definition classes (like "ClassDefinition" or "MemberMehodDefinition")
+are evaluated first when needed. Here's an example:
+
+  private AbstractTypeDefinition _memberType;
+  public AbstractTypeDefinition MemberType {
+    get {
+      if (_memberType == null) {
+        // Initialization code here
+        ...
+      }
+
+      return _memberType;
+    }
+  }
+
+So, the value of "_memberType" is NOT set within the constructor which would seem to be
+a viable (and better) alternative. 
+
+The reason why it's done in the properties access and not in the constructor is that the
+initialization code examines some type definition that hasn't been loaded yet (which then
+leads to a KeyNotFoundException). Such problems arise for example when a Class A is being
+loaded and one of A's fields is of type B which hasn't been loaded yet. To make things more
+complicate one of B's fields could be of type A and this circular reference could not be
+resolved in a constructor of either class definitions.
+
+So to prevent such problems from occuring, lazy property evaluation (as seen in the code
+above) is used.
