@@ -154,7 +154,7 @@
     <Compile Include="Meta\CppNonOverridableClassProducer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Meta\Definitions\AbstractMemberDefinition.cs" />
+    <Compile Include="Meta\Definitions\MemberDefinitionBase.cs" />
     <Compile Include="Meta\Definitions\NamespaceDefinition.cs" />
     <Compile Include="Meta\Definitions\AbstractTypeDefinition.cs" />
     <Compile Include="Meta\ClassInclCodeProducer.cs" />

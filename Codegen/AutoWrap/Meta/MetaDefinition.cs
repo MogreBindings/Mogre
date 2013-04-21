@@ -145,7 +145,7 @@ namespace AutoWrap.Meta
                         break;
                     case "function":
                     case "variable":
-                        foreach (AbstractMemberDefinition m in (type as ClassDefinition).GetMembers((child as XmlElement).GetAttribute("name")))
+                        foreach (MemberDefinitionBase m in (type as ClassDefinition).GetMembers((child as XmlElement).GetAttribute("name")))
                             AddAttributesInMember(m, child as XmlElement);
                         break;
                     default:
@@ -154,7 +154,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInMember(AbstractMemberDefinition member, XmlElement elem)
+        private void AddAttributesInMember(MemberDefinitionBase member, XmlElement elem)
         {
             foreach (XmlAttribute attr in elem.Attributes)
             {

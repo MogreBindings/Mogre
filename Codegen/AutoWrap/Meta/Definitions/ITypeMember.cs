@@ -3,7 +3,7 @@
     /// <summary>
     /// Describes a member of a class (or struct) or something in a class (or struct) context. 
     /// This interface is implemented by: <see cref="TypeMemberDefinition"/>, <see cref="PropertyDefinition"/>, 
-    /// <see cref="ParamDefinition"/>, and <see cref="AbstractMemberDefinition"/>.
+    /// <see cref="ParamDefinition"/>, and <see cref="MemberDefinitionBase"/>.
     /// </summary>
     public interface ITypeMember
     {

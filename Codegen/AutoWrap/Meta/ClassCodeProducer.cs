@@ -44,7 +44,7 @@ namespace AutoWrap.Meta
         protected readonly Dictionary<MemberMethodDefinition, int> _methodIndices = new Dictionary<MemberMethodDefinition, int>();
         protected int _methodIndicesCount = 0;
 
-        protected readonly List<AbstractMemberDefinition> _cachedMembers = new List<AbstractMemberDefinition>();
+        protected readonly List<MemberDefinitionBase> _cachedMembers = new List<MemberDefinitionBase>();
 
         public ClassCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb) : base(metaDef)
         {
@@ -171,7 +171,7 @@ namespace AutoWrap.Meta
 
             //Find cached members
 
-            foreach (AbstractMemberDefinition m in _definition.Members)
+            foreach (MemberDefinitionBase m in _definition.Members)
             {
                 if (m.HasAttribute<CachedAttribute>())
                     MarkCachedMember(m);
@@ -182,7 +182,7 @@ namespace AutoWrap.Meta
                 if (iface == _definition)
                     continue;
 
-                foreach (AbstractMemberDefinition m in iface.Members)
+                foreach (MemberDefinitionBase m in iface.Members)
                 {
                     if (m.HasAttribute<CachedAttribute>())
                         MarkCachedMember(m);
@@ -318,7 +318,7 @@ namespace AutoWrap.Meta
                 return GetTopClass(type.BaseClass);
         }
 
-        protected virtual void MarkCachedMember(AbstractMemberDefinition m)
+        protected virtual void MarkCachedMember(MemberDefinitionBase m)
         {
             if (m.IsStatic || AllowCachedMemberFields)
                 _cachedMembers.Add(m);
@@ -526,7 +526,7 @@ namespace AutoWrap.Meta
 
         protected bool HasStaticCachedFields()
         {
-            foreach (AbstractMemberDefinition m in _cachedMembers)
+            foreach (MemberDefinitionBase m in _cachedMembers)
             {
                 if (m.IsStatic)
                     return true;
@@ -692,7 +692,7 @@ namespace AutoWrap.Meta
 
             List<string> stls = new List<string>();
 
-            foreach (AbstractMemberDefinition m in _definition.Members)
+            foreach (MemberDefinitionBase m in _definition.Members)
             {
                 if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                     && !m.IsIgnored
@@ -713,7 +713,7 @@ namespace AutoWrap.Meta
                 if (iface == _definition)
                     continue;
 
-                foreach (AbstractMemberDefinition m in iface.Members)
+                foreach (MemberDefinitionBase m in iface.Members)
                 {
                     if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                         && !m.IsIgnored

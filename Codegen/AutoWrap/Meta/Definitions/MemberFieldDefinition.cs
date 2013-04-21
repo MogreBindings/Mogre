@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class MemberFieldDefinition : AbstractMemberDefinition
+    public class MemberFieldDefinition : MemberDefinitionBase
     {
         public override bool IsProperty
         {

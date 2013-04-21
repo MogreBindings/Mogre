@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class MemberMethodDefinition : AbstractMemberDefinition
+    public class MemberMethodDefinition : MemberDefinitionBase
     {
         public List<ParamDefinition> Parameters = new List<ParamDefinition>();
         public VirtualLevel VirtualLevel;

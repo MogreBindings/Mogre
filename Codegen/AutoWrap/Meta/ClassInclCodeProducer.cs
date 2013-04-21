@@ -587,7 +587,7 @@ namespace AutoWrap.Meta
             if (_cachedMembers.Count > 0)
             {
                 _code.AppendLine("//Cached fields");
-                foreach (AbstractMemberDefinition m in _cachedMembers)
+                foreach (MemberDefinitionBase m in _cachedMembers)
                 {
                     _code.AppendIndent("");
                     if (m.IsStatic)

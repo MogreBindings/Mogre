@@ -32,7 +32,9 @@ namespace AutoWrap.Meta
     /// Describes a class or struct member, i.e. a field (see <see cref="MemberFieldDefinition"/>) or a 
     /// method (<see cref="MemberMethodDefinition"/>).
     /// </summary>
-    public abstract class AbstractMemberDefinition : AttributeSet, ITypeMember
+    // NOTE: Don't call this class "AbstractMemberDefintion" to avoid confusion about whether the 
+    //   described member is an "abstract" member (i.e. an abstract method).
+    public abstract class MemberDefinitionBase : AttributeSet, ITypeMember
     {
         string ITypeMember.MemberTypeName
         {
@@ -181,7 +183,7 @@ namespace AutoWrap.Meta
             get { return _elem; }
         }
 
-        public AbstractMemberDefinition(MetaDefinition metaDef, XmlElement elem)
+        public MemberDefinitionBase(MetaDefinition metaDef, XmlElement elem)
             : base(metaDef)
         {
             this._elem = elem;

@@ -216,7 +216,7 @@ namespace AutoWrap.Meta
 
             _code.AppendLine("{");
             _code.IncreaseIndent();
-            foreach (AbstractMemberDefinition m in _cachedMembers)
+            foreach (MemberDefinitionBase m in _cachedMembers)
             {
                 if (m.IsStatic)
                 {

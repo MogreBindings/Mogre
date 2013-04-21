@@ -14,7 +14,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Contains the members (fields and methods) of this class.
         /// </summary>
-        public List<AbstractMemberDefinition> Members = new List<AbstractMemberDefinition>();
+        public List<MemberDefinitionBase> Members = new List<MemberDefinitionBase>();
         /// <summary>
         /// Contains the types nested in this class (e.g. inner classes).
         /// </summary>
@@ -226,7 +226,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (AbstractMemberDefinition m in Members)
+                foreach (MemberDefinitionBase m in Members)
                 {
                     if (m is MemberMethodDefinition)
                         yield return m;
@@ -238,7 +238,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (AbstractMemberDefinition m in Members)
+                foreach (MemberDefinitionBase m in Members)
                 {
                     if (m is MemberFieldDefinition)
                         yield return m;
@@ -961,14 +961,14 @@ namespace AutoWrap.Meta
                 return null;
         }
 
-        public AbstractMemberDefinition GetMember(string name)
+        public MemberDefinitionBase GetMember(string name)
         {
             return GetMember(name, true);
         }
 
-        public AbstractMemberDefinition GetMember(string name, bool raiseException)
+        public MemberDefinitionBase GetMember(string name, bool raiseException)
         {
-            foreach (AbstractMemberDefinition m in Members)
+            foreach (MemberDefinitionBase m in Members)
             {
                 if (m.Name == name)
                     return m;
@@ -980,16 +980,16 @@ namespace AutoWrap.Meta
                 return null;
         }
 
-        public AbstractMemberDefinition[] GetMembers(string name)
+        public MemberDefinitionBase[] GetMembers(string name)
         {
             return GetMembers(name, true);
         }
 
-        public AbstractMemberDefinition[] GetMembers(string name, bool raiseException)
+        public MemberDefinitionBase[] GetMembers(string name, bool raiseException)
         {
-            List<AbstractMemberDefinition> list = new List<AbstractMemberDefinition>();
+            List<MemberDefinitionBase> list = new List<MemberDefinitionBase>();
 
-            foreach (AbstractMemberDefinition m in Members)
+            foreach (MemberDefinitionBase m in Members)
             {
                 if (m.Name == name)
                     list.Add(m);
@@ -1143,9 +1143,9 @@ namespace AutoWrap.Meta
 
         private void AddNewFunction(MemberMethodDefinition func)
         {
-            AbstractMemberDefinition[] members = GetMembers(func.Name, false);
+            MemberDefinitionBase[] members = GetMembers(func.Name, false);
             MemberMethodDefinition prevf = null;
-            foreach (AbstractMemberDefinition m in members)
+            foreach (MemberDefinitionBase m in members)
             {
                 if (m is MemberMethodDefinition)
                 {

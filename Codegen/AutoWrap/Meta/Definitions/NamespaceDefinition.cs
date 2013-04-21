@@ -28,8 +28,8 @@ using System.Xml;
 namespace AutoWrap.Meta
 {
     /// <summary>
-    /// Contains the definition of a C++ namespace (i.e. its name) along with the name of its
-    /// managed counter part.
+    /// Contains the definition of a C++ namespace (i.e. its name and the contained types) along 
+    /// with the name of its managed counter part.
     /// </summary>
     /// <remarks>As for now, only three levels of nested namespaces are supported 
     /// (like "Level1::Level2::Level3").</remarks>

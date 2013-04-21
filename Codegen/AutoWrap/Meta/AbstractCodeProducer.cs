@@ -117,7 +117,7 @@ namespace AutoWrap.Meta
         {
             return "_" + Char.ToLower(name[0]) + name.Substring(1);
         }
-        protected virtual string NameToPrivate(AbstractMemberDefinition m)
+        protected virtual string NameToPrivate(MemberDefinitionBase m)
         {
             string name = m.Name;
             if (m is MemberMethodDefinition
