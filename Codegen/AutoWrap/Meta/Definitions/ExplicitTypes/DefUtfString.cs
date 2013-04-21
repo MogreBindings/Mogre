@@ -117,8 +117,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefUtfString(MetaDefinition metaDef)
-            : base(metaDef)
+        public DefUtfString(NamespaceDefinition nsDef)
+            : base(nsDef)
         {
         }
     }

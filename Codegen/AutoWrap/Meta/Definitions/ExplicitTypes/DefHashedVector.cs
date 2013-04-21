@@ -16,11 +16,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefHashedVector(typedef.MetaDef, typedef.Element);
+            return new DefHashedVector(typedef.NameSpace, typedef.Element);
         }
 
-        public DefHashedVector(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public DefHashedVector(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
         }
     }

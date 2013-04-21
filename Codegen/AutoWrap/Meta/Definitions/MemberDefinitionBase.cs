@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Xml;
 
 namespace AutoWrap.Meta
@@ -50,9 +49,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (HasAttribute<RenameAttribute>())
-                {
                     return GetAttribute<RenameAttribute>().Name;
-                }
                 
                 return Name;
             }
@@ -66,7 +63,7 @@ namespace AutoWrap.Meta
                 if (Definition.StartsWith("Controller<"))
                     return true;
 
-                return (this.MemberType.IsIgnored || this.HasAttribute<IgnoreAttribute>());
+                return (MemberType.IsIgnored || HasAttribute<IgnoreAttribute>());
             }
         }
 
@@ -78,30 +75,32 @@ namespace AutoWrap.Meta
         /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
         public abstract bool IsConst { get; }
 
-        AbstractTypeDefinition _type = null;
-        public virtual AbstractTypeDefinition MemberType
+        private AbstractTypeDefinition _memberType;
+        public AbstractTypeDefinition MemberType
         {
             get
             {
-                if (_type == null)
+                if (_memberType == null)
                 {
-                    if (Container != "")
+                    // NOTE: This code can't be placed in the constructor as there may be circular references
+                    //   which then would lead to "FindType()" failing (as the type hasn't been added yet).
+                    if (_container != "")
                     {
-                        _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.SurroundingClass = ContainingClass;
-                    }
-                    else
-                        _type = ContainingClass.FindType<AbstractTypeDefinition>(TypeName, false);
+                        _memberType = CreateExplicitContainerType(_containingClass.NameSpace, _container, _containerKey,
+                            (_containerValue != "") ? _containerValue : _typeName);
+                        _memberType.SurroundingClass = ContainingClass;
+                    } else
+                        _memberType = ContainingClass.FindType<AbstractTypeDefinition>(_typeName, false);
                 }
 
-                return _type;
+                return _memberType;
             }
         }
 
-        public string TypeName = null;
-        string ITypeMember.MemberTypeName
+        private readonly string _typeName;
+        public virtual string MemberTypeName
         {
-            get { return this.TypeName; }
+            get { return _typeName; }
         }
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace AutoWrap.Meta
         /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
         public virtual string MemberTypeCLRName
         {
-            get { return this.MemberType.GetCLRTypeName(this);  }
+            get { return MemberType.GetCLRTypeName(this);  }
         }
 
         /// <summary>
@@ -142,37 +141,24 @@ namespace AutoWrap.Meta
         /// depends on whether this member is a method or a field.
         /// </summary>
         public PassedByType PassedByType;
-        PassedByType ITypeMember.PassedByType {
-          get { return this.PassedByType; }
-        }
-
-        protected string _container;
-        public virtual string Container
+        PassedByType ITypeMember.PassedByType
         {
-            get { return _container; }
+            get { return PassedByType; }
         }
 
-        protected string _containerKey;
-        public virtual string ContainerKey
-        {
-            get { return _containerKey; }
-        }
+        private readonly string _container;
+        private readonly string _containerKey;
+        private readonly string _containerValue;
 
-        protected string _containerValue;
-        public virtual string ContainerValue
-        {
-            get { return _containerValue; }
-        }
-
-        public string Definition;
+        public readonly string Definition;
 
         public MemberDefinitionBase(XmlElement elem, ClassDefinition containingClass)
             : base(containingClass.MetaDef)
         {
-            this._containingClass = containingClass;
-            this.IsStatic = elem.GetAttribute("static") == "yes";
-            this.ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
-            this.PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
+            _containingClass = containingClass;
+            IsStatic = elem.GetAttribute("static") == "yes";
+            ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
+            PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)
             {
@@ -183,14 +169,14 @@ namespace AutoWrap.Meta
                         break;
 
                     case "type":
-                        this.TypeName = child.InnerText;
-                        this._container = child.GetAttribute("container");
-                        this._containerKey = child.GetAttribute("containerKey");
-                        this._containerValue = child.GetAttribute("containerValue");
+                        _typeName = child.InnerText;
+                        _container = child.GetAttribute("container");
+                        _containerKey = child.GetAttribute("containerKey");
+                        _containerValue = child.GetAttribute("containerValue");
                         break;
 
                     case "definition":
-                        this.Definition = child.InnerText;
+                        Definition = child.InnerText;
                         break;
 
                     default:
@@ -205,6 +191,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// This method allows subclasses to interpret XML child elements other than
         /// "name", "type", and "definition" (which are already interpreted in the constructor).
+        /// Note that not all fields of this class may have been initialized yet.
         /// </summary>
         /// <param name="child">the child element to be interpreted</param>
         protected virtual void InterpretChildElement(XmlElement child)

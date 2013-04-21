@@ -147,8 +147,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public EnumDefinition(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public EnumDefinition(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
             if (elem.Name != "enumeration")
                 throw new Exception("Not enumeration element");

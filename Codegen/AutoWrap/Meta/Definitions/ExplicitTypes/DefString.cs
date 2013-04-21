@@ -14,8 +14,8 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public DefString(MetaDefinition metaDef)
-            : base(metaDef)
+        public DefString(NamespaceDefinition nsDef)
+            : base(nsDef)
         {
         }
 

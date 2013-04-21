@@ -267,7 +267,7 @@ namespace AutoWrap.Meta
         public virtual bool HasReturnValue {
             get
             {
-                return (TypeName == "void" || TypeName == "const void") && PassedByType == PassedByType.Value;
+                return (MemberTypeName == "void" || MemberTypeName == "const void") && PassedByType == PassedByType.Value;
             }
         }
 
@@ -283,7 +283,7 @@ namespace AutoWrap.Meta
                     {
                         _isGetProperty = BaseFunction.IsGetProperty;
                     }
-                    else if (IsConstructor || TypeName == "void" || Parameters.Count > 0)
+                    else if (IsConstructor || MemberTypeName == "void" || Parameters.Count > 0)
                         _isGetProperty = false;
                     else if (HasAttribute<PropertyAttribute>())
                         _isGetProperty = true;
@@ -337,7 +337,7 @@ namespace AutoWrap.Meta
                     {
                         _isSetProperty = BaseFunction.IsSetProperty;
                     }
-                    else if (IsConstructor || TypeName != "void" || Parameters.Count != 1)
+                    else if (IsConstructor || MemberTypeName != "void" || Parameters.Count != 1)
                     {
                         _isSetProperty = false;
                     }
@@ -353,7 +353,7 @@ namespace AutoWrap.Meta
                         {
                             // Check to see if there is a "get" function
                             MemberMethodDefinition func = ContainingClass.GetFunction("get" + name.Substring(3), false, false);
-                            _isSetProperty = (func != null && func.IsGetProperty && func.TypeName == Parameters[0].TypeName
+                            _isSetProperty = (func != null && func.IsGetProperty && func.MemberTypeName == Parameters[0].TypeName
                                               && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverride == IsOverride)));
                         }
                         else

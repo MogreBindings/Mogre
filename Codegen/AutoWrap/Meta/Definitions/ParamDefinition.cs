@@ -91,16 +91,18 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        AbstractTypeDefinition _type;
+        private AbstractTypeDefinition _type;
         public virtual AbstractTypeDefinition Type
         {
             get
             {
                 if (_type == null)
                 {
+                    // NOTE: This code can't be placed in the constructor as there may be circular references
+                    //   which then would lead to "FindType()" failing (as the type hasn't been added yet).
                     if (Container != "")
                     {
-                        _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
+                        _type = CreateExplicitContainerType(Function.ContainingClass.NameSpace, Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
                         _type.SurroundingClass = Function.ContainingClass;
                     }
                     else

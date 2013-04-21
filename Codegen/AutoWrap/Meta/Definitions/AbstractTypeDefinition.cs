@@ -280,7 +280,7 @@ namespace AutoWrap.Meta
             get { return HasAttribute<ReadOnlyAttribute>(); }
         }
 
-        public NamespaceDefinition NameSpace;
+        public readonly NamespaceDefinition NameSpace;
         public ProtectionLevel ProtectionLevel;
         /// <summary>
         /// The class this type is nested within or <c>null</c> if this type is not nested.
@@ -372,15 +372,16 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        protected AbstractTypeDefinition(MetaDefinition metaDef)
-            : base(metaDef)
+        protected AbstractTypeDefinition(NamespaceDefinition nsDef) : base(nsDef.MetaDef)
         {
-            
+            this.NameSpace = nsDef;
         }
 
-        protected AbstractTypeDefinition(MetaDefinition metaDef, XmlElement elem) : base(metaDef)
+        protected AbstractTypeDefinition(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef.MetaDef)
         {
             this._elem = elem;
+            this.NameSpace = nsDef;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
         }
 

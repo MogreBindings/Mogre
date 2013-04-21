@@ -29,24 +29,24 @@ namespace AutoWrap.Meta
             return new NamespaceDefinition(_metaDef, elem, managedRootNamespaceName);
         }
   
-        public virtual ClassDefinition CreateClass(XmlElement elem)
+        public virtual ClassDefinition CreateClass(NamespaceDefinition nsDef, XmlElement elem)
         {
-            return new ClassDefinition(_metaDef, elem);
+            return new ClassDefinition(nsDef, elem);
         }
           
-        public virtual StructDefinition CreateStruct(XmlElement elem)
+        public virtual StructDefinition CreateStruct(NamespaceDefinition nsDef, XmlElement elem)
         {
-            return new StructDefinition(_metaDef, elem);
+            return new StructDefinition(nsDef, elem);
         }
 
-        public virtual TypedefDefinition CreateTypedef(XmlElement elem)
+        public virtual TypedefDefinition CreateTypedef(NamespaceDefinition nsDef, XmlElement elem)
         {
-            return new TypedefDefinition(_metaDef, elem);
+            return new TypedefDefinition(nsDef, elem);
         }
 
-        public virtual EnumDefinition CreateEnum(XmlElement elem)
+        public virtual EnumDefinition CreateEnum(NamespaceDefinition nsDef, XmlElement elem)
         {
-            return new EnumDefinition(_metaDef, elem);
+            return new EnumDefinition(nsDef, elem);
         }
 
         /// <summary>
@@ -54,18 +54,18 @@ namespace AutoWrap.Meta
         /// create an instance from an apropriate subclass (e.g. <see cref="ClassDefinition"/> for a class).
         /// </summary>
         /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
-        public AbstractTypeDefinition CreateType(XmlElement elem) 
+        public AbstractTypeDefinition CreateType(NamespaceDefinition nsDef, XmlElement elem)
         {
             switch (elem.Name)
             {
                 case "class":
-                    return CreateClass(elem);
+                    return CreateClass(nsDef, elem);
                 case "struct":
-                    return CreateStruct(elem);
+                    return CreateStruct(nsDef, elem);
                 case "typedef":
-                    return CreateTypedef(elem);
+                    return CreateTypedef(nsDef, elem);
                 case "enumeration":
-                    return CreateEnum(elem);
+                    return CreateEnum(nsDef, elem);
                 case "variable":
                     //It's global variables, ignore them
                     return null;

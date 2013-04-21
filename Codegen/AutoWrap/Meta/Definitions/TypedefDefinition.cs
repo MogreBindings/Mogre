@@ -114,13 +114,12 @@ namespace AutoWrap.Meta
             }
             else if (typedef.Name == "String")
             {
-                expl = new DefStringTypeDef(typedef.MetaDef, typedef.Element);
+                expl = new DefStringTypeDef(typedef.NameSpace, typedef.Element);
             }
 
             if (expl != null)
             {
                 expl.SurroundingClass = typedef.SurroundingClass;
-                expl.NameSpace = typedef.NameSpace;
                 expl.LinkAttributes(typedef);
                 return expl;
             }
@@ -210,8 +209,8 @@ namespace AutoWrap.Meta
             get { return BaseTypeName.StartsWith("SharedPtr"); }
         }
 
-        public TypedefDefinition(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public TypedefDefinition(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
             if (elem.Name != "typedef")
                 throw new Exception("Not typedef element");

@@ -233,8 +233,8 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public DefInternal(MetaDefinition metaDef, string name)
-            : base(metaDef)
+        public DefInternal(NamespaceDefinition nsDef, string name)
+            : base(nsDef)
         {
             if (name.StartsWith("const "))
                 name = name.Substring("const ".Length);

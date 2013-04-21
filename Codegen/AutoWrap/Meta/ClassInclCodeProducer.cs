@@ -373,7 +373,7 @@ namespace AutoWrap.Meta
                         _code.Append(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName + "\n");
                         _code.AppendLine("{");
                         _code.AppendIndent("\t");
-                        if (f.TypeName != "void")
+                        if (f.MemberTypeName != "void")
                             _code.Append("return ");
                         _code.Append(f.CLRName + "(");
                         for (int i = 0; i < f.Parameters.Count; i++)
@@ -493,7 +493,7 @@ namespace AutoWrap.Meta
                         {
                             _code.AppendLine("\tif (" + privField + ")");
                             _code.AppendIndent("\t\t");
-                            if (f.TypeName != "void")
+                            if (f.MemberTypeName != "void")
                                 _code.Append("return ");
                             _code.Append(privField + "->Invoke(");
                             for (int i = 0; i < f.Parameters.Count; i++)

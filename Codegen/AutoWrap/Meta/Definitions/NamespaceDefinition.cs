@@ -137,12 +137,9 @@ namespace AutoWrap.Meta
             //
             foreach (XmlElement child in elem.ChildNodes)
             {
-                AbstractTypeDefinition type = MetaDef.Factory.CreateType(child);
+                AbstractTypeDefinition type = MetaDef.Factory.CreateType(this, child);
                 if (type != null)
-                {
-                    type.NameSpace = this;
                     _containedTypes.Add(type);
-                }
             }
         }
 
@@ -175,7 +172,7 @@ namespace AutoWrap.Meta
                 if (raiseException)
                     throw new Exception("Could not find type");
 
-                return (T)(object)new DefInternal(MetaDef, name);
+                return (T)(object)new DefInternal(this, name);
             }
 
             if (type is AbstractTypeDefinition && type.IsIgnored)

@@ -93,7 +93,10 @@ namespace AutoWrap.Meta
             return true;
         }
 
-        protected virtual AbstractTypeDefinition CreateExplicitContainerType(string container, string key, string val)
+        /// <summary>
+        /// Creates a typedefinition.
+        /// </summary>
+        protected virtual AbstractTypeDefinition CreateExplicitContainerType(NamespaceDefinition nsDef, string container, string key, string val)
         {
             string stdcont = "std::" + container;
             XmlDocument doc = new XmlDocument();
@@ -110,7 +113,7 @@ namespace AutoWrap.Meta
                 elem.InsertAfter(te, null);
             }
 
-            return TypedefDefinition.CreateExplicitType(MetaDef.Factory.CreateTypedef(elem));
+            return TypedefDefinition.CreateExplicitType(this.MetaDef.Factory.CreateTypedef(nsDef, elem));
         }
 
         protected virtual string NameToPrivate(string name)
@@ -151,7 +154,7 @@ namespace AutoWrap.Meta
             if (f.HasAttribute<CustomIncDeclarationAttribute>() || f.HasAttribute<CustomCppDeclarationAttribute>())
                 return false;
 
-            if (f.TypeName == "bool" &&
+            if (f.MemberTypeName == "bool" &&
                 ((name.StartsWith("is") && Char.IsUpper(name[2])) || (name.StartsWith("has") && Char.IsUpper(name[3])))
                 && f.Parameters.Count == 0)
                 return true;

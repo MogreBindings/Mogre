@@ -10,8 +10,8 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public DefStringTypeDef(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public DefStringTypeDef(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
         }
 

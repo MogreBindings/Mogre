@@ -11,6 +11,10 @@
         /// The member's type. For fields and properties this is the data type.
         /// For methods this is the return type.
         /// </summary>
+        /// <remarks>The value of this property usually must not be determined in the constructor,
+        /// as there may be circular references which then would lead to "FindType()" failing (as the 
+        /// type hasn't been added yet). So this value should first be determined when the property
+        /// is read the first time.</remarks>
         AbstractTypeDefinition MemberType { get; }
 
         /// <summary>

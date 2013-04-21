@@ -70,11 +70,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefTRect(typedef.MetaDef, typedef.Element);
+            return new DefTRect(typedef.NameSpace, typedef.Element);
         }
 
-        public DefTRect(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public DefTRect(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
         }
     }

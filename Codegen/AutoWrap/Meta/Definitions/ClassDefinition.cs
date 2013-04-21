@@ -834,7 +834,7 @@ namespace AutoWrap.Meta
                         p = new PropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
-                            p.MemberTypeName = f.TypeName;
+                            p.MemberTypeName = f.MemberTypeName;
                             p.PassedByType = f.PassedByType;
                         }
                         else
@@ -1073,8 +1073,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public ClassDefinition(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public ClassDefinition(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef, elem)
         {
             if (this.GetType() == typeof(ClassDefinition)
                 && elem.Name != "class")
@@ -1130,9 +1130,8 @@ namespace AutoWrap.Meta
                         break;
 
                     default:
-                        AbstractTypeDefinition type = MetaDef.Factory.CreateType(child);
+                        AbstractTypeDefinition type = MetaDef.Factory.CreateType(NameSpace, child);
                         type.SurroundingClass = this;
-                        type.NameSpace = this.NameSpace;
                         NestedTypes.Add(type);
                         break;
                 }

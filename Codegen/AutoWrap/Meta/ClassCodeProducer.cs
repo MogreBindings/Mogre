@@ -212,7 +212,7 @@ namespace AutoWrap.Meta
                         p = new PropertyDefinition(f.CLRName);
                         if (f.IsGetProperty)
                         {
-                            p.MemberTypeName = f.TypeName;
+                            p.MemberTypeName = f.MemberTypeName;
                             p.PassedByType = f.PassedByType;
                         }
                         else
