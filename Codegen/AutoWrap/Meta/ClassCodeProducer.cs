@@ -301,12 +301,12 @@ namespace AutoWrap.Meta
         protected virtual bool DeclareAsVirtual(MemberMethodDefinition f)
         {
             return (f.IsVirtual && AllowVirtualMethods) || f.IsVirtualInterfaceMethod
-                || (f.IsVirtual && f.BaseFunction != null && f.BaseFunction.ContainingClass.AllowVirtuals);
+                || (f.IsVirtual && f.BaseMethod != null && f.BaseMethod.ContainingClass.AllowVirtuals);
         }
 
         protected virtual bool DeclareAsOverride(MemberMethodDefinition f)
         {
-            return (f.IsOverride && DeclareAsVirtual(f))
+            return (f.IsOverriding && DeclareAsVirtual(f))
                 || (f.IsVirtualInterfaceMethod && !f.ContainingClass.IsInterface && !f.ContainingClass.ContainsInterfaceFunctionSignature(f.Signature, false));
         }
 

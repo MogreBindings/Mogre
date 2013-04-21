@@ -64,9 +64,10 @@ namespace AutoWrap.Meta
         private MemberMethodDefinition _baseFunc;
 
         /// <summary>
-        /// Denotes whether this method overrides a
+        /// Denotes whether this method overrides a method in one of the class' base classes. If 
+        /// this is true, the method is accessible through <see cref="BaseMethod"/>.
         /// </summary>
-        public bool IsOverride
+        public bool IsOverriding
         {
             get
             {
@@ -74,7 +75,7 @@ namespace AutoWrap.Meta
                 {
                     if (IsVirtual && !ContainingClass.IsInterface && ContainingClass.BaseClass != null)
                     {
-                        if (ContainingClass.BaseClass.ContainsFunctionSignature(Signature, true, out _baseFunc)
+                        if (   ContainingClass.BaseClass.ContainsFunctionSignature(Signature, true, out _baseFunc)
                             || ContainingClass.BaseClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
                             _isOverride = true;
                         else
@@ -88,16 +89,27 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MemberMethodDefinition BaseFunction
+        /// <summary>
+        /// The method this method overrides (see <see cref="IsOverriding"/>) or implements. The 
+        /// method is contained in one of the class' base classes or implemented interfaces.
+        /// Note that <see cref="IsOverriding"/> may be <c>false</c> even though this property
+        /// has a value. This is the case when this class implements an interface directly (i.e.
+        /// it's not implemented by any base class). In this case the implemented method doesn't
+        /// override any base method but has a base method (i.e. the one in the implemented 
+        /// interface).
+        /// </summary>
+        public MemberMethodDefinition BaseMethod
         {
             get
             {
                 if (_baseFunc != null)
                     return _baseFunc;
 
-                if (IsOverride)
+                if (IsOverriding)
                     return _baseFunc;
 
+                // Check whether the class directly implements an interface and whether one of this
+                // interface's methods is implemented by this method.
                 if (ContainingClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
                     return _baseFunc;
 
@@ -110,8 +122,8 @@ namespace AutoWrap.Meta
             if (base.HasAttribute<T>())
                 return true;
 
-            if (BaseFunction != null)
-                return BaseFunction.HasAttribute<T>();
+            if (BaseMethod != null)
+                return BaseMethod.HasAttribute<T>();
             
             return false;
         }
@@ -122,8 +134,8 @@ namespace AutoWrap.Meta
             if (res != null)
                 return res;
 
-            if (BaseFunction != null)
-                return BaseFunction.GetAttribute<T>();
+            if (BaseMethod != null)
+                return BaseMethod.GetAttribute<T>();
             
             return default(T);
         }
@@ -259,10 +271,8 @@ namespace AutoWrap.Meta
             {
                 if (_isGetProperty == null)
                 {
-                    if (IsOverride)
-                    {
-                        _isGetProperty = BaseFunction.IsGetProperty;
-                    }
+                    if (IsOverriding)
+                        _isGetProperty = BaseMethod.IsGetProperty;
                     else if (IsConstructor || MemberTypeName == "void" || Parameters.Count > 0)
                         _isGetProperty = false;
                     else if (HasAttribute<PropertyAttribute>())
@@ -313,10 +323,8 @@ namespace AutoWrap.Meta
             {
                 if (_isSetProperty == null)
                 {
-                    if (IsOverride)
-                    {
-                        _isSetProperty = BaseFunction.IsSetProperty;
-                    }
+                    if (IsOverriding)
+                        _isSetProperty = BaseMethod.IsSetProperty;
                     else if (IsConstructor || MemberTypeName != "void" || Parameters.Count != 1)
                     {
                         _isSetProperty = false;
@@ -334,7 +342,7 @@ namespace AutoWrap.Meta
                             // Check to see if there is a "get" function
                             MemberMethodDefinition func = ContainingClass.GetFunction("get" + name.Substring(3), false, false);
                             _isSetProperty = (func != null && func.IsGetProperty && func.MemberTypeName == Parameters[0].TypeName
-                                              && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverride == IsOverride)));
+                                              && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverriding == IsOverriding)));
                         }
                         else
                             _isSetProperty = false;
