@@ -35,6 +35,8 @@ namespace AutoWrap.Meta
     public class MetaDefinition
     {
         private readonly XmlDocument _doc = new XmlDocument();
+        private readonly MetaConstructFactory _factory;
+
         private readonly string _managedNamespace;
         private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
 
@@ -56,10 +58,11 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MetaDefinition(string file, string managedNamespace)
+        public MetaDefinition(string file, string managedNamespace, MetaConstructFactory factory)
         {
             _doc.Load(file);
-            this._managedNamespace = managedNamespace;
+            _managedNamespace = managedNamespace;
+            _factory = factory;
 
             XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
 
@@ -243,8 +246,7 @@ namespace AutoWrap.Meta
             if (elem.Name != "namespace")
                 throw new InvalidOperationException("Wrong element; expected 'namespace'.");
 
-            NamespaceDefinition spc = new NamespaceDefinition(elem, _managedNamespace, this);
-
+            NamespaceDefinition spc = _factory.CreateNamespace(this, elem, _managedNamespace);
             _namespaces[spc.NativeName] = spc;
         }
     }

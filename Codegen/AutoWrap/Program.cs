@@ -27,7 +27,7 @@ namespace AutoWrap
             Globals.NativeNamespace = "Ogre";
             Globals.ManagedNamespace = "Mogre";
 
-            MetaDefinition meta = new MetaDefinition(META_XML_FILE, Globals.ManagedNamespace);
+            MetaDefinition meta = new MetaDefinition(META_XML_FILE, Globals.ManagedNamespace, new MetaConstructFactory());
             meta.AddAttributes(ATTRIBUTES_FILE);
 
             //check if auto directories exists, and create it if needed

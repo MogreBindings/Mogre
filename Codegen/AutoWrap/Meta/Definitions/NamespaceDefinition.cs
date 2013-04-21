@@ -92,7 +92,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public NamespaceDefinition(XmlElement elem, string managedRootNamespaceName, MetaDefinition metaDef)
+        public NamespaceDefinition(MetaDefinition metaDef, XmlElement elem, string managedRootNamespaceName)
         {
             // The child namespace names are stored in the attributes "second" and "third". Thus
             // we can only support up to three namespace levels (like "Level1::Level2::Level3").

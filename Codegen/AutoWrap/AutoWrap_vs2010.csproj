@@ -133,6 +133,7 @@
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
     <Compile Include="Meta\IncCLRHandleClassProducer.cs" />
+    <Compile Include="Meta\MetaConstructFactory.cs" />
     <Compile Include="Meta\SourceCodeStringBuilder.cs" />
     <Compile Include="Meta\Mogre17.cs" />
     <Compile Include="Meta\NativeProtectedTypesProxy.cs" />
