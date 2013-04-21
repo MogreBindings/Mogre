@@ -31,11 +31,10 @@ namespace AutoWrap.Meta
     /// Contains the definition of a C++ namespace (i.e. its name) along with the name of its
     /// managed counter part.
     /// </summary>
+    /// <remarks>As for now, only three levels of nested namespaces are supported 
+    /// (like "Level1::Level2::Level3").</remarks>
     public class NamespaceDefinition
     {
-        private readonly NamespaceDefinition _parentNamespace;
-        private readonly List<NamespaceDefinition> _childNamespaces = new List<NamespaceDefinition>();
-
         /// <summary>
         /// The native (C++) name of this namespace.
         /// </summary>
@@ -46,6 +45,37 @@ namespace AutoWrap.Meta
         /// The managed (C++/CLI) name of this namespace. May differ from <see cref="NativeName"/>.
         /// </summary>
         public readonly string CLRName;
+
+        /// <summary>
+        /// The parent namespace of this namespace or <c>null</c>, if this namespace is a root
+        /// namespace (i.e. has no parent).
+        /// </summary>
+        public readonly NamespaceDefinition ParentNamespace;
+        
+        private readonly List<NamespaceDefinition> _childNamespaces = new List<NamespaceDefinition>();
+        /// <summary>
+        /// The child namespaces of this namespace.
+        /// </summary>
+        /// <seealso cref="ChildNamespaceCount"/>
+        public IEnumerable<NamespaceDefinition> ChildNamespaces
+        {
+            get
+            {
+                foreach (NamespaceDefinition def in _childNamespaces)
+                {
+                    yield return def;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// The number of child namespaces in the namespace.
+        /// </summary>
+        /// <seealso cref="ChildNamespaces"/>
+        public uint ChildNamespaceCount
+        {
+            get { return (uint)_childNamespaces.Count; }
+        }
         
         private readonly List<AbstractTypeDefinition> _containedTypes = new List<AbstractTypeDefinition>();
         /// <summary>
@@ -89,12 +119,12 @@ namespace AutoWrap.Meta
             {
                 // Is a child namespace.
                 string parentNamespaceName = NativeName.Substring(0, NativeName.LastIndexOf("::"));
-                _parentNamespace = metaDef.GetNameSpace(parentNamespaceName);
-            
-                _parentNamespace._childNamespaces.Add(this);
+                ParentNamespace = metaDef.GetNameSpace(parentNamespaceName);
+
+                ParentNamespace._childNamespaces.Add(this);
             }
             else
-                _parentNamespace = null;
+                ParentNamespace = null;
             
             //
             // Add types contained in this namespace.
@@ -124,10 +154,10 @@ namespace AutoWrap.Meta
             if (name.StartsWith(Globals.NativeNamespace + "::"))
                 name = name.Substring(name.IndexOf("::") + 2);
 
-            T type = FindTypeInList<T>(name, _containedTypes, false);
+            AbstractTypeDefinition type = FindTypeInList<T>(name, _containedTypes);
             if (type == null)
             {
-                if (_parentNamespace == null)
+                if (ParentNamespace == null)
                 {
                     if (raiseException)
                         throw new Exception("Could not find type");
@@ -135,20 +165,20 @@ namespace AutoWrap.Meta
                     return (T) (object) new DefInternal(name);
                 }
 
-                return _parentNamespace.FindType<T>(name, raiseException);
+                return ParentNamespace.FindType<T>(name, raiseException);
             }
 
             if (type is AbstractTypeDefinition)
             {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
-                if (((AbstractTypeDefinition) (object) type).IsIgnored)
-                    return type;
+                if (type.IsIgnored)
+                    return (T)(object)type;
             }
 
-            return (T)(object)((AbstractTypeDefinition)(object)type).CreateExplicitType();
+            return (T)(object)type.CreateExplicitType();
         }
 
-        protected virtual T FindTypeInList<T>(string name, List<AbstractTypeDefinition> types, bool raiseException)
+        private AbstractTypeDefinition FindTypeInList<T>(string name, List<AbstractTypeDefinition> types) 
         {
             List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
 
@@ -163,29 +193,24 @@ namespace AutoWrap.Meta
 
             foreach (AbstractTypeDefinition t in types)
             {
-                if (t is T && t.Name == topname)
+                if (t.Name == topname && t is T) 
                 {
                     list.Add(t);
                 }
             }
 
             if (list.Count == 0)
-            {
-                if (raiseException)
-                    throw new Exception("Could not find type");
-
-                return default(T);
-            }
-
+                return null;
+            
             if (list.Count > 1)
                 throw new Exception("Found more than one type");
 
-            T type = (T) (object) list[0];
+            AbstractTypeDefinition type = list[0];
 
-            if (nextnames == null)
-                return type;
+            if (nextnames != null)
+                return FindTypeInList<T>(nextnames, ((ClassDefinition)type).NestedTypes);
 
-            return FindTypeInList<T>(nextnames, ((ClassDefinition)(object)type).NestedTypes, raiseException);
+            return type;
         }
 
         public AbstractTypeDefinition GetDefType(string name)
