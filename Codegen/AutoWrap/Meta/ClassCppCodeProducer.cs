@@ -223,12 +223,12 @@ namespace AutoWrap.Meta
                     _code.AppendIndent(NameToPrivate(m) + " = ");
                     if (m.ProtectionLevel == ProtectionLevel.Protected)
                     {
-                        _code.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.Class));
+                        _code.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.ContainingClass));
                         _code.Append("::" + m.Name + ";\n");
                     }
                     else
                     {
-                        _code.Append(m.Class.FullNativeName);
+                        _code.Append(m.ContainingClass.FullNativeName);
                         _code.Append("::" + m.Name + ";\n");
                     }
                 }

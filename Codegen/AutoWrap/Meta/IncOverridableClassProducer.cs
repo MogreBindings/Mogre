@@ -283,7 +283,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + f.Class.Name + "::" + f.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.Name;
         }
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)

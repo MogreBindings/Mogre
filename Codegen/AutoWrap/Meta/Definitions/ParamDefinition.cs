@@ -17,7 +17,7 @@ namespace AutoWrap.Meta
 
         ClassDefinition ITypeMember.ContainingClass
         {
-            get { return Function.Class; }
+            get { return Function.ContainingClass; }
         }
 
         AbstractTypeDefinition ITypeMember.MemberType
@@ -101,10 +101,10 @@ namespace AutoWrap.Meta
                     if (Container != "")
                     {
                         _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.SurroundingClass = Function.Class;
+                        _type.SurroundingClass = Function.ContainingClass;
                     }
                     else
-                        _type = Function.Class.FindType<AbstractTypeDefinition>(TypeName, false);
+                        _type = Function.ContainingClass.FindType<AbstractTypeDefinition>(TypeName, false);
                 }
 
                 return _type;

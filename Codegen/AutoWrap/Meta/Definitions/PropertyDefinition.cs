@@ -97,7 +97,7 @@
         
         public ClassDefinition ContainingClass
         {
-            get { return _accessorFunction.Class; }
+            get { return _accessorFunction.ContainingClass; }
         }
 
         public bool IsConst

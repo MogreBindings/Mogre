@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
                 if (func.ProtectionLevel == ProtectionLevel.Public
                         || (AllowProtectedMembers && func.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if ((func.Class.AllowSubClassing || (func.Class == _definition && AllowSubclassing)) && !func.IsProperty)
+                    if ((func.ContainingClass.AllowSubClassing || (func.ContainingClass == _definition && AllowSubclassing)) && !func.IsProperty)
                     {
                         _isAbstractClass = true;
                         _abstractFunctions.Add(func);
@@ -301,13 +301,13 @@ namespace AutoWrap.Meta
         protected virtual bool DeclareAsVirtual(MemberMethodDefinition f)
         {
             return (f.IsVirtual && AllowVirtualMethods) || f.IsVirtualInterfaceMethod
-                || (f.IsVirtual && f.BaseFunction != null && f.BaseFunction.Class.AllowVirtuals);
+                || (f.IsVirtual && f.BaseFunction != null && f.BaseFunction.ContainingClass.AllowVirtuals);
         }
 
         protected virtual bool DeclareAsOverride(MemberMethodDefinition f)
         {
             return (f.IsOverride && DeclareAsVirtual(f))
-                || (f.IsVirtualInterfaceMethod && !f.Class.IsInterface && !f.Class.ContainsInterfaceFunctionSignature(f.Signature, false));
+                || (f.IsVirtualInterfaceMethod && !f.ContainingClass.IsInterface && !f.ContainingClass.ContainsInterfaceFunctionSignature(f.Signature, false));
         }
 
         protected ClassDefinition GetTopClass(ClassDefinition type)
@@ -360,9 +360,9 @@ namespace AutoWrap.Meta
             else
             {
                 if (f.ProtectionLevel == ProtectionLevel.Public)
-                    return f.Class.FullNativeName + "::" + f.Name;
+                    return f.ContainingClass.FullNativeName + "::" + f.Name;
                 else
-                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.Class) + "::" + f.Name;
+                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.ContainingClass) + "::" + f.Name;
             }
         }
         protected virtual string GetNativeInvokationTarget(MemberFieldDefinition field)
@@ -384,9 +384,9 @@ namespace AutoWrap.Meta
             else
             {
                 if (field.ProtectionLevel == ProtectionLevel.Public)
-                    return field.Class.FullNativeName + "::" + field.Name;
+                    return field.ContainingClass.FullNativeName + "::" + field.Name;
                 else
-                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.Class) + "::" + field.Name;
+                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.ContainingClass) + "::" + field.Name;
             }
         }
 

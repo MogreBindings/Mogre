@@ -36,6 +36,12 @@ namespace AutoWrap.Meta
     //   described member is an "abstract" member (i.e. an abstract method).
     public abstract class MemberDefinitionBase : AttributeSet, ITypeMember
     {
+        protected string _name;
+        public virtual string Name
+        {
+            get { return _name; }
+        }
+
         /// <summary>
         /// The managed (C++/CLI) name of this member.
         /// </summary>
@@ -82,14 +88,20 @@ namespace AutoWrap.Meta
                     if (Container != "")
                     {
                         _type = CreateExplicitContainerType(Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.SurroundingClass = Class;
+                        _type.SurroundingClass = ContainingClass;
                     }
                     else
-                        _type = Class.FindType<AbstractTypeDefinition>(TypeName, false);
+                        _type = ContainingClass.FindType<AbstractTypeDefinition>(TypeName, false);
                 }
 
                 return _type;
             }
+        }
+
+        public string TypeName = null;
+        string ITypeMember.MemberTypeName
+        {
+            get { return this.TypeName; }
         }
 
         /// <summary>
@@ -110,12 +122,28 @@ namespace AutoWrap.Meta
             get { return (this as ITypeMember).MemberType.GetNativeTypeName(IsConst, (this as ITypeMember).PassedByType); }
         }
 
-        public ClassDefinition Class;
-
-        protected string _name;
-        public virtual string Name
+        private ClassDefinition _containingClass;
+        /// <summary>
+        /// The class this member is contained in.
+        /// </summary>
+        /// <remarks>Required by <see cref="ITypeMember"/>.</remarks>
+        public virtual ClassDefinition ContainingClass
         {
-            get { return _name; }
+            get { return _containingClass; }
+        }
+
+        /// <summary>
+        /// The native (C++) protection level of this member (e.g. "public", "protected", ...).
+        /// </summary>
+        public ProtectionLevel ProtectionLevel;
+    
+        /// <summary>
+        /// Describes how this member is accessed (e.g. pointer or copy). The actual interpretation
+        /// depends on whether this member is a method or a field.
+        /// </summary>
+        public PassedByType PassedByType;
+        PassedByType ITypeMember.PassedByType {
+          get { return this.PassedByType; }
         }
 
         protected string _container;
@@ -136,38 +164,12 @@ namespace AutoWrap.Meta
             get { return _containerValue; }
         }
 
-        public string TypeName = null;
         public string Definition;
-    
-        /// <summary>
-        /// The native (C++) protection level of this member (e.g. "public", "protected", ...).
-        /// </summary>
-        public ProtectionLevel ProtectionLevel;
-    
-        /// <summary>
-        /// Describes how this member is accessed (e.g. pointer or copy). The actual interpretation
-        /// depends on whether this member is a method or a field.
-        /// </summary>
-        public PassedByType PassedByType;
 
-        string ITypeMember.MemberTypeName
+        public MemberDefinitionBase(XmlElement elem, ClassDefinition containingClass)
+            : base(containingClass.MetaDef)
         {
-            get { return this.TypeName; }
-        }
-
-        PassedByType ITypeMember.PassedByType
-        {
-            get { return this.PassedByType; }
-        }
-
-        ClassDefinition ITypeMember.ContainingClass
-        {
-            get { return this.Class; }
-        }
-
-        public MemberDefinitionBase(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef)
-        {
+            this._containingClass = containingClass;
             this.IsStatic = elem.GetAttribute("static") == "yes";
             this.ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
             this.PassedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);

@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
                 _code.AppendLine("else");
                 _code.AppendIndent("\t");
                 if (!f.HasReturnValue) _code.Append("return ");
-                _code.Append(f.Class.Name + "::" + f.Name + "(");
+                _code.Append(f.ContainingClass.Name + "::" + f.Name + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -306,7 +306,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + f.Class.Name + "::" + f.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.Name;
         }
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)

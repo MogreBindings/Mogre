@@ -1085,17 +1085,15 @@ namespace AutoWrap.Meta
                 switch (child.Name)
                 {
                     case "function":
-                        MemberMethodDefinition func = new MemberMethodDefinition(MetaDef, child);
-                        func.Class = this;
+                        MemberMethodDefinition func = new MemberMethodDefinition(child, this);
                         if (func.Name != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.Name.StartsWith("OGRE_"))
                             AddNewFunction(func);
                         break;
 
                     case "variable":
-                        MemberFieldDefinition field = new MemberFieldDefinition(MetaDef, child);
+                        MemberFieldDefinition field = new MemberFieldDefinition(child, this);
                         if (field.Name != this.Name && !field.Name.StartsWith("OGRE_"))
                         {
-                            field.Class = this;
                             Members.Add(field);
                         }
                         break;

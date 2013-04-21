@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
 
         protected override void AddMethod(MemberMethodDefinition f)
         {
-            string def = f.Definition.Replace(f.Class.FullNativeName, GetClassName()) + "(";
+            string def = f.Definition.Replace(f.ContainingClass.FullNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
                 def = def.Substring("virtual ".Length);
             _code.AppendIndent(def);

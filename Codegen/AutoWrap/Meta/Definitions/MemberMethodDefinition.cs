@@ -92,10 +92,10 @@ namespace AutoWrap.Meta
             {
                 if (_isOverride == null)
                 {
-                    if (IsVirtual && !Class.IsInterface && Class.BaseClass != null)
+                    if (IsVirtual && !ContainingClass.IsInterface && ContainingClass.BaseClass != null)
                     {
-                        if (Class.BaseClass.ContainsFunctionSignature(Signature, true, out _baseFunc)
-                            || Class.BaseClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
+                        if (ContainingClass.BaseClass.ContainsFunctionSignature(Signature, true, out _baseFunc)
+                            || ContainingClass.BaseClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
                             _isOverride = true;
                         else
                             _isOverride = false;
@@ -118,7 +118,7 @@ namespace AutoWrap.Meta
                 if (IsOverride)
                     return _baseFunc;
 
-                if (Class.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
+                if (ContainingClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
                     return _baseFunc;
 
                 return null;
@@ -158,10 +158,10 @@ namespace AutoWrap.Meta
                 {
                     if (IsVirtual)
                     {
-                        if (Class.IsInterface)
+                        if (ContainingClass.IsInterface)
                             _isVirtualInterfaceMethod = true;
                         else
-                            _isVirtualInterfaceMethod = Class.ContainsInterfaceFunctionSignature(Signature, true);
+                            _isVirtualInterfaceMethod = ContainingClass.ContainsInterfaceFunctionSignature(Signature, true);
                     }
                     else
                         _isVirtualInterfaceMethod = false;
@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
 
         public bool IsConstructor
         {
-            get { return (Name == Class.Name); }
+            get { return (Name == ContainingClass.Name); }
         }
 
         public bool IsOperatorOverload
@@ -302,13 +302,13 @@ namespace AutoWrap.Meta
                             {
                                 string pname = name.Substring(3);
                                 //check if property name collides with a nested type
-                                AbstractTypeDefinition type = Class.GetNestedType(pname, false);
+                                AbstractTypeDefinition type = ContainingClass.GetNestedType(pname, false);
                                 if (type != null)
                                     _isGetProperty = false;
                                 else
                                 {
                                     //check if property name collides with a method
-                                    MemberMethodDefinition func = Class.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+                                    MemberMethodDefinition func = ContainingClass.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
                                     if (func != null && !func.HasAttribute<RenameAttribute>())
                                         _isGetProperty = false;
                                     else
@@ -352,9 +352,9 @@ namespace AutoWrap.Meta
                         if (name.StartsWith("set") && Char.IsUpper(name[3]))
                         {
                             // Check to see if there is a "get" function
-                            MemberMethodDefinition func = Class.GetFunction("get" + name.Substring(3), false, false);
+                            MemberMethodDefinition func = ContainingClass.GetFunction("get" + name.Substring(3), false, false);
                             _isSetProperty = (func != null && func.IsGetProperty && func.TypeName == Parameters[0].TypeName
-                                              && (!Class.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverride == IsOverride)));
+                                              && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverride == IsOverride)));
                         }
                         else
                             _isSetProperty = false;
@@ -365,8 +365,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MemberMethodDefinition(MetaDefinition metaDef, XmlElement elem)
-            : base(metaDef, elem)
+        public MemberMethodDefinition(XmlElement elem, ClassDefinition containingClass)
+            : base(elem, containingClass)
         {
             if (elem.Name != "function")
                 throw new Exception("Wrong element; expected 'function'.");
