@@ -30,19 +30,13 @@ namespace AutoWrap.Meta
             get { return _isConstFunctionCall; }
         }
 
-        private string _signature;
-        public string Signature
+        private MethodSignature _signature;
+        public MethodSignature Signature
         {
             get
             {
                 if (_signature == null)
-                {
-                    _signature = IsVirtual.ToString() + ProtectionLevel + Name;
-                    foreach (ParamDefinition param in Parameters)
-                    {
-                        _signature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
-                    }
-                }
+                    _signature = new MethodSignature(this);
 
                 return _signature;
             }

@@ -198,7 +198,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public virtual MemberMethodDefinition GetFunctionWithSignature(string signature)
+        public virtual MemberMethodDefinition GetFunctionWithSignature(MethodSignature signature)
         {
             foreach (MemberMethodDefinition func in this.Functions)
             {
@@ -590,13 +590,13 @@ namespace AutoWrap.Meta
         /// <param name="signature">the signature</param>
         /// <param name="allowInheritedSignature">if this is <c>false</c> only this class will be
         /// checked for the signature. Otherwise all base classes will be checked as well.</param>
-        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature)
+        public virtual bool ContainsFunctionSignature(MethodSignature signature, bool allowInheritedSignature)
         {
             MemberMethodDefinition f;
             return ContainsFunctionSignature(signature, allowInheritedSignature, out f);
         }
 
-        public virtual bool ContainsFunctionSignature(string signature, bool allowInheritedSignature, out MemberMethodDefinition basefunc)
+        public virtual bool ContainsFunctionSignature(MethodSignature signature, bool allowInheritedSignature, out MemberMethodDefinition basefunc)
         {
             basefunc = null;
             if (allowInheritedSignature && BaseClass != null)
@@ -619,13 +619,13 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        public virtual bool ContainsInterfaceFunctionSignature(string signature, bool inherit)
+        public virtual bool ContainsInterfaceFunctionSignature(MethodSignature signature, bool inherit)
         {
             MemberMethodDefinition f;
             return ContainsInterfaceFunctionSignature(signature, inherit, out f);
         }
 
-        public virtual bool ContainsInterfaceFunctionSignature(string signature, bool inherit, out MemberMethodDefinition basefunc)
+        public virtual bool ContainsInterfaceFunctionSignature(MethodSignature signature, bool inherit, out MemberMethodDefinition basefunc)
         {
             basefunc = null;
             if (inherit && BaseClass != null)

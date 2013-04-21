@@ -101,6 +101,7 @@
     <Compile Include="Meta\Definitions\EnumDefinition.cs" />
     <Compile Include="Meta\Definitions\MemberFieldDefinition.cs" />
     <Compile Include="Meta\Definitions\MemberMethodDefinition.cs" />
+    <Compile Include="Meta\Definitions\MethodSignature.cs" />
     <Compile Include="Meta\Definitions\ParamDefinition.cs" />
     <Compile Include="Meta\Definitions\MemberPropertyDefinition.cs" />
     <Compile Include="Meta\Definitions\StructDefinition.cs" />
