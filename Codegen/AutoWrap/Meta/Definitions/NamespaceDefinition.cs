@@ -140,44 +140,55 @@ namespace AutoWrap.Meta
             }
         }
 
-        public T FindType<T>(string name, bool raiseException = true)
+        public AbstractTypeDefinition FindType(string name, bool raiseException = true)
         {
-            if (name.EndsWith(" std::string"))
-                name = "std::string";
+            return FindType<AbstractTypeDefinition>(name, raiseException);
+        }
 
-            if (name == "std::string")
-                return (T)(object)new DefString();
-
+        /// <summary>
+        /// Finds a type (e.g. a class) within this namespace. This namespace and all parent namespaces
+        /// will be searched (where this namespace will be searched first).
+        /// </summary>
+        /// <typeparam name="T">the type of the definition to be returned (e.g. <see cref="ClassDefinition"/>).</typeparam>
+        /// <param name="name">the name of the type. The name must be specified without namespace. </param>
+        /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
+        /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
+        /// the type couldn't be found.</param>
+        /// <returns></returns>
+        public T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
+        {
             if (name == "DisplayString")
                 return (T)(object)new DefUtfString();
-
-            if (name.StartsWith(Globals.NativeNamespace + "::"))
-                name = name.Substring(name.IndexOf("::") + 2);
 
             AbstractTypeDefinition type = FindTypeInList<T>(name, _containedTypes);
             if (type == null)
             {
-                if (ParentNamespace == null)
+                if (ParentNamespace != null)
                 {
-                    if (raiseException)
-                        throw new Exception("Could not find type");
-
-                    return (T) (object) new DefInternal(name);
+                    // Search parent namespace for the type.
+                    return ParentNamespace.FindType<T>(name, raiseException);
                 }
 
-                return ParentNamespace.FindType<T>(name, raiseException);
+                if (raiseException)
+                    throw new Exception("Could not find type");
+
+                return (T)(object)new DefInternal(name);
             }
 
             if (type is AbstractTypeDefinition)
             {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
                 if (type.IsIgnored)
-                    return (T)(object)type;
+                    return (T)type;
             }
 
-            return (T)(object)type.CreateExplicitType();
+            return (T)type.CreateExplicitType();
         }
 
+        /// <summary>
+        /// Finds the specified type in a specified list.
+        /// </summary>
+        /// <returns>Returns the type definition or <c>null</c>, if it could not be found.</returns>
         private AbstractTypeDefinition FindTypeInList<T>(string name, List<AbstractTypeDefinition> types) 
         {
             List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();

@@ -130,7 +130,8 @@ namespace AutoWrap.Meta
             }
 
             // Get explicit type or a new type if type has ReplaceBy attribute
-            type = (type.IsNested) ? type.SurroundingClass.FindType<AbstractTypeDefinition>(type.Name) : type.NameSpace.FindType<AbstractTypeDefinition>(type.Name);
+            type = (type.IsNested) ? type.SurroundingClass.FindType(type.Name) 
+                                   : type.NameSpace.FindType(type.Name);
 
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
@@ -684,7 +685,8 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) : t.NameSpace.FindType<TypedefDefinition>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) 
+                                                : t.NameSpace.FindType<TypedefDefinition>(t.Name);
 
                 if (t.HasWrapType(WrapTypes.SharedPtr))
                 {
@@ -763,7 +765,8 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) : t.NameSpace.FindType<TypedefDefinition>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) 
+                                                : t.NameSpace.FindType<TypedefDefinition>(t.Name);
 
                 if (explicitType.IsSTLContainer)
                 {

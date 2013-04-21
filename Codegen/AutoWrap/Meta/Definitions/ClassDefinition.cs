@@ -11,7 +11,13 @@ namespace AutoWrap.Meta
     /// <seealso cref="StructDefinition"/>
     public class ClassDefinition : AbstractTypeDefinition
     {
+        /// <summary>
+        /// Contains the members (fields and methods) of this class.
+        /// </summary>
         public List<AbstractMemberDefinition> Members = new List<AbstractMemberDefinition>();
+        /// <summary>
+        /// Contains the types nested in this class (e.g. inner classes).
+        /// </summary>
         public List<AbstractTypeDefinition> NestedTypes = new List<AbstractTypeDefinition>();
         public string[] Derives;
         public string[] Inherits;
@@ -1027,7 +1033,7 @@ namespace AutoWrap.Meta
                 return attr;
         }
 
-        public override T FindType<T>(string name, bool raiseException)
+        public override T FindType<T>(string name, bool raiseException = true)
         {
             if (name.StartsWith(Globals.NativeNamespace + "::"))
             {

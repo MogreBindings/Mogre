@@ -108,9 +108,9 @@ namespace AutoWrap.Meta
                 {
                     string name = GetAttribute<ReplaceByAttribute>().Name;
                     if (SurroundingClass != null)
-                        _replaceByType = SurroundingClass.FindType<AbstractTypeDefinition>(name, false);
+                        _replaceByType = SurroundingClass.FindType(name, false);
                     else
-                        _replaceByType = NameSpace.FindType<AbstractTypeDefinition>(name, false);
+                        _replaceByType = NameSpace.FindType(name, false);
                 }
 
                 return _replaceByType;
@@ -240,11 +240,12 @@ namespace AutoWrap.Meta
                 return this.NameSpace;
         }
 
-        public T FindType<T>(string name)
+        public AbstractTypeDefinition FindType(string name, bool raiseException = true)
         {
-            return FindType<T>(name, true);
+            return FindType<AbstractTypeDefinition>(name, raiseException);
         }
-        public virtual T FindType<T>(string name, bool raiseException)
+
+        public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
             if (name.StartsWith(Globals.NativeNamespace + "::"))
             {
