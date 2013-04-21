@@ -81,6 +81,8 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Contains the type definitions (mostly class definitions) contained in this namespace.
         /// </summary>
+        // TODO by manski: What happens when a subclass returns different types for types in this list (like
+        //   MOGRE returning "DefUtfString" for "DisplayString")? Then this can't be used for search type or what?
         public IEnumerable<AbstractTypeDefinition> ContainedTypes
         {
             get
@@ -155,11 +157,8 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
-        public T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
+        public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
-            if (name == "DisplayString")
-                return (T)(object)new DefUtfString();
-
             AbstractTypeDefinition type = FindTypeInList<T>(name, _containedTypes);
             if (type == null)
             {
@@ -175,11 +174,11 @@ namespace AutoWrap.Meta
                 return (T)(object)new DefInternal(name);
             }
 
-            if (type is AbstractTypeDefinition)
+            if (type is AbstractTypeDefinition && type.IsIgnored)
             {
                 // Short circuit out to handle OGRE 1.6 memory allocator types
-                if (type.IsIgnored)
-                    return (T)type;
+                // TODO by manski: ??? Document this more clearly.
+                return (T)type;
             }
 
             return (T)type.CreateExplicitType();

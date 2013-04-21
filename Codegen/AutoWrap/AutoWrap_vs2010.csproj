@@ -166,6 +166,8 @@
     <Compile Include="Meta\NativeProxyClassProducer.cs" />
     <Compile Include="Meta\Wrapper.cs" />
     <Compile Include="Meta\Attributes\AutoWrapAttribute.cs" />
+    <Compile Include="Mogre\MogreConstructFactory.cs" />
+    <Compile Include="Mogre\MogreNamespaceDefinition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AutoWrap.resx">
@@ -195,9 +197,7 @@
   <ItemGroup>
     <Content Include="readme.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mogre\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

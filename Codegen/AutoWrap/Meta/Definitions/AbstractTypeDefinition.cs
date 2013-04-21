@@ -151,7 +151,7 @@ namespace AutoWrap.Meta
 
             if (this is TypedefDefinition)
             {
-                return TypedefDefinition.CreateExplicitType(this as TypedefDefinition);
+                return TypedefDefinition.CreateExplicitType((TypedefDefinition)this);
             } else
             {
                 return this;

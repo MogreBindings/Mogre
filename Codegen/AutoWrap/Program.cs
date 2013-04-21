@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using AutoWrap.Meta;
+using AutoWrap.Mogre;
 
 namespace AutoWrap
 {
@@ -27,7 +28,7 @@ namespace AutoWrap
             Globals.NativeNamespace = "Ogre";
             Globals.ManagedNamespace = "Mogre";
 
-            MetaDefinition meta = new MetaDefinition(META_XML_FILE, Globals.ManagedNamespace, new MetaConstructFactory());
+            MetaDefinition meta = new MetaDefinition(META_XML_FILE, Globals.ManagedNamespace, new MogreConstructFactory());
             meta.AddAttributes(ATTRIBUTES_FILE);
 
             //check if auto directories exists, and create it if needed
