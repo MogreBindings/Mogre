@@ -147,8 +147,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefTemplateTwoTypes(XmlElement elem)
-            : base(elem)
+        public DefTemplateTwoTypes(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem) 
         {
         }
     }

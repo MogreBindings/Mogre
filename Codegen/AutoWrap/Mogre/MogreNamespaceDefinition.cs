@@ -13,7 +13,7 @@ namespace AutoWrap.Mogre
         public override T FindType<T>(string name, bool raiseException = true)
         {
             if (name == "DisplayString")
-                return (T) (object) new DefUtfString();
+                return (T)(object)new DefUtfString(MetaDef);
 
             return base.FindType<T>(name, raiseException);
         }

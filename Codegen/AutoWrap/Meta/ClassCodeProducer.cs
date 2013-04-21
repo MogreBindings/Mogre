@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
         protected readonly List<AbstractMemberDefinition> _cachedMembers = new List<AbstractMemberDefinition>();
 
-        public ClassCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public ClassCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb) : base(metaDef)
         {
             this._wrapper = wrapper;
             this._definition = t;

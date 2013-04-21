@@ -95,11 +95,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefIterator(typedef.Element);
+            return new DefIterator(typedef.MetaDef, typedef.Element);
         }
 
-        public DefIterator(XmlElement elem)
-            : base(elem)
+        public DefIterator(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
         }
     }

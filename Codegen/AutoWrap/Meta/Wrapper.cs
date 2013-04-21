@@ -51,6 +51,7 @@ namespace AutoWrap.Meta
 
         string _includePath;
         string _sourcePath;
+        MetaDefinition _metaDef;
 
         public string NativeNamespace;
         public string ManagedNamespace;
@@ -66,6 +67,7 @@ namespace AutoWrap.Meta
         {
             this._includePath = includePath;
             this._sourcePath = sourcePath;
+            this._metaDef = meta;
             this.ManagedNamespace = Globals.ManagedNamespace;
             this.NativeNamespace = Globals.NativeNamespace;
 
@@ -535,13 +537,13 @@ namespace AutoWrap.Meta
 
             SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder();
 
-            new IncSubclassingClassProducer(this, type, sbTypes, null).Add();
+            new IncSubclassingClassProducer(this._metaDef, this, type, sbTypes, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
             {
                 List<ClassDefinition[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
                 foreach (ClassDefinition[] ifaces in interfaces)
                 {
-                    new IncSubclassingClassProducer(this, type, sbTypes, ifaces).Add();
+                  new IncSubclassingClassProducer(this._metaDef, this, type, sbTypes, ifaces).Add();
                 }
             }
 
@@ -587,13 +589,13 @@ namespace AutoWrap.Meta
             PreClassProducers.Clear();
             PostClassProducers.Clear();
 
-            new CppSubclassingClassProducer(this, type, sb, null).Add();
+            new CppSubclassingClassProducer(this._metaDef, this, type, sb, null).Add();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
             {
                 List<ClassDefinition[]> interfaces = type.GetAttribute<InterfacesForOverridableAttribute>().Interfaces;
                 foreach (ClassDefinition[] ifaces in interfaces)
                 {
-                    new CppSubclassingClassProducer(this, type, sb, ifaces).Add();
+                  new CppSubclassingClassProducer(this._metaDef, this, type, sb, ifaces).Add();
                 }
             }
 
@@ -638,35 +640,35 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new IncNonOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncNonOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Overridable:
-                            new IncOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativeDirector:
-                            new IncNativeDirectorClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncNativeDirectorClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Interface:
-                            new IncInterfaceClassProducer(this, t as ClassDefinition, sb).Add();
-                            new IncOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncInterfaceClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
+                            new IncOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Singleton:
-                            new IncSingletonClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncSingletonClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.ReadOnlyStruct:
-                            new IncReadOnlyStructClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncReadOnlyStructClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.ValueType:
-                            new IncValueClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncValueClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new IncNativePtrValueClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncNativePtrValueClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.CLRHandle:
-                            new IncCLRHandleClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncCLRHandleClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new IncPlainWrapperClassProducer(this, t as ClassDefinition, sb).Add();
+                            new IncPlainWrapperClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.SharedPtr:
                             IncAddSharedPtrType(t, sb);
@@ -732,28 +734,28 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new CppNonOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppNonOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Overridable:
-                            new CppOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Interface:
-                            new CppOverridableClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppOverridableClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativeDirector:
-                            new CppNativeDirectorClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppNativeDirectorClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new CppNativePtrValueClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppNativePtrValueClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.Singleton:
-                            new CppSingletonClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppSingletonClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.CLRHandle:
-                            new CppCLRHandleClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppCLRHandleClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new CppPlainWrapperClassProducer(this, t as ClassDefinition, sb).Add();
+                            new CppPlainWrapperClassProducer(this._metaDef, this, t as ClassDefinition, sb).Add();
                             break;
                     }
                 }

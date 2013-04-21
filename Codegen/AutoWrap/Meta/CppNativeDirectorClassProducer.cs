@@ -35,8 +35,8 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public CppNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public CppNativeDirectorClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
 

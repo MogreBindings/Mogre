@@ -21,11 +21,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefStdVector(typedef.Element);
+            return new DefStdVector(typedef.MetaDef, typedef.Element);
         }
 
-        public DefStdVector(XmlElement elem)
-            : base(elem)
+        public DefStdVector(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
         }
     }

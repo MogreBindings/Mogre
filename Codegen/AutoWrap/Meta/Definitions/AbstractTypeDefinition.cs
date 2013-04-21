@@ -117,31 +117,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        /// <summary>
-        /// Creates an instance of this class from the specified xml element. This method will
-        /// create an instance from an apropriate subclass (e.g. <see cref="ClassDefinition"/> for a class).
-        /// </summary>
-        /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
-        public static AbstractTypeDefinition CreateType(XmlElement elem)
-        {
-            switch (elem.Name)
-            {
-                case "class":
-                    return new ClassDefinition(elem);
-                case "struct":
-                    return new StructDefinition(elem);
-                case "typedef":
-                    return new TypedefDefinition(elem);
-                case "enumeration":
-                    return new EnumDefinition(elem);
-                case "variable":
-                    //It's global variables, ignore them
-                    return null;
-                default:
-                    throw new Exception("Type unknown: '" + elem.Name + "'");
-            }
-        }
-
         public AbstractTypeDefinition CreateExplicitType()
         {
             if (this.ReplaceByType != null)
@@ -397,11 +372,13 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        protected AbstractTypeDefinition()
+        protected AbstractTypeDefinition(MetaDefinition metaDef)
+            : base(metaDef)
         {
+            
         }
 
-        protected AbstractTypeDefinition(XmlElement elem)
+        protected AbstractTypeDefinition(MetaDefinition metaDef, XmlElement elem) : base(metaDef)
         {
             this._elem = elem;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));

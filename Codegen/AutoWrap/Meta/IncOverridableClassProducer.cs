@@ -30,8 +30,8 @@ namespace AutoWrap.Meta
 {
     class IncNativeProxyClassProducer : NativeProxyClassProducer
     {
-        public IncNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public IncNativeProxyClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
 
@@ -255,10 +255,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public IncOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(_wrapper, _definition, _code));
+            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(metaDef, _wrapper, _definition, _code));
         }
 
         private string _proxyName;
@@ -329,8 +329,8 @@ namespace AutoWrap.Meta
     {
         protected ClassDefinition[] _additionalInterfaces;
 
-        public IncSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb, ClassDefinition[] additionalInterfaces)
-            : base(wrapper, t, sb)
+        public IncSubclassingClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb, ClassDefinition[] additionalInterfaces)
+            : base(metaDef, wrapper, t, sb)
         {
             this._additionalInterfaces = additionalInterfaces;
         }

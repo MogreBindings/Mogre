@@ -142,8 +142,8 @@ namespace AutoWrap.Meta
             return DefStdList.CreateExplicitType(typedef);
         }
 
-        public DefTemplateOneType(XmlElement elem)
-            : base(elem)
+        public DefTemplateOneType(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
         }
     }

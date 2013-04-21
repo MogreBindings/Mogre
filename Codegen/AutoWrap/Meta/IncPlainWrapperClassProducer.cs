@@ -110,8 +110,8 @@ namespace AutoWrap.Meta
             _code.AppendLine("}");
         }
 
-        public IncPlainWrapperClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public IncPlainWrapperClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
     }

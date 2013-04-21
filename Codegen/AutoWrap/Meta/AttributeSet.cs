@@ -47,6 +47,11 @@ namespace AutoWrap.Meta
             }
         }
 
+        protected AttributeSet(MetaDefinition metaDef)
+            : base(metaDef)
+        {
+        }
+
         /// <summary>
         /// Adds an attribute to this set. If this attribute has already been added then it's
         /// overwritten.

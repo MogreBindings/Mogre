@@ -104,8 +104,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNonOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public CppNonOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
     }

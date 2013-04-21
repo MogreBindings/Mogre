@@ -181,7 +181,8 @@ namespace AutoWrap.Meta
             get { return _elem; }
         }
 
-        public AbstractMemberDefinition(XmlElement elem)
+        public AbstractMemberDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef)
         {
             this._elem = elem;
             this.ProtectionType = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));

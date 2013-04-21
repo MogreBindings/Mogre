@@ -107,8 +107,8 @@ namespace AutoWrap.Meta
             _code.AppendLine("}");
         }
 
-        public IncReadOnlyStructClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public IncReadOnlyStructClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
     }

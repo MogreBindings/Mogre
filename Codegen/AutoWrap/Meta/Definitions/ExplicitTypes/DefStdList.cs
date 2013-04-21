@@ -180,7 +180,7 @@ namespace AutoWrap.Meta
                 case "std::deque":
                     return DefStdDeque.CreateExplicitType(typedef);
                 case "std::list":
-                    return new DefStdList(typedef.Element);
+                    return new DefStdList(typedef.MetaDef, typedef.Element);
                 case "HashedVector":
                     return DefHashedVector.CreateExplicitType(typedef);
                 case "std::map":
@@ -190,8 +190,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefStdList(XmlElement elem)
-            : base(elem)
+        public DefStdList(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
         }
     }

@@ -30,8 +30,8 @@ namespace AutoWrap.Meta
 {
     abstract class ClassInclCodeProducer : ClassCodeProducer 
     {
-        public ClassInclCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public ClassInclCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
             AddPreDeclarations();
 
@@ -40,8 +40,8 @@ namespace AutoWrap.Meta
 
             if (AllowSubclassing)
             {
-                _wrapper.PreClassProducers.Add(new NativeProtectedTypesProxy(_wrapper, _definition, _code));
-                _wrapper.PostClassProducers.Add(new NativeProtectedStaticsProxy(_wrapper, _definition, _code));
+                _wrapper.PreClassProducers.Add(new NativeProtectedTypesProxy(metaDef, _wrapper, _definition, _code));
+                _wrapper.PostClassProducers.Add(new NativeProtectedStaticsProxy(metaDef, _wrapper, _definition, _code));
                 //_wrapper.PreClassProducers.Add(new IncNativeProtectedTypesProxy(_wrapper, _t, _code));
             }
         }
@@ -814,7 +814,7 @@ namespace AutoWrap.Meta
                 if (field.Type.HasAttribute<NativeValueContainerAttribute>()
                     || (field.Type.IsValueType && !field.Type.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    ParamDefinition tmpParam = new ParamDefinition(field, field.Name);
+                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.Name);
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -903,7 +903,7 @@ namespace AutoWrap.Meta
         protected override void AddMethodsForField(MemberFieldDefinition field)
         {
             _code.AppendLine(GetCLRTypeName(field) + " get_" + field.Name + "();");
-            ParamDefinition param = new ParamDefinition(field, "value");
+            ParamDefinition param = new ParamDefinition(this.MetaDef, field, "value");
             _code.AppendLine("void set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value);");
         }
 

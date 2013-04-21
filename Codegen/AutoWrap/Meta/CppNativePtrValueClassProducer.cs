@@ -152,8 +152,8 @@ namespace AutoWrap.Meta
             _code.AppendLine("}");
         }
 
-        public CppNativePtrValueClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public CppNativePtrValueClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
     }

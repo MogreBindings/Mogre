@@ -190,13 +190,15 @@ namespace AutoWrap.Meta
             }
         }
 
-        public ParamDefinition(XmlElement elem)
+        public ParamDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef)
         {
             _elem = elem;
             PassedByType = (PassedByType) Enum.Parse(typeof (PassedByType), elem.GetAttribute("passedBy"), true);
         }
 
-        public ParamDefinition(ITypeMember m, string name)
+        public ParamDefinition(MetaDefinition metaDef, ITypeMember m, string name)
+            : base(metaDef)
         {
             _name = name;
             _type = m.MemberType;

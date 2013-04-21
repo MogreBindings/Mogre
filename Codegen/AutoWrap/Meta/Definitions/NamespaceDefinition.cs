@@ -35,6 +35,8 @@ namespace AutoWrap.Meta
     /// (like "Level1::Level2::Level3").</remarks>
     public class NamespaceDefinition
     {
+        public readonly MetaDefinition MetaDef;
+
         /// <summary>
         /// The native (C++) name of this namespace.
         /// </summary>
@@ -96,6 +98,8 @@ namespace AutoWrap.Meta
 
         public NamespaceDefinition(MetaDefinition metaDef, XmlElement elem, string managedRootNamespaceName)
         {
+            MetaDef = metaDef;
+
             // The child namespace names are stored in the attributes "second" and "third". Thus
             // we can only support up to three namespace levels (like "Level1::Level2::Level3").
             string second = elem.GetAttribute("second");
@@ -133,7 +137,7 @@ namespace AutoWrap.Meta
             //
             foreach (XmlElement child in elem.ChildNodes)
             {
-                AbstractTypeDefinition type = AbstractTypeDefinition.CreateType(child);
+                AbstractTypeDefinition type = MetaDef.Factory.CreateType(child);
                 if (type != null)
                 {
                     type.NameSpace = this;
@@ -171,7 +175,7 @@ namespace AutoWrap.Meta
                 if (raiseException)
                     throw new Exception("Could not find type");
 
-                return (T)(object)new DefInternal(name);
+                return (T)(object)new DefInternal(MetaDef, name);
             }
 
             if (type is AbstractTypeDefinition && type.IsIgnored)

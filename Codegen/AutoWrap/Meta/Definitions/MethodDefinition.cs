@@ -354,8 +354,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MemberMethodDefinition(XmlElement elem)
-            : base(elem)
+        public MemberMethodDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
             if (elem.Name != "function")
                 throw new Exception("Wrong element; expected 'function'.");
@@ -385,7 +385,7 @@ namespace AutoWrap.Meta
                     int count = 1;
                     foreach (XmlElement param in child.ChildNodes)
                     {
-                        ParamDefinition p = new ParamDefinition(param);
+                        ParamDefinition p = new ParamDefinition(MetaDef, param);
                         if (p.Name == null && (p.TypeName != "void" || p.PassedByType != PassedByType.Value))
                             p.Name = "param" + count;
 

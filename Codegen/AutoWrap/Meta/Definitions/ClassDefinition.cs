@@ -1073,8 +1073,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public ClassDefinition(XmlElement elem)
-            : base(elem)
+        public ClassDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
             if (this.GetType() == typeof(ClassDefinition)
                 && elem.Name != "class")
@@ -1085,14 +1085,14 @@ namespace AutoWrap.Meta
                 switch (child.Name)
                 {
                     case "function":
-                        MemberMethodDefinition func = new MemberMethodDefinition(child);
+                        MemberMethodDefinition func = new MemberMethodDefinition(MetaDef, child);
                         func.Class = this;
                         if (func.Name != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.Name.StartsWith("OGRE_"))
                             AddNewFunction(func);
                         break;
 
                     case "variable":
-                        MemberFieldDefinition field = new MemberFieldDefinition(child);
+                        MemberFieldDefinition field = new MemberFieldDefinition(MetaDef, child);
                         if (field.Name != this.Name && !field.Name.StartsWith("OGRE_"))
                         {
                             field.Class = this;
@@ -1132,7 +1132,7 @@ namespace AutoWrap.Meta
                         break;
 
                     default:
-                        AbstractTypeDefinition type = CreateType(child);
+                        AbstractTypeDefinition type = MetaDef.Factory.CreateType(child);
                         type.SurroundingClass = this;
                         type.NameSpace = this.NameSpace;
                         NestedTypes.Add(type);

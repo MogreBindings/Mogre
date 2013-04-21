@@ -34,8 +34,8 @@ namespace AutoWrap.Meta
             get { return (_arraySize != null); }
         }
 
-        public MemberFieldDefinition(XmlElement elem)
-            : base(elem)
+        public MemberFieldDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
             if (elem.Name != "variable")
                 throw new Exception("Wrong element; expected 'variable'.");

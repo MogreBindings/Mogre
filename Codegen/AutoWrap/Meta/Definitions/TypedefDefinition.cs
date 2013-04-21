@@ -114,7 +114,7 @@ namespace AutoWrap.Meta
             }
             else if (typedef.Name == "String")
             {
-                expl = new DefStringTypeDef(typedef.Element);
+                expl = new DefStringTypeDef(typedef.MetaDef, typedef.Element);
             }
 
             if (expl != null)
@@ -210,8 +210,8 @@ namespace AutoWrap.Meta
             get { return BaseTypeName.StartsWith("SharedPtr"); }
         }
 
-        public TypedefDefinition(XmlElement elem)
-            : base(elem)
+        public TypedefDefinition(MetaDefinition metaDef, XmlElement elem)
+            : base(metaDef, elem)
         {
             if (elem.Name != "typedef")
                 throw new Exception("Not typedef element");

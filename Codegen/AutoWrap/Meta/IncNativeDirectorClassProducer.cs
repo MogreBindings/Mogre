@@ -44,8 +44,8 @@ namespace AutoWrap.Meta
             get { return false; }
         }
 
-        public IncNativeDirectorClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public IncNativeDirectorClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
 

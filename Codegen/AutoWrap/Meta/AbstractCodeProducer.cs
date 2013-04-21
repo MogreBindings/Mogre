@@ -34,6 +34,13 @@ namespace AutoWrap.Meta
     /// </summary>
     public abstract class AbstractCodeProducer
     {
+        public readonly MetaDefinition MetaDef;
+        
+        protected AbstractCodeProducer(MetaDefinition metaDef)
+        {
+            MetaDef = metaDef;
+        }
+
         protected virtual string GetNativeDirectorReceiverInterfaceName(ClassDefinition type)
         {
             if (!type.HasWrapType(WrapTypes.NativeDirector))
@@ -103,7 +110,7 @@ namespace AutoWrap.Meta
                 elem.InsertAfter(te, null);
             }
 
-            return TypedefDefinition.CreateExplicitType((TypedefDefinition)AbstractTypeDefinition.CreateType(elem));
+            return TypedefDefinition.CreateExplicitType(MetaDef.Factory.CreateTypedef(elem));
         }
 
         protected virtual string NameToPrivate(string name)

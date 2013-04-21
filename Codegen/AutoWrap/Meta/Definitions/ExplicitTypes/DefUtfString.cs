@@ -116,5 +116,10 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
             }
         }
+
+        public DefUtfString(MetaDefinition metaDef)
+            : base(metaDef)
+        {
+        }
     }
 }

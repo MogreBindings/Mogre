@@ -112,7 +112,7 @@ namespace AutoWrap.Meta
                 {
                     string returnExpr;
                     string newname, expr, postcall;
-                    ParamDefinition param = new ParamDefinition(f, managedCall);
+                    ParamDefinition param = new ParamDefinition(f.MetaDef, f, managedCall);
                     expr = f.Type.ProducePreCallParamConversionCode(param, out newname);
                     postcall = f.Type.ProducePostCallParamConversionCleanupCode(param);
                     if (!String.IsNullOrEmpty(expr))
@@ -151,8 +151,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNativeProxyClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public CppNativeProxyClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
         }
 
@@ -278,10 +278,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppOverridableClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public CppOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(_wrapper, _definition, _code));
+            _wrapper.PostClassProducers.Add(new CppNativeProxyClassProducer(metaDef, _wrapper, _definition, _code));
         }
 
         private string _proxyName;
@@ -441,8 +441,8 @@ namespace AutoWrap.Meta
     {
         protected ClassDefinition[] _additionalInterfaces;
 
-        public CppSubclassingClassProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb, ClassDefinition[] additionalInterfaces)
-            : base(wrapper, t, sb)
+        public CppSubclassingClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb, ClassDefinition[] additionalInterfaces)
+            : base(metaDef, wrapper, t, sb)
         {
             this._additionalInterfaces = additionalInterfaces;
         }

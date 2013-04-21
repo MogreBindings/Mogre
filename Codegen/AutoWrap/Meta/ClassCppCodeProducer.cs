@@ -30,8 +30,8 @@ namespace AutoWrap.Meta
 {
     abstract class ClassCppCodeProducer : ClassCodeProducer
     {
-        public ClassCppCodeProducer(Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
-            : base(wrapper, t, sb)
+        public ClassCppCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef, wrapper, t, sb)
         {
             //if (AllowSubclassing)
             //{
@@ -596,7 +596,7 @@ namespace AutoWrap.Meta
                 if (field.Type.HasAttribute<NativeValueContainerAttribute>()
                     || (field.Type.IsValueType && !field.Type.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    ParamDefinition tmpParam = new ParamDefinition(field, field.Name + "_array");
+                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.Name + "_array");
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -630,7 +630,7 @@ namespace AutoWrap.Meta
                     _code.AppendLine("{");
                     _code.IncreaseIndent();
                     _code.AppendLine("if (index < 0 || index >= " + field.ArraySize + ") throw gcnew IndexOutOfRangeException();");
-                    string param = AddParameterConversion(new ParamDefinition(field, "value"));
+                    string param = AddParameterConversion(new ParamDefinition(this.MetaDef, field, "value"));
                     _code.AppendLine(GetNativeInvokationTarget(field) + "[index] = " + param + ";");
                     _code.DecreaseIndent();
                     _code.AppendLine("}");
@@ -673,7 +673,7 @@ namespace AutoWrap.Meta
                     _code.AppendLine("void " + pname + "::set( " + ptype + " value )");
                     _code.AppendLine("{");
                     _code.IncreaseIndent();
-                    string param = AddParameterConversion(new ParamDefinition(field, "value"));
+                    string param = AddParameterConversion(new ParamDefinition(this.MetaDef, field, "value"));
                     _code.AppendLine(GetNativeInvokationTarget(field) + " = " + param + ";");
                     _code.DecreaseIndent();
                     _code.AppendLine("}");
@@ -690,7 +690,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("\treturn " + managedType + ";");
             _code.AppendLine("}");
 
-            ParamDefinition param = new ParamDefinition(field, "value");
+            ParamDefinition param = new ParamDefinition(this.MetaDef, field, "value");
             _code.AppendLine("void " + GetClassName() + "::set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
             _code.AppendLine("{");
             _code.IncreaseIndent();

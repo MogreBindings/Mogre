@@ -14,6 +14,11 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
+        public DefString(MetaDefinition metaDef)
+            : base(metaDef)
+        {
+        }
+
         public override string GetCLRParamTypeName(ParamDefinition param)
         {
             switch (param.PassedByType)
