@@ -176,7 +176,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Converts the name into upper camel case, meaning the first character will be
         /// made upper-case. Note that the remainder of the name must already be in camel
-        /// case.
+        /// case. Used for converting method names and property names to C# coding style.
         /// </summary>
         public static string ToCamelCase(string name)
         {

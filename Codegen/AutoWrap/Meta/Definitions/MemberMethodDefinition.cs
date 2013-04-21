@@ -6,8 +6,36 @@ namespace AutoWrap.Meta
 {
     public class MemberMethodDefinition : MemberDefinitionBase
     {
-        public List<ParamDefinition> Parameters = new List<ParamDefinition>();
-        public VirtualLevel VirtualLevel;
+        public override string CLRName
+        {
+            get
+            {
+                if (IsProperty)
+                {
+                    // property
+                    string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : Name;
+
+                    if (name.StartsWith("get"))
+                        return name.Substring(3);
+
+                    if (name.StartsWith("set"))
+                    return name.Substring(3);
+
+                    return ToCamelCase(base.CLRName);
+                
+                } else if (IsOperatorOverload) 
+                {
+                    // operator
+                    return base.CLRName;
+                } else
+                {
+                    // regular method
+                    return ToCamelCase(base.CLRName);
+                }
+            }
+        }
+
+    
 
         private bool _isConst;
         /// <summary>
@@ -18,6 +46,8 @@ namespace AutoWrap.Meta
         {
             get { return _isConst; }
         }
+
+        public readonly VirtualLevel VirtualLevel;
 
         public bool IsVirtual
         {
@@ -49,6 +79,12 @@ namespace AutoWrap.Meta
             }
         }
 
+        private readonly List<ParamDefinition> _parameters = new List<ParamDefinition>();
+        /// <summary>
+        /// Contains the parameters of this method.
+        /// </summary>
+        public readonly IList<ParamDefinition> Parameters;
+
         public override bool IsIgnored
         {
             get
@@ -57,7 +93,7 @@ namespace AutoWrap.Meta
                     return true;
 
                 // If one of the parameters is ignore, then so is this methods.
-                foreach (ParamDefinition param in Parameters)
+                foreach (ParamDefinition param in _parameters)
                 {
                     if (param.Type.IsIgnored)
                         return true;
@@ -177,18 +213,26 @@ namespace AutoWrap.Meta
             get
             {
                 if (_isDeclarableFunction == null)
-                    _isDeclarableFunction = !(IsConstructor || IsListenerAdder || IsListenerRemover
-                                              || IsOperatorOverload || !IsFunctionAllowed(this));
+                    // TODO by manski: For some strange reasons "IsFunctionAllowed" must be the last element in the
+                    //   condition. Explore this issue further as this might be a bug or document the behaviour.
+                    _isDeclarableFunction = !IsConstructor && !IsListenerAdder
+                        && !IsListenerRemover && !IsOperatorOverload && IsFunctionAllowed(this);
 
                 return (bool) _isDeclarableFunction;
             }
         }
 
+        /// <summary>
+        /// Denotes whether this method is a constructor.
+        /// </summary>
         public bool IsConstructor
         {
             get { return (Name == ContainingClass.Name); }
         }
 
+        /// <summary>
+        /// Denotes whether this method describes an operator (such as <c>==</c> or <c>&lt;=</c>).
+        /// </summary>
         public bool IsOperatorOverload
         {
             get
@@ -198,55 +242,40 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Denotes whether this method is used to add an event listener.
+        /// </summary>
         public bool IsListenerAdder
         {
             get
             {
                 return (Name.StartsWith("add")
                         && Name.EndsWith("Listener")
-                        && Parameters.Count == 1
-                        && Parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
+                        && _parameters.Count == 1
+                        && _parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
             }
         }
 
+        /// <summary>
+        /// Denotes whether this method is used to remove an event listener.
+        /// </summary>
         public bool IsListenerRemover
         {
             get
             {
                 return (Name.StartsWith("remove")
                         && Name.EndsWith("Listener")
-                        && Parameters.Count == 1
-                        && Parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
+                        && _parameters.Count == 1
+                        && _parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
             }
         }
 
+        /// <summary>
+        /// Denotes whether this method is a property accessor (i.e. getter or setter method).
+        /// </summary>
         public bool IsProperty
         {
             get { return IsGetProperty || IsSetProperty; }
-        }
-
-        public override string CLRName
-        {
-            get
-            {
-                if (IsProperty)
-                {
-                    string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : Name;
-
-                    if (name.StartsWith("get"))
-                        return name.Substring(3);
-                    
-                    if (name.StartsWith("set"))
-                        return name.Substring(3);
-                    
-                    return ToCamelCase(base.CLRName);
-                }
-                
-                if (IsOperatorOverload)
-                    return base.CLRName;
-                
-                return ToCamelCase(base.CLRName);
-            }
         }
 
         /// <summary>
@@ -270,7 +299,7 @@ namespace AutoWrap.Meta
                 {
                     if (IsOverriding)
                         _isGetProperty = BaseMethod.IsGetProperty;
-                    else if (IsConstructor || MemberTypeName == "void" || Parameters.Count > 0)
+                    else if (IsConstructor || MemberTypeName == "void" || _parameters.Count > 0)
                         _isGetProperty = false;
                     else if (HasAttribute<PropertyAttribute>())
                         _isGetProperty = true;
@@ -322,7 +351,7 @@ namespace AutoWrap.Meta
                 {
                     if (IsOverriding)
                         _isSetProperty = BaseMethod.IsSetProperty;
-                    else if (IsConstructor || MemberTypeName != "void" || Parameters.Count != 1)
+                    else if (IsConstructor || MemberTypeName != "void" || _parameters.Count != 1)
                     {
                         _isSetProperty = false;
                     }
@@ -354,19 +383,24 @@ namespace AutoWrap.Meta
             : base(elem, containingClass)
         {
             if (elem.Name != "function")
-                throw new Exception("Wrong element; expected 'function'.");
+                throw new InvalidOperationException("Wrong element; expected 'function'.");
+
+            Parameters = _parameters.AsReadOnly();
 
             switch (elem.GetAttribute("virt"))
             {
                 case "virtual":
                     VirtualLevel = VirtualLevel.Virtual;
                     break;
+
                 case "non-virtual":
                     VirtualLevel = VirtualLevel.NotVirtual;
                     break;
+
                 case "pure-virtual":
                     VirtualLevel = VirtualLevel.Abstract;
                     break;
+
                 default:
                     throw new Exception("unexpected");
             }
@@ -377,27 +411,26 @@ namespace AutoWrap.Meta
 
         protected override void InterpretChildElement(XmlElement child)
         {
-            switch (child.Name)
+            if (child.Name != "parameters")
+                throw new Exception("Unknown child of function: '" + child.Name + "'");
+
+            int count = 1;
+            foreach (XmlElement param in child.ChildNodes)
             {
-                case "parameters":
-                    int count = 1;
-                    foreach (XmlElement param in child.ChildNodes)
-                    {
-                        ParamDefinition p = new ParamDefinition(MetaDef, param);
-                        if (p.Name == null && (p.TypeName != "void" || p.PassedByType != PassedByType.Value))
-                            p.Name = "param" + count;
+                ParamDefinition paraDef = new ParamDefinition(MetaDef, param);
+                if (paraDef.Name == null && (paraDef.TypeName != "void" || paraDef.PassedByType != PassedByType.Value))
+                {
+                    // Auto-generate a name for unnamed parameters, unless the parameter is of type "void"
+                    // (but not "void&" or "void*) in which case the parameter is simply ignored.
+                    paraDef.Name = "param" + count;
+                }
 
-                        if (p.Name != null)
-                        {
-                            p.Function = this;
-                            Parameters.Add(p);
-                        }
-                        count++;
-                    }
-                    break;
-
-                default:
-                    throw new Exception("Unknown child of function: '" + child.Name + "'");
+                if (paraDef.Name != null)
+                {
+                    paraDef.Function = this;
+                    _parameters.Add(paraDef);
+                }
+                count++;
             }
         }
     }

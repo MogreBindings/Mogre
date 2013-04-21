@@ -92,6 +92,9 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Denotes whether this class definition actually describes an interface.
+        /// </summary>
         public virtual bool IsInterface
         {
             get { return HasWrapType(WrapTypes.Interface); }
