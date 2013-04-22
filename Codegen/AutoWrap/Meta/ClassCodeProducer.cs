@@ -229,7 +229,7 @@ namespace AutoWrap.Meta
                     {
                         p.GetterFunction = f;
                     }
-                    else if (f.IsSetProperty)
+                    else if (f.IsPropertySetAccessor)
                     {
                         p.SetterFunction = f;
                     }

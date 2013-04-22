@@ -839,7 +839,7 @@ namespace AutoWrap.Meta
 
                     if (f.IsPropertyGetAccessor)
                         p.GetterFunction = f;
-                    else if (f.IsSetProperty)
+                    else if (f.IsPropertySetAccessor)
                         p.SetterFunction = f;
                 }
             }

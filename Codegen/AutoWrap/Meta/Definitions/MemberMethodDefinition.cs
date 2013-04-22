@@ -273,7 +273,7 @@ namespace AutoWrap.Meta
         /// </summary>
         public bool IsProperty
         {
-            get { return IsPropertyGetAccessor || IsSetProperty; }
+            get { return IsPropertyGetAccessor || IsPropertySetAccessor; }
         }
 
         private bool? _isPropertyGetAccessor;
@@ -291,41 +291,15 @@ namespace AutoWrap.Meta
             }
         }
 
-        private bool? _isSetProperty;
-
-        public bool IsSetProperty
+        private bool? _isPropertySetAccessor;
+        public bool IsPropertySetAccessor
         {
             get
             {
-                if (_isSetProperty == null)
-                {
-                    if (IsOverriding)
-                        _isSetProperty = BaseMethod.IsSetProperty;
-                    else if (IsConstructor || MemberTypeName != "void" || _parameters.Count != 1)
-                    {
-                        _isSetProperty = false;
-                    }
-                    else if (HasAttribute<PropertyAttribute>())
-                        _isSetProperty = true;
-                    else if (HasAttribute<MethodAttribute>())
-                        _isSetProperty = false;
-                    else
-                    {
-                        string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
+                if (_isPropertySetAccessor == null)
+                    _isPropertySetAccessor = CheckForSetAccessor();
 
-                        if (name.StartsWith("set") && Char.IsUpper(name[3]))
-                        {
-                            // Check to see if there is a "get" function
-                            MemberMethodDefinition func = ContainingClass.GetMethodByNativeName("get" + name.Substring(3), false, false);
-                            _isSetProperty = (func != null && func.IsPropertyGetAccessor && func.MemberTypeName == Parameters[0].TypeName
-                                              && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverriding == IsOverriding)));
-                        }
-                        else
-                            _isSetProperty = false;
-                    }
-                }
-
-                return (bool) _isSetProperty;
+                return (bool)_isPropertySetAccessor;
             }
         }
 
@@ -397,7 +371,7 @@ namespace AutoWrap.Meta
                 return BaseMethod.IsPropertyGetAccessor;
             }
             
-            if (IsConstructor || MemberTypeName == "void" || _parameters.Count > 0)
+            if (IsConstructor || MemberTypeName == "void" || _parameters.Count != 0)
             {
                 // Check this before checking possible attributes
                 return false;
@@ -464,7 +438,57 @@ namespace AutoWrap.Meta
             // case we can't convert the method into a property.
             MemberMethodDefinition method = ContainingClass.GetMethodByCLRName(propName, true, false);
 
+            // If there is no method == valid property name
             return (method == null);
+        }
+
+        /// <summary>
+        /// Checks whether this method is a set accessor for a CLR property.
+        /// </summary>
+        /// <seealso cref="IsPropertyGetAccessor"/>
+        protected virtual bool CheckForSetAccessor()
+        {
+            if (IsOverriding)
+            {
+                // Check this before checking possible attributes
+                return BaseMethod.IsPropertySetAccessor;
+            }
+            
+            if (IsConstructor || MemberTypeName != "void" || _parameters.Count != 1)
+            {
+                // Check this before checking possible attributes
+                return false;
+            }
+            
+            if (HasAttribute<PropertyAttribute>())
+                return true;
+            
+            if (HasAttribute<MethodAttribute>())
+                return false;
+            
+            if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
+                return false;
+
+            string name = this.GetRenameName();
+
+            if (!name.StartsWith("set") || !Char.IsUpper(name[3]))
+                return false;
+
+            // Check to see if there is a "get" function
+            string propName = name.Substring(3);
+            MemberMethodDefinition method;
+            method = ContainingClass.GetMethodByNativeName("get" + propName, true, false);
+            // TODO by manski: Include again
+            /*if (method == null) {
+            method = this.ContainingClass.GetMethodByNativeName("is" + propName, true, false);
+            if (method == null) {
+            method = this.ContainingClass.GetMethodByNativeName("has" + propName, true, false);
+            }
+            }*/
+
+            // NOTE: Most checks done in "CheckForGetAccessor()" are represented in "method.IsPropertyGetAccessor".
+            return (method != null && method.IsPropertyGetAccessor && method.MemberTypeName == Parameters[0].TypeName
+                && (!ContainingClass.AllowVirtuals || (method.IsVirtual == IsVirtual && method.IsOverriding == IsOverriding)));
         }
     }
 }

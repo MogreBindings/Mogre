@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
                 sb.AppendLine(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + MemberPropertyDefinition.GetPropertyName(f) + ";");
                 managedCall = "mp_return";
             }
-            else if (f.IsSetProperty)
+            else if (f.IsPropertySetAccessor)
             {
                 ParamDefinition param = f.Parameters[0];
                 managedCall = managedTarget + "->" + MemberPropertyDefinition.GetPropertyName(f) + " = " + param.Type.ProduceNativeCallConversionCode(param.Name, param);
