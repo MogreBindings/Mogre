@@ -213,31 +213,31 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable Methods
+        public IEnumerable<MemberMethodDefinition> Methods
         {
             get
             {
                 foreach (MemberDefinitionBase m in Members)
                 {
                     if (m is MemberMethodDefinition)
-                        yield return m;
+                        yield return (MemberMethodDefinition)m;
                 }
             }
         }
 
-        public IEnumerable Fields
+        public IEnumerable<MemberFieldDefinition> Fields
         {
             get
             {
                 foreach (MemberDefinitionBase m in Members)
                 {
                     if (m is MemberFieldDefinition)
-                        yield return m;
+                        yield return (MemberFieldDefinition)m;
                 }
             }
         }
 
-        public IEnumerable PublicMethods
+        public IEnumerable<MemberMethodDefinition> PublicMethods
         {
             get
             {
@@ -250,7 +250,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable DeclarableMethods
+        public IEnumerable<MemberMethodDefinition> DeclarableMethods
         {
             get
             {
@@ -263,7 +263,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable ProtectedMethods
+        public IEnumerable<MemberMethodDefinition> ProtectedMethods
         {
             get
             {
@@ -276,7 +276,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable PublicFields
+        public IEnumerable<MemberFieldDefinition> PublicFields
         {
             get
             {
@@ -288,7 +288,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable ProtectedFields
+        public IEnumerable<MemberFieldDefinition> ProtectedFields
         {
             get
             {
@@ -809,44 +809,11 @@ namespace AutoWrap.Meta
             if (_properties != null)
                 return _properties;
 
-            SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
-
-            foreach (MemberMethodDefinition f in Methods)
-            {
-                if (f.IsProperty && f.IsDeclarableFunction)
-                {
-                    MemberPropertyDefinition p = null;
-                    string propName = MemberPropertyDefinition.GetPropertyName(f);
-
-                    if (props.ContainsKey(propName))
-                        p = props[propName];
-                    else
-                    {
-                        p = new MemberPropertyDefinition(propName);
-                        if (f.IsPropertyGetAccessor)
-                        {
-                            p.MemberTypeName = f.MemberTypeName;
-                            p.PassedByType = f.PassedByType;
-                        }
-                        else
-                        {
-                            p.MemberTypeName = f.Parameters[0].TypeName;
-                            p.PassedByType = f.Parameters[0].PassedByType;
-                        }
-
-                        props.Add(p.Name, p);
-                    }
-
-                    if (f.IsPropertyGetAccessor)
-                        p.GetterFunction = f;
-                    else if (f.IsPropertySetAccessor)
-                        p.SetterFunction = f;
-                }
-            }
+            _properties = MemberPropertyDefinition.GetPropertiesFromMethods(this.Methods);
 
             if (GetInterfaces().Length > 0)
             {
-                foreach (MemberPropertyDefinition prop in props.Values)
+                foreach (MemberPropertyDefinition prop in _properties)
                 {
                     if (!prop.CanWrite)
                     {
@@ -876,11 +843,6 @@ namespace AutoWrap.Meta
                 }
             }
 
-            MemberPropertyDefinition[] parr = new MemberPropertyDefinition[props.Count];
-            for (int i = 0; i < props.Count; i++)
-                parr[i] = props.Values[i];
-
-            _properties = parr;
             return _properties;
         }
 

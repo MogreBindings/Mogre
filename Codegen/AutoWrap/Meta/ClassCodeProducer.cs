@@ -167,7 +167,7 @@ namespace AutoWrap.Meta
                 //SearchProtectedFields(iface);
             }
 
-            _overridableProperties = MemberPropertyDefinition.GetPropertiesFromFunctions(_overridableFunctions);
+            _overridableProperties = MemberPropertyDefinition.GetPropertiesFromMethods(_overridableFunctions);
 
             //Find cached members
 

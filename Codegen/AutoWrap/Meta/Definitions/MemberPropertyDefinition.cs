@@ -162,13 +162,12 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Converts the specified methods into CLR properties.
         /// </summary>
-        /// <param name="funcs">The methods to convert. Must only contain getter and setter
-        /// methods.</param>
-        public static MemberPropertyDefinition[] GetPropertiesFromFunctions(List<MemberMethodDefinition> funcs)
+        /// <param name="methods">The methods to convert. Methods that are no accesors (<c>IsProperty == false</c>) will be ignored.</param>
+        public static MemberPropertyDefinition[] GetPropertiesFromMethods(IEnumerable<MemberMethodDefinition> methods)
         {
             SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
 
-            foreach (MemberMethodDefinition f in funcs)
+            foreach (MemberMethodDefinition f in methods)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
