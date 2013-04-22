@@ -87,7 +87,7 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.Name));
+                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
                 _code.IncreaseIndent();
                 _code.AppendLine(ptype + " get()\n{");
                 _code.AppendLine("\treturn " + NameToPrivate(field) + ";");
@@ -97,7 +97,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                _code.AppendLine(field.MemberType.FullCLRName + " " + field.Name + ";");
+                _code.AppendLine(field.MemberType.FullCLRName + " " + field.NativeName + ";");
             }
         }
 

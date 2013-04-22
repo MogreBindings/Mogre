@@ -25,6 +25,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Marks a method explicitly as method. This is necessary if the method is falsely detected
+    /// as property accessor (getter or setter).
+    /// </summary>
     public class MethodAttribute : AutoWrapAttribute
     {
         public static MethodAttribute FromElement(XmlElement elem)

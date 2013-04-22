@@ -33,12 +33,15 @@ namespace AutoWrap.Meta
     /// </summary>
     // NOTE: Don't call this class "AbstractMemberDefintion" to avoid confusion about whether the 
     //   described member is an "abstract" member (i.e. an abstract method).
-    public abstract class MemberDefinitionBase : AttributeSet, ITypeMember
+    public abstract class MemberDefinitionBase : AttributeSet, ITypeMember, IRenamable
     {
-        protected string _name;
-        public virtual string Name
+        private readonly string _nativeName;
+        /// <summary>
+        /// The native (C++) name of this member.
+        /// </summary>
+        public virtual string NativeName
         {
-            get { return _name; }
+            get { return _nativeName; }
         }
 
         /// <summary>
@@ -46,13 +49,7 @@ namespace AutoWrap.Meta
         /// </summary>
         public virtual string CLRName
         {
-            get
-            {
-                if (HasAttribute<RenameAttribute>())
-                    return GetAttribute<RenameAttribute>().Name;
-                
-                return Name;
-            }
+            get { return this.GetRenameName(); }
         }
 
         public virtual bool IsIgnored
@@ -165,7 +162,7 @@ namespace AutoWrap.Meta
                 switch (child.Name)
                 {
                     case "name":
-                        _name = child.InnerText;
+                        _nativeName = child.InnerText;
                         break;
 
                     case "type":

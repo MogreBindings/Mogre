@@ -833,7 +833,7 @@ namespace AutoWrap.Meta
                     else
                     {
                         p = new MemberPropertyDefinition(f.CLRName);
-                        if (f.IsGetProperty)
+                        if (f.IsPropertyGetAccessor)
                         {
                             p.MemberTypeName = f.MemberTypeName;
                             p.PassedByType = f.PassedByType;
@@ -847,7 +847,7 @@ namespace AutoWrap.Meta
                         props.Add(f.CLRName, p);
                     }
 
-                    if (f.IsGetProperty)
+                    if (f.IsPropertyGetAccessor)
                         p.GetterFunction = f;
                     else if (f.IsSetProperty)
                         p.SetterFunction = f;
@@ -904,7 +904,7 @@ namespace AutoWrap.Meta
             MemberFieldDefinition field = null;
             foreach (MemberFieldDefinition f in Fields)
             {
-                if (f.Name == name)
+                if (f.NativeName == name)
                 {
                     field = f;
                     break;
@@ -927,7 +927,7 @@ namespace AutoWrap.Meta
             MemberMethodDefinition func = null;
             foreach (MemberMethodDefinition f in Functions)
             {
-                if (f.Name == name)
+                if (f.NativeName == name)
                 {
                     func = f;
                     break;
@@ -971,7 +971,7 @@ namespace AutoWrap.Meta
         {
             foreach (MemberDefinitionBase m in Members)
             {
-                if (m.Name == name)
+                if (m.NativeName == name)
                     return m;
             }
 
@@ -992,7 +992,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberDefinitionBase m in Members)
             {
-                if (m.Name == name)
+                if (m.NativeName == name)
                     list.Add(m);
             }
 
@@ -1087,13 +1087,13 @@ namespace AutoWrap.Meta
                 {
                     case "function":
                         MemberMethodDefinition func = new MemberMethodDefinition(child, this);
-                        if (func.Name != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.Name.StartsWith("OGRE_"))
+                        if (func.NativeName != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.NativeName.StartsWith("OGRE_"))
                             AddNewFunction(func);
                         break;
 
                     case "variable":
                         MemberFieldDefinition field = new MemberFieldDefinition(child, this);
-                        if (field.Name != this.Name && !field.Name.StartsWith("OGRE_"))
+                        if (field.NativeName != Name && !field.NativeName.StartsWith("OGRE_"))
                         {
                             Members.Add(field);
                         }
@@ -1141,7 +1141,7 @@ namespace AutoWrap.Meta
 
         private void AddNewFunction(MemberMethodDefinition func)
         {
-            MemberDefinitionBase[] members = GetMembers(func.Name, false);
+            MemberDefinitionBase[] members = GetMembers(func.NativeName, false);
             MemberMethodDefinition prevf = null;
             foreach (MemberDefinitionBase m in members)
             {

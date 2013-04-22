@@ -77,7 +77,7 @@ namespace AutoWrap.Meta
             {
                 if (!field.IsIgnored)
                 {
-                    string conv = field.MemberType.ProduceNativeCallConversionCode("obj." + field.Name, field);
+                    string conv = field.MemberType.ProduceNativeCallConversionCode("obj." + field.NativeName, field);
                     _code.AppendLine("clr->" + NameToPrivate(field) + " = " + conv + ";");
                 }
             }
@@ -98,7 +98,7 @@ namespace AutoWrap.Meta
             //TODO comments for fields
             //AddComments(field);
             string ptype = GetCLRTypeName(field);
-            _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.Name));
+            _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
             _code.IncreaseIndent();
             _code.AppendLine(ptype + " get()\n{");
             _code.AppendLine("\treturn " + NameToPrivate(field) + ";");

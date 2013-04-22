@@ -244,7 +244,7 @@ namespace AutoWrap.Meta
                 if (!field.IsIgnored
                     && !(field.IsStatic && type != _definition) )
                 {
-                    _code.AppendLine("friend ref class " + className + "::" + field.Name + ";");
+                    _code.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
                 }
             }
 

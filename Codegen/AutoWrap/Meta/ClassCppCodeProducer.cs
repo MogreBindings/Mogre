@@ -224,12 +224,12 @@ namespace AutoWrap.Meta
                     if (m.ProtectionLevel == ProtectionLevel.Protected)
                     {
                         _code.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.ContainingClass));
-                        _code.Append("::" + m.Name + ";\n");
+                        _code.Append("::" + m.NativeName + ";\n");
                     }
                     else
                     {
                         _code.Append(m.ContainingClass.FullNativeName);
-                        _code.Append("::" + m.Name + ";\n");
+                        _code.Append("::" + m.NativeName + ";\n");
                     }
                 }
             }
@@ -473,11 +473,11 @@ namespace AutoWrap.Meta
                 if (f.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     string classname = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
-                    invoke = classname + "::" + f.Name + "(";
+                    invoke = classname + "::" + f.NativeName + "(";
                 }
                 else
                 {
-                    invoke = _definition.FullNativeName + "::" + f.Name + "(";
+                    invoke = _definition.FullNativeName + "::" + f.NativeName + "(";
                 }
             }
             else
@@ -589,14 +589,14 @@ namespace AutoWrap.Meta
         protected override void AddPropertyField(MemberFieldDefinition field)
         {
             string ptype = GetCLRTypeName(field);
-            string pname = GetClassName () + "::" + (field.HasAttribute<RenameAttribute>() ? field.GetAttribute<RenameAttribute> ().Name : field.Name);
+            string pname = GetClassName () + "::" + (field.HasAttribute<RenameAttribute>() ? field.GetAttribute<RenameAttribute> ().Name : field.NativeName);
 
             if (field.IsNativeArray)
             {
                 if (field.MemberType.HasAttribute<NativeValueContainerAttribute>()
                     || (field.MemberType.IsValueType && !field.MemberType.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.Name + "_array");
+                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.NativeName + "_array");
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -685,13 +685,13 @@ namespace AutoWrap.Meta
         {
             string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
-            _code.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.Name + "()");
+            _code.AppendLine(GetCLRTypeName(field) + " " + GetClassName() + "::get_" + field.NativeName + "()");
             _code.AppendLine("{");
             _code.AppendLine("\treturn " + managedType + ";");
             _code.AppendLine("}");
 
             ParamDefinition param = new ParamDefinition(this.MetaDef, field, "value");
-            _code.AppendLine("void " + GetClassName() + "::set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
+            _code.AppendLine("void " + GetClassName() + "::set_" + field.NativeName + "(" + param.Type.GetCLRParamTypeName(param) + " value)");
             _code.AppendLine("{");
             _code.IncreaseIndent();
             _code.AppendLine(GetNativeInvokationTarget(field) + " = " + AddParameterConversion(param) + ";");

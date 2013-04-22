@@ -7,7 +7,7 @@
 
         public MethodSignature(MemberMethodDefinition methodDef)
         {
-            _partialSignature = methodDef.Name;
+            _partialSignature = methodDef.NativeName;
             foreach (ParamDefinition param in methodDef.Parameters)
             {
                 _partialSignature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;

@@ -122,9 +122,9 @@ namespace AutoWrap.Meta
         }
         protected virtual string NameToPrivate(MemberDefinitionBase m)
         {
-            string name = m.Name;
+            string name = m.NativeName;
             if (m is MemberMethodDefinition
-                && (m as MemberMethodDefinition).IsGetProperty
+                && (m as MemberMethodDefinition).IsPropertyGetAccessor
                 && name.StartsWith("get"))
                 name = name.Substring(3);
 
@@ -145,21 +145,6 @@ namespace AutoWrap.Meta
                     return true;
 
             return false;
-        }
-
-        protected virtual bool? CheckFunctionForGetProperty(MemberMethodDefinition f)
-        {
-            string name = f.HasAttribute<RenameAttribute>() ? f.GetAttribute<RenameAttribute>().Name : f.Name;
-
-            if (f.HasAttribute<CustomIncDeclarationAttribute>() || f.HasAttribute<CustomCppDeclarationAttribute>())
-                return false;
-
-            if (f.MemberTypeName == "bool" &&
-                ((name.StartsWith("is") && Char.IsUpper(name[2])) || (name.StartsWith("has") && Char.IsUpper(name[3])))
-                && f.Parameters.Count == 0)
-                return true;
-
-            return CheckTypeMemberForGetProperty(f);
         }
 
         protected virtual bool? CheckTypeMemberForGetProperty(ITypeMember m)

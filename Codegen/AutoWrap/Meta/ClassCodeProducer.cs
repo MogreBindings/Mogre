@@ -210,7 +210,7 @@ namespace AutoWrap.Meta
                     else
                     {
                         p = new MemberPropertyDefinition(f.CLRName);
-                        if (f.IsGetProperty)
+                        if (f.IsPropertyGetAccessor)
                         {
                             p.MemberTypeName = f.MemberTypeName;
                             p.PassedByType = f.PassedByType;
@@ -224,7 +224,7 @@ namespace AutoWrap.Meta
                         props.Add(f.CLRName, p);
                     }
 
-                    if (f.IsGetProperty)
+                    if (f.IsPropertyGetAccessor)
                     {
                         p.GetterFunction = f;
                     }
@@ -342,14 +342,14 @@ namespace AutoWrap.Meta
             {
                 if (f.ProtectionLevel == ProtectionLevel.Public)
                 {
-                    return GetNativeInvokationTarget(f.IsConstMethod) + "->" + f.Name;
+                    return GetNativeInvokationTarget(f.IsConstMethod) + "->" + f.NativeName;
                 }
                 else if (f.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     if (!f.IsVirtual)
                     {
                         string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
-                        return "static_cast<" + proxyName + "*>(_native)->" + f.Name;
+                        return "static_cast<" + proxyName + "*>(_native)->" + f.NativeName;
                     }
                     else
                         throw new Exception("Unexpected");
@@ -360,9 +360,9 @@ namespace AutoWrap.Meta
             else
             {
                 if (f.ProtectionLevel == ProtectionLevel.Public)
-                    return f.ContainingClass.FullNativeName + "::" + f.Name;
+                    return f.ContainingClass.FullNativeName + "::" + f.NativeName;
                 else
-                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.ContainingClass) + "::" + f.Name;
+                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.ContainingClass) + "::" + f.NativeName;
             }
         }
         protected virtual string GetNativeInvokationTarget(MemberFieldDefinition field)
@@ -371,12 +371,12 @@ namespace AutoWrap.Meta
             {
                 if (field.ProtectionLevel == ProtectionLevel.Public)
                 {
-                    return GetNativeInvokationTarget() + "->" + field.Name;
+                    return GetNativeInvokationTarget() + "->" + field.NativeName;
                 }
                 else if (field.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
-                    return "static_cast<" + proxyName + "*>(_native)->" + field.Name;
+                    return "static_cast<" + proxyName + "*>(_native)->" + field.NativeName;
                 }
                 else
                     throw new Exception("Unexpected");
@@ -384,9 +384,9 @@ namespace AutoWrap.Meta
             else
             {
                 if (field.ProtectionLevel == ProtectionLevel.Public)
-                    return field.ContainingClass.FullNativeName + "::" + field.Name;
+                    return field.ContainingClass.FullNativeName + "::" + field.NativeName;
                 else
-                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.ContainingClass) + "::" + field.Name;
+                    return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.ContainingClass) + "::" + field.NativeName;
             }
         }
 
@@ -766,13 +766,13 @@ namespace AutoWrap.Meta
             {
                 if (f.IsOperatorOverload)
                 {
-                    if (f.Name.EndsWith("=="))
+                    if (f.NativeName.EndsWith("=="))
                     {
                       if( !f.IsIgnored )
                         AddPredefinedMethods( PredefinedMethods.Equals );
                         _code.AppendEmptyLine();
                     }
-                    else if (f.Name.EndsWith("="))
+                    else if (f.NativeName.EndsWith("="))
                     {
                       if(!f.IsIgnored)
                         AddPredefinedMethods(PredefinedMethods.CopyTo);

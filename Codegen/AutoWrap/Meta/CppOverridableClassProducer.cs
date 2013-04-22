@@ -41,7 +41,7 @@ namespace AutoWrap.Meta
             string managedCall;
             string fullPostConv = null;
 
-            if (f.IsGetProperty)
+            if (f.IsPropertyGetAccessor)
             {
                 sb.AppendLine(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + ";");
                 managedCall = "mp_return";
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
             _code.AppendIndent("");
-            _code.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.Name + "(");
+            _code.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.NativeName + "(");
             AddNativeMethodParams(f);
             _code.Append(" )");
             if (f.IsConstMethod)
@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
                 _code.AppendLine("else");
                 _code.AppendIndent("\t");
                 if (!f.HasReturnValue) _code.Append("return ");
-                _code.Append(f.ContainingClass.Name + "::" + f.Name + "(");
+                _code.Append(f.ContainingClass.Name + "::" + f.NativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -306,12 +306,12 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.NativeName;
         }
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.NativeName;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)

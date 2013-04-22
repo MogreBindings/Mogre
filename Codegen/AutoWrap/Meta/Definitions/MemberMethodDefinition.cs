@@ -13,7 +13,7 @@ namespace AutoWrap.Meta
                 if (IsProperty)
                 {
                     // property
-                    string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : Name;
+                    string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
 
                     if (name.StartsWith("get"))
                         return name.Substring(3);
@@ -27,15 +27,16 @@ namespace AutoWrap.Meta
                     // For properties named like "hasEnabledAnimationState".
                     return MetaDef.CodeStyleDef.ConvertPropertyName(base.CLRName, this);
                 
-                } else if (IsOperatorOverload) 
+                }
+                
+                if (IsOperatorOverload) 
                 {
                     // operator
                     return base.CLRName;
-                } else
-                {
-                    // regular method
-                    return MetaDef.CodeStyleDef.ConvertMethodName(base.CLRName, this);
                 }
+                
+                // regular method
+                return MetaDef.CodeStyleDef.ConvertMethodName(base.CLRName, this);
             }
         }
 
@@ -107,7 +108,19 @@ namespace AutoWrap.Meta
             }
         }
 
-        private bool? _isOverride;
+        /// <summary>
+        /// Indicates whether this method returns something (i.e. whether its return type is 
+        /// <c>void</c> - but not a <c>void*</c>).
+        /// </summary>
+        public virtual bool HasReturnValue
+        {
+            get
+            {
+                return (MemberTypeName == "void" || MemberTypeName == "const void") && PassedByType == PassedByType.Value;
+            }
+        }
+
+        private bool? _isOverriding;
         private MemberMethodDefinition _baseFunc;
 
         /// <summary>
@@ -118,21 +131,21 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (_isOverride == null)
+                if (_isOverriding == null)
                 {
                     if (IsVirtual && !ContainingClass.IsInterface && ContainingClass.BaseClass != null)
                     {
                         if (   ContainingClass.BaseClass.ContainsFunctionSignature(Signature, true, out _baseFunc)
                             || ContainingClass.BaseClass.ContainsInterfaceFunctionSignature(Signature, true, out _baseFunc))
-                            _isOverride = true;
+                            _isOverriding = true;
                         else
-                            _isOverride = false;
+                            _isOverriding = false;
                     }
                     else
-                        _isOverride = false;
+                        _isOverriding = false;
                 }
 
-                return (bool) _isOverride;
+                return (bool)_isOverriding;
             }
         }
 
@@ -231,7 +244,7 @@ namespace AutoWrap.Meta
         /// </summary>
         public bool IsConstructor
         {
-            get { return (Name == ContainingClass.Name); }
+            get { return (NativeName == ContainingClass.Name); }
         }
 
         /// <summary>
@@ -241,8 +254,8 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return (Name.StartsWith("operator")
-                        && !Char.IsLetterOrDigit(Name["operator".Length]));
+                return (NativeName.StartsWith("operator")
+                    && !Char.IsLetterOrDigit(NativeName["operator".Length]));
             }
         }
 
@@ -253,8 +266,8 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return (Name.StartsWith("add")
-                        && Name.EndsWith("Listener")
+                return (NativeName.StartsWith("add")
+                        && NativeName.EndsWith("Listener")
                         && _parameters.Count == 1
                         && _parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
             }
@@ -267,8 +280,8 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return (Name.StartsWith("remove")
-                        && Name.EndsWith("Listener")
+                return (NativeName.StartsWith("remove")
+                        && NativeName.EndsWith("Listener")
                         && _parameters.Count == 1
                         && _parameters[0].Type.HasWrapType(WrapTypes.NativeDirector));
             }
@@ -279,44 +292,43 @@ namespace AutoWrap.Meta
         /// </summary>
         public bool IsProperty
         {
-            get { return IsGetProperty || IsSetProperty; }
+            get { return IsPropertyGetAccessor || IsSetProperty; }
         }
 
+        private bool? _isPropertyGetAccessor;
         /// <summary>
-        /// Indicates whether this method returns something (i.e. whether its return type is 
-        /// <c>void</c> - but not a <c>void*</c>).
+        /// Denotes whether this method a get accessor (getter) for a property.
         /// </summary>
-        public virtual bool HasReturnValue {
-            get
-            {
-                return (MemberTypeName == "void" || MemberTypeName == "const void") && PassedByType == PassedByType.Value;
-            }
-        }
-
-        private bool? _isGetProperty;
-
-        public bool IsGetProperty
+        public bool IsPropertyGetAccessor
         {
             get
             {
-                if (_isGetProperty == null)
+                if (_isPropertyGetAccessor == null)
                 {
                     if (IsOverriding)
-                        _isGetProperty = BaseMethod.IsGetProperty;
+                    {
+                        // Check this before checking possible attributes
+                        _isPropertyGetAccessor = BaseMethod.IsPropertyGetAccessor;
+                    }
                     else if (IsConstructor || MemberTypeName == "void" || _parameters.Count > 0)
-                        _isGetProperty = false;
+                    {
+                        // Check this before checking possible attributes
+                        _isPropertyGetAccessor = false;
+                    }
                     else if (HasAttribute<PropertyAttribute>())
-                        _isGetProperty = true;
+                        _isPropertyGetAccessor = true;
                     else if (HasAttribute<MethodAttribute>())
-                        _isGetProperty = false;
+                        _isPropertyGetAccessor = false;
                     else
                     {
-                        bool? ret = CheckFunctionForGetProperty(this);
+                        // Auto-detected whether this method is a property accessor
+                        bool? ret = CheckFunctionForGetProperty();
                         if (ret != null)
-                            _isGetProperty = ret;
-                        else
                         {
-                            string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : Name;
+                            _isPropertyGetAccessor = ret;
+                        } else
+                        {
+                            string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
 
                             if (name.StartsWith("get") && Char.IsUpper(name[3]))
                             {
@@ -324,24 +336,24 @@ namespace AutoWrap.Meta
                                 //check if property name collides with a nested type
                                 AbstractTypeDefinition type = ContainingClass.GetNestedType(pname, false);
                                 if (type != null)
-                                    _isGetProperty = false;
+                                    _isPropertyGetAccessor = false;
                                 else
                                 {
                                     //check if property name collides with a method
                                     MemberMethodDefinition func = ContainingClass.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
                                     if (func != null && !func.HasAttribute<RenameAttribute>())
-                                        _isGetProperty = false;
+                                        _isPropertyGetAccessor = false;
                                     else
-                                        _isGetProperty = true;
+                                        _isPropertyGetAccessor = true;
                                 }
                             }
                             else
-                                _isGetProperty = false;
+                                _isPropertyGetAccessor = false;
                         }
                     }
                 }
 
-                return (bool) _isGetProperty;
+                return (bool) _isPropertyGetAccessor;
             }
         }
 
@@ -365,13 +377,13 @@ namespace AutoWrap.Meta
                         _isSetProperty = false;
                     else
                     {
-                        string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : Name;
+                        string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
 
                         if (name.StartsWith("set") && Char.IsUpper(name[3]))
                         {
                             // Check to see if there is a "get" function
                             MemberMethodDefinition func = ContainingClass.GetFunction("get" + name.Substring(3), false, false);
-                            _isSetProperty = (func != null && func.IsGetProperty && func.MemberTypeName == Parameters[0].TypeName
+                            _isSetProperty = (func != null && func.IsPropertyGetAccessor && func.MemberTypeName == Parameters[0].TypeName
                                               && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverriding == IsOverriding)));
                         }
                         else
@@ -410,7 +422,7 @@ namespace AutoWrap.Meta
             }
 
             IsConstMethod = bool.Parse(elem.GetAttribute("const"));
-            _isConst = (" " + Definition.Substring(0, Definition.IndexOf(Name))).Contains(" const ");
+            this._isConst = (" " + Definition.Substring(0, Definition.IndexOf(NativeName))).Contains(" const ");
         }
 
         protected override void InterpretChildElement(XmlElement child)
@@ -436,6 +448,26 @@ namespace AutoWrap.Meta
                 }
                 count++;
             }
+        }
+    
+
+        protected virtual bool? CheckFunctionForGetProperty()
+        {
+            if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
+            {
+                return false;
+            }
+
+            string name = this.GetRenameName();
+
+            if (MemberTypeName == "bool" &&
+                ((name.StartsWith("is") && Char.IsUpper(name[2])) || (name.StartsWith("has") && Char.IsUpper(name[3])))
+                && _parameters.Count == 0)
+            {
+                return true;
+            }
+
+            return CheckTypeMemberForGetProperty(this);
         }
     }
 }

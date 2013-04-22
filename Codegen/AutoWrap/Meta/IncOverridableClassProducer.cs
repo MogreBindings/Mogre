@@ -93,7 +93,7 @@ namespace AutoWrap.Meta
                     if (!field.IsIgnored
                         && field.ProtectionLevel == ProtectionLevel.Protected
                         && !field.IsStatic)
-                        _code.AppendLine("friend ref class " + className + "::" + field.Name + ";");
+                        _code.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
                 }
             }
 
@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
             _code.AppendIndent("");
             if (f.IsVirtual)
                 _code.Append("virtual ");
-            _code.Append(f.MemberTypeNativeName + " " + f.Name + "(");
+            _code.Append(f.MemberTypeNativeName + " " + f.NativeName + "(");
             AddNativeMethodParams(f);
             _code.Append(" ) ");
             if (f.IsConstMethod)
@@ -283,12 +283,12 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberMethodDefinition f)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + f.ContainingClass.Name + "::" + f.NativeName;
         }
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.Name;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.NativeName;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)

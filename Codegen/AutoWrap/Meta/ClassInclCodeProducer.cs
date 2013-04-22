@@ -163,14 +163,14 @@ namespace AutoWrap.Meta
                 {
                     if (f.IsDeclarableFunction)
                     {
-                        _code.AppendLine(cls.FullCLRName + "::" + f.CLRName + "Handler^ " + NameToPrivate(f.Name) + ";");
+                        _code.AppendLine(cls.FullCLRName + "::" + f.CLRName + "Handler^ " + NameToPrivate(f.NativeName) + ";");
                     }
                     else
                         continue;
 
                     if (cls.HasAttribute<StopDelegationForReturnAttribute>())
                     {
-                        _code.AppendLine("array<Delegate^>^ " + NameToPrivate(f.Name) + "Delegates;");
+                        _code.AppendLine("array<Delegate^>^ " + NameToPrivate(f.NativeName) + "Delegates;");
                     }
                 }
 
@@ -413,7 +413,7 @@ namespace AutoWrap.Meta
                     if (f.IsDeclarableFunction)
                     {
                         string handler = cls.FullCLRName + "::" + f.CLRName + "Handler^";
-                        string privField = NameToPrivate(f.Name);
+                        string privField = NameToPrivate(f.NativeName);
                         string listener = NameToPrivate(cls.Name);
                         _code.AppendLine("event " + handler + " " + f.CLRName);
                         _code.AppendLine("{");
@@ -536,7 +536,7 @@ namespace AutoWrap.Meta
                 _code.Append("const ");
             if (field.IsStatic)
                 _code.Append("static ");
-            _code.Append(GetCLRTypeName(field) + " " + field.Name + " = " + field.MemberType.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
+            _code.Append(GetCLRTypeName(field) + " " + field.NativeName + " = " + field.MemberType.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
         protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
@@ -814,7 +814,7 @@ namespace AutoWrap.Meta
                 if (field.MemberType.HasAttribute<NativeValueContainerAttribute>()
                     || (field.MemberType.IsValueType && !field.MemberType.HasWrapType(WrapTypes.NativePtrValueType)))
                 {
-                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.Name);
+                    ParamDefinition tmpParam = new ParamDefinition(this.MetaDef, field, field.NativeName);
                     switch (field.PassedByType)
                     {
                         case PassedByType.Value:
@@ -831,7 +831,7 @@ namespace AutoWrap.Meta
                     _code.AppendIndent("");
                     if (field.IsStatic)
                         _code.Append("static ");
-                    _code.AppendFormat("property {0} {1}\n", ptype, field.Name);
+                    _code.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
                     _code.AppendLine("{");
 
                     _code.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
@@ -845,7 +845,7 @@ namespace AutoWrap.Meta
                     _code.AppendIndent("");
                     if (field.IsStatic)
                         _code.Append("static ");
-                    _code.AppendFormat("property {0} {1}[int]\n", ptype, field.Name);
+                    _code.AppendFormat("property {0} {1}[int]\n", ptype, field.NativeName);
                     _code.AppendLine("{");
 
                     _code.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
@@ -861,7 +861,7 @@ namespace AutoWrap.Meta
                 _code.AppendIndent("");
                 if (field.IsStatic)
                     _code.Append("static ");
-                _code.AppendFormat("property {0} {1}\n", ptype, field.Name);
+                _code.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
                 _code.AppendLine("{");
 
                 _code.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
@@ -881,7 +881,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    _code.AppendFormat("property {0} {1}\n", ptype, field.Name);
+                    _code.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
                 }
                 _code.AppendLine("{");
 
@@ -902,9 +902,9 @@ namespace AutoWrap.Meta
 
         protected override void AddMethodsForField(MemberFieldDefinition field)
         {
-            _code.AppendLine(GetCLRTypeName(field) + " get_" + field.Name + "();");
+            _code.AppendLine(GetCLRTypeName(field) + " get_" + field.NativeName + "();");
             ParamDefinition param = new ParamDefinition(this.MetaDef, field, "value");
-            _code.AppendLine("void set_" + field.Name + "(" + param.Type.GetCLRParamTypeName(param) + " value);");
+            _code.AppendLine("void set_" + field.NativeName + "(" + param.Type.GetCLRParamTypeName(param) + " value);");
         }
 
         protected virtual void AddComments()

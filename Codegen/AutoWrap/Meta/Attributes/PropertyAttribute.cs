@@ -25,6 +25,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Marks a method explicitly as an property accessor (getter or setter). Use this
+    /// if the property isn't recognized automatically.
+    /// </summary>
     public class PropertyAttribute : AutoWrapAttribute
     {
         public static PropertyAttribute FromElement(XmlElement elem)
