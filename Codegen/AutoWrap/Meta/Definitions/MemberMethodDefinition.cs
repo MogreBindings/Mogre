@@ -280,24 +280,24 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Denotes whether this method a get accessor (getter) for a property.
         /// </summary>
-        public bool IsPropertyGetAccessor
+        public virtual bool IsPropertyGetAccessor
         {
             get
             {
                 if (_isPropertyGetAccessor == null)
-                    _isPropertyGetAccessor = CheckForGetAccessor();
+                    _isPropertyGetAccessor = MemberPropertyDefinition.CheckForGetAccessor(this);
 
                 return (bool) _isPropertyGetAccessor;
             }
         }
 
         private bool? _isPropertySetAccessor;
-        public bool IsPropertySetAccessor
+        public virtual bool IsPropertySetAccessor
         {
             get
             {
                 if (_isPropertySetAccessor == null)
-                    _isPropertySetAccessor = CheckForSetAccessor();
+                    _isPropertySetAccessor = MemberPropertyDefinition.CheckForSetAccessor(this);
 
                 return (bool)_isPropertySetAccessor;
             }
@@ -356,139 +356,6 @@ namespace AutoWrap.Meta
                 }
                 count++;
             }
-        }
-    
-
-        /// <summary>
-        /// Checks whether this method is a get accessor for a CLR property.
-        /// </summary>
-        /// <seealso cref="IsPropertyGetAccessor"/>
-        protected virtual bool CheckForGetAccessor()
-        {
-            if (IsOverriding)
-            {
-                // Check this before checking possible attributes
-                return BaseMethod.IsPropertyGetAccessor;
-            }
-            
-            if (IsConstructor || MemberTypeName == "void" || _parameters.Count != 0)
-            {
-                // Check this before checking possible attributes
-                return false;
-            }
-            
-            if (HasAttribute<PropertyAttribute>())
-            {
-                return true;
-            }
-            
-            if (HasAttribute<MethodAttribute>())
-            {
-                return false;
-            }
-            
-            if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
-            {
-                return false;
-            }
-
-            string name = this.GetRenameName();
-
-            if (MemberTypeName == "bool"
-                && ((name.StartsWith("is") && Char.IsUpper(name[2]) && MetaDef.CodeStyleDef.AllowIsInPropertyName) 
-                    || (name.StartsWith("has") && Char.IsUpper(name[3])))
-                && _parameters.Count == 0)
-            {
-                return true;
-            }
-
-            if (!MemberType.IsValueType
-                && (MemberType.IsSharedPtr || MemberType is DefTemplateOneType || MemberType is DefTemplateTwoTypes))
-            {
-                return false;
-            }
-
-            if (MemberType.HasAttribute<ReturnOnlyByMethodAttribute>())
-            {
-                // Invalid type for a property
-                return false;
-            }
-
-            string propName;
-            if (name.StartsWith("get") && Char.IsUpper(name[3]))
-            {
-                propName = name.Substring(3);
-            } else if (name.StartsWith("is") && Char.IsUpper(name[2]))
-            {
-                propName = name.Substring(2);
-            } else
-            {
-            // Not a valid getter prefix.
-                return false;
-            }
-
-            // Check if the property's name collides with the name of a nested type. In this 
-            // case we can't convert the method into a property.
-            AbstractTypeDefinition type = ContainingClass.GetNestedType(propName, false);
-            if (type != null) {
-                return false;
-            } 
-
-            // Check if the property's name collides with the name of a method. In this 
-            // case we can't convert the method into a property.
-            MemberMethodDefinition method = ContainingClass.GetMethodByCLRName(propName, true, false);
-
-            // If there is no method == valid property name
-            return (method == null);
-        }
-
-        /// <summary>
-        /// Checks whether this method is a set accessor for a CLR property.
-        /// </summary>
-        /// <seealso cref="IsPropertyGetAccessor"/>
-        protected virtual bool CheckForSetAccessor()
-        {
-            if (IsOverriding)
-            {
-                // Check this before checking possible attributes
-                return BaseMethod.IsPropertySetAccessor;
-            }
-            
-            if (IsConstructor || MemberTypeName != "void" || _parameters.Count != 1)
-            {
-                // Check this before checking possible attributes
-                return false;
-            }
-            
-            if (HasAttribute<PropertyAttribute>())
-                return true;
-            
-            if (HasAttribute<MethodAttribute>())
-                return false;
-            
-            if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
-                return false;
-
-            string name = this.GetRenameName();
-
-            if (!name.StartsWith("set") || !Char.IsUpper(name[3]))
-                return false;
-
-            // Check to see if there is a "get" function
-            string propName = name.Substring(3);
-            MemberMethodDefinition method;
-            method = ContainingClass.GetMethodByNativeName("get" + propName, true, false);
-            // TODO by manski: Include again
-            /*if (method == null) {
-            method = this.ContainingClass.GetMethodByNativeName("is" + propName, true, false);
-            if (method == null) {
-            method = this.ContainingClass.GetMethodByNativeName("has" + propName, true, false);
-            }
-            }*/
-
-            // NOTE: Most checks done in "CheckForGetAccessor()" are represented in "method.IsPropertyGetAccessor".
-            return (method != null && method.IsPropertyGetAccessor && method.MemberTypeName == Parameters[0].TypeName
-                && (!ContainingClass.AllowVirtuals || (method.IsVirtual == IsVirtual && method.IsOverriding == IsOverriding)));
         }
     }
 }

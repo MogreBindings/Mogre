@@ -167,7 +167,7 @@ namespace AutoWrap.Meta
                 //SearchProtectedFields(iface);
             }
 
-            _overridableProperties = GetPropertiesFromFunctions(_overridableFunctions);
+            _overridableProperties = MemberPropertyDefinition.GetPropertiesFromFunctions(_overridableFunctions);
 
             //Find cached members
 
@@ -188,59 +188,6 @@ namespace AutoWrap.Meta
                         MarkCachedMember(m);
                 }
             }
-        }
-
-        /// <summary>
-        /// Converts the specified methods into CLR properties.
-        /// </summary>
-        /// <param name="funcs">The methods to convert. Must only contain getter and setter
-        /// methods.</param>
-        public static MemberPropertyDefinition[] GetPropertiesFromFunctions(List<MemberMethodDefinition> funcs)
-        {
-            SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
-
-            foreach (MemberMethodDefinition f in funcs)
-            {
-                if (f.IsProperty && f.IsDeclarableFunction)
-                {
-                    MemberPropertyDefinition p = null;
-                    string propName = MemberPropertyDefinition.GetPropertyName(f);
-
-                    if (props.ContainsKey(propName))
-                        p = props[propName];
-                    else
-                    {
-                        p = new MemberPropertyDefinition(propName);
-                        if (f.IsPropertyGetAccessor)
-                        {
-                            p.MemberTypeName = f.MemberTypeName;
-                            p.PassedByType = f.PassedByType;
-                        }
-                        else
-                        {
-                            p.MemberTypeName = f.Parameters[0].TypeName;
-                            p.PassedByType = f.Parameters[0].PassedByType;
-                        }
-
-                        props.Add(p.Name, p);
-                    }
-
-                    if (f.IsPropertyGetAccessor)
-                    {
-                        p.GetterFunction = f;
-                    }
-                    else if (f.IsPropertySetAccessor)
-                    {
-                        p.SetterFunction = f;
-                    }
-                }
-            }
-
-            MemberPropertyDefinition[] parr = new MemberPropertyDefinition[props.Count];
-            for (int i = 0; i < props.Count; i++)
-                parr[i] = props.Values[i];
-
-            return parr;
         }
 
         public virtual string ClassFullNativeName
