@@ -204,12 +204,13 @@ namespace AutoWrap.Meta
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
                     MemberPropertyDefinition p = null;
+                    string propName = MemberPropertyDefinition.GetPropertyName(f);
 
-                    if (props.ContainsKey(f.CLRName))
-                        p = props[f.CLRName];
+                    if (props.ContainsKey(propName))
+                        p = props[propName];
                     else
                     {
-                        p = new MemberPropertyDefinition(f.CLRName);
+                        p = new MemberPropertyDefinition(propName);
                         if (f.IsPropertyGetAccessor)
                         {
                             p.MemberTypeName = f.MemberTypeName;
@@ -221,7 +222,7 @@ namespace AutoWrap.Meta
                             p.PassedByType = f.Parameters[0].PassedByType;
                         }
 
-                        props.Add(f.CLRName, p);
+                        props.Add(p.Name, p);
                     }
 
                     if (f.IsPropertyGetAccessor)

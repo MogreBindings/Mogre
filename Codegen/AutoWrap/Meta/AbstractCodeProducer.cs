@@ -32,13 +32,11 @@ namespace AutoWrap.Meta
     /// <summary>
     /// Base class for all classes that generate some kind of source code.
     /// </summary>
-    public abstract class AbstractCodeProducer
+    public abstract class AbstractCodeProducer : MetaDefBasedClass
     {
-        public readonly MetaDefinition MetaDef;
-        
         protected AbstractCodeProducer(MetaDefinition metaDef)
+            : base(metaDef)
         {
-            MetaDef = metaDef;
         }
 
         protected virtual string GetNativeDirectorReceiverInterfaceName(ClassDefinition type)

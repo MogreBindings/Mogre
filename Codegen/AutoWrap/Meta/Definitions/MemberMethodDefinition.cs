@@ -10,28 +10,9 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (IsProperty)
+                if (IsOperatorOverload)
                 {
-                    // property
-                    string name = this.GetRenameName();
-
-                    if (name.StartsWith("get"))
-                        return name.Substring(3);
-
-                    if (name.StartsWith("set"))
-                    return name.Substring(3);
-                    
-                    if (!MetaDef.CodeStyleDef.AllowIsInPropertyName && name.StartsWith("is"))
-                        return name.Substring(2);
-
-                    // For properties named like "hasEnabledAnimationState".
-                    return MetaDef.CodeStyleDef.ConvertPropertyName(base.CLRName, this);
-                
-                }
-                
-                if (IsOperatorOverload) 
-                {
-                    // operator
+                    // operator - don't convert it.
                     return base.CLRName;
                 }
                 

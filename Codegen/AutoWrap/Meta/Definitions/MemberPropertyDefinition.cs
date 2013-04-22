@@ -137,5 +137,23 @@
         {
             return clazz.ContainsFunctionSignature(_accessorFunction.Signature, allowInBaseClass);
         }
+    
+        public static string GetPropertyName(MemberMethodDefinition methodDef)
+        {
+            // property
+            string name = methodDef.GetRenameName();
+
+            if (name.StartsWith("get"))
+                return name.Substring(3);
+
+            if (name.StartsWith("set"))
+                return name.Substring(3);
+            
+            if (!methodDef.MetaDef.CodeStyleDef.AllowIsInPropertyName && name.StartsWith("is"))
+                return name.Substring(2);
+
+            // For properties named like "hasEnabledAnimationState".
+            return methodDef.MetaDef.CodeStyleDef.ConvertPropertyName(methodDef.CLRName, methodDef);
+        }
     }
 }

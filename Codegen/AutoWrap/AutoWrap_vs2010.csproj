@@ -136,6 +136,7 @@
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
     <Compile Include="Meta\IncCLRHandleClassProducer.cs" />
     <Compile Include="Meta\MetaConstructFactory.cs" />
+    <Compile Include="Meta\MetaDefBasedClass.cs" />
     <Compile Include="Meta\SourceCodeStringBuilder.cs" />
     <Compile Include="Mogre\Mogre17.cs" />
     <Compile Include="Meta\NativeProtectedTypesProxy.cs" />

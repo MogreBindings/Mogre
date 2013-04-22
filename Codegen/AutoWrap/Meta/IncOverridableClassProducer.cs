@@ -81,7 +81,7 @@ namespace AutoWrap.Meta
             //with 'friend' specifier
             foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
-                if (prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected
+                if (   (prop.CanRead  && prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected)
                     || (prop.CanWrite && prop.SetterFunction.ProtectionLevel == ProtectionLevel.Protected))
                     _code.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }

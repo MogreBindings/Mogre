@@ -43,13 +43,13 @@ namespace AutoWrap.Meta
 
             if (f.IsPropertyGetAccessor)
             {
-                sb.AppendLine(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + ";");
+                sb.AppendLine(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + MemberPropertyDefinition.GetPropertyName(f) + ";");
                 managedCall = "mp_return";
             }
             else if (f.IsSetProperty)
             {
                 ParamDefinition param = f.Parameters[0];
-                managedCall = managedTarget + "->" + f.CLRName + " = " + param.Type.ProduceNativeCallConversionCode(param.Name, param);
+                managedCall = managedTarget + "->" + MemberPropertyDefinition.GetPropertyName(f) + " = " + param.Type.ProduceNativeCallConversionCode(param.Name, param);
             }
             else
             {
