@@ -13,7 +13,7 @@ namespace AutoWrap.Meta
                 if (IsProperty)
                 {
                     // property
-                    string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
+                    string name = this.GetRenameName();
 
                     if (name.StartsWith("get"))
                         return name.Substring(3);
@@ -340,7 +340,7 @@ namespace AutoWrap.Meta
                                 else
                                 {
                                     //check if property name collides with a method
-                                    MemberMethodDefinition func = ContainingClass.GetMethod(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+                                    MemberMethodDefinition func = ContainingClass.GetMethodByNativeName(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
                                     if (func != null && !func.HasAttribute<RenameAttribute>())
                                         _isPropertyGetAccessor = false;
                                     else
@@ -382,7 +382,7 @@ namespace AutoWrap.Meta
                         if (name.StartsWith("set") && Char.IsUpper(name[3]))
                         {
                             // Check to see if there is a "get" function
-                            MemberMethodDefinition func = ContainingClass.GetMethod("get" + name.Substring(3), false, false);
+                            MemberMethodDefinition func = ContainingClass.GetMethodByNativeName("get" + name.Substring(3), false, false);
                             _isSetProperty = (func != null && func.IsPropertyGetAccessor && func.MemberTypeName == Parameters[0].TypeName
                                               && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverriding == IsOverriding)));
                         }
@@ -495,7 +495,7 @@ namespace AutoWrap.Meta
 
             // Check if the property's name collides with the name of a method. In this 
             // case we can't convert the method into a property.
-            MemberMethodDefinition method = ContainingClass.GetMethod(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+            MemberMethodDefinition method = ContainingClass.GetMethodByNativeName(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
 
             return (method == null || method.HasAttribute<RenameAttribute>());
         }

@@ -916,7 +916,7 @@ namespace AutoWrap.Meta
         /// <param name="raiseException">denotes whether an exception shall be thrown when the
         /// specified method couldn't be found. If this is <c>false</c>, <c>null</c> will be returned
         /// instead.</param>
-        public MemberMethodDefinition GetMethod(string nativeName, bool checkBaseClass = false, bool raiseException = true)
+        public MemberMethodDefinition GetMethodByNativeName(string nativeName, bool checkBaseClass = false, bool raiseException = true)
         {
             foreach (MemberMethodDefinition f in Methods)
             {
@@ -925,10 +925,37 @@ namespace AutoWrap.Meta
             }
 
             if (checkBaseClass && BaseClass != null)
-                return BaseClass.GetMethod(nativeName, true, raiseException);
+                return BaseClass.GetMethodByNativeName(nativeName, true, raiseException);
 
             if (raiseException)
-                throw new Exception("Method not found: " + nativeName);
+                throw new Exception("Native method not found: " + nativeName);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a method with the specified CLR name. Note: If there more than one method
+        /// with the same name, only the first (order is, however, arbitrary) will be returned.
+        /// </summary>
+        /// <param name="clrName">the CLR name of the method</param>
+        /// <param name="checkBaseClass">denotes whether the base class are to be search for the
+        /// method, if it's not found in the current class</param>
+        /// <param name="raiseException">denotes whether an exception shall be thrown when the
+        /// specified method couldn't be found. If this is <c>false</c>, <c>null</c> will be returned
+        /// instead.</param>
+        public MemberMethodDefinition GetMethodByCLRName(string clrName, bool checkBaseClass = false, bool raiseException = true)
+        {
+            foreach (MemberMethodDefinition f in Methods)
+            {
+                if (f.CLRName == clrName)
+                    return f;
+            }
+
+            if (checkBaseClass && BaseClass != null)
+                return BaseClass.GetMethodByNativeName(clrName, true, raiseException);
+
+            if (raiseException) 
+                throw new Exception("CLR method not found: " + clrName);
 
             return null;
        }
