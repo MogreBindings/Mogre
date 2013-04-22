@@ -29,7 +29,9 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Denotes whether "is" is allowed as prefix in a property name. If this
         /// is <c>true</c> a property could be named "IsEnabled" while if this is
-        /// <c>false</c> the property would be named "Enabled".
+        /// <c>false</c> the property would be named "Enabled". Note that get accessor
+        /// methods whose names start with "is" are always considered a property, 
+        /// regardless of the value of this (i.e. <c>AllowIsInPropertyName</c>) property.
         /// </summary>
         public virtual bool AllowIsInPropertyName
         {

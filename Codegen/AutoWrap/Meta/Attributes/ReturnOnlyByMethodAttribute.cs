@@ -25,6 +25,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// This attribute describes a type that can only be returned by a method. It can't
+    /// be used as a parameter type nor as type for a field or property.
+    /// </summary>
     public class ReturnOnlyByMethodAttribute : AutoWrapAttribute
     {
         public static ReturnOnlyByMethodAttribute FromElement(XmlElement elem)

@@ -146,16 +146,5 @@ namespace AutoWrap.Meta
 
             return false;
         }
-
-        protected virtual bool? CheckTypeMemberForGetProperty(ITypeMember m)
-        {
-            if (!m.MemberType.IsValueType && (m.MemberType.IsSharedPtr || m.MemberType is DefTemplateOneType || m.MemberType is DefTemplateTwoTypes))
-                return false;
-
-            if (m.MemberType.HasAttribute<ReturnOnlyByMethodAttribute>())
-                return false;
-
-            return null;
-        }
     }
 }

@@ -122,7 +122,7 @@ namespace AutoWrap.Meta
                         }
                     }
 
-                    foreach (MemberMethodDefinition func in this.Functions)
+                    foreach (MemberMethodDefinition func in Methods)
                     {
                         if (func.IsAbstract)
                             list.Add(func);
@@ -157,7 +157,7 @@ namespace AutoWrap.Meta
                         }
                     }
 
-                    foreach (MemberMethodDefinition func in this.Functions)
+                    foreach (MemberMethodDefinition func in Methods)
                     {
                         if (func.IsDeclarableFunction && func.IsAbstract)
                             list.Add(func);
@@ -201,17 +201,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        public virtual MemberMethodDefinition GetFunctionWithSignature(MethodSignature signature)
-        {
-            foreach (MemberMethodDefinition func in this.Functions)
-            {
-                if (func.Signature == signature)
-                    return func;
-            }
-
-            return null;
-        }
-
         public IEnumerable PublicNestedTypes
         {
             get
@@ -224,7 +213,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IEnumerable Functions
+        public IEnumerable Methods
         {
             get
             {
@@ -252,7 +241,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (MemberMethodDefinition func in Functions)
+                foreach (MemberMethodDefinition func in Methods)
                 {
                     if (!func.IsProperty
                         && func.ProtectionLevel == ProtectionLevel.Public)
@@ -265,7 +254,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (MemberMethodDefinition func in Functions)
+                foreach (MemberMethodDefinition func in Methods)
                 {
                     if (func.IsDeclarableFunction
                         && !func.IsProperty)
@@ -278,7 +267,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                foreach (MemberMethodDefinition func in Functions)
+                foreach (MemberMethodDefinition func in Methods)
                 {
                     if (!func.IsProperty
                         && func.ProtectionLevel == ProtectionLevel.Protected)
@@ -610,7 +599,7 @@ namespace AutoWrap.Meta
             if (basefunc != null)
                 return true;
 
-            foreach (MemberMethodDefinition func in this.Functions)
+            foreach (MemberMethodDefinition func in Methods)
             {
                 if (func.Signature == signature)
                 {
@@ -801,7 +790,7 @@ namespace AutoWrap.Meta
                 if (_constructors == null)
                 {
                     List<MemberMethodDefinition> list = new List<MemberMethodDefinition>();
-                    foreach (MemberMethodDefinition f in Functions)
+                    foreach (MemberMethodDefinition f in Methods)
                     {
                         if (f.IsConstructor)
                             list.Add(f);
@@ -822,7 +811,7 @@ namespace AutoWrap.Meta
 
             SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
 
-            foreach (MemberMethodDefinition f in this.Functions)
+            foreach (MemberMethodDefinition f in Methods)
             {
                 if (f.IsProperty && f.IsDeclarableFunction)
                 {
@@ -917,30 +906,42 @@ namespace AutoWrap.Meta
             return field;
         }
 
-        public MemberMethodDefinition GetFunction(string name)
+        /// <summary>
+        /// Returns a method with the specified native name. Note: If there more than one method
+        /// with the same name, only the first (order is, however, arbitrary) will be returned.
+        /// </summary>
+        /// <param name="nativeName">the native name of the method</param>
+        /// <param name="checkBaseClass">denotes whether the base class are to be search for the
+        /// method, if it's not found in the current class</param>
+        /// <param name="raiseException">denotes whether an exception shall be thrown when the
+        /// specified method couldn't be found. If this is <c>false</c>, <c>null</c> will be returned
+        /// instead.</param>
+        public MemberMethodDefinition GetMethod(string nativeName, bool checkBaseClass = false, bool raiseException = true)
         {
-            return GetFunction(name, false, true);
-        }
-
-        public MemberMethodDefinition GetFunction(string name, bool inherit, bool raiseException)
-        {
-            MemberMethodDefinition func = null;
-            foreach (MemberMethodDefinition f in Functions)
+            foreach (MemberMethodDefinition f in Methods)
             {
-                if (f.NativeName == name)
-                {
-                    func = f;
-                    break;
-                }
+                if (f.NativeName == nativeName)
+                    return f;
             }
 
-            if (func == null && inherit && BaseClass != null)
-                func = BaseClass.GetFunction(name, inherit, raiseException);
+            if (checkBaseClass && BaseClass != null)
+                return BaseClass.GetMethod(nativeName, true, raiseException);
 
-            if (func == null && raiseException)
-                throw new Exception("DefFunction not found");
+            if (raiseException)
+                throw new Exception("Method not found: " + nativeName);
 
-            return func;
+            return null;
+       }
+
+       public virtual MemberMethodDefinition GetMethodWithSignature(MethodSignature signature)
+       {
+            foreach (MemberMethodDefinition func in this.Methods)
+            {
+                if (func.Signature == signature)
+                    return func;
+            }
+
+            return null;
         }
 
         public AbstractTypeDefinition GetNestedType(string name)

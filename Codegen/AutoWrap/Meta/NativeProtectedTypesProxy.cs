@@ -248,7 +248,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (MemberMethodDefinition func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Methods)
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionLevel == ProtectionLevel.Protected
@@ -289,7 +289,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (MemberMethodDefinition func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Methods)
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionLevel == ProtectionLevel.Protected

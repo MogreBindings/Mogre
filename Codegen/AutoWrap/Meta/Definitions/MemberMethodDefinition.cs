@@ -340,7 +340,7 @@ namespace AutoWrap.Meta
                                 else
                                 {
                                     //check if property name collides with a method
-                                    MemberMethodDefinition func = ContainingClass.GetFunction(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+                                    MemberMethodDefinition func = ContainingClass.GetMethod(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
                                     if (func != null && !func.HasAttribute<RenameAttribute>())
                                         _isPropertyGetAccessor = false;
                                     else
@@ -382,7 +382,7 @@ namespace AutoWrap.Meta
                         if (name.StartsWith("set") && Char.IsUpper(name[3]))
                         {
                             // Check to see if there is a "get" function
-                            MemberMethodDefinition func = ContainingClass.GetFunction("get" + name.Substring(3), false, false);
+                            MemberMethodDefinition func = ContainingClass.GetMethod("get" + name.Substring(3), false, false);
                             _isSetProperty = (func != null && func.IsPropertyGetAccessor && func.MemberTypeName == Parameters[0].TypeName
                                               && (!ContainingClass.AllowVirtuals || (func.IsVirtual == IsVirtual && func.IsOverriding == IsOverriding)));
                         }
@@ -451,7 +451,7 @@ namespace AutoWrap.Meta
         }
     
 
-        protected virtual bool? CheckFunctionForGetProperty()
+        protected virtual bool CheckFunctionForGetProperty()
         {
             if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
             {
@@ -460,14 +460,44 @@ namespace AutoWrap.Meta
 
             string name = this.GetRenameName();
 
-            if (MemberTypeName == "bool" &&
-                ((name.StartsWith("is") && Char.IsUpper(name[2])) || (name.StartsWith("has") && Char.IsUpper(name[3])))
+            if (MemberTypeName == "bool" 
+                && (  (name.StartsWith("is")  && Char.IsUpper(name[2])) 
+                    || (name.StartsWith("has") && Char.IsUpper(name[3])))
                 && _parameters.Count == 0)
             {
                 return true;
             }
 
-            return CheckTypeMemberForGetProperty(this);
+            if (!MemberType.IsValueType
+                && (MemberType.IsSharedPtr || MemberType is DefTemplateOneType || MemberType is DefTemplateTwoTypes))
+            {
+                return false;
+            }
+
+            if (MemberType.HasAttribute<ReturnOnlyByMethodAttribute>())
+            {
+                // Invalid type for a property
+                return false;
+            }
+
+            if (!name.StartsWith("get") || !Char.IsUpper(name[3]))
+            {
+                return false;
+            }
+
+            string pname = name.Substring(3);
+            // Check if the property's name collides with the name of a nested type. In this 
+            // case we can't convert the method into a property.
+            AbstractTypeDefinition type = ContainingClass.GetNestedType(pname, false);
+            if (type != null) {
+                return false;
+            } 
+
+            // Check if the property's name collides with the name of a method. In this 
+            // case we can't convert the method into a property.
+            MemberMethodDefinition method = ContainingClass.GetMethod(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+
+            return (method == null || method.HasAttribute<RenameAttribute>());
         }
     }
 }

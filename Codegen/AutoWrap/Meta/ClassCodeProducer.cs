@@ -84,9 +84,9 @@ namespace AutoWrap.Meta
             foreach (ClassDefinition iface in _definition.GetInterfaces())
             {
                 // Add attributes of interface methods from the interface classes
-                foreach (MemberMethodDefinition f in iface.Functions)
+                foreach (MemberMethodDefinition f in iface.Methods)
                 {
-                    MemberMethodDefinition tf = _definition.GetFunctionWithSignature(f.Signature);
+                    MemberMethodDefinition tf = _definition.GetMethodWithSignature(f.Signature);
                     if (tf != null)
                         tf.AddAttributes(f.Attributes);
                 }
@@ -397,7 +397,7 @@ namespace AutoWrap.Meta
 
         protected virtual void SearchOverridableFunctions(ClassDefinition type)
         {
-            foreach (MemberMethodDefinition func in type.Functions)
+            foreach (MemberMethodDefinition func in type.Methods)
             {
                 if (func.IsDeclarableFunction && func.IsVirtual)
                 {
