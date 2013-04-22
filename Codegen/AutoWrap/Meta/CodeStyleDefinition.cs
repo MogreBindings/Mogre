@@ -39,6 +39,22 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
+        /// The prefix "is" for a CLR property name (e.g. "Is" in "IsEnabled").
+        /// </summary>
+        public virtual string CLRPropertyIsPrefix
+        {
+            get { return "Is"; }
+        }
+    
+        /// <summary>
+        /// The prefix "has" for a CLR property name (e.g. "Has" in "HasSubMeshes").
+        /// </summary>
+        public virtual string CLRPropertyHasPrefix
+        {
+            get { return "Has"; }
+        }
+    
+        /// <summary>
         /// Converts the native method name into an CLR method name. <b>Be careful:</b> Don't call 
         /// <see cref="MemberMethodDefinition.CLRName"/> from this method!
         /// </summary>
@@ -58,6 +74,8 @@ namespace AutoWrap.Meta
         /// "get", "set", and possibly "is" (see <see cref="RemoveIsFromPropertyName"/>) removed.</param>
         /// <param name="methodDef">the definition of one of the accessor methods for this property</param>
         /// <returns>the CLR name of this property</returns>
+        /// <seealso cref="CLRPropertyIsPrefix"/>
+        /// <seealso cref="CLRPropertyHasPrefix"/>
         public virtual string ConvertPropertyName(string name, MemberMethodDefinition methodDef)
         {
             return ToCamelCase(name);

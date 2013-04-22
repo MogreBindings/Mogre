@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AutoWrap.Meta
 {
@@ -165,19 +166,80 @@ namespace AutoWrap.Meta
         /// <param name="methods">The methods to convert. Methods that are no accesors (<c>IsProperty == false</c>) will be ignored.</param>
         public static MemberPropertyDefinition[] GetPropertiesFromMethods(IEnumerable<MemberMethodDefinition> methods)
         {
-            SortedList<string, MemberPropertyDefinition> props = new SortedList<string, MemberPropertyDefinition>();
+            // NOTE: Use a sorted "list" here so that the order (and thereby the position) of thy properties in 
+            //   the generated source code doesn't vary each time the sources are generated.
+            SortedDictionary<string, MemberPropertyDefinition> props = new SortedDictionary<string, MemberPropertyDefinition>();
 
             foreach (MemberMethodDefinition f in methods)
             {
-                if (f.IsProperty && f.IsDeclarableFunction)
-                {
-                    MemberPropertyDefinition p;
-                    string propName = GetPropertyName(f);
+                if (!f.IsProperty || !f.IsDeclarableFunction)
+                    continue;
 
-                    if (props.ContainsKey(propName))
-                        p = props[propName];
-                    else
+                MemberPropertyDefinition p = null;
+                string propName = GetPropertyName(f);
+                CodeStyleDefinition codeStyle = f.MetaDef.CodeStyleDef;        
+
+                if (props.ContainsKey(propName))
+                {
+                    p = props[propName];
+                } else
+                {
+                    //
+                    // Merge properties with "is" or "has" prefix as this prefix can only be determined
+                    // from the get accessor but not from the set accessor.
+                    //
+                    if (f.IsPropertySetAccessor)
                     {
+                        // Set accessor - check for existing properties prefixed with "is" or "has".
+                        if (codeStyle.AllowIsInPropertyName && props.ContainsKey(codeStyle.CLRPropertyIsPrefix + propName))
+                        {
+                            propName = codeStyle.CLRPropertyIsPrefix + propName;
+                            p = props[propName];
+                        }
+                        else if (props.ContainsKey(codeStyle.CLRPropertyHasPrefix + propName))
+                        {
+                            propName = codeStyle.CLRPropertyHasPrefix + propName;
+                            p = props[propName];
+                        }
+                    } else
+                    {
+                        // Get accessor
+                        string oldPropName = null;
+                        if (codeStyle.AllowIsInPropertyName
+                            && propName.StartsWith(codeStyle.CLRPropertyIsPrefix)
+                            && props.ContainsKey(propName.Substring(codeStyle.CLRPropertyIsPrefix.Length)))
+                        {
+                            // is prefix
+                            oldPropName = propName.Substring(codeStyle.CLRPropertyIsPrefix.Length);
+                        }
+                        else if (propName.StartsWith(codeStyle.CLRPropertyHasPrefix)
+                            && props.ContainsKey(propName.Substring(codeStyle.CLRPropertyHasPrefix.Length)))
+                        {
+                            // has prefix
+                            oldPropName = propName.Substring(codeStyle.CLRPropertyHasPrefix.Length);
+                        }
+
+                        if (oldPropName != null)
+                        {
+                            MemberPropertyDefinition oldProp = props[oldPropName];
+                            // We need to check here whether the set accessor is actually
+                            if (oldProp.MemberTypeName == f.MemberTypeName)
+                            {
+                                props.Remove(oldPropName);
+
+                                p = new MemberPropertyDefinition(propName);
+                                p.MemberTypeName = oldProp.MemberTypeName;
+                                p.PassedByType = oldProp.PassedByType;
+                                p.SetterFunction = oldProp.SetterFunction;
+
+                                props.Add(p.Name, p);
+                            }
+                        }
+                    }
+
+                    if (p == null)
+                    {
+                        // New property found
                         p = new MemberPropertyDefinition(propName);
                         if (f.IsPropertyGetAccessor)
                         {
@@ -191,19 +253,15 @@ namespace AutoWrap.Meta
 
                         props.Add(p.Name, p);
                     }
-
-                    if (f.IsPropertyGetAccessor)
-                        p.GetterFunction = f;
-                    else if (f.IsPropertySetAccessor)
-                        p.SetterFunction = f;
                 }
+
+                if (f.IsPropertyGetAccessor)
+                    p.GetterFunction = f;
+                else if (f.IsPropertySetAccessor)
+                    p.SetterFunction = f;
             }
 
-            MemberPropertyDefinition[] parr = new MemberPropertyDefinition[props.Count];
-            for (int i = 0; i < props.Count; i++)
-                parr[i] = props.Values[i];
-
-            return parr;
+            return props.Values.ToArray();
         }
 
         /// <summary>
@@ -328,13 +386,13 @@ namespace AutoWrap.Meta
             string propName = name.Substring(3);
             MemberMethodDefinition method;
             method = methodDef.ContainingClass.GetMethodByNativeName("get" + propName, true, false);
-            // TODO by manski: Include again
-            /*if (method == null) {
+            if (method == null)
+            {
                 method = methodDef.ContainingClass.GetMethodByNativeName("is" + propName, true, false);
                 if (method == null) {
                     method = methodDef.ContainingClass.GetMethodByNativeName("has" + propName, true, false);
                 }
-            }*/
+            }
 
             // NOTE: Most checks done in "CheckForGetAccessor()" are represented in "method.IsPropertyGetAccessor".
             return (method != null && method.IsPropertyGetAccessor && method.MemberTypeName == methodDef.Parameters[0].TypeName
