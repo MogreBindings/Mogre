@@ -285,54 +285,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_isPropertyGetAccessor == null)
-                {
-                    if (IsOverriding)
-                    {
-                        // Check this before checking possible attributes
-                        _isPropertyGetAccessor = BaseMethod.IsPropertyGetAccessor;
-                    }
-                    else if (IsConstructor || MemberTypeName == "void" || _parameters.Count > 0)
-                    {
-                        // Check this before checking possible attributes
-                        _isPropertyGetAccessor = false;
-                    }
-                    else if (HasAttribute<PropertyAttribute>())
-                        _isPropertyGetAccessor = true;
-                    else if (HasAttribute<MethodAttribute>())
-                        _isPropertyGetAccessor = false;
-                    else
-                    {
-                        // Auto-detected whether this method is a property accessor
-                        bool? ret = CheckFunctionForGetProperty();
-                        if (ret != null)
-                        {
-                            _isPropertyGetAccessor = ret;
-                        } else
-                        {
-                            string name = HasAttribute<RenameAttribute>() ? GetAttribute<RenameAttribute>().Name : NativeName;
-
-                            if (name.StartsWith("get") && Char.IsUpper(name[3]))
-                            {
-                                string pname = name.Substring(3);
-                                //check if property name collides with a nested type
-                                AbstractTypeDefinition type = ContainingClass.GetNestedType(pname, false);
-                                if (type != null)
-                                    _isPropertyGetAccessor = false;
-                                else
-                                {
-                                    //check if property name collides with a method
-                                    MemberMethodDefinition func = ContainingClass.GetMethodByNativeName(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
-                                    if (func != null && !func.HasAttribute<RenameAttribute>())
-                                        _isPropertyGetAccessor = false;
-                                    else
-                                        _isPropertyGetAccessor = true;
-                                }
-                            }
-                            else
-                                _isPropertyGetAccessor = false;
-                        }
-                    }
-                }
+                    _isPropertyGetAccessor = CheckForGetAccessor();
 
                 return (bool) _isPropertyGetAccessor;
             }
@@ -432,8 +385,34 @@ namespace AutoWrap.Meta
         }
     
 
-        protected virtual bool CheckFunctionForGetProperty()
+        /// <summary>
+        /// Checks whether this method is a get accessor for a CLR property.
+        /// </summary>
+        /// <seealso cref="IsPropertyGetAccessor"/>
+        protected virtual bool CheckForGetAccessor()
         {
+            if (IsOverriding)
+            {
+                // Check this before checking possible attributes
+                return BaseMethod.IsPropertyGetAccessor;
+            }
+            
+            if (IsConstructor || MemberTypeName == "void" || _parameters.Count > 0)
+            {
+                // Check this before checking possible attributes
+                return false;
+            }
+            
+            if (HasAttribute<PropertyAttribute>())
+            {
+                return true;
+            }
+            
+            if (HasAttribute<MethodAttribute>())
+            {
+                return false;
+            }
+            
             if (HasAttribute<CustomIncDeclarationAttribute>() || HasAttribute<CustomCppDeclarationAttribute>())
             {
                 return false;
