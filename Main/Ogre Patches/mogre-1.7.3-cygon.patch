@@ -1,7 +1,7 @@
 diff -r -u -N -w Main\include\auto\Mogre-WIN32_OgreTimerImp.h Main\include\auto\Mogre-WIN32_OgreTimerImp.h
---- Main\include\auto\Mogre-WIN32_OgreTimerImp.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\Mogre-WIN32_OgreTimerImp.h	Fri Aug 05 01:02:28 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\Mogre-WIN32_OgreTimerImp.h	2013-04-22 20:21:41.967636200 +0200
++++ Main\include\auto\Mogre-WIN32_OgreTimerImp.h	2013-04-22 20:23:13.868644100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -12,9 +12,9 @@ diff -r -u -N -w Main\include\auto\Mogre-WIN32_OgreTimerImp.h Main\include\auto\
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreAnimable.h Main\include\auto\MogreAnimable.h
---- Main\include\auto\MogreAnimable.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreAnimable.h	Fri Aug 05 01:02:36 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreAnimable.h	2013-04-22 20:21:37.191832800 +0200
++++ Main\include\auto\MogreAnimable.h	2013-04-22 20:23:13.881653000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -25,9 +25,9 @@ diff -r -u -N -w Main\include\auto\MogreAnimable.h Main\include\auto\MogreAnimab
  #include "MogreStringVector.h"
  
 diff -r -u -N -w Main\include\auto\MogreAnimation.h Main\include\auto\MogreAnimation.h
---- Main\include\auto\MogreAnimation.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreAnimation.h	Fri Aug 05 01:02:47 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreAnimation.h	2013-04-22 20:21:37.289900000 +0200
++++ Main\include\auto\MogreAnimation.h	2013-04-22 20:23:13.889660400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -38,9 +38,9 @@ diff -r -u -N -w Main\include\auto\MogreAnimation.h Main\include\auto\MogreAnima
  #include "MogreAnimationTrack.h"
  #include "MogreAnimationState.h"
 diff -r -u -N -w Main\include\auto\MogreAnimationState.h Main\include\auto\MogreAnimationState.h
---- Main\include\auto\MogreAnimationState.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreAnimationState.h	Fri Aug 05 01:02:54 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreAnimationState.h	2013-04-22 20:21:37.342936900 +0200
++++ Main\include\auto\MogreAnimationState.h	2013-04-22 20:23:13.899666300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -51,9 +51,9 @@ diff -r -u -N -w Main\include\auto\MogreAnimationState.h Main\include\auto\Mogre
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreAnimationTrack.h Main\include\auto\MogreAnimationTrack.h
---- Main\include\auto\MogreAnimationTrack.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreAnimationTrack.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreAnimationTrack.h	2013-04-22 20:21:37.409480600 +0200
++++ Main\include\auto\MogreAnimationTrack.h	2013-04-22 20:23:13.939667600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -64,9 +64,9 @@ diff -r -u -N -w Main\include\auto\MogreAnimationTrack.h Main\include\auto\Mogre
  #include "MogrePose.h"
  
 diff -r -u -N -w Main\include\auto\MogreArchive.h Main\include\auto\MogreArchive.h
---- Main\include\auto\MogreArchive.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreArchive.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreArchive.h	2013-04-22 20:21:37.434499600 +0200
++++ Main\include\auto\MogreArchive.h	2013-04-22 20:23:13.946672100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -77,9 +77,9 @@ diff -r -u -N -w Main\include\auto\MogreArchive.h Main\include\auto\MogreArchive
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreArchiveManager.h Main\include\auto\MogreArchiveManager.h
---- Main\include\auto\MogreArchiveManager.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreArchiveManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreArchiveManager.h	2013-04-22 20:21:37.451509500 +0200
++++ Main\include\auto\MogreArchiveManager.h	2013-04-22 20:23:13.951678100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -90,9 +90,9 @@ diff -r -u -N -w Main\include\auto\MogreArchiveManager.h Main\include\auto\Mogre
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreBillboard.h Main\include\auto\MogreBillboard.h
---- Main\include\auto\MogreBillboard.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBillboard.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBillboard.h	2013-04-22 20:21:37.476527700 +0200
++++ Main\include\auto\MogreBillboard.h	2013-04-22 20:23:13.956681200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -103,9 +103,9 @@ diff -r -u -N -w Main\include\auto\MogreBillboard.h Main\include\auto\MogreBillb
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogreBillboardChain.h Main\include\auto\MogreBillboardChain.h
---- Main\include\auto\MogreBillboardChain.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBillboardChain.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBillboardChain.h	2013-04-22 20:21:37.563583600 +0200
++++ Main\include\auto\MogreBillboardChain.h	2013-04-22 20:23:13.966688300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -116,9 +116,9 @@ diff -r -u -N -w Main\include\auto\MogreBillboardChain.h Main\include\auto\Mogre
  #include "MogreMovableObject.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreBillboardParticleRenderer.h Main\include\auto\MogreBillboardParticleRenderer.h
---- Main\include\auto\MogreBillboardParticleRenderer.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBillboardParticleRenderer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBillboardParticleRenderer.h	2013-04-22 20:21:37.591603200 +0200
++++ Main\include\auto\MogreBillboardParticleRenderer.h	2013-04-22 20:23:13.972690700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -129,9 +129,9 @@ diff -r -u -N -w Main\include\auto\MogreBillboardParticleRenderer.h Main\include
  #include "MogreBillboardSet.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreBillboardSet.h Main\include\auto\MogreBillboardSet.h
---- Main\include\auto\MogreBillboardSet.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBillboardSet.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBillboardSet.h	2013-04-22 20:21:37.676652400 +0200
++++ Main\include\auto\MogreBillboardSet.h	2013-04-22 20:23:13.981695700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -142,9 +142,9 @@ diff -r -u -N -w Main\include\auto\MogreBillboardSet.h Main\include\auto\MogreBi
  #include "MogreMovableObject.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreBlendMode.h Main\include\auto\MogreBlendMode.h
---- Main\include\auto\MogreBlendMode.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBlendMode.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBlendMode.h	2013-04-22 20:21:37.706157300 +0200
++++ Main\include\auto\MogreBlendMode.h	2013-04-22 20:23:13.986702900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -155,9 +155,9 @@ diff -r -u -N -w Main\include\auto\MogreBlendMode.h Main\include\auto\MogreBlend
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreBone.h Main\include\auto\MogreBone.h
---- Main\include\auto\MogreBone.h	Sat Aug 06 12:02:12 2011
-+++ Main\include\auto\MogreBone.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBone.h	2013-04-22 20:21:37.736924900 +0200
++++ Main\include\auto\MogreBone.h	2013-04-22 20:23:13.992388300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -168,9 +168,9 @@ diff -r -u -N -w Main\include\auto\MogreBone.h Main\include\auto\MogreBone.h
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreBorderPanelOverlayElement.h Main\include\auto\MogreBorderPanelOverlayElement.h
---- Main\include\auto\MogreBorderPanelOverlayElement.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreBorderPanelOverlayElement.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreBorderPanelOverlayElement.h	2013-04-22 20:21:37.810976400 +0200
++++ Main\include\auto\MogreBorderPanelOverlayElement.h	2013-04-22 20:23:13.997392700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -181,9 +181,9 @@ diff -r -u -N -w Main\include\auto\MogreBorderPanelOverlayElement.h Main\include
  #include "MogrePrerequisites.h"
  #include "MogreOverlayElement.h"
 diff -r -u -N -w Main\include\auto\MogreCamera.h Main\include\auto\MogreCamera.h
---- Main\include\auto\MogreCamera.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCamera.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCamera.h	2013-04-22 20:21:37.926051500 +0200
++++ Main\include\auto\MogreCamera.h	2013-04-22 20:23:14.005393600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -194,9 +194,9 @@ diff -r -u -N -w Main\include\auto\MogreCamera.h Main\include\auto\MogreCamera.h
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreCodec.h Main\include\auto\MogreCodec.h
---- Main\include\auto\MogreCodec.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCodec.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCodec.h	2013-04-22 20:21:37.946066900 +0200
++++ Main\include\auto\MogreCodec.h	2013-04-22 20:23:14.012400500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -207,9 +207,9 @@ diff -r -u -N -w Main\include\auto\MogreCodec.h Main\include\auto\MogreCodec.h
  #include "MogreStringVector.h"
  
 diff -r -u -N -w Main\include\auto\MogreColourValue.h Main\include\auto\MogreColourValue.h
---- Main\include\auto\MogreColourValue.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreColourValue.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreColourValue.h	2013-04-22 20:21:37.955075200 +0200
++++ Main\include\auto\MogreColourValue.h	2013-04-22 20:23:14.053089400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -220,9 +220,9 @@ diff -r -u -N -w Main\include\auto\MogreColourValue.h Main\include\auto\MogreCol
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreCommon.h Main\include\auto\MogreCommon.h
---- Main\include\auto\MogreCommon.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCommon.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCommon.h	2013-04-22 20:21:37.961079200 +0200
++++ Main\include\auto\MogreCommon.h	2013-04-22 20:23:14.063096500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -233,9 +233,9 @@ diff -r -u -N -w Main\include\auto\MogreCommon.h Main\include\auto\MogreCommon.h
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreCompositionPass.h Main\include\auto\MogreCompositionPass.h
---- Main\include\auto\MogreCompositionPass.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositionPass.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositionPass.h	2013-04-22 20:21:37.985466800 +0200
++++ Main\include\auto\MogreCompositionPass.h	2013-04-22 20:23:14.073103600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -246,9 +246,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositionPass.h Main\include\auto\Mogr
  #include "MogrePlatform.h"
  #include "MogreRenderSystem.h"
 diff -r -u -N -w Main\include\auto\MogreCompositionTargetPass.h Main\include\auto\MogreCompositionTargetPass.h
---- Main\include\auto\MogreCompositionTargetPass.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositionTargetPass.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositionTargetPass.h	2013-04-22 20:21:37.998478200 +0200
++++ Main\include\auto\MogreCompositionTargetPass.h	2013-04-22 20:23:14.081108200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -259,9 +259,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositionTargetPass.h Main\include\aut
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogreCompositionTechnique.h Main\include\auto\MogreCompositionTechnique.h
---- Main\include\auto\MogreCompositionTechnique.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositionTechnique.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositionTechnique.h	2013-04-22 20:21:38.019490400 +0200
++++ Main\include\auto\MogreCompositionTechnique.h	2013-04-22 20:23:14.087113000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -272,9 +272,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositionTechnique.h Main\include\auto
  #include "MogrePixelFormat.h"
  
 diff -r -u -N -w Main\include\auto\MogreCompositor.h Main\include\auto\MogreCompositor.h
---- Main\include\auto\MogreCompositor.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositor.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositor.h	2013-04-22 20:21:38.048509100 +0200
++++ Main\include\auto\MogreCompositor.h	2013-04-22 20:23:14.096120400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -285,9 +285,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositor.h Main\include\auto\MogreComp
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreCompositorChain.h Main\include\auto\MogreCompositorChain.h
---- Main\include\auto\MogreCompositorChain.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositorChain.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositorChain.h	2013-04-22 20:21:38.066452200 +0200
++++ Main\include\auto\MogreCompositorChain.h	2013-04-22 20:23:14.102125300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -298,9 +298,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositorChain.h Main\include\auto\Mogr
  #include "MogreRenderTargetListener.h"
  
 diff -r -u -N -w Main\include\auto\MogreCompositorInstance.h Main\include\auto\MogreCompositorInstance.h
---- Main\include\auto\MogreCompositorInstance.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositorInstance.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositorInstance.h	2013-04-22 20:21:38.101475400 +0200
++++ Main\include\auto\MogreCompositorInstance.h	2013-04-22 20:23:14.110127800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -311,9 +311,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositorInstance.h Main\include\auto\M
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreCompositorManager.h Main\include\auto\MogreCompositorManager.h
---- Main\include\auto\MogreCompositorManager.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreCompositorManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreCompositorManager.h	2013-04-22 20:21:38.146505700 +0200
++++ Main\include\auto\MogreCompositorManager.h	2013-04-22 20:23:14.117136700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -324,9 +324,9 @@ diff -r -u -N -w Main\include\auto\MogreCompositorManager.h Main\include\auto\Mo
  #include "MogrePrerequisites.h"
  #include "MogrePixelFormat.h"
 diff -r -u -N -w Main\include\auto\MogreConfigFile.h Main\include\auto\MogreConfigFile.h
---- Main\include\auto\MogreConfigFile.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreConfigFile.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreConfigFile.h	2013-04-22 20:21:38.172529700 +0200
++++ Main\include\auto\MogreConfigFile.h	2013-04-22 20:23:14.122137000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -337,9 +337,9 @@ diff -r -u -N -w Main\include\auto\MogreConfigFile.h Main\include\auto\MogreConf
  #include "MogreStringVector.h"
  
 diff -r -u -N -w Main\include\auto\MogreConfigOptionMap.h Main\include\auto\MogreConfigOptionMap.h
---- Main\include\auto\MogreConfigOptionMap.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreConfigOptionMap.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreConfigOptionMap.h	2013-04-22 20:21:38.186534100 +0200
++++ Main\include\auto\MogreConfigOptionMap.h	2013-04-22 20:23:14.131141600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -350,9 +350,9 @@ diff -r -u -N -w Main\include\auto\MogreConfigOptionMap.h Main\include\auto\Mogr
  #include "MogreStringVector.h"
  
 diff -r -u -N -w Main\include\auto\MogreDataStream.h Main\include\auto\MogreDataStream.h
---- Main\include\auto\MogreDataStream.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreDataStream.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreDataStream.h	2013-04-22 20:21:38.211550200 +0200
++++ Main\include\auto\MogreDataStream.h	2013-04-22 20:23:14.138146100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -363,9 +363,9 @@ diff -r -u -N -w Main\include\auto\MogreDataStream.h Main\include\auto\MogreData
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogreDDSCodec.h Main\include\auto\MogreDDSCodec.h
---- Main\include\auto\MogreDDSCodec.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreDDSCodec.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreDDSCodec.h	2013-04-22 20:21:38.225557100 +0200
++++ Main\include\auto\MogreDDSCodec.h	2013-04-22 20:23:14.145151400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -376,9 +376,9 @@ diff -r -u -N -w Main\include\auto\MogreDDSCodec.h Main\include\auto\MogreDDSCod
  #include "MogrePrerequisites.h"
  #include "MogreCodec.h"
 diff -r -u -N -w Main\include\auto\MogreDefaultHardwareBufferManager.h Main\include\auto\MogreDefaultHardwareBufferManager.h
---- Main\include\auto\MogreDefaultHardwareBufferManager.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreDefaultHardwareBufferManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreDefaultHardwareBufferManager.h	2013-04-22 20:21:38.248575200 +0200
++++ Main\include\auto\MogreDefaultHardwareBufferManager.h	2013-04-22 20:23:14.152161200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -389,9 +389,9 @@ diff -r -u -N -w Main\include\auto\MogreDefaultHardwareBufferManager.h Main\incl
  #include "MogreHardwareBuffer.h"
  #include "MogreHardwareIndexBuffer.h"
 diff -r -u -N -w Main\include\auto\MogreDistanceLodStrategy.h Main\include\auto\MogreDistanceLodStrategy.h
---- Main\include\auto\MogreDistanceLodStrategy.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreDistanceLodStrategy.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreDistanceLodStrategy.h	2013-04-22 20:21:38.267585600 +0200
++++ Main\include\auto\MogreDistanceLodStrategy.h	2013-04-22 20:23:14.157160200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -402,9 +402,9 @@ diff -r -u -N -w Main\include\auto\MogreDistanceLodStrategy.h Main\include\auto\
  #include "MogrePrerequisites.h"
  #include "MogreMesh.h"
 diff -r -u -N -w Main\include\auto\MogreEdgeListBuilder.h Main\include\auto\MogreEdgeListBuilder.h
---- Main\include\auto\MogreEdgeListBuilder.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreEdgeListBuilder.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreEdgeListBuilder.h	2013-04-22 20:21:38.280949200 +0200
++++ Main\include\auto\MogreEdgeListBuilder.h	2013-04-22 20:23:14.166165600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -415,9 +415,9 @@ diff -r -u -N -w Main\include\auto\MogreEdgeListBuilder.h Main\include\auto\Mogr
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreEntity.h Main\include\auto\MogreEntity.h
---- Main\include\auto\MogreEntity.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreEntity.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreEntity.h	2013-04-22 20:21:38.349995100 +0200
++++ Main\include\auto\MogreEntity.h	2013-04-22 20:23:14.174244000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -428,9 +428,9 @@ diff -r -u -N -w Main\include\auto\MogreEntity.h Main\include\auto\MogreEntity.h
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreException.h Main\include\auto\MogreException.h
---- Main\include\auto\MogreException.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreException.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreException.h	2013-04-22 20:21:38.364004100 +0200
++++ Main\include\auto\MogreException.h	2013-04-22 20:23:14.183250700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -441,9 +441,9 @@ diff -r -u -N -w Main\include\auto\MogreException.h Main\include\auto\MogreExcep
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreExternalTextureSource.h Main\include\auto\MogreExternalTextureSource.h
---- Main\include\auto\MogreExternalTextureSource.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreExternalTextureSource.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreExternalTextureSource.h	2013-04-22 20:21:38.380015600 +0200
++++ Main\include\auto\MogreExternalTextureSource.h	2013-04-22 20:23:14.189255900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -454,9 +454,9 @@ diff -r -u -N -w Main\include\auto\MogreExternalTextureSource.h Main\include\aut
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreExternalTextureSourceManager.h Main\include\auto\MogreExternalTextureSourceManager.h
---- Main\include\auto\MogreExternalTextureSourceManager.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreExternalTextureSourceManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreExternalTextureSourceManager.h	2013-04-22 20:21:38.393024100 +0200
++++ Main\include\auto\MogreExternalTextureSourceManager.h	2013-04-22 20:23:14.197262500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -467,9 +467,9 @@ diff -r -u -N -w Main\include\auto\MogreExternalTextureSourceManager.h Main\incl
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreFileSystem.h Main\include\auto\MogreFileSystem.h
---- Main\include\auto\MogreFileSystem.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreFileSystem.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreFileSystem.h	2013-04-22 20:21:38.412035000 +0200
++++ Main\include\auto\MogreFileSystem.h	2013-04-22 20:23:14.202981200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -480,9 +480,9 @@ diff -r -u -N -w Main\include\auto\MogreFileSystem.h Main\include\auto\MogreFile
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreFont.h Main\include\auto\MogreFont.h
---- Main\include\auto\MogreFont.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreFont.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreFont.h	2013-04-22 20:21:38.437052700 +0200
++++ Main\include\auto\MogreFont.h	2013-04-22 20:23:14.208984400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -493,9 +493,9 @@ diff -r -u -N -w Main\include\auto\MogreFont.h Main\include\auto\MogreFont.h
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreFontManager.h Main\include\auto\MogreFontManager.h
---- Main\include\auto\MogreFontManager.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreFontManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreFontManager.h	2013-04-22 20:21:38.465084200 +0200
++++ Main\include\auto\MogreFontManager.h	2013-04-22 20:23:14.215991300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -506,9 +506,9 @@ diff -r -u -N -w Main\include\auto\MogreFontManager.h Main\include\auto\MogreFon
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreFrameListener.h Main\include\auto\MogreFrameListener.h
---- Main\include\auto\MogreFrameListener.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreFrameListener.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreFrameListener.h	2013-04-22 20:21:38.470090600 +0200
++++ Main\include\auto\MogreFrameListener.h	2013-04-22 20:23:14.221995700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -519,9 +519,9 @@ diff -r -u -N -w Main\include\auto\MogreFrameListener.h Main\include\auto\MogreF
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreFrustum.h Main\include\auto\MogreFrustum.h
---- Main\include\auto\MogreFrustum.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreFrustum.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreFrustum.h	2013-04-22 20:21:38.494101300 +0200
++++ Main\include\auto\MogreFrustum.h	2013-04-22 20:23:14.230999100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -532,9 +532,9 @@ diff -r -u -N -w Main\include\auto\MogreFrustum.h Main\include\auto\MogreFrustum
  #include "MogreMovableObject.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreGpuProgram.h Main\include\auto\MogreGpuProgram.h
---- Main\include\auto\MogreGpuProgram.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreGpuProgram.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreGpuProgram.h	2013-04-22 20:21:38.524689500 +0200
++++ Main\include\auto\MogreGpuProgram.h	2013-04-22 20:23:14.237005600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -545,9 +545,9 @@ diff -r -u -N -w Main\include\auto\MogreGpuProgram.h Main\include\auto\MogreGpuP
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreGpuProgramManager.h Main\include\auto\MogreGpuProgramManager.h
---- Main\include\auto\MogreGpuProgramManager.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreGpuProgramManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreGpuProgramManager.h	2013-04-22 20:21:38.549710100 +0200
++++ Main\include\auto\MogreGpuProgramManager.h	2013-04-22 20:23:14.245010100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -558,9 +558,9 @@ diff -r -u -N -w Main\include\auto\MogreGpuProgramManager.h Main\include\auto\Mo
  #include "MogrePrerequisites.h"
  #include "MogreGpuProgram.h"
 diff -r -u -N -w Main\include\auto\MogreGpuProgramParams.h Main\include\auto\MogreGpuProgramParams.h
---- Main\include\auto\MogreGpuProgramParams.h	Sat Aug 06 12:02:13 2011
-+++ Main\include\auto\MogreGpuProgramParams.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreGpuProgramParams.h	2013-04-22 20:21:38.645772300 +0200
++++ Main\include\auto\MogreGpuProgramParams.h	2013-04-22 20:23:14.257020200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -571,9 +571,9 @@ diff -r -u -N -w Main\include\auto\MogreGpuProgramParams.h Main\include\auto\Mog
  #include "MogrePrerequisites.h"
  #include "MogreSerializer.h"
 diff -r -u -N -w Main\include\auto\MogreGrid2DPageStrategy.h Main\include\auto\MogreGrid2DPageStrategy.h
---- Main\include\auto\MogreGrid2DPageStrategy.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreGrid2DPageStrategy.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreGrid2DPageStrategy.h	2013-04-22 20:21:38.678796200 +0200
++++ Main\include\auto\MogreGrid2DPageStrategy.h	2013-04-22 20:23:14.268028200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -584,9 +584,9 @@ diff -r -u -N -w Main\include\auto\MogreGrid2DPageStrategy.h Main\include\auto\M
  #include "MogrePlatform.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreHardwareBuffer.h Main\include\auto\MogreHardwareBuffer.h
---- Main\include\auto\MogreHardwareBuffer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwareBuffer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwareBuffer.h	2013-04-22 20:21:38.689952400 +0200
++++ Main\include\auto\MogreHardwareBuffer.h	2013-04-22 20:23:14.277031100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -597,9 +597,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwareBuffer.h Main\include\auto\Mogre
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreHardwareBufferManager.h Main\include\auto\MogreHardwareBufferManager.h
---- Main\include\auto\MogreHardwareBufferManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwareBufferManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwareBufferManager.h	2013-04-22 20:21:38.699957800 +0200
++++ Main\include\auto\MogreHardwareBufferManager.h	2013-04-22 20:23:14.289047700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -610,9 +610,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwareBufferManager.h Main\include\aut
  #include "MogreHardwareIndexBuffer.h"
  
 diff -r -u -N -w Main\include\auto\MogreHardwareIndexBuffer.h Main\include\auto\MogreHardwareIndexBuffer.h
---- Main\include\auto\MogreHardwareIndexBuffer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwareIndexBuffer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwareIndexBuffer.h	2013-04-22 20:21:38.708968600 +0200
++++ Main\include\auto\MogreHardwareIndexBuffer.h	2013-04-22 20:23:14.301049200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -623,9 +623,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwareIndexBuffer.h Main\include\auto\
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreHardwareOcclusionQuery.h Main\include\auto\MogreHardwareOcclusionQuery.h
---- Main\include\auto\MogreHardwareOcclusionQuery.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwareOcclusionQuery.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwareOcclusionQuery.h	2013-04-22 20:21:38.715970200 +0200
++++ Main\include\auto\MogreHardwareOcclusionQuery.h	2013-04-22 20:23:14.310053000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -636,9 +636,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwareOcclusionQuery.h Main\include\au
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreHardwarePixelBuffer.h Main\include\auto\MogreHardwarePixelBuffer.h
---- Main\include\auto\MogreHardwarePixelBuffer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwarePixelBuffer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwarePixelBuffer.h	2013-04-22 20:21:38.734849700 +0200
++++ Main\include\auto\MogreHardwarePixelBuffer.h	2013-04-22 20:23:14.318066900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -649,9 +649,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwarePixelBuffer.h Main\include\auto\
  #include "MogrePixelFormat.h"
  #include "MogreImage.h"
 diff -r -u -N -w Main\include\auto\MogreHardwareVertexBuffer.h Main\include\auto\MogreHardwareVertexBuffer.h
---- Main\include\auto\MogreHardwareVertexBuffer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHardwareVertexBuffer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHardwareVertexBuffer.h	2013-04-22 20:21:38.762907000 +0200
++++ Main\include\auto\MogreHardwareVertexBuffer.h	2013-04-22 20:23:14.329065500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -662,9 +662,9 @@ diff -r -u -N -w Main\include\auto\MogreHardwareVertexBuffer.h Main\include\auto
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgram.h Main\include\auto\MogreHighLevelGpuProgram.h
---- Main\include\auto\MogreHighLevelGpuProgram.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHighLevelGpuProgram.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHighLevelGpuProgram.h	2013-04-22 20:21:38.776914300 +0200
++++ Main\include\auto\MogreHighLevelGpuProgram.h	2013-04-22 20:23:14.341074700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -675,9 +675,9 @@ diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgram.h Main\include\auto\
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgramManager.h Main\include\auto\MogreHighLevelGpuProgramManager.h
---- Main\include\auto\MogreHighLevelGpuProgramManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreHighLevelGpuProgramManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreHighLevelGpuProgramManager.h	2013-04-22 20:21:38.786922600 +0200
++++ Main\include\auto\MogreHighLevelGpuProgramManager.h	2013-04-22 20:23:14.350083800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -688,9 +688,9 @@ diff -r -u -N -w Main\include\auto\MogreHighLevelGpuProgramManager.h Main\includ
  #include "MogrePrerequisites.h"
  #include "MogreGpuProgram.h"
 diff -r -u -N -w Main\include\auto\MogreImage.h Main\include\auto\MogreImage.h
---- Main\include\auto\MogreImage.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreImage.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreImage.h	2013-04-22 20:21:38.816943100 +0200
++++ Main\include\auto\MogreImage.h	2013-04-22 20:23:14.358085900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -701,9 +701,9 @@ diff -r -u -N -w Main\include\auto\MogreImage.h Main\include\auto\MogreImage.h
  #include "MogrePixelFormat.h"
  
 diff -r -u -N -w Main\include\auto\MogreImageCodec.h Main\include\auto\MogreImageCodec.h
---- Main\include\auto\MogreImageCodec.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreImageCodec.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreImageCodec.h	2013-04-22 20:21:38.825948900 +0200
++++ Main\include\auto\MogreImageCodec.h	2013-04-22 20:23:14.366089600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -714,9 +714,9 @@ diff -r -u -N -w Main\include\auto\MogreImageCodec.h Main\include\auto\MogreImag
  #include "MogrePrerequisites.h"
  #include "MogrePixelFormat.h"
 diff -r -u -N -w Main\include\auto\MogreInstancedGeometry.h Main\include\auto\MogreInstancedGeometry.h
---- Main\include\auto\MogreInstancedGeometry.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreInstancedGeometry.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreInstancedGeometry.h	2013-04-22 20:21:38.879982600 +0200
++++ Main\include\auto\MogreInstancedGeometry.h	2013-04-22 20:23:14.376095500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -727,9 +727,9 @@ diff -r -u -N -w Main\include\auto\MogreInstancedGeometry.h Main\include\auto\Mo
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreKeyFrame.h Main\include\auto\MogreKeyFrame.h
---- Main\include\auto\MogreKeyFrame.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreKeyFrame.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreKeyFrame.h	2013-04-22 20:21:38.903240400 +0200
++++ Main\include\auto\MogreKeyFrame.h	2013-04-22 20:23:14.385098000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -740,9 +740,9 @@ diff -r -u -N -w Main\include\auto\MogreKeyFrame.h Main\include\auto\MogreKeyFra
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreLight.h Main\include\auto\MogreLight.h
---- Main\include\auto\MogreLight.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLight.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLight.h	2013-04-22 20:21:38.949271100 +0200
++++ Main\include\auto\MogreLight.h	2013-04-22 20:23:14.393104200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -753,9 +753,9 @@ diff -r -u -N -w Main\include\auto\MogreLight.h Main\include\auto\MogreLight.h
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreLodListener.h Main\include\auto\MogreLodListener.h
---- Main\include\auto\MogreLodListener.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLodListener.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLodListener.h	2013-04-22 20:21:38.958278600 +0200
++++ Main\include\auto\MogreLodListener.h	2013-04-22 20:23:14.399109000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -766,9 +766,9 @@ diff -r -u -N -w Main\include\auto\MogreLodListener.h Main\include\auto\MogreLod
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreLodStrategy.h Main\include\auto\MogreLodStrategy.h
---- Main\include\auto\MogreLodStrategy.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLodStrategy.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLodStrategy.h	2013-04-22 20:21:38.967283200 +0200
++++ Main\include\auto\MogreLodStrategy.h	2013-04-22 20:23:14.407115200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -779,9 +779,9 @@ diff -r -u -N -w Main\include\auto\MogreLodStrategy.h Main\include\auto\MogreLod
  #include "MogreMesh.h"
  #include "MogreMaterial.h"
 diff -r -u -N -w Main\include\auto\MogreLodStrategyManager.h Main\include\auto\MogreLodStrategyManager.h
---- Main\include\auto\MogreLodStrategyManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLodStrategyManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLodStrategyManager.h	2013-04-22 20:21:38.977627300 +0200
++++ Main\include\auto\MogreLodStrategyManager.h	2013-04-22 20:23:14.416126300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -792,9 +792,9 @@ diff -r -u -N -w Main\include\auto\MogreLodStrategyManager.h Main\include\auto\M
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreLog.h Main\include\auto\MogreLog.h
---- Main\include\auto\MogreLog.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLog.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLog.h	2013-04-22 20:21:38.994639300 +0200
++++ Main\include\auto\MogreLog.h	2013-04-22 20:23:14.424125100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -805,9 +805,9 @@ diff -r -u -N -w Main\include\auto\MogreLog.h Main\include\auto\MogreLog.h
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreLogManager.h Main\include\auto\MogreLogManager.h
---- Main\include\auto\MogreLogManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreLogManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreLogManager.h	2013-04-22 20:21:39.006647700 +0200
++++ Main\include\auto\MogreLogManager.h	2013-04-22 20:23:14.431130000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -818,9 +818,9 @@ diff -r -u -N -w Main\include\auto\MogreLogManager.h Main\include\auto\MogreLogM
  #include "MogreLog.h"
  
 diff -r -u -N -w Main\include\auto\MogreManualObject.h Main\include\auto\MogreManualObject.h
---- Main\include\auto\MogreManualObject.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreManualObject.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreManualObject.h	2013-04-22 20:21:39.071688900 +0200
++++ Main\include\auto\MogreManualObject.h	2013-04-22 20:23:14.441136300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -831,9 +831,9 @@ diff -r -u -N -w Main\include\auto\MogreManualObject.h Main\include\auto\MogreMa
  #include "MogreRenderable.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreMaterial.h Main\include\auto\MogreMaterial.h
---- Main\include\auto\MogreMaterial.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMaterial.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMaterial.h	2013-04-22 20:21:39.119721400 +0200
++++ Main\include\auto\MogreMaterial.h	2013-04-22 20:23:14.453377500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -844,9 +844,9 @@ diff -r -u -N -w Main\include\auto\MogreMaterial.h Main\include\auto\MogreMateri
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreMaterialManager.h Main\include\auto\MogreMaterialManager.h
---- Main\include\auto\MogreMaterialManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMaterialManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMaterialManager.h	2013-04-22 20:21:39.141737800 +0200
++++ Main\include\auto\MogreMaterialManager.h	2013-04-22 20:23:14.462386600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -857,9 +857,9 @@ diff -r -u -N -w Main\include\auto\MogreMaterialManager.h Main\include\auto\Mogr
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreMaterialSerializer.h Main\include\auto\MogreMaterialSerializer.h
---- Main\include\auto\MogreMaterialSerializer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMaterialSerializer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMaterialSerializer.h	2013-04-22 20:21:39.175758500 +0200
++++ Main\include\auto\MogreMaterialSerializer.h	2013-04-22 20:23:14.473392100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -870,9 +870,9 @@ diff -r -u -N -w Main\include\auto\MogreMaterialSerializer.h Main\include\auto\M
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreMesh.h Main\include\auto\MogreMesh.h
---- Main\include\auto\MogreMesh.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMesh.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMesh.h	2013-04-22 20:21:39.249810400 +0200
++++ Main\include\auto\MogreMesh.h	2013-04-22 20:23:14.483400800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -883,9 +883,9 @@ diff -r -u -N -w Main\include\auto\MogreMesh.h Main\include\auto\MogreMesh.h
  #include "MogrePrerequisites.h"
  #include "MogreVertexBoneAssignment.h"
 diff -r -u -N -w Main\include\auto\MogreMeshManager.h Main\include\auto\MogreMeshManager.h
---- Main\include\auto\MogreMeshManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMeshManager.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMeshManager.h	2013-04-22 20:21:39.296842500 +0200
++++ Main\include\auto\MogreMeshManager.h	2013-04-22 20:23:14.494406700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -896,9 +896,9 @@ diff -r -u -N -w Main\include\auto\MogreMeshManager.h Main\include\auto\MogreMes
  #include "MogreResourceManager.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreMeshSerializer.h Main\include\auto\MogreMeshSerializer.h
---- Main\include\auto\MogreMeshSerializer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMeshSerializer.h	Fri Aug 05 01:13:57 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMeshSerializer.h	2013-04-22 20:21:39.312850300 +0200
++++ Main\include\auto\MogreMeshSerializer.h	2013-04-22 20:23:14.501409600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -909,9 +909,9 @@ diff -r -u -N -w Main\include\auto\MogreMeshSerializer.h Main\include\auto\Mogre
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreMovableObject.h Main\include\auto\MogreMovableObject.h
---- Main\include\auto\MogreMovableObject.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMovableObject.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMovableObject.h	2013-04-22 20:21:39.328861000 +0200
++++ Main\include\auto\MogreMovableObject.h	2013-04-22 20:23:14.512417100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -922,9 +922,9 @@ diff -r -u -N -w Main\include\auto\MogreMovableObject.h Main\include\auto\MogreM
  #include "MogreShadowCaster.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreMovablePlane.h Main\include\auto\MogreMovablePlane.h
---- Main\include\auto\MogreMovablePlane.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreMovablePlane.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreMovablePlane.h	2013-04-22 20:21:39.343122000 +0200
++++ Main\include\auto\MogreMovablePlane.h	2013-04-22 20:23:14.518419100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -935,9 +935,9 @@ diff -r -u -N -w Main\include\auto\MogreMovablePlane.h Main\include\auto\MogreMo
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreNode.h Main\include\auto\MogreNode.h
---- Main\include\auto\MogreNode.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreNode.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreNode.h	2013-04-22 20:21:39.360886900 +0200
++++ Main\include\auto\MogreNode.h	2013-04-22 20:23:14.529430300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -948,9 +948,9 @@ diff -r -u -N -w Main\include\auto\MogreNode.h Main\include\auto\MogreNode.h
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreNumerics.h Main\include\auto\MogreNumerics.h
---- Main\include\auto\MogreNumerics.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreNumerics.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreNumerics.h	2013-04-22 20:21:39.368890600 +0200
++++ Main\include\auto\MogreNumerics.h	2013-04-22 20:23:14.535431100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -961,9 +961,9 @@ diff -r -u -N -w Main\include\auto\MogreNumerics.h Main\include\auto\MogreNumeri
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreOverlay.h Main\include\auto\MogreOverlay.h
---- Main\include\auto\MogreOverlay.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreOverlay.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreOverlay.h	2013-04-22 20:21:39.384902600 +0200
++++ Main\include\auto\MogreOverlay.h	2013-04-22 20:23:14.542436000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -974,9 +974,9 @@ diff -r -u -N -w Main\include\auto\MogreOverlay.h Main\include\auto\MogreOverlay
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreOverlayContainer.h Main\include\auto\MogreOverlayContainer.h
---- Main\include\auto\MogreOverlayContainer.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreOverlayContainer.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreOverlayContainer.h	2013-04-22 20:21:39.401913700 +0200
++++ Main\include\auto\MogreOverlayContainer.h	2013-04-22 20:23:14.549442500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -987,9 +987,9 @@ diff -r -u -N -w Main\include\auto\MogreOverlayContainer.h Main\include\auto\Mog
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreOverlayElement.h Main\include\auto\MogreOverlayElement.h
---- Main\include\auto\MogreOverlayElement.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreOverlayElement.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreOverlayElement.h	2013-04-22 20:21:39.424927300 +0200
++++ Main\include\auto\MogreOverlayElement.h	2013-04-22 20:23:14.559014000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1000,9 +1000,9 @@ diff -r -u -N -w Main\include\auto\MogreOverlayElement.h Main\include\auto\Mogre
  #include "MogreRenderable.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreOverlayElementFactory.h Main\include\auto\MogreOverlayElementFactory.h
---- Main\include\auto\MogreOverlayElementFactory.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreOverlayElementFactory.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreOverlayElementFactory.h	2013-04-22 20:21:39.441938800 +0200
++++ Main\include\auto\MogreOverlayElementFactory.h	2013-04-22 20:23:14.566017700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1013,9 +1013,9 @@ diff -r -u -N -w Main\include\auto\MogreOverlayElementFactory.h Main\include\aut
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreOverlayManager.h Main\include\auto\MogreOverlayManager.h
---- Main\include\auto\MogreOverlayManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogreOverlayManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreOverlayManager.h	2013-04-22 20:21:39.480966800 +0200
++++ Main\include\auto\MogreOverlayManager.h	2013-04-22 20:23:14.574023400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1026,9 +1026,9 @@ diff -r -u -N -w Main\include\auto\MogreOverlayManager.h Main\include\auto\Mogre
  #include "MogreFrustum.h"
  #include "MogreStringVector.h"
 diff -r -u -N -w Main\include\auto\MogrePage.h Main\include\auto\MogrePage.h
---- Main\include\auto\MogrePage.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePage.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePage.h	2013-04-22 20:21:39.503979900 +0200
++++ Main\include\auto\MogrePage.h	2013-04-22 20:23:14.582027500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1039,9 +1039,9 @@ diff -r -u -N -w Main\include\auto\MogrePage.h Main\include\auto\MogrePage.h
  #include "MogrePlatform.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogrePageContent.h Main\include\auto\MogrePageContent.h
---- Main\include\auto\MogrePageContent.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePageContent.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageContent.h	2013-04-22 20:21:39.515988700 +0200
++++ Main\include\auto\MogrePageContent.h	2013-04-22 20:23:14.590263600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1052,9 +1052,9 @@ diff -r -u -N -w Main\include\auto\MogrePageContent.h Main\include\auto\MogrePag
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePageContentCollection.h Main\include\auto\MogrePageContentCollection.h
---- Main\include\auto\MogrePageContentCollection.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePageContentCollection.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageContentCollection.h	2013-04-22 20:21:39.524994100 +0200
++++ Main\include\auto\MogrePageContentCollection.h	2013-04-22 20:23:14.598269000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1065,9 +1065,9 @@ diff -r -u -N -w Main\include\auto\MogrePageContentCollection.h Main\include\aut
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogrePageContentCollectionFactory.h Main\include\auto\MogrePageContentCollectionFactory.h
---- Main\include\auto\MogrePageContentCollectionFactory.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePageContentCollectionFactory.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageContentCollectionFactory.h	2013-04-22 20:21:39.531001400 +0200
++++ Main\include\auto\MogrePageContentCollectionFactory.h	2013-04-22 20:23:14.604271700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1078,9 +1078,9 @@ diff -r -u -N -w Main\include\auto\MogrePageContentCollectionFactory.h Main\incl
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePageContentFactory.h Main\include\auto\MogrePageContentFactory.h
---- Main\include\auto\MogrePageContentFactory.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePageContentFactory.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageContentFactory.h	2013-04-22 20:21:39.536012800 +0200
++++ Main\include\auto\MogrePageContentFactory.h	2013-04-22 20:23:14.614279700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1091,9 +1091,9 @@ diff -r -u -N -w Main\include\auto\MogrePageContentFactory.h Main\include\auto\M
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePagedWorld.h Main\include\auto\MogrePagedWorld.h
---- Main\include\auto\MogrePagedWorld.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePagedWorld.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePagedWorld.h	2013-04-22 20:21:39.558029100 +0200
++++ Main\include\auto\MogrePagedWorld.h	2013-04-22 20:23:14.625285600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1104,9 +1104,9 @@ diff -r -u -N -w Main\include\auto\MogrePagedWorld.h Main\include\auto\MogrePage
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogrePagedWorldSection.h Main\include\auto\MogrePagedWorldSection.h
---- Main\include\auto\MogrePagedWorldSection.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePagedWorldSection.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePagedWorldSection.h	2013-04-22 20:21:39.593042100 +0200
++++ Main\include\auto\MogrePagedWorldSection.h	2013-04-22 20:23:14.633290500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1117,9 +1117,9 @@ diff -r -u -N -w Main\include\auto\MogrePagedWorldSection.h Main\include\auto\Mo
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogrePageManager.h Main\include\auto\MogrePageManager.h
---- Main\include\auto\MogrePageManager.h	Sat Aug 06 12:02:14 2011
-+++ Main\include\auto\MogrePageManager.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageManager.h	2013-04-22 20:21:39.635072200 +0200
++++ Main\include\auto\MogrePageManager.h	2013-04-22 20:23:14.642299200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1130,9 +1130,9 @@ diff -r -u -N -w Main\include\auto\MogrePageManager.h Main\include\auto\MogrePag
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogrePageStrategy.h Main\include\auto\MogrePageStrategy.h
---- Main\include\auto\MogrePageStrategy.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePageStrategy.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePageStrategy.h	2013-04-22 20:21:39.646080200 +0200
++++ Main\include\auto\MogrePageStrategy.h	2013-04-22 20:23:14.651303000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1143,9 +1143,9 @@ diff -r -u -N -w Main\include\auto\MogrePageStrategy.h Main\include\auto\MogrePa
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogrePagingPrerequisites.h Main\include\auto\MogrePagingPrerequisites.h
---- Main\include\auto\MogrePagingPrerequisites.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePagingPrerequisites.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePagingPrerequisites.h	2013-04-22 20:21:39.650084500 +0200
++++ Main\include\auto\MogrePagingPrerequisites.h	2013-04-22 20:23:14.657559500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1156,9 +1156,9 @@ diff -r -u -N -w Main\include\auto\MogrePagingPrerequisites.h Main\include\auto\
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogrePanelOverlayElement.h Main\include\auto\MogrePanelOverlayElement.h
---- Main\include\auto\MogrePanelOverlayElement.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePanelOverlayElement.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePanelOverlayElement.h	2013-04-22 20:21:39.657085700 +0200
++++ Main\include\auto\MogrePanelOverlayElement.h	2013-04-22 20:23:14.664566800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1169,9 +1169,9 @@ diff -r -u -N -w Main\include\auto\MogrePanelOverlayElement.h Main\include\auto\
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreParticle.h Main\include\auto\MogreParticle.h
---- Main\include\auto\MogreParticle.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticle.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticle.h	2013-04-22 20:21:39.666093600 +0200
++++ Main\include\auto\MogreParticle.h	2013-04-22 20:23:14.673568900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1182,9 +1182,9 @@ diff -r -u -N -w Main\include\auto\MogreParticle.h Main\include\auto\MogrePartic
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreParticleAffector.h Main\include\auto\MogreParticleAffector.h
---- Main\include\auto\MogreParticleAffector.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleAffector.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleAffector.h	2013-04-22 20:21:39.673098500 +0200
++++ Main\include\auto\MogreParticleAffector.h	2013-04-22 20:23:14.681574300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1195,9 +1195,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleAffector.h Main\include\auto\Mog
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreParticleAffectorFactory.h Main\include\auto\MogreParticleAffectorFactory.h
---- Main\include\auto\MogreParticleAffectorFactory.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleAffectorFactory.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleAffectorFactory.h	2013-04-22 20:21:39.681106300 +0200
++++ Main\include\auto\MogreParticleAffectorFactory.h	2013-04-22 20:23:14.689585000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1208,9 +1208,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleAffectorFactory.h Main\include\a
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreParticleEmitter.h Main\include\auto\MogreParticleEmitter.h
---- Main\include\auto\MogreParticleEmitter.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleEmitter.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleEmitter.h	2013-04-22 20:21:39.712123900 +0200
++++ Main\include\auto\MogreParticleEmitter.h	2013-04-22 20:23:14.698586300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1221,9 +1221,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleEmitter.h Main\include\auto\Mogr
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreParticleEmitterFactory.h Main\include\auto\MogreParticleEmitterFactory.h
---- Main\include\auto\MogreParticleEmitterFactory.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleEmitterFactory.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleEmitterFactory.h	2013-04-22 20:21:39.720131700 +0200
++++ Main\include\auto\MogreParticleEmitterFactory.h	2013-04-22 20:23:14.708591700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1234,9 +1234,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleEmitterFactory.h Main\include\au
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreParticleIterator.h Main\include\auto\MogreParticleIterator.h
---- Main\include\auto\MogreParticleIterator.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleIterator.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleIterator.h	2013-04-22 20:21:39.725132800 +0200
++++ Main\include\auto\MogreParticleIterator.h	2013-04-22 20:23:14.715596600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1247,9 +1247,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleIterator.h Main\include\auto\Mog
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreParticleSystem.h Main\include\auto\MogreParticleSystem.h
---- Main\include\auto\MogreParticleSystem.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleSystem.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleSystem.h	2013-04-22 20:21:39.797844400 +0200
++++ Main\include\auto\MogreParticleSystem.h	2013-04-22 20:23:14.723449600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1260,9 +1260,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleSystem.h Main\include\auto\Mogre
  #include "MogreMovableObject.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreParticleSystemManager.h Main\include\auto\MogreParticleSystemManager.h
---- Main\include\auto\MogreParticleSystemManager.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleSystemManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleSystemManager.h	2013-04-22 20:21:39.836867000 +0200
++++ Main\include\auto\MogreParticleSystemManager.h	2013-04-22 20:23:14.731455400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1273,9 +1273,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleSystemManager.h Main\include\aut
  #include "MogreStringVector.h"
  #include "MogreMovableObject.h"
 diff -r -u -N -w Main\include\auto\MogreParticleSystemRenderer.h Main\include\auto\MogreParticleSystemRenderer.h
---- Main\include\auto\MogreParticleSystemRenderer.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreParticleSystemRenderer.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreParticleSystemRenderer.h	2013-04-22 20:21:39.849879200 +0200
++++ Main\include\auto\MogreParticleSystemRenderer.h	2013-04-22 20:23:14.739459500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1286,9 +1286,9 @@ diff -r -u -N -w Main\include\auto\MogreParticleSystemRenderer.h Main\include\au
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogrePass.h Main\include\auto\MogrePass.h
---- Main\include\auto\MogrePass.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePass.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePass.h	2013-04-22 20:21:39.931929500 +0200
++++ Main\include\auto\MogrePass.h	2013-04-22 20:23:14.750466700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1299,9 +1299,9 @@ diff -r -u -N -w Main\include\auto\MogrePass.h Main\include\auto\MogrePass.h
  #include "MogreBlendMode.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogrePatchMesh.h Main\include\auto\MogrePatchMesh.h
---- Main\include\auto\MogrePatchMesh.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePatchMesh.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePatchMesh.h	2013-04-22 20:21:39.947939800 +0200
++++ Main\include\auto\MogrePatchMesh.h	2013-04-22 20:23:14.757471100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1312,9 +1312,9 @@ diff -r -u -N -w Main\include\auto\MogrePatchMesh.h Main\include\auto\MogrePatch
  #include "MogrePrerequisites.h"
  #include "MogreResource.h"
 diff -r -u -N -w Main\include\auto\MogrePatchSurface.h Main\include\auto\MogrePatchSurface.h
---- Main\include\auto\MogrePatchSurface.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePatchSurface.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePatchSurface.h	2013-04-22 20:21:39.962949200 +0200
++++ Main\include\auto\MogrePatchSurface.h	2013-04-22 20:23:14.767479500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1325,9 +1325,9 @@ diff -r -u -N -w Main\include\auto\MogrePatchSurface.h Main\include\auto\MogrePa
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePixelCountLodStrategy.h Main\include\auto\MogrePixelCountLodStrategy.h
---- Main\include\auto\MogrePixelCountLodStrategy.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePixelCountLodStrategy.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePixelCountLodStrategy.h	2013-04-22 20:21:39.972026000 +0200
++++ Main\include\auto\MogrePixelCountLodStrategy.h	2013-04-22 20:23:14.773482300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1338,9 +1338,9 @@ diff -r -u -N -w Main\include\auto\MogrePixelCountLodStrategy.h Main\include\aut
  #include "MogrePrerequisites.h"
  #include "MogreMesh.h"
 diff -r -u -N -w Main\include\auto\MogrePixelFormat.h Main\include\auto\MogrePixelFormat.h
---- Main\include\auto\MogrePixelFormat.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePixelFormat.h	Fri Aug 05 01:00:04 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePixelFormat.h	2013-04-22 20:21:39.993040700 +0200
++++ Main\include\auto\MogrePixelFormat.h	2013-04-22 20:23:14.782488100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1351,9 +1351,9 @@ diff -r -u -N -w Main\include\auto\MogrePixelFormat.h Main\include\auto\MogrePix
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogrePlane.h Main\include\auto\MogrePlane.h
---- Main\include\auto\MogrePlane.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePlane.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePlane.h	2013-04-22 20:21:39.997043400 +0200
++++ Main\include\auto\MogrePlane.h	2013-04-22 20:23:14.791495900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1364,9 +1364,9 @@ diff -r -u -N -w Main\include\auto\MogrePlane.h Main\include\auto\MogrePlane.h
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogrePlaneBoundedVolume.h Main\include\auto\MogrePlaneBoundedVolume.h
---- Main\include\auto\MogrePlaneBoundedVolume.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePlaneBoundedVolume.h	Fri Aug 05 01:01:15 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePlaneBoundedVolume.h	2013-04-22 20:21:40.006052000 +0200
++++ Main\include\auto\MogrePlaneBoundedVolume.h	2013-04-22 20:23:14.798501600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1377,9 +1377,9 @@ diff -r -u -N -w Main\include\auto\MogrePlaneBoundedVolume.h Main\include\auto\M
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePlatform.h Main\include\auto\MogrePlatform.h
---- Main\include\auto\MogrePlatform.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePlatform.h	Fri Aug 05 00:59:39 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePlatform.h	2013-04-22 20:21:40.013054100 +0200
++++ Main\include\auto\MogrePlatform.h	2013-04-22 20:23:14.807506200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1390,9 +1390,9 @@ diff -r -u -N -w Main\include\auto\MogrePlatform.h Main\include\auto\MogrePlatfo
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogrePlugin.h Main\include\auto\MogrePlugin.h
---- Main\include\auto\MogrePlugin.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePlugin.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePlugin.h	2013-04-22 20:21:40.024062000 +0200
++++ Main\include\auto\MogrePlugin.h	2013-04-22 20:23:14.815509500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1403,9 +1403,9 @@ diff -r -u -N -w Main\include\auto\MogrePlugin.h Main\include\auto\MogrePlugin.h
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePose.h Main\include\auto\MogrePose.h
---- Main\include\auto\MogrePose.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePose.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePose.h	2013-04-22 20:21:40.034067900 +0200
++++ Main\include\auto\MogrePose.h	2013-04-22 20:23:14.823516900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1416,9 +1416,9 @@ diff -r -u -N -w Main\include\auto\MogrePose.h Main\include\auto\MogrePose.h
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePrerequisites.h Main\include\auto\MogrePrerequisites.h
---- Main\include\auto\MogrePrerequisites.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePrerequisites.h	Fri Aug 05 00:59:28 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePrerequisites.h	2013-04-22 20:21:40.044076200 +0200
++++ Main\include\auto\MogrePrerequisites.h	2013-04-22 20:23:14.831524700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1429,9 +1429,9 @@ diff -r -u -N -w Main\include\auto\MogrePrerequisites.h Main\include\auto\MogreP
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreProfiler.h Main\include\auto\MogreProfiler.h
---- Main\include\auto\MogreProfiler.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreProfiler.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreProfiler.h	2013-04-22 20:21:40.064089200 +0200
++++ Main\include\auto\MogreProfiler.h	2013-04-22 20:23:14.839526800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1442,9 +1442,9 @@ diff -r -u -N -w Main\include\auto\MogreProfiler.h Main\include\auto\MogreProfil
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogreProgressiveMesh.h Main\include\auto\MogreProgressiveMesh.h
---- Main\include\auto\MogreProgressiveMesh.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreProgressiveMesh.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreProgressiveMesh.h	2013-04-22 20:21:40.074095100 +0200
++++ Main\include\auto\MogreProgressiveMesh.h	2013-04-22 20:23:14.848532200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1455,9 +1455,9 @@ diff -r -u -N -w Main\include\auto\MogreProgressiveMesh.h Main\include\auto\Mogr
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogrePVRTCCodec.h Main\include\auto\MogrePVRTCCodec.h
---- Main\include\auto\MogrePVRTCCodec.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogrePVRTCCodec.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogrePVRTCCodec.h	2013-04-22 20:21:40.086103100 +0200
++++ Main\include\auto\MogrePVRTCCodec.h	2013-04-22 20:23:14.864546200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1468,9 +1468,9 @@ diff -r -u -N -w Main\include\auto\MogrePVRTCCodec.h Main\include\auto\MogrePVRT
  #include "MogrePrerequisites.h"
  #include "MogreCodec.h"
 diff -r -u -N -w Main\include\auto\MogreRectangle2D.h Main\include\auto\MogreRectangle2D.h
---- Main\include\auto\MogreRectangle2D.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRectangle2D.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRectangle2D.h	2013-04-22 20:21:40.105113100 +0200
++++ Main\include\auto\MogreRectangle2D.h	2013-04-22 20:23:14.872547800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1481,9 +1481,9 @@ diff -r -u -N -w Main\include\auto\MogreRectangle2D.h Main\include\auto\MogreRec
  #include "MogreHardwareBuffer.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreRenderable.h Main\include\auto\MogreRenderable.h
---- Main\include\auto\MogreRenderable.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderable.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderable.h	2013-04-22 20:21:40.115289400 +0200
++++ Main\include\auto\MogreRenderable.h	2013-04-22 20:23:14.888559800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1494,9 +1494,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderable.h Main\include\auto\MogreRend
  #include "MogreGpuProgramParams.h"
  
 diff -r -u -N -w Main\include\auto\MogreRenderObjectListener.h Main\include\auto\MogreRenderObjectListener.h
---- Main\include\auto\MogreRenderObjectListener.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderObjectListener.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderObjectListener.h	2013-04-22 20:21:40.122294200 +0200
++++ Main\include\auto\MogreRenderObjectListener.h	2013-04-22 20:23:14.904571300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1507,9 +1507,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderObjectListener.h Main\include\auto
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreRenderOperation.h Main\include\auto\MogreRenderOperation.h
---- Main\include\auto\MogreRenderOperation.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderOperation.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderOperation.h	2013-04-22 20:21:40.128299900 +0200
++++ Main\include\auto\MogreRenderOperation.h	2013-04-22 20:23:14.928636200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1520,9 +1520,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderOperation.h Main\include\auto\Mogr
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreRenderQueue.h Main\include\auto\MogreRenderQueue.h
---- Main\include\auto\MogreRenderQueue.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderQueue.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderQueue.h	2013-04-22 20:21:40.144309400 +0200
++++ Main\include\auto\MogreRenderQueue.h	2013-04-22 20:23:14.937635400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1533,9 +1533,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderQueue.h Main\include\auto\MogreRen
  #include "MogrePrerequisites.h"
  #include "MogreSceneManager.h"
 diff -r -u -N -w Main\include\auto\MogreRenderQueueInvocation.h Main\include\auto\MogreRenderQueueInvocation.h
---- Main\include\auto\MogreRenderQueueInvocation.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderQueueInvocation.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderQueueInvocation.h	2013-04-22 20:21:40.161320500 +0200
++++ Main\include\auto\MogreRenderQueueInvocation.h	2013-04-22 20:23:14.945642900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1546,9 +1546,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderQueueInvocation.h Main\include\aut
  #include "MogrePrerequisites.h"
  #include "MogreRenderQueueSortingGrouping.h"
 diff -r -u -N -w Main\include\auto\MogreRenderQueueListener.h Main\include\auto\MogreRenderQueueListener.h
---- Main\include\auto\MogreRenderQueueListener.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderQueueListener.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderQueueListener.h	2013-04-22 20:21:40.170328000 +0200
++++ Main\include\auto\MogreRenderQueueListener.h	2013-04-22 20:23:14.954647400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1559,9 +1559,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderQueueListener.h Main\include\auto\
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreRenderQueueSortingGrouping.h Main\include\auto\MogreRenderQueueSortingGrouping.h
---- Main\include\auto\MogreRenderQueueSortingGrouping.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderQueueSortingGrouping.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderQueueSortingGrouping.h	2013-04-22 20:21:40.197343000 +0200
++++ Main\include\auto\MogreRenderQueueSortingGrouping.h	2013-04-22 20:23:14.966162000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1572,9 +1572,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderQueueSortingGrouping.h Main\includ
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreRenderSystem.h Main\include\auto\MogreRenderSystem.h
---- Main\include\auto\MogreRenderSystem.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderSystem.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderSystem.h	2013-04-22 20:21:40.272395400 +0200
++++ Main\include\auto\MogreRenderSystem.h	2013-04-22 20:23:14.979172500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1585,9 +1585,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderSystem.h Main\include\auto\MogreRe
  #include "MogreCommon.h"
  #include "MogreHardwareVertexBuffer.h"
 diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilities.h Main\include\auto\MogreRenderSystemCapabilities.h
---- Main\include\auto\MogreRenderSystemCapabilities.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderSystemCapabilities.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderSystemCapabilities.h	2013-04-22 20:21:40.303416700 +0200
++++ Main\include\auto\MogreRenderSystemCapabilities.h	2013-04-22 20:23:14.988177100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1598,9 +1598,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilities.h Main\include\
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilitiesManager.h Main\include\auto\MogreRenderSystemCapabilitiesManager.h
---- Main\include\auto\MogreRenderSystemCapabilitiesManager.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderSystemCapabilitiesManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderSystemCapabilitiesManager.h	2013-04-22 20:21:40.328945600 +0200
++++ Main\include\auto\MogreRenderSystemCapabilitiesManager.h	2013-04-22 20:23:14.997182100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1611,9 +1611,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderSystemCapabilitiesManager.h Main\i
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreRenderTarget.h Main\include\auto\MogreRenderTarget.h
---- Main\include\auto\MogreRenderTarget.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderTarget.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderTarget.h	2013-04-22 20:21:40.358966500 +0200
++++ Main\include\auto\MogreRenderTarget.h	2013-04-22 20:23:15.006185500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1624,9 +1624,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderTarget.h Main\include\auto\MogreRe
  #include "MogrePrerequisites.h"
  #include "MogrePixelFormat.h"
 diff -r -u -N -w Main\include\auto\MogreRenderTargetListener.h Main\include\auto\MogreRenderTargetListener.h
---- Main\include\auto\MogreRenderTargetListener.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderTargetListener.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderTargetListener.h	2013-04-22 20:21:40.364238900 +0200
++++ Main\include\auto\MogreRenderTargetListener.h	2013-04-22 20:23:15.014190400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1637,9 +1637,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderTargetListener.h Main\include\auto
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreRenderTexture.h Main\include\auto\MogreRenderTexture.h
---- Main\include\auto\MogreRenderTexture.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderTexture.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderTexture.h	2013-04-22 20:21:40.377247800 +0200
++++ Main\include\auto\MogreRenderTexture.h	2013-04-22 20:23:15.024198700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1650,9 +1650,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderTexture.h Main\include\auto\MogreR
  #include "MogrePixelFormat.h"
  
 diff -r -u -N -w Main\include\auto\MogreRenderToVertexBuffer.h Main\include\auto\MogreRenderToVertexBuffer.h
---- Main\include\auto\MogreRenderToVertexBuffer.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderToVertexBuffer.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderToVertexBuffer.h	2013-04-22 20:21:40.388255800 +0200
++++ Main\include\auto\MogreRenderToVertexBuffer.h	2013-04-22 20:23:15.032202000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1663,9 +1663,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderToVertexBuffer.h Main\include\auto
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreRenderWindow.h Main\include\auto\MogreRenderWindow.h
---- Main\include\auto\MogreRenderWindow.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRenderWindow.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRenderWindow.h	2013-04-22 20:21:40.407269900 +0200
++++ Main\include\auto\MogreRenderWindow.h	2013-04-22 20:23:15.041208300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1676,9 +1676,9 @@ diff -r -u -N -w Main\include\auto\MogreRenderWindow.h Main\include\auto\MogreRe
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreResource.h Main\include\auto\MogreResource.h
---- Main\include\auto\MogreResource.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreResource.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreResource.h	2013-04-22 20:21:40.419275500 +0200
++++ Main\include\auto\MogreResource.h	2013-04-22 20:23:15.053217900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1689,9 +1689,9 @@ diff -r -u -N -w Main\include\auto\MogreResource.h Main\include\auto\MogreResour
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreResourceBackgroundQueue.h Main\include\auto\MogreResourceBackgroundQueue.h
---- Main\include\auto\MogreResourceBackgroundQueue.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreResourceBackgroundQueue.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreResourceBackgroundQueue.h	2013-04-22 20:21:40.428286200 +0200
++++ Main\include\auto\MogreResourceBackgroundQueue.h	2013-04-22 20:23:15.060223600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1702,9 +1702,9 @@ diff -r -u -N -w Main\include\auto\MogreResourceBackgroundQueue.h Main\include\a
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreResourceGroupManager.h Main\include\auto\MogreResourceGroupManager.h
---- Main\include\auto\MogreResourceGroupManager.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreResourceGroupManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreResourceGroupManager.h	2013-04-22 20:21:40.508334400 +0200
++++ Main\include\auto\MogreResourceGroupManager.h	2013-04-22 20:23:15.071231600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1715,9 +1715,9 @@ diff -r -u -N -w Main\include\auto\MogreResourceGroupManager.h Main\include\auto
  #include "MogreCommon.h"
  #include "MogreStringVector.h"
 diff -r -u -N -w Main\include\auto\MogreResourceManager.h Main\include\auto\MogreResourceManager.h
---- Main\include\auto\MogreResourceManager.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreResourceManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreResourceManager.h	2013-04-22 20:21:40.534352600 +0200
++++ Main\include\auto\MogreResourceManager.h	2013-04-22 20:23:15.079057100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1728,9 +1728,9 @@ diff -r -u -N -w Main\include\auto\MogreResourceManager.h Main\include\auto\Mogr
  #include "MogreResource.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreRibbonTrail.h Main\include\auto\MogreRibbonTrail.h
---- Main\include\auto\MogreRibbonTrail.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRibbonTrail.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRibbonTrail.h	2013-04-22 20:21:40.582384300 +0200
++++ Main\include\auto\MogreRibbonTrail.h	2013-04-22 20:23:15.086064100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1741,9 +1741,9 @@ diff -r -u -N -w Main\include\auto\MogreRibbonTrail.h Main\include\auto\MogreRib
  #include "MogreBillboardChain.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreRoot.h Main\include\auto\MogreRoot.h
---- Main\include\auto\MogreRoot.h	Sat Aug 06 12:02:15 2011
-+++ Main\include\auto\MogreRoot.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRoot.h	2013-04-22 20:21:40.643423600 +0200
++++ Main\include\auto\MogreRoot.h	2013-04-22 20:29:22.258816200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1753,35 +1753,35 @@ diff -r -u -N -w Main\include\auto\MogreRoot.h Main\include\auto\MogreRoot.h
  #include "MogreFrameListener.h"
  #include "MogrePrerequisites.h"
  #include "MogreSceneManager.h"
-@@ -51,12 +53,9 @@
- 		{
- 		}
- 	
-+    // Destructor - this runs in the main thread -- if the user calls Dispose()	
- 		~Root()
- 		{
--			this->!Root();
--		}
--		!Root()
--		{
- 			_native = Ogre::Root::getSingletonPtr();
- 			
- 			        // Collect all SharedPtr objects that are waiting for finalization
-@@ -73,6 +72,10 @@
- 			_singleton = nullptr;
- 		}
- 	
+@@ -58,12 +60,9 @@
+     {
+     }
+   
++    // Destructor - this runs in the main thread -- if the user calls Dispose()
+     ~Root()
+     {
+-    	this->!Root();
+-    }
+-    !Root()
+-    {
+       _native = Ogre::Root::getSingletonPtr();
+       
+       // Collect all SharedPtr objects that are waiting for finalization
+@@ -80,6 +79,10 @@
+       _singleton = nullptr;
+     }
+   
 +    // Finalizer - this runs in the garbage collector thread.
-+		!Root()
-+		{
-+		}
- 	
- 		//Public Declarations
- 	public:
++    !Root()
++    {
++    }
+   
+     //Public Declarations
+   public:
 diff -r -u -N -w Main\include\auto\MogreRotationalSpline.h Main\include\auto\MogreRotationalSpline.h
---- Main\include\auto\MogreRotationalSpline.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreRotationalSpline.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreRotationalSpline.h	2013-04-22 20:21:40.655433700 +0200
++++ Main\include\auto\MogreRotationalSpline.h	2013-04-22 20:23:15.115086100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1792,9 +1792,9 @@ diff -r -u -N -w Main\include\auto\MogreRotationalSpline.h Main\include\auto\Mog
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreSceneManager.h Main\include\auto\MogreSceneManager.h
---- Main\include\auto\MogreSceneManager.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSceneManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSceneManager.h	2013-04-22 20:21:40.872577000 +0200
++++ Main\include\auto\MogreSceneManager.h	2013-04-22 20:23:15.125088700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1805,9 +1805,9 @@ diff -r -u -N -w Main\include\auto\MogreSceneManager.h Main\include\auto\MogreSc
  #include "MogreRenderQueueListener.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreSceneManagerEnumerator.h Main\include\auto\MogreSceneManagerEnumerator.h
---- Main\include\auto\MogreSceneManagerEnumerator.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSceneManagerEnumerator.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSceneManagerEnumerator.h	2013-04-22 20:21:40.902596700 +0200
++++ Main\include\auto\MogreSceneManagerEnumerator.h	2013-04-22 20:23:15.132092800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1818,9 +1818,9 @@ diff -r -u -N -w Main\include\auto\MogreSceneManagerEnumerator.h Main\include\au
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreSceneNode.h Main\include\auto\MogreSceneNode.h
---- Main\include\auto\MogreSceneNode.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSceneNode.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSceneNode.h	2013-04-22 20:21:40.941625400 +0200
++++ Main\include\auto\MogreSceneNode.h	2013-04-22 20:23:15.143100800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1831,9 +1831,9 @@ diff -r -u -N -w Main\include\auto\MogreSceneNode.h Main\include\auto\MogreScene
  #include "MogrePrerequisites.h"
  #include "MogreSceneManager.h"
 diff -r -u -N -w Main\include\auto\MogreSceneQuery.h Main\include\auto\MogreSceneQuery.h
---- Main\include\auto\MogreSceneQuery.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSceneQuery.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSceneQuery.h	2013-04-22 20:21:40.964640600 +0200
++++ Main\include\auto\MogreSceneQuery.h	2013-04-22 20:23:15.150691900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1844,9 +1844,9 @@ diff -r -u -N -w Main\include\auto\MogreSceneQuery.h Main\include\auto\MogreScen
  #include "MogrePlaneBoundedVolume.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreSerializer.h Main\include\auto\MogreSerializer.h
---- Main\include\auto\MogreSerializer.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSerializer.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSerializer.h	2013-04-22 20:21:40.973648900 +0200
++++ Main\include\auto\MogreSerializer.h	2013-04-22 20:23:15.158116700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1857,9 +1857,9 @@ diff -r -u -N -w Main\include\auto\MogreSerializer.h Main\include\auto\MogreSeri
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreShadowCameraSetup.h Main\include\auto\MogreShadowCameraSetup.h
---- Main\include\auto\MogreShadowCameraSetup.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCameraSetup.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCameraSetup.h	2013-04-22 20:21:40.982652600 +0200
++++ Main\include\auto\MogreShadowCameraSetup.h	2013-04-22 20:23:15.168123400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1870,9 +1870,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCameraSetup.h Main\include\auto\Mo
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupFocused.h Main\include\auto\MogreShadowCameraSetupFocused.h
---- Main\include\auto\MogreShadowCameraSetupFocused.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCameraSetupFocused.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCameraSetupFocused.h	2013-04-22 20:21:40.994660200 +0200
++++ Main\include\auto\MogreShadowCameraSetupFocused.h	2013-04-22 20:23:15.176129600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1883,9 +1883,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupFocused.h Main\include\
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupLiSPSM.h Main\include\auto\MogreShadowCameraSetupLiSPSM.h
---- Main\include\auto\MogreShadowCameraSetupLiSPSM.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCameraSetupLiSPSM.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCameraSetupLiSPSM.h	2013-04-22 20:21:41.009668400 +0200
++++ Main\include\auto\MogreShadowCameraSetupLiSPSM.h	2013-04-22 20:23:15.183013800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1896,9 +1896,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupLiSPSM.h Main\include\a
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h
---- Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	2013-04-22 20:21:41.015678600 +0200
++++ Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h	2013-04-22 20:23:15.189019000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1909,9 +1909,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPlaneOptimal.h Main\inc
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPSSM.h Main\include\auto\MogreShadowCameraSetupPSSM.h
---- Main\include\auto\MogreShadowCameraSetupPSSM.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCameraSetupPSSM.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCameraSetupPSSM.h	2013-04-22 20:21:41.030684700 +0200
++++ Main\include\auto\MogreShadowCameraSetupPSSM.h	2013-04-22 20:23:15.197033000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1922,9 +1922,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCameraSetupPSSM.h Main\include\aut
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreShadowCaster.h Main\include\auto\MogreShadowCaster.h
---- Main\include\auto\MogreShadowCaster.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowCaster.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowCaster.h	2013-04-22 20:21:41.040695100 +0200
++++ Main\include\auto\MogreShadowCaster.h	2013-04-22 20:23:15.204028500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1935,9 +1935,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowCaster.h Main\include\auto\MogreSh
  #include "MogrePrerequisites.h"
  #include "MogreGpuProgramParams.h"
 diff -r -u -N -w Main\include\auto\MogreShadowTextureManager.h Main\include\auto\MogreShadowTextureManager.h
---- Main\include\auto\MogreShadowTextureManager.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreShadowTextureManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreShadowTextureManager.h	2013-04-22 20:21:41.050698100 +0200
++++ Main\include\auto\MogreShadowTextureManager.h	2013-04-22 20:23:15.215034800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1948,9 +1948,9 @@ diff -r -u -N -w Main\include\auto\MogreShadowTextureManager.h Main\include\auto
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreSimplePageContentCollection.h Main\include\auto\MogreSimplePageContentCollection.h
---- Main\include\auto\MogreSimplePageContentCollection.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSimplePageContentCollection.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSimplePageContentCollection.h	2013-04-22 20:21:41.063704500 +0200
++++ Main\include\auto\MogreSimplePageContentCollection.h	2013-04-22 20:23:15.223041000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1961,9 +1961,9 @@ diff -r -u -N -w Main\include\auto\MogreSimplePageContentCollection.h Main\inclu
  #include "MogrePlatform.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreSimpleRenderable.h Main\include\auto\MogreSimpleRenderable.h
---- Main\include\auto\MogreSimpleRenderable.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSimpleRenderable.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSimpleRenderable.h	2013-04-22 20:21:41.071712700 +0200
++++ Main\include\auto\MogreSimpleRenderable.h	2013-04-22 20:23:15.230043400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1974,9 +1974,9 @@ diff -r -u -N -w Main\include\auto\MogreSimpleRenderable.h Main\include\auto\Mog
  #include "MogreMovableObject.h"
  #include "MogrePrerequisites.h"
 diff -r -u -N -w Main\include\auto\MogreSimpleSpline.h Main\include\auto\MogreSimpleSpline.h
---- Main\include\auto\MogreSimpleSpline.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSimpleSpline.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSimpleSpline.h	2013-04-22 20:21:41.080719400 +0200
++++ Main\include\auto\MogreSimpleSpline.h	2013-04-22 20:23:15.237054400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -1987,9 +1987,9 @@ diff -r -u -N -w Main\include\auto\MogreSimpleSpline.h Main\include\auto\MogreSi
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreSkeleton.h Main\include\auto\MogreSkeleton.h
---- Main\include\auto\MogreSkeleton.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSkeleton.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSkeleton.h	2013-04-22 20:21:41.114740900 +0200
++++ Main\include\auto\MogreSkeleton.h	2013-04-22 20:23:15.247057400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2000,9 +2000,9 @@ diff -r -u -N -w Main\include\auto\MogreSkeleton.h Main\include\auto\MogreSkelet
  #include "MogreResource.h"
  #include "MogreStringVector.h"
 diff -r -u -N -w Main\include\auto\MogreSkeletonInstance.h Main\include\auto\MogreSkeletonInstance.h
---- Main\include\auto\MogreSkeletonInstance.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSkeletonInstance.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSkeletonInstance.h	2013-04-22 20:21:41.134753900 +0200
++++ Main\include\auto\MogreSkeletonInstance.h	2013-04-22 20:23:15.254059400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2013,9 +2013,9 @@ diff -r -u -N -w Main\include\auto\MogreSkeletonInstance.h Main\include\auto\Mog
  #include "MogrePrerequisites.h"
  #include "MogreResource.h"
 diff -r -u -N -w Main\include\auto\MogreSkeletonManager.h Main\include\auto\MogreSkeletonManager.h
---- Main\include\auto\MogreSkeletonManager.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSkeletonManager.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSkeletonManager.h	2013-04-22 20:21:41.143166500 +0200
++++ Main\include\auto\MogreSkeletonManager.h	2013-04-22 20:23:15.261064300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2026,9 +2026,9 @@ diff -r -u -N -w Main\include\auto\MogreSkeletonManager.h Main\include\auto\Mogr
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreSkeletonSerializer.h Main\include\auto\MogreSkeletonSerializer.h
---- Main\include\auto\MogreSkeletonSerializer.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSkeletonSerializer.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSkeletonSerializer.h	2013-04-22 20:21:41.162179400 +0200
++++ Main\include\auto\MogreSkeletonSerializer.h	2013-04-22 20:23:15.270072200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2039,9 +2039,9 @@ diff -r -u -N -w Main\include\auto\MogreSkeletonSerializer.h Main\include\auto\M
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreStaticGeometry.h Main\include\auto\MogreStaticGeometry.h
---- Main\include\auto\MogreStaticGeometry.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreStaticGeometry.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreStaticGeometry.h	2013-04-22 20:21:41.212210700 +0200
++++ Main\include\auto\MogreStaticGeometry.h	2013-04-22 20:23:15.280077600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2052,9 +2052,9 @@ diff -r -u -N -w Main\include\auto\MogreStaticGeometry.h Main\include\auto\Mogre
  #include "MogrePlatform.h"
  #include "MogreShadowCaster.h"
 diff -r -u -N -w Main\include\auto\MogreStreamSerialiser.h Main\include\auto\MogreStreamSerialiser.h
---- Main\include\auto\MogreStreamSerialiser.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreStreamSerialiser.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreStreamSerialiser.h	2013-04-22 20:21:41.235227200 +0200
++++ Main\include\auto\MogreStreamSerialiser.h	2013-04-22 20:23:15.286080400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2065,9 +2065,9 @@ diff -r -u -N -w Main\include\auto\MogreStreamSerialiser.h Main\include\auto\Mog
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreString.h Main\include\auto\MogreString.h
---- Main\include\auto\MogreString.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreString.h	Fri Aug 05 01:14:17 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreString.h	2013-04-22 20:21:41.240218800 +0200
++++ Main\include\auto\MogreString.h	2013-04-22 20:23:15.292088500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2078,9 +2078,9 @@ diff -r -u -N -w Main\include\auto\MogreString.h Main\include\auto\MogreString.h
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreStringConverter.h Main\include\auto\MogreStringConverter.h
---- Main\include\auto\MogreStringConverter.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreStringConverter.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreStringConverter.h	2013-04-22 20:21:41.267246100 +0200
++++ Main\include\auto\MogreStringConverter.h	2013-04-22 20:23:15.299095900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2091,9 +2091,9 @@ diff -r -u -N -w Main\include\auto\MogreStringConverter.h Main\include\auto\Mogr
  #include "MogreStringVector.h"
  
 diff -r -u -N -w Main\include\auto\MogreStringInterface.h Main\include\auto\MogreStringInterface.h
---- Main\include\auto\MogreStringInterface.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreStringInterface.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreStringInterface.h	2013-04-22 20:21:41.277252800 +0200
++++ Main\include\auto\MogreStringInterface.h	2013-04-22 20:23:15.308098400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2104,9 +2104,9 @@ diff -r -u -N -w Main\include\auto\MogreStringInterface.h Main\include\auto\Mogr
  #include "MogreCommon.h"
  
 diff -r -u -N -w Main\include\auto\MogreStringVector.h Main\include\auto\MogreStringVector.h
---- Main\include\auto\MogreStringVector.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreStringVector.h	Fri Aug 05 01:13:56 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreStringVector.h	2013-04-22 20:21:41.284260100 +0200
++++ Main\include\auto\MogreStringVector.h	2013-04-22 20:23:15.317106300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2117,9 +2117,9 @@ diff -r -u -N -w Main\include\auto\MogreStringVector.h Main\include\auto\MogreSt
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreSubEntity.h Main\include\auto\MogreSubEntity.h
---- Main\include\auto\MogreSubEntity.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSubEntity.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSubEntity.h	2013-04-22 20:21:41.299269100 +0200
++++ Main\include\auto\MogreSubEntity.h	2013-04-22 20:23:15.326107600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2130,9 +2130,9 @@ diff -r -u -N -w Main\include\auto\MogreSubEntity.h Main\include\auto\MogreSubEn
  #include "MogrePrerequisites.h"
  #include "MogreGpuProgramParams.h"
 diff -r -u -N -w Main\include\auto\MogreSubMesh.h Main\include\auto\MogreSubMesh.h
---- Main\include\auto\MogreSubMesh.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreSubMesh.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreSubMesh.h	2013-04-22 20:21:41.320282200 +0200
++++ Main\include\auto\MogreSubMesh.h	2013-04-22 20:23:15.335113800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2143,9 +2143,9 @@ diff -r -u -N -w Main\include\auto\MogreSubMesh.h Main\include\auto\MogreSubMesh
  #include "MogrePrerequisites.h"
  #include "MogreRenderOperation.h"
 diff -r -u -N -w Main\include\auto\MogreTagPoint.h Main\include\auto\MogreTagPoint.h
---- Main\include\auto\MogreTagPoint.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTagPoint.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTagPoint.h	2013-04-22 20:21:41.337294500 +0200
++++ Main\include\auto\MogreTagPoint.h	2013-04-22 20:23:15.344120000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2156,9 +2156,9 @@ diff -r -u -N -w Main\include\auto\MogreTagPoint.h Main\include\auto\MogreTagPoi
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreTechnique.h Main\include\auto\MogreTechnique.h
---- Main\include\auto\MogreTechnique.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTechnique.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTechnique.h	2013-04-22 20:21:41.376320800 +0200
++++ Main\include\auto\MogreTechnique.h	2013-04-22 20:23:15.355129200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2169,9 +2169,9 @@ diff -r -u -N -w Main\include\auto\MogreTechnique.h Main\include\auto\MogreTechn
  #include "MogreRenderSystemCapabilities.h"
  #include "MogrePass.h"
 diff -r -u -N -w Main\include\auto\MogreTerrain.h Main\include\auto\MogreTerrain.h
---- Main\include\auto\MogreTerrain.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTerrain.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrain.h	2013-04-22 20:21:41.526387100 +0200
++++ Main\include\auto\MogreTerrain.h	2013-04-22 20:23:15.366135200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2182,9 +2182,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrain.h Main\include\auto\MogreTerrain
  #include "MogreWorkQueue.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreTerrainGroup.h Main\include\auto\MogreTerrainGroup.h
---- Main\include\auto\MogreTerrainGroup.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTerrainGroup.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainGroup.h	2013-04-22 20:21:41.574420800 +0200
++++ Main\include\auto\MogreTerrainGroup.h	2013-04-22 20:23:15.375146300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2195,9 +2195,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainGroup.h Main\include\auto\MogreTe
  #include "MogrePrerequisites.h"
  #include "MogreTerrain.h"
 diff -r -u -N -w Main\include\auto\MogreTerrainLayerBlendMap.h Main\include\auto\MogreTerrainLayerBlendMap.h
---- Main\include\auto\MogreTerrainLayerBlendMap.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTerrainLayerBlendMap.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainLayerBlendMap.h	2013-04-22 20:21:41.593433300 +0200
++++ Main\include\auto\MogreTerrainLayerBlendMap.h	2013-04-22 20:23:15.382145000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2208,9 +2208,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainLayerBlendMap.h Main\include\auto
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGenerator.h Main\include\auto\MogreTerrainMaterialGenerator.h
---- Main\include\auto\MogreTerrainMaterialGenerator.h	Sat Aug 06 12:02:16 2011
-+++ Main\include\auto\MogreTerrainMaterialGenerator.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainMaterialGenerator.h	2013-04-22 20:21:41.616446900 +0200
++++ Main\include\auto\MogreTerrainMaterialGenerator.h	2013-04-22 20:23:15.454625900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2221,9 +2221,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGenerator.h Main\include\
  #include "MogrePrerequisites.h"
  #include "MogrePixelFormat.h"
 diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGeneratorA.h Main\include\auto\MogreTerrainMaterialGeneratorA.h
---- Main\include\auto\MogreTerrainMaterialGeneratorA.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTerrainMaterialGeneratorA.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainMaterialGeneratorA.h	2013-04-22 20:21:41.644466000 +0200
++++ Main\include\auto\MogreTerrainMaterialGeneratorA.h	2013-04-22 20:23:15.460629900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2234,9 +2234,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainMaterialGeneratorA.h Main\include
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreTerrainPagedWorldSection.h Main\include\auto\MogreTerrainPagedWorldSection.h
---- Main\include\auto\MogreTerrainPagedWorldSection.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTerrainPagedWorldSection.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainPagedWorldSection.h	2013-04-22 20:21:41.658477000 +0200
++++ Main\include\auto\MogreTerrainPagedWorldSection.h	2013-04-22 20:23:15.468639300 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2247,9 +2247,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainPagedWorldSection.h Main\include\
  #include "MogrePrerequisites.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreTerrainPaging.h Main\include\auto\MogreTerrainPaging.h
---- Main\include\auto\MogreTerrainPaging.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTerrainPaging.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainPaging.h	2013-04-22 20:21:41.666480700 +0200
++++ Main\include\auto\MogreTerrainPaging.h	2013-04-22 20:23:15.476640200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2260,9 +2260,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainPaging.h Main\include\auto\MogreT
  #include "MogrePlatform.h"
  
 diff -r -u -N -w Main\include\auto\MogreTerrainQuadTreeNode.h Main\include\auto\MogreTerrainQuadTreeNode.h
---- Main\include\auto\MogreTerrainQuadTreeNode.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTerrainQuadTreeNode.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTerrainQuadTreeNode.h	2013-04-22 20:21:41.693500600 +0200
++++ Main\include\auto\MogreTerrainQuadTreeNode.h	2013-04-22 20:23:15.485650100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2273,9 +2273,9 @@ diff -r -u -N -w Main\include\auto\MogreTerrainQuadTreeNode.h Main\include\auto\
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreTextAreaOverlayElement.h Main\include\auto\MogreTextAreaOverlayElement.h
---- Main\include\auto\MogreTextAreaOverlayElement.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTextAreaOverlayElement.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTextAreaOverlayElement.h	2013-04-22 20:21:41.714815400 +0200
++++ Main\include\auto\MogreTextAreaOverlayElement.h	2013-04-22 20:23:15.492656600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2286,9 +2286,9 @@ diff -r -u -N -w Main\include\auto\MogreTextAreaOverlayElement.h Main\include\au
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreTexture.h Main\include\auto\MogreTexture.h
---- Main\include\auto\MogreTexture.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTexture.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTexture.h	2013-04-22 20:21:41.747837600 +0200
++++ Main\include\auto\MogreTexture.h	2013-04-22 20:23:15.500659100 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2299,9 +2299,9 @@ diff -r -u -N -w Main\include\auto\MogreTexture.h Main\include\auto\MogreTexture
  #include "MogrePrerequisites.h"
  #include "MogrePixelFormat.h"
 diff -r -u -N -w Main\include\auto\MogreTextureManager.h Main\include\auto\MogreTextureManager.h
---- Main\include\auto\MogreTextureManager.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTextureManager.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTextureManager.h	2013-04-22 20:21:41.780859100 +0200
++++ Main\include\auto\MogreTextureManager.h	2013-04-22 20:23:15.509664500 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2312,9 +2312,9 @@ diff -r -u -N -w Main\include\auto\MogreTextureManager.h Main\include\auto\Mogre
  #include "MogrePrerequisites.h"
  #include "MogreCommon.h"
 diff -r -u -N -w Main\include\auto\MogreTextureUnitState.h Main\include\auto\MogreTextureUnitState.h
---- Main\include\auto\MogreTextureUnitState.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreTextureUnitState.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreTextureUnitState.h	2013-04-22 20:21:41.830892500 +0200
++++ Main\include\auto\MogreTextureUnitState.h	2013-04-22 20:23:15.521674600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2325,9 +2325,9 @@ diff -r -u -N -w Main\include\auto\MogreTextureUnitState.h Main\include\auto\Mog
  #include "MogreCommon.h"
  #include "MogreBlendMode.h"
 diff -r -u -N -w Main\include\auto\MogreUnifiedHighLevelGpuProgram.h Main\include\auto\MogreUnifiedHighLevelGpuProgram.h
---- Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	2013-04-22 20:21:41.859910100 +0200
++++ Main\include\auto\MogreUnifiedHighLevelGpuProgram.h	2013-04-22 20:23:15.527674900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2338,9 +2338,9 @@ diff -r -u -N -w Main\include\auto\MogreUnifiedHighLevelGpuProgram.h Main\includ
  #include "MogrePrerequisites.h"
  #include "MogreResource.h"
 diff -r -u -N -w Main\include\auto\MogreUserObjectBindings.h Main\include\auto\MogreUserObjectBindings.h
---- Main\include\auto\MogreUserObjectBindings.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreUserObjectBindings.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreUserObjectBindings.h	2013-04-22 20:21:41.868920800 +0200
++++ Main\include\auto\MogreUserObjectBindings.h	2013-04-22 20:23:15.539684600 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2351,9 +2351,9 @@ diff -r -u -N -w Main\include\auto\MogreUserObjectBindings.h Main\include\auto\M
  
  namespace Mogre
 diff -r -u -N -w Main\include\auto\MogreVertexBoneAssignment.h Main\include\auto\MogreVertexBoneAssignment.h
---- Main\include\auto\MogreVertexBoneAssignment.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreVertexBoneAssignment.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreVertexBoneAssignment.h	2013-04-22 20:21:41.872921800 +0200
++++ Main\include\auto\MogreVertexBoneAssignment.h	2013-04-22 20:23:15.548691200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2364,9 +2364,9 @@ diff -r -u -N -w Main\include\auto\MogreVertexBoneAssignment.h Main\include\auto
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreVertexIndexData.h Main\include\auto\MogreVertexIndexData.h
---- Main\include\auto\MogreVertexIndexData.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreVertexIndexData.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreVertexIndexData.h	2013-04-22 20:21:41.883926500 +0200
++++ Main\include\auto\MogreVertexIndexData.h	2013-04-22 20:23:15.554694000 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2377,9 +2377,9 @@ diff -r -u -N -w Main\include\auto\MogreVertexIndexData.h Main\include\auto\Mogr
  #include "MogreHardwareVertexBuffer.h"
  #include "MogreHardwareBuffer.h"
 diff -r -u -N -w Main\include\auto\MogreViewport.h Main\include\auto\MogreViewport.h
---- Main\include\auto\MogreViewport.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreViewport.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreViewport.h	2013-04-22 20:21:41.905942100 +0200
++++ Main\include\auto\MogreViewport.h	2013-04-22 20:23:15.563701900 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2390,9 +2390,9 @@ diff -r -u -N -w Main\include\auto\MogreViewport.h Main\include\auto\MogreViewpo
  #include "MogreFrustum.h"
  #include "MogrePlatform.h"
 diff -r -u -N -w Main\include\auto\MogreWindowEventUtilities.h Main\include\auto\MogreWindowEventUtilities.h
---- Main\include\auto\MogreWindowEventUtilities.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreWindowEventUtilities.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreWindowEventUtilities.h	2013-04-22 20:21:41.918257200 +0200
++++ Main\include\auto\MogreWindowEventUtilities.h	2013-04-22 20:23:15.575707400 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2403,9 +2403,9 @@ diff -r -u -N -w Main\include\auto\MogreWindowEventUtilities.h Main\include\auto
  namespace Mogre
  {
 diff -r -u -N -w Main\include\auto\MogreWireBoundingBox.h Main\include\auto\MogreWireBoundingBox.h
---- Main\include\auto\MogreWireBoundingBox.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreWireBoundingBox.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreWireBoundingBox.h	2013-04-22 20:21:41.928265900 +0200
++++ Main\include\auto\MogreWireBoundingBox.h	2013-04-22 20:23:15.584713200 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2416,9 +2416,9 @@ diff -r -u -N -w Main\include\auto\MogreWireBoundingBox.h Main\include\auto\Mogr
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreWorkQueue.h Main\include\auto\MogreWorkQueue.h
---- Main\include\auto\MogreWorkQueue.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreWorkQueue.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreWorkQueue.h	2013-04-22 20:21:41.943274900 +0200
++++ Main\include\auto\MogreWorkQueue.h	2013-04-22 20:23:15.595722800 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
@@ -2429,9 +2429,9 @@ diff -r -u -N -w Main\include\auto\MogreWorkQueue.h Main\include\auto\MogreWorkQ
  #include "MogrePrerequisites.h"
  
 diff -r -u -N -w Main\include\auto\MogreZip.h Main\include\auto\MogreZip.h
---- Main\include\auto\MogreZip.h	Sat Aug 06 12:02:17 2011
-+++ Main\include\auto\MogreZip.h	Fri Aug 05 01:13:55 2011
-@@ -3,7 +3,9 @@
+--- Main\include\auto\MogreZip.h	2013-04-22 20:21:41.961291500 +0200
++++ Main\include\auto\MogreZip.h	2013-04-22 20:23:15.603725700 +0200
+@@ -10,7 +10,9 @@
  
  #pragma once
  
