@@ -5,8 +5,7 @@ namespace AutoWrap.Mogre
 {
     internal class MogreNamespaceDefinition : NamespaceDefinition
     {
-        public MogreNamespaceDefinition(MetaDefinition metaDef, XmlElement elem, string managedRootNamespaceName)
-            : base(metaDef, elem, managedRootNamespaceName)
+        public MogreNamespaceDefinition(MetaDefinition metaDef, XmlElement elem) : base(metaDef, elem)
         {
         }
 

@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                className = _wrapper.ManagedNamespace + "::" + _definition.Name;
+                className = this.MetaDef.ManagedNamespace + "::" + _definition.Name;
             }
 
             _code.AppendLine("friend ref class " + className + ";");
@@ -122,7 +122,7 @@ namespace AutoWrap.Meta
             }
             else
             {
-                className = _wrapper.ManagedNamespace + "::" + _definition.Name;
+                className = this.MetaDef.ManagedNamespace + "::" + _definition.Name;
             }
             _code.AppendIndent(ProxyName + "( " + className + "^ managedObj");
             if (f != null)

@@ -64,7 +64,7 @@ namespace AutoWrap.Meta
                     className = className.Replace(_definition.CLRName, _definition.Name);
                 }
 
-                className = _wrapper.ManagedNamespace + "::" + className;
+                className = this.MetaDef.ManagedNamespace + "::" + className;
 
                 _code.AppendLine("friend ref class " + className + ";");
 
@@ -218,7 +218,7 @@ namespace AutoWrap.Meta
                     className = className.Replace(_definition.CLRName, _definition.Name);
                 }
 
-                className = _wrapper.ManagedNamespace + "::" + className;
+                className = this.MetaDef.ManagedNamespace + "::" + className;
 
                 _code.AppendLine("friend ref class " + className + ";");
 

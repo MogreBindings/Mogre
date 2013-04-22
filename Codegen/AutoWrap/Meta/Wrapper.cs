@@ -53,8 +53,6 @@ namespace AutoWrap.Meta
         string _sourcePath;
         MetaDefinition _metaDef;
 
-        public string NativeNamespace;
-        public string ManagedNamespace;
         public List<string> PreDeclarations = new List<string>();
         public List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
         public List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
@@ -68,8 +66,6 @@ namespace AutoWrap.Meta
             this._includePath = includePath;
             this._sourcePath = sourcePath;
             this._metaDef = meta;
-            this.ManagedNamespace = Globals.ManagedNamespace;
-            this.NativeNamespace = Globals.NativeNamespace;
 
             foreach (NamespaceDefinition space in meta.Namespaces)
             {
@@ -280,7 +276,7 @@ namespace AutoWrap.Meta
                 {
                     AbstractTypeDefinition type = t.FindType<AbstractTypeDefinition>(t.Name);
 
-                    if (type.FullNativeName.StartsWith(NativeNamespace + "::")
+                    if (type.FullNativeName.StartsWith(_metaDef.NativeNamespace + "::")
                         && type is ClassDefinition && !type.IsTemplate)
                     {
                         if (!typesForMakePublic.Contains(type))
@@ -292,7 +288,7 @@ namespace AutoWrap.Meta
             builder.AppendLine("#pragma once");
             builder.AppendLine();
 
-            builder.AppendLine("namespace " + NativeNamespace);
+            builder.AppendLine("namespace " + _metaDef.NativeNamespace);
             builder.AppendLine("{");
 
             foreach (AbstractTypeDefinition type in typesForMakePublic)
@@ -425,10 +421,10 @@ namespace AutoWrap.Meta
         protected string GetManagedIncludeFileName(string name)
         {
             name = name.Replace('/', '_').Replace('\\', '_');
-            if (name.StartsWith(NativeNamespace))
-                name = ManagedNamespace + name.Substring(NativeNamespace.Length);
+            if (name.StartsWith(_metaDef.NativeNamespace))
+                name = _metaDef.ManagedNamespace + name.Substring(_metaDef.NativeNamespace.Length);
             else
-                name = ManagedNamespace + "-" + name;
+                name = _metaDef.ManagedNamespace + "-" + name;
 
             return name;
         }
@@ -465,7 +461,7 @@ namespace AutoWrap.Meta
 
             IncAddIncludeFiles(includeFile, UsedTypes, sb);
 
-            sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
             sb.IncreaseIndent();
             sb.AppendLine(sbTypes.ToString());
@@ -504,7 +500,7 @@ namespace AutoWrap.Meta
 
             CppAddIncludeFiles(include, UsedTypes, sb);
 
-            sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
             sb.IncreaseIndent();
 
@@ -558,7 +554,7 @@ namespace AutoWrap.Meta
             SourceCodeStringBuilder sb = new SourceCodeStringBuilder(this._metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
-            sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
             sb.IncreaseIndent();
             sb.AppendLine(sbTypes.ToString());
@@ -575,8 +571,8 @@ namespace AutoWrap.Meta
 
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
-            
-            sb.AppendFormat("namespace {0}\n{{\n", ManagedNamespace);
+
+            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
             sb.IncreaseIndent();
 

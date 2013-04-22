@@ -1036,7 +1036,7 @@ namespace AutoWrap.Meta
 
         public override T FindType<T>(string name, bool raiseException = true)
         {
-            if (name.StartsWith(Globals.NativeNamespace + "::"))
+            if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
                 return GetNameSpace().FindType<T>(name, raiseException);

@@ -729,7 +729,7 @@ namespace AutoWrap.Meta
                         _code.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                         _code.AppendLine("    if (obj->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
                         _code.AppendEmptyLine();
-                        _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _wrapper.NativeNamespace + "::" + cls + "*>(obj->_native));");
+                        _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + this.MetaDef.NativeNamespace + "::" + cls + "*>(obj->_native));");
                         _code.AppendLine("}");
 
                         _code.AppendEmptyLine();

@@ -222,7 +222,7 @@ namespace AutoWrap.Meta
 
         public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
-            if (name.StartsWith(Globals.NativeNamespace + "::"))
+            if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
                 return GetNameSpace().FindType<T>(name, raiseException);

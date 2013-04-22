@@ -158,8 +158,8 @@ namespace AutoWrap.Meta
                 if (_typename == null)
                 {
                     _typename = _elem.ChildNodes[0].InnerText;
-                    if (_typename.StartsWith(Globals.NativeNamespace + "::"))
-                        _typename = _typename.Substring((Globals.NativeNamespace + "::").Length);
+                    if (_typename.StartsWith(MetaDef.NativeNamespace + "::"))
+                        _typename = _typename.Substring((MetaDef.NativeNamespace + "::").Length);
                 }
                 return _typename;
             }

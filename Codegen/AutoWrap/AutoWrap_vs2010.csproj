@@ -131,13 +131,12 @@
     <Compile Include="Meta\Definitions\PassedByType.cs" />
     <Compile Include="Meta\Definitions\ProtectionLevel.cs" />
     <Compile Include="Meta\Definitions\VirtualLevel.cs" />
-    <Compile Include="Meta\Globals.cs" />
     <Compile Include="Meta\IncPlainWrapperClassProducer.cs" />
     <Compile Include="Meta\CppCLRHandleClassProducer.cs" />
     <Compile Include="Meta\IncCLRHandleClassProducer.cs" />
     <Compile Include="Meta\MetaConstructFactory.cs" />
     <Compile Include="Meta\SourceCodeStringBuilder.cs" />
-    <Compile Include="Meta\Mogre17.cs" />
+    <Compile Include="Mogre\Mogre17.cs" />
     <Compile Include="Meta\NativeProtectedTypesProxy.cs" />
     <Compile Include="Meta\CppNativeProtectedTypesProxy.cs" />
     <Compile Include="Meta\CppOverridableClassProducer.cs" />

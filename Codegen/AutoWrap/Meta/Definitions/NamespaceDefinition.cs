@@ -96,7 +96,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public NamespaceDefinition(MetaDefinition metaDef, XmlElement elem, string managedRootNamespaceName)
+        public NamespaceDefinition(MetaDefinition metaDef, XmlElement elem)
         {
             MetaDef = metaDef;
 
@@ -106,7 +106,7 @@ namespace AutoWrap.Meta
             string third = elem.GetAttribute("third");
             
             NativeName = elem.GetAttribute("name");
-            CLRName = managedRootNamespaceName;
+            CLRName = metaDef.ManagedNamespace;
             
             if (second != "")
             {

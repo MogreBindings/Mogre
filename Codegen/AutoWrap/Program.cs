@@ -23,13 +23,8 @@ namespace AutoWrap
         [STAThread]
         static void Main(string[] args)
         {
-            // Initialize namespace names
-            // TODO: Pass them as parameters rather than using global variables.
-            Globals.NativeNamespace = "Ogre";
-            Globals.ManagedNamespace = "Mogre";
-
-            MetaDefinition meta = new MetaDefinition(META_XML_FILE, Globals.ManagedNamespace,
-                new MogreConstructFactory(), new MogreCodeStyleDef());
+            MetaDefinition meta = new MetaDefinition(META_XML_FILE, "Ogre", "Mogre",
+                                                new MogreConstructFactory(), new MogreCodeStyleDef());
             meta.AddAttributes(ATTRIBUTES_FILE);
 
             //check if auto directories exists, and create it if needed

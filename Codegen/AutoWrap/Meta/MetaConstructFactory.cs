@@ -10,23 +10,9 @@ namespace AutoWrap.Meta
     /// </summary>
     public class MetaConstructFactory
     {
-        private MetaDefinition _metaDef;
-
-        internal MetaDefinition MetaDef
+        public virtual NamespaceDefinition CreateNamespace(MetaDefinition metaDef, XmlElement elem)
         {
-            get { return _metaDef; }
-            set
-            {
-                if (_metaDef != null)
-                    throw new InvalidOperationException("Already initialized.");
-
-                _metaDef = value;
-            }
-        }
-
-        public virtual NamespaceDefinition CreateNamespace(XmlElement elem, string managedRootNamespaceName)
-        {
-            return new NamespaceDefinition(_metaDef, elem, managedRootNamespaceName);
+            return new NamespaceDefinition(metaDef, elem);
         }
   
         public virtual ClassDefinition CreateClass(NamespaceDefinition nsDef, XmlElement elem)

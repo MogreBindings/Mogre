@@ -36,8 +36,10 @@ namespace AutoWrap.Meta
     {
         private readonly XmlDocument _doc = new XmlDocument();
 
-        private readonly string _managedNamespace;
         private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
+
+        public readonly string NativeNamespace;
+        public readonly string ManagedNamespace;
 
         /// <summary>
         /// The factory used to create all definitions.
@@ -64,12 +66,12 @@ namespace AutoWrap.Meta
             }
         }
 
-        public MetaDefinition(string file, string managedNamespace, MetaConstructFactory factory, CodeStyleDefinition codeStyleDef)
+        public MetaDefinition(string file, string nativeNamespace, string managedNamespace, MetaConstructFactory factory, CodeStyleDefinition codeStyleDef)
         {
             _doc.Load(file);
-            _managedNamespace = managedNamespace;
+            NativeNamespace = nativeNamespace;
+            ManagedNamespace = managedNamespace;
             Factory = factory;
-            Factory.MetaDef = this;
             CodeStyleDef = codeStyleDef;
 
             XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
@@ -254,7 +256,7 @@ namespace AutoWrap.Meta
             if (elem.Name != "namespace")
                 throw new InvalidOperationException("Wrong element; expected 'namespace'.");
 
-            NamespaceDefinition spc = Factory.CreateNamespace(elem, _managedNamespace);
+            NamespaceDefinition spc = Factory.CreateNamespace(this, elem);
             _namespaces[spc.NativeName] = spc;
         }
     }
