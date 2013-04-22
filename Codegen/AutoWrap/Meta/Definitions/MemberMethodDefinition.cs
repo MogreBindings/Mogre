@@ -441,8 +441,8 @@ namespace AutoWrap.Meta
 
             string name = this.GetRenameName();
 
-            if (MemberTypeName == "bool" 
-                && (  (name.StartsWith("is")  && Char.IsUpper(name[2])) 
+            if (MemberTypeName == "bool"
+                && ((name.StartsWith("is") && Char.IsUpper(name[2]) && MetaDef.CodeStyleDef.AllowIsInPropertyName) 
                     || (name.StartsWith("has") && Char.IsUpper(name[3])))
                 && _parameters.Count == 0)
             {
@@ -461,24 +461,31 @@ namespace AutoWrap.Meta
                 return false;
             }
 
-            if (!name.StartsWith("get") || !Char.IsUpper(name[3]))
+            string propName;
+            if (name.StartsWith("get") && Char.IsUpper(name[3]))
             {
+                propName = name.Substring(3);
+            } else if (name.StartsWith("is") && Char.IsUpper(name[2]))
+            {
+                propName = name.Substring(2);
+            } else
+            {
+            // Not a valid getter prefix.
                 return false;
             }
 
-            string pname = name.Substring(3);
             // Check if the property's name collides with the name of a nested type. In this 
             // case we can't convert the method into a property.
-            AbstractTypeDefinition type = ContainingClass.GetNestedType(pname, false);
+            AbstractTypeDefinition type = ContainingClass.GetNestedType(propName, false);
             if (type != null) {
                 return false;
             } 
 
             // Check if the property's name collides with the name of a method. In this 
             // case we can't convert the method into a property.
-            MemberMethodDefinition method = ContainingClass.GetMethodByNativeName(Char.ToLower(pname[0]) + pname.Substring(1), true, false);
+            MemberMethodDefinition method = ContainingClass.GetMethodByCLRName(propName, true, false);
 
-            return (method == null || method.HasAttribute<RenameAttribute>());
+            return (method == null);
         }
     }
 }
