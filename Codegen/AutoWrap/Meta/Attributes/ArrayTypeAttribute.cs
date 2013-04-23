@@ -25,6 +25,9 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Identifies a pointer as an array.
+    /// </summary>
     public class ArrayTypeAttribute : AutoWrapAttribute
     {
         public int Length;

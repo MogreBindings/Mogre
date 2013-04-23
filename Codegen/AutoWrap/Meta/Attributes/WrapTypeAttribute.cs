@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
             return new WrapTypeAttribute(wt);
         }
 
-        public override void ProcessHolder(AttributeSet holder)
+        public override void PostProcessAttributes(AttributeSet holder)
         {
             switch (WrapType)
             {

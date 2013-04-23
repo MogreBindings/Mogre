@@ -108,7 +108,7 @@ namespace AutoWrap.Meta
 
             foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in _holders)
             {
-                pair.Value.ProcessHolder(pair.Key);
+                pair.Value.PostProcessAttributes(pair.Key);
             }
         }
 

@@ -28,7 +28,11 @@ namespace AutoWrap.Meta
     /// </summary>
     public abstract class AutoWrapAttribute
     {
-        public virtual void ProcessHolder(AttributeSet holder)
+        /// <summary>
+        /// Called for each new attribute that has been added to the set.
+        /// </summary>
+        /// <param name="attributes">the set to which the attribute has been added</param>
+        public virtual void PostProcessAttributes(AttributeSet attributes)
         {
         }
     }

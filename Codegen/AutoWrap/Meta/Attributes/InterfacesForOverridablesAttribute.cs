@@ -32,7 +32,7 @@ namespace AutoWrap.Meta
 
         private List<string[]> _interfaceNames = new List<string[]>();
 
-        public override void ProcessHolder(AttributeSet holder)
+        public override void PostProcessAttributes(AttributeSet holder)
         {
             ClassDefinition type = (ClassDefinition) holder;
 
