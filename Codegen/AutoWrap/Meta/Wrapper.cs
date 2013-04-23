@@ -128,8 +128,8 @@ namespace AutoWrap.Meta
             }
 
             // Get explicit type or a new type if type has ReplaceBy attribute
-            type = (type.IsNested) ? type.SurroundingClass.FindType(type.Name) 
-                                   : type.Namespace.FindType(type.Name);
+            type = (type.IsNested) ? type.SurroundingClass.DetermineType(type.Name) 
+                                   : type.Namespace.DetermineType(type.Name);
 
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
@@ -187,7 +187,7 @@ namespace AutoWrap.Meta
                         {
                             try
                             {
-                                AbstractTypeDefinition notconst = type.FindType<AbstractTypeDefinition>(type.Name.Substring("Const".Length), true);
+                                AbstractTypeDefinition notconst = type.DetermineType<AbstractTypeDefinition>(type.Name.Substring("Const".Length), true);
                                 return false;
                             }
                             catch
@@ -274,7 +274,7 @@ namespace AutoWrap.Meta
             {
                 if (t is ClassDefinition && !t.IsNested && !t.IsIgnored)
                 {
-                    AbstractTypeDefinition type = t.FindType<AbstractTypeDefinition>(t.Name);
+                    AbstractTypeDefinition type = t.DetermineType<AbstractTypeDefinition>(t.Name);
 
                     if (type.FullyQualifiedNativeName.StartsWith(this._metaDef.NativeNamespace + "::")
                         && type is ClassDefinition && !type.IsTemplate)
@@ -676,8 +676,8 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) 
-                                                : t.Namespace.FindType<TypedefDefinition>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.DetermineType<TypedefDefinition>(t.Name) 
+                                                : t.Namespace.DetermineType<TypedefDefinition>(t.Name);
 
                 if (t.HasWrapType(WrapTypes.SharedPtr))
                 {
@@ -756,8 +756,8 @@ namespace AutoWrap.Meta
                 if (t.IsUnnamedSTLContainer)
                     explicitType = t as TypedefDefinition;
                 else
-                    explicitType = (t.IsNested) ? t.SurroundingClass.FindType<TypedefDefinition>(t.Name) 
-                                                : t.Namespace.FindType<TypedefDefinition>(t.Name);
+                    explicitType = (t.IsNested) ? t.SurroundingClass.DetermineType<TypedefDefinition>(t.Name) 
+                                                : t.Namespace.DetermineType<TypedefDefinition>(t.Name);
 
                 if (explicitType.IsSTLContainer)
                 {
@@ -831,7 +831,7 @@ namespace AutoWrap.Meta
             int e = basename.LastIndexOf(">");
             string baseClass = basename.Substring(s + 1, e - s - 1).Trim();
             //string nativeClass = _nativePrefix + "::" + baseClass;
-            AbstractTypeDefinition baseType = type.FindType<AbstractTypeDefinition>(baseClass);
+            AbstractTypeDefinition baseType = type.DetermineType<AbstractTypeDefinition>(baseClass);
             string nativeClass = baseType.FullyQualifiedNativeName;
 
             string className = type.FullyQualifiedCLRName;
@@ -884,7 +884,7 @@ namespace AutoWrap.Meta
 
             if (type is ClassDefinition)
             {
-                ClassDefinition realType = type.FindType<ClassDefinition>(baseClass, false);
+                ClassDefinition realType = type.DetermineType<ClassDefinition>(baseClass, false);
                 if (realType != null && realType.BaseClass != null && realType.BaseClass.Name == "Resource")
                 {
                     // For Resource subclasses (Material etc.) allow implicit conversion of ResourcePtr (i.e ResourcePtr -> MaterialPtr)

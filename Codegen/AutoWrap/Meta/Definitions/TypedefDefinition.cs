@@ -181,7 +181,7 @@ namespace AutoWrap.Meta
                     if (basename.Contains("<"))
                         basename = basename.Substring(0, basename.IndexOf("<")).Trim();
 
-                    _baseType = FindType<AbstractTypeDefinition>(basename, false);
+                    _baseType = DetermineType<AbstractTypeDefinition>(basename, false);
                 }
 
                 return _baseType;
@@ -219,7 +219,7 @@ namespace AutoWrap.Meta
                             isConst = true;
                             name = name.Substring("const ".Length);
                         }
-                        _types[i] = new TypeMemberDefinition(FindType<AbstractTypeDefinition>(name, false), _passed[i], isConst);
+                        _types[i] = new TypeMemberDefinition(DetermineType<AbstractTypeDefinition>(name, false), _passed[i], isConst);
                     }
                 }
 

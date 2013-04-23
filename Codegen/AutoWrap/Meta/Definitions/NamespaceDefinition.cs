@@ -155,9 +155,9 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
-        public AbstractTypeDefinition FindType(string name, bool raiseException = true)
+        public AbstractTypeDefinition DetermineType(string name, bool raiseException = true)
         {
-            return FindType<AbstractTypeDefinition>(name, raiseException);
+            return DetermineType<AbstractTypeDefinition>(name, raiseException);
         }
 
         /// <summary>
@@ -172,8 +172,8 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
-        /// <seealso cref="AbstractTypeDefinition.FindType"/>
-        public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
+        /// <seealso cref="AbstractTypeDefinition.DetermineType"/>
+        public virtual T DetermineType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
             // Search this namespace
             AbstractTypeDefinition type = FindTypeInList<T>(name, _containedTypes);
@@ -181,7 +181,7 @@ namespace AutoWrap.Meta
             if (type == null)
             {
                 if (ParentNamespace != null)
-                    return ParentNamespace.FindType<T>(name, raiseException);
+                    return ParentNamespace.DetermineType<T>(name, raiseException);
 
                 if (raiseException)
                     throw new Exception("Could not find type");

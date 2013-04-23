@@ -41,7 +41,7 @@ namespace AutoWrap.Meta
                 List<ClassDefinition> ifaces = new List<ClassDefinition>();
                 foreach (string ifacename in names)
                 {
-                    ifaces.Add(type.FindType<ClassDefinition>(ifacename));
+                    ifaces.Add(type.DetermineType<ClassDefinition>(ifacename));
                 }
                 Interfaces.Add(ifaces.ToArray());
             }

@@ -675,7 +675,7 @@ namespace AutoWrap.Meta
                 {
                     // Explicit base class name
                     string basename = GetAttribute<BaseClassAttribute>().Name;
-                    _baseClass = this.FindType<ClassDefinition>(basename);
+                    _baseClass = DetermineType<ClassDefinition>(basename);
                 }
                 else
                 {
@@ -697,7 +697,7 @@ namespace AutoWrap.Meta
                             n = n.Substring(0, n.IndexOf("<")).Trim();
                         }
 
-                        inherits.Add(this.FindType<ClassDefinition>(n));
+                        inherits.Add(DetermineType<ClassDefinition>(n));
                     }
 
                     foreach (ClassDefinition t in inherits)
@@ -739,7 +739,7 @@ namespace AutoWrap.Meta
                     n = n.Substring(0, n.IndexOf("<")).Trim();
                 }
 
-                inherits.Add(this.FindType<ClassDefinition>(n));
+                inherits.Add(DetermineType<ClassDefinition>(n));
             }
 
             for (int i = 0; i < inherits.Count; i++)
@@ -766,7 +766,7 @@ namespace AutoWrap.Meta
                 {
                     try
                     {
-                        list.Add(FindType<ClassDefinition>(cls));
+                        list.Add(DetermineType<ClassDefinition>(cls));
                     }
                     catch
                     {
@@ -1050,12 +1050,12 @@ namespace AutoWrap.Meta
         /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
-        public override T FindType<T>(string name, bool raiseException = true)
+        public override T DetermineType<T>(string name, bool raiseException = true)
         {
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return Namespace.FindType<T>(name, raiseException);
+                return Namespace.DetermineType<T>(name, raiseException);
             }
 
             List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
@@ -1072,15 +1072,15 @@ namespace AutoWrap.Meta
             {
                 if (BaseClass != null)
                 {
-                    T t = BaseClass.FindType<T>(name, false);
+                    T t = BaseClass.DetermineType<T>(name, false);
                     if (!(t is DefInternal))
                         return t;
                 }
 
                 if (SurroundingClass != null)
-                    return SurroundingClass.FindType<T>(name, raiseException);
+                    return SurroundingClass.DetermineType<T>(name, raiseException);
                 else
-                    return Namespace.FindType<T>(name, raiseException);
+                    return Namespace.DetermineType<T>(name, raiseException);
             }
             else if (list.Count > 1)
                 throw new Exception("Found more than one type");

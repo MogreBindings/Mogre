@@ -35,7 +35,7 @@ namespace AutoWrap.Meta
                         }
 
                         string name = conversion.Substring(0, conversion.LastIndexOf("::"));
-                        dependancyType = FindType<AbstractTypeDefinition>(name);
+                        dependancyType = DetermineType<AbstractTypeDefinition>(name);
                     }
                     break;
                 default:

@@ -94,9 +94,9 @@ namespace AutoWrap.Meta
                 {
                     string name = GetAttribute<ReplaceByAttribute>().Name;
                     if (SurroundingClass != null)
-                        _replaceByType = SurroundingClass.FindType(name, false);
+                        _replaceByType = SurroundingClass.DetermineType(name, false);
                     else
-                        _replaceByType = Namespace.FindType(name, false);
+                        _replaceByType = Namespace.DetermineType(name, false);
                 }
 
                 return _replaceByType;
@@ -236,8 +236,8 @@ namespace AutoWrap.Meta
             if (this.IsSharedPtr)
                 return false;
 
-            TypedefDefinition explicitType = IsNested ? SurroundingClass.FindType<TypedefDefinition>(Name)
-                                                            : Namespace.FindType<TypedefDefinition>(Name);
+            TypedefDefinition explicitType = IsNested ? SurroundingClass.DetermineType<TypedefDefinition>(Name) 
+                                                        : Namespace.DetermineType<TypedefDefinition>(Name);
             if (explicitType.IsSTLContainer)
                 return false;
 
@@ -357,13 +357,13 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
-        public AbstractTypeDefinition FindType(string name, bool raiseException = true)
+        public AbstractTypeDefinition DetermineType(string name, bool raiseException = true)
         {
-            return FindType<AbstractTypeDefinition>(name, raiseException);
+            return DetermineType<AbstractTypeDefinition>(name, raiseException);
         }
 
         /// <summary>
-        /// Finds a type (e.g. class, enum, typedef) as if it was used directly at a certain position in the code
+        /// Determines a type (e.g. class, enum, typedef) as if it was used directly at a certain position in the code
         /// (i.e. from the type definition's perspective). Consider the following C# code example:
         /// 
         /// <code>
@@ -395,15 +395,15 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
-        public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
+        public virtual T DetermineType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return Namespace.FindType<T>(name, raiseException);
+                return Namespace.DetermineType<T>(name, raiseException);
             }
 
-            return (IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : Namespace.FindType<T>(name, raiseException);
+            return (IsNested) ? SurroundingClass.DetermineType<T>(name, raiseException) : Namespace.DetermineType<T>(name, raiseException);
         }
 
         public override string ToString()

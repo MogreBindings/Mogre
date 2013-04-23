@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
                         _memberType = TypedefDefinition.CreateExplicitCollectionType(_containingClass, _container, _containerKey,
                             (_containerValue != "") ? _containerValue : _typeName);
                     } else
-                        _memberType = ContainingClass.FindType<AbstractTypeDefinition>(_typeName, false);
+                        _memberType = ContainingClass.DetermineType<AbstractTypeDefinition>(_typeName, false);
                 }
 
                 return _memberType;

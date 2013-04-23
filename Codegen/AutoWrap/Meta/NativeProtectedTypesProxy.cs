@@ -70,7 +70,7 @@ namespace AutoWrap.Meta
 
                 foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
                 {
-                    AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
+                    AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
                     if (type.ProtectionLevel == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
@@ -88,7 +88,7 @@ namespace AutoWrap.Meta
         {
             foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
             {
-                AbstractTypeDefinition type = nested.FindType<AbstractTypeDefinition>(nested.Name);
+                AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
                 if (type.ProtectionLevel == ProtectionLevel.Protected
                     && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )

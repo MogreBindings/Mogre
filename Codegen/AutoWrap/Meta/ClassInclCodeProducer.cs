@@ -553,7 +553,7 @@ namespace AutoWrap.Meta
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    AbstractTypeDefinition expl = _definition.FindType<AbstractTypeDefinition>(nested.Name);
+                    AbstractTypeDefinition expl = _definition.DetermineType<AbstractTypeDefinition>(nested.Name);
 
                     if (expl.IsSTLContainer
                         || (!nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && _wrapper.TypeIsWrappable(nested)))
