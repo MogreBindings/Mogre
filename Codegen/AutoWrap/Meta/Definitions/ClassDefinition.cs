@@ -21,8 +21,19 @@ namespace AutoWrap.Meta
         /// </summary>
         public List<AbstractTypeDefinition> NestedTypes = new List<AbstractTypeDefinition>();
 
-        public string[] Derives;
-        public string[] Inherits;
+        /// <summary>
+        /// This array contains the names of all subclasses of this class (or all subinterfaces of this
+        /// interface).
+        /// </summary>
+        public readonly string[] SubClassesNames;
+
+        public readonly string BaseClassName;
+
+        /// <summary>
+        /// This array contains the names of the base class and all directly implemented interfaces
+        /// (or the base interfaces, if this is an interface). The base 
+        /// </summary>
+        public readonly string[] BaseClassesNames;
 
         public bool AllowVirtuals
         {
@@ -68,10 +79,10 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (this.Inherits == null)
+                if (BaseClassesNames == null)
                     return false;
 
-                foreach (string tn in this.Inherits)
+                foreach (string tn in BaseClassesNames)
                 {
                     if (tn.StartsWith("Singleton<"))
                         return true;
@@ -679,14 +690,14 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    if (this.Inherits == null)
+                    if (BaseClassesNames == null)
                         return null;
 
                     if (this.IsDirectSubclassOfCLRObject)
                         return null;
 
                     List<ClassDefinition> inherits = new List<ClassDefinition>();
-                    foreach (string tn in this.Inherits)
+                    foreach (string tn in BaseClassesNames)
                     {
                         string n = tn;
                         if (n.Contains("<"))
@@ -721,14 +732,14 @@ namespace AutoWrap.Meta
             if (_interfaces != null)
                 return _interfaces;
 
-            if (this.Inherits == null)
+            if (BaseClassesNames == null)
             {
                 _interfaces = new ClassDefinition[] { };
                 return _interfaces;
             }
 
             List<ClassDefinition> inherits = new List<ClassDefinition>();
-            foreach (string tn in this.Inherits)
+            foreach (string tn in BaseClassesNames)
             {
                 string n = tn;
                 if (n.Contains("<"))
@@ -762,7 +773,7 @@ namespace AutoWrap.Meta
             if (_derives == null)
             {
                 List<ClassDefinition> list = new List<ClassDefinition>();
-                foreach (string cls in this.Derives)
+                foreach (string cls in SubClassesNames)
                 {
                     try
                     {
@@ -1122,7 +1133,7 @@ namespace AutoWrap.Meta
                                 throw new Exception("Unknown element; expected 'subClass'");
                             list.Add(sub.InnerText);
                         }
-                        Derives = list.ToArray();
+                        SubClassesNames = list.ToArray();
                         break;
 
                     case "inherits":
@@ -1142,7 +1153,7 @@ namespace AutoWrap.Meta
                                     ilist.Add(sub.InnerText);
                             }
                         }
-                        Inherits = ilist.ToArray();
+                        BaseClassesNames = ilist.ToArray();
                         break;
 
                     default:

@@ -823,7 +823,7 @@ namespace AutoWrap.Meta
 
             string basename = null;
             if (type is ClassDefinition)
-                basename = (type as ClassDefinition).Inherits[0];
+                basename = (type as ClassDefinition).BaseClassesNames[0];
             else
                 basename = (type as TypedefDefinition).BaseTypeName;
 
