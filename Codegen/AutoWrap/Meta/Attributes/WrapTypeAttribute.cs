@@ -89,10 +89,6 @@ namespace AutoWrap.Meta
                     if (!holder.HasAttribute<ValueTypeAttribute>())
                         holder.AddAttribute(new ValueTypeAttribute());
                     break;
-                case WrapTypes.Overridable:
-                    ClassDefinition type = (ClassDefinition) holder;
-                    AddAttributeToInheritanceChain(type, new BaseForSubclassingAttribute());
-                    break;
             }
         }
     }

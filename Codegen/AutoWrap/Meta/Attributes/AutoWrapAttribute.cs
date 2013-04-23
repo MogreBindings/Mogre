@@ -28,26 +28,6 @@ namespace AutoWrap.Meta
     /// </summary>
     public abstract class AutoWrapAttribute
     {
-
-        protected void AddAttributeToInheritanceChain(ClassDefinition type, AutoWrapAttribute attr)
-        {
-            bool hasit = false;
-            foreach (AutoWrapAttribute a in type.Attributes)
-            {
-                if (a.GetType() == attr.GetType())
-                {
-                    hasit = true;
-                    break;
-                }
-            }
-
-            if (!hasit)
-                type.AddAttribute(attr);
-
-            if (type.BaseClass != null)
-                AddAttributeToInheritanceChain(type.BaseClass, attr);
-        }
-
         public virtual void ProcessHolder(AttributeSet holder)
         {
         }

@@ -55,7 +55,6 @@
     <Compile Include="Meta\AttributeSet.cs" />
     <Compile Include="Meta\Attributes\ArrayTypeAttribute.cs" />
     <Compile Include="Meta\Attributes\BaseClassAttribute.cs" />
-    <Compile Include="Meta\Attributes\BaseForSubclassingAttribute.cs" />
     <Compile Include="Meta\Attributes\CacheAttribute.cs" />
     <Compile Include="Meta\Attributes\CLRObjectAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomClassAttribute.cs" />
