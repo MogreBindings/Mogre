@@ -15,21 +15,26 @@ namespace AutoWrap.Meta
         /// Contains the members (fields and methods) of this class.
         /// </summary>
         public List<MemberDefinitionBase> Members = new List<MemberDefinitionBase>();
+
         /// <summary>
         /// Contains the types nested in this class (e.g. inner classes).
         /// </summary>
         public List<AbstractTypeDefinition> NestedTypes = new List<AbstractTypeDefinition>();
+
         public string[] Derives;
         public string[] Inherits;
 
-        public override bool AllowVirtuals
+        public bool AllowVirtuals
         {
-            get { return base.AllowVirtuals || IsInterface; }
+            get { return AllowSubClassing || IsInterface; }
         }
 
-        public override bool AllowSubClassing
+        /// <summary>
+        /// Denotes whether subclasses of this class can be created.
+        /// </summary>
+        public bool AllowSubClassing
         {
-            get { return base.AllowSubClassing || (BaseClass != null && BaseClass.AllowSubClassing); }
+            get { return HasWrapType(WrapTypes.Overridable) || (BaseClass != null && BaseClass.AllowSubClassing); }
         }
 
         /// <summary>

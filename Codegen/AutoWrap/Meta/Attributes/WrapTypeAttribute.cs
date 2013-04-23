@@ -28,16 +28,19 @@ namespace AutoWrap.Meta
 {
     public enum WrapTypes
     {
-        NonOverridable,
-        Overridable,
-        NativeDirector,
+        NonOverridable, 
+        /// <summary>
+        /// Denotes that the class can be subclassed (i.e. inherited from).
+        /// </summary>
+        Overridable, 
+        NativeDirector, 
         Interface,
-        Singleton,
-        SharedPtr,
-        ReadOnlyStruct,
-        ValueType,
-        NativePtrValueType,
-        CLRHandle,
+        Singleton, 
+        SharedPtr, 
+        ReadOnlyStruct, 
+        ValueType, 
+        NativePtrValueType, 
+        CLRHandle, 
         PlainWrapper
     }
 

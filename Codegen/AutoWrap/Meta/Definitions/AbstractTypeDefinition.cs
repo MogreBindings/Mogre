@@ -62,19 +62,6 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
-        /// Denotes whether subclasses of this class can be created.
-        /// </summary>
-        public virtual bool AllowSubClassing
-        {
-            get { return this.HasWrapType(WrapTypes.Overridable); }
-        }
-
-        public virtual bool AllowVirtuals
-        {
-            get { return AllowSubClassing; }
-        }
-
-        /// <summary>
         /// Indicates whether this type is ignored.
         /// </summary>
         public virtual bool IsIgnored
