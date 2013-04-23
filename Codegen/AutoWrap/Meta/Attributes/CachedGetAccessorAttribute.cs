@@ -25,11 +25,16 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class CachedAttribute : AutoWrapAttribute
+    /// <summary>
+    /// This attribute can be added to a CLR property's get accessor. This way the value returned
+    /// by the accessor will only be "calculated" once, cached and the same value will be returned
+    /// on all subsequent calls to this accessor.
+    /// </summary>
+    public class CachedGetAccessorAttribute : AutoWrapAttribute
     {
-        public static CachedAttribute FromElement(XmlElement elem)
+        public static CachedGetAccessorAttribute FromElement(XmlElement elem)
         {
-            return new CachedAttribute();
+            return new CachedGetAccessorAttribute();
         }
     }
 }

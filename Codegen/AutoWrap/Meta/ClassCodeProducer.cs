@@ -173,7 +173,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberDefinitionBase m in _definition.Members)
             {
-                if (m.HasAttribute<CachedAttribute>())
+                if (m.HasAttribute<CachedGetAccessorAttribute>())
                     MarkCachedMember(m);
             }
 
@@ -184,7 +184,7 @@ namespace AutoWrap.Meta
 
                 foreach (MemberDefinitionBase m in iface.Members)
                 {
-                    if (m.HasAttribute<CachedAttribute>())
+                    if (m.HasAttribute<CachedGetAccessorAttribute>())
                         MarkCachedMember(m);
                 }
             }

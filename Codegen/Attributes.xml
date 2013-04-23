@@ -607,12 +607,12 @@ System::GC::Collect();
     </class>
 
     <class name="AnimationState" WrapType="NonOverridable">
-      <function name="getAnimationName" Cached=""/>
+      <function name="getAnimationName" CachedGetAccessor=""/>
     </class>
 
     <class name="SceneManager" WrapType="NonOverridable">
-      <function name="getName" Cached=""/>
-      <function name="getRenderQueue" Cached=""/>
+      <function name="getName" CachedGetAccessor=""/>
+      <function name="getRenderQueue" CachedGetAccessor=""/>
       <function name="showBoundingBoxes" Rename="setShowBoundingBoxes"/>
       <function name="_pauseRendering" Ignore=""/>
       <function name="_resumeRendering" Ignore=""/>
