@@ -101,7 +101,11 @@ namespace AutoWrap.Meta
         
         public ClassDefinition ContainingClass
         {
-            get { return _accessorFunction.ContainingClass; }
+            get
+            {
+                return _accessorFunction.ContainingClass; 
+                throw new InvalidOperationException("The containing class is ambiguous"); 
+            }
         }
 
         public bool IsConst
@@ -385,12 +389,17 @@ namespace AutoWrap.Meta
             // Check to see if there is a "get" function
             string propName = name.Substring(3);
             MemberMethodDefinition method;
-            method = methodDef.ContainingClass.GetMethodByNativeName("get" + propName, true, false);
+            // TODO by manski: Allow the case that the getter and the setter come from different classes.
+            //   Special care must be taken in this case as for example "Property.ContainingClass" can't
+            //   be used anymore, since there are two classes involved. This could be solved by returning
+            //   the "lowest" subclass (i.e. the class in which both accessors are defined then).
+            //   Then the second argument should be changed to "true" here.
+            method = methodDef.ContainingClass.GetMethodByNativeName("get" + propName, false, false);
             if (method == null)
             {
-                method = methodDef.ContainingClass.GetMethodByNativeName("is" + propName, true, false);
+                method = methodDef.ContainingClass.GetMethodByNativeName("is" + propName, false, false);
                 if (method == null) {
-                    method = methodDef.ContainingClass.GetMethodByNativeName("has" + propName, true, false);
+                    method = methodDef.ContainingClass.GetMethodByNativeName("has" + propName, false, false);
                 }
             }
 

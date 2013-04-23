@@ -63,7 +63,7 @@ namespace AutoWrap.Meta
         protected virtual bool IsPropertyAllowed(MemberPropertyDefinition p)
         {
             // If the property is ignored or the property is unhandled
-            if (p.HasAttribute<IgnoreAttribute>() || !p.IsTypeHandled())
+            if (p.IsIgnored() || !p.IsTypeHandled())
                 return false;
             
             if (p.ContainingClass.IsSingleton && (p.Name == "Singleton" || p.Name == "SingletonPtr"))
@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
         protected virtual bool IsFunctionAllowed(MemberMethodDefinition f)
         {
             // If the function is ignored or the return value type is unhandled
-            if (f.HasAttribute<IgnoreAttribute>() || !f.IsTypeHandled())
+            if (f.IsIgnored() || !f.IsTypeHandled())
                 return false;
         
             // Check whether all parameter types are handled

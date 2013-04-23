@@ -78,10 +78,18 @@
             if (m.MemberType.IsIgnored)
                 return false;
 
-            if (m.MemberType is ClassDefinition && ((ClassDefinition)m.MemberType).IsSingleton)
+            if (m.MemberType is ClassDefinition && ((ClassDefinition) m.MemberType).IsSingleton)
                 return false;
 
             return (m.MemberTypeName != "UserDefinedObject");
+        }
+
+        /// <summary>
+        /// Indicates whether this member is ignored.
+        /// </summary>
+        public static bool IsIgnored(this ITypeMember m)
+        {
+            return m.HasAttribute<IgnoreAttribute>();
         }
     }
 }
