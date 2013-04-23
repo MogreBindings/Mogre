@@ -23,6 +23,12 @@ namespace AutoWrap
         [STAThread]
         static void Main(string[] args)
         {
+            if (!File.Exists(META_XML_FILE))
+            {
+                MessageBox.Show("The file \"Meta.xml\" doesn't exist. You need to run \"cpp2java\" to create it first.", "Error");
+                return;
+            }
+
             MetaDefinition meta = new MetaDefinition(META_XML_FILE, "Ogre", "Mogre",
                                                 new MogreConstructFactory(), new MogreCodeStyleDef());
             meta.AddAttributes(ATTRIBUTES_FILE);
