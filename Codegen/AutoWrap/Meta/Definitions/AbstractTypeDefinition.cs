@@ -402,14 +402,6 @@ namespace AutoWrap.Meta
 
         #endregion
 
-        public NamespaceDefinition GetNameSpace()
-        {
-            if (this.NameSpace == null)
-                return SurroundingClass.GetNameSpace();
-            else
-                return this.NameSpace;
-        }
-
         public AbstractTypeDefinition FindType(string name, bool raiseException = true)
         {
             return FindType<AbstractTypeDefinition>(name, raiseException);
@@ -420,7 +412,7 @@ namespace AutoWrap.Meta
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return GetNameSpace().FindType<T>(name, raiseException);
+                return NameSpace.FindType<T>(name, raiseException);
             }
 
             return (this.IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : NameSpace.FindType<T>(name, raiseException);

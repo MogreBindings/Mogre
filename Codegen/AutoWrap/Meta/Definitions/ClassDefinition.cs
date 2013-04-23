@@ -1034,7 +1034,7 @@ namespace AutoWrap.Meta
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return GetNameSpace().FindType<T>(name, raiseException);
+                return NameSpace.FindType<T>(name, raiseException);
             }
 
             List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
