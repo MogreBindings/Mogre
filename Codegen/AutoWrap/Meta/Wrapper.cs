@@ -150,10 +150,9 @@ namespace AutoWrap.Meta
                 ClassDefinition cls = type as ClassDefinition;
                 if (cls.HasAttribute<CLRObjectAttribute>(true))
                 {
-                    if (cls.HasAttribute<OverridableAttribute>(true))
-                        cls.AddAttribute(new WrapTypeAttribute(WrapTypes.Overridable));
-                    else
-                        cls.AddAttribute(new WrapTypeAttribute(WrapTypes.NonOverridable));
+                    if (!cls.HasAttribute<WrapTypeAttribute>(false)) {
+                      cls.AddAttribute(new WrapTypeAttribute(WrapTypes.NonOverridable));
+                    }
                     return true;
                 }
 
