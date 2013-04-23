@@ -1,10 +1,4 @@
 using System;
-using System.Xml;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using AutoWrap.Meta;
 
@@ -20,11 +14,12 @@ namespace AutoWrap
             InitializeComponent();
 
             _wrapper = wrapper;
-            wrapper.IncludeFileWrapped += (s, e) => {
-                // Called when an include files has been wrapped (update progress).
-                bar.Value++;
-                bar.Refresh();
-            };
+            wrapper.IncludeFileWrapped += (s, e) =>
+                                              {
+                                                  // Called when an include files has been wrapped (update progress).
+                                                  bar.Value++;
+                                                  bar.Refresh();
+                                              };
 
             for (int i = 0; i < _wrapper.IncludeFiles.Count; i++)
             {
@@ -53,7 +48,7 @@ namespace AutoWrap
 
         private void ToggleButtonClicked(object sender, EventArgs e)
         {
-            _showHeaderFiles = !this._showHeaderFiles;
+            _showHeaderFiles = !_showHeaderFiles;
             if (_showHeaderFiles)
                 _showToggleButton.Text = "Show CPP File";
             else
@@ -66,18 +61,18 @@ namespace AutoWrap
             ShowCurrentFile();
         }
 
-        private void ShowCurrentFile() 
+        private void ShowCurrentFile()
         {
-          if (_inputFilesList.SelectedItem == null)
-              return;
+            if (_inputFilesList.SelectedItem == null)
+                return;
 
-          if (_showHeaderFiles)
-              _sourceCodeField.Text = _wrapper.GenerateIncludeFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString()).Replace("\n", "\r\n");
-          else 
-          {
-              bool hasContent;
-              _sourceCodeField.Text = _wrapper.GenerateCppFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString(), out hasContent).Replace("\n", "\r\n");
-          }
+            if (_showHeaderFiles)
+                _sourceCodeField.Text = _wrapper.GenerateIncludeFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString()).Replace("\n", "\r\n");
+            else
+            {
+                bool hasContent;
+                _sourceCodeField.Text = _wrapper.GenerateCppFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString(), out hasContent).Replace("\n", "\r\n");
+            }
         }
     }
 }
