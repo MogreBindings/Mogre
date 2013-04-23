@@ -39,7 +39,11 @@ namespace AutoWrap
 
             // Generate the C++/CLI source files
             _wrapper.GenerateCodeFiles();
-            MessageBox.Show("Generation complete.");
+            if (MessageBox.Show(this, "The source files were generated sucessfully.\nDo you want to quit now?", "Generation complete", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Close();
+                return;
+            }
 
             bar.Visible = false;
             _generateButton.Enabled = true;
