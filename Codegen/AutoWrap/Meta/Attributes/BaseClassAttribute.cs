@@ -25,13 +25,20 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Allows to explicitly specify the base class name. This is necessary if a C++ class has 
+    /// multiple C++ base classes (which is not allowed in CLR). 
+    /// </summary>
     public class BaseClassAttribute : AutoWrapAttribute
     {
-        public string Name;
+        /// <summary>
+        /// The CLR name of the base class.
+        /// </summary>
+        public string BaseClassName;
 
         public BaseClassAttribute(string name)
         {
-            Name = name;
+            BaseClassName = name;
         }
 
         public static BaseClassAttribute FromElement(XmlElement elem)

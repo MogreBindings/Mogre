@@ -684,8 +684,9 @@ namespace AutoWrap.Meta
 
                 if (HasAttribute<BaseClassAttribute>())
                 {
-                    // Explicit base class name
-                    string basename = GetAttribute<BaseClassAttribute>().Name;
+                    // Explicit base class name; used when the class has multiple base classes 
+                    // (see attribute documentation).
+                    string basename = GetAttribute<BaseClassAttribute>().BaseClassName;
                     _baseClass = DetermineType<ClassDefinition>(basename);
                 }
                 else
