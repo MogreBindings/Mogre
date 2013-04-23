@@ -131,19 +131,19 @@ namespace AutoWrap.Meta
 
         private void FillEnumValues()
         {
-            _nativeEnumValues = new string[_elem.ChildNodes.Count];
-            _CLREnumValues = new string[_elem.ChildNodes.Count];
+            _nativeEnumValues = new string[DefiningXmlElement.ChildNodes.Count];
+            _CLREnumValues = new string[DefiningXmlElement.ChildNodes.Count];
 
-            for (int i = 0; i < _elem.ChildNodes.Count; i++)
+            for (int i = 0; i < DefiningXmlElement.ChildNodes.Count; i++)
             {
-                string parentName = this.FullNativeName;
+                string parentName = FullNativeName;
                 parentName = parentName.Substring(0, parentName.LastIndexOf("::"));
-                string nativeName = (_elem.ChildNodes[i] as XmlElement).GetAttribute("name");
+                string nativeName = (DefiningXmlElement.ChildNodes[i] as XmlElement).GetAttribute("name");
                 //if (ProtectionType == ProtectionType.Protected)
                 //    nativeName = "PUBLIC_" + nativeName;
 
                 _nativeEnumValues[i] = parentName + "::" + nativeName;
-                _CLREnumValues[i] = (_elem.ChildNodes[i] as XmlElement).GetAttribute("name");
+                _CLREnumValues[i] = (DefiningXmlElement.ChildNodes[i] as XmlElement).GetAttribute("name");
             }
         }
 

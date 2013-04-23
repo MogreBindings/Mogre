@@ -37,16 +37,6 @@ namespace AutoWrap.Meta
     /// </summary>
     public abstract class AbstractTypeDefinition : AttributeSet
     {
-        public bool IsSTLContainer
-        {
-            get { return STLContainer != null; }
-        }
-
-        public virtual bool IsUnnamedSTLContainer
-        {
-            get { return false; }
-        }
-
         public virtual string STLContainer
         {
             get { return null; }
@@ -57,9 +47,18 @@ namespace AutoWrap.Meta
             get { return null; }
         }
 
-        public bool IsTemplate
+        public bool IsSTLContainer
         {
-            get { return _elem.GetAttribute("template") == "true"; }
+            get { return STLContainer != null; }
+        }
+        
+        public virtual bool IsUnnamedSTLContainer
+        {
+            get { return false; }
+        }
+        
+        public bool IsTemplate {
+            get { return _definingXmlElement.GetAttribute("template") == "true"; }
         }
 
         /// <summary>
@@ -117,6 +116,202 @@ namespace AutoWrap.Meta
             }
         }
 
+        private readonly XmlElement _definingXmlElement;
+
+        /// <summary>
+        /// The XML element that defines this type. Is <c>null</c> for standard types like strings (that are not
+        /// defined in the meta.xml file).
+        /// </summary>
+        public XmlElement DefiningXmlElement {
+            get { return _definingXmlElement; }
+        }
+
+        public virtual string Name
+        {
+            get { return _definingXmlElement.GetAttribute("name"); }
+        }
+
+        public virtual string CLRName
+        {
+            get
+            {
+                if (HasAttribute<RenameAttribute>())
+                    return GetAttribute<RenameAttribute>().Name;
+                else
+                    return Name;
+            }
+        }
+
+        public virtual string IncludeFile
+        {
+            get
+            {
+                if (_definingXmlElement == null)
+                    return null;
+                else
+                    return _definingXmlElement.GetAttribute("includeFile");
+            }
+        }
+
+        public virtual bool IsSharedPtr
+        {
+            get { return false; }
+        }
+
+        public virtual bool IsReadOnly
+        {
+            get { return HasAttribute<ReadOnlyAttribute>(); }
+        }
+
+        /// <summary>
+        /// The namespace this type is defined in. Is never <c>null</c>.
+        /// </summary>
+        public readonly NamespaceDefinition NameSpace;
+        
+        public ProtectionLevel ProtectionLevel;
+
+        /// <summary>
+        /// The class this type is nested within or <c>null</c> if this type is not nested.
+        /// </summary>
+        /// <seealso cref="IsNested"/>
+        public ClassDefinition SurroundingClass;
+
+        /// <summary>
+        /// Denotes whether this type is nested within a surrounding class.
+        /// </summary>
+        public virtual bool IsNested
+        {
+            get { return SurroundingClass != null; }
+        }
+
+        public virtual string ParentNativeName
+        {
+            get
+            {
+                switch (_definingXmlElement.ParentNode.Name)
+                {
+                    case "class":
+                        return ClassDefinition.GetName(_definingXmlElement.ParentNode as XmlElement);
+                    case "namespace":
+                        return this.NameSpace.NativeName;
+                    default:
+                        throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
+                }
+            }
+        }
+
+        public virtual string ParentFullNativeName
+        {
+            get
+            {
+                switch (_definingXmlElement.ParentNode.Name)
+                {
+                    case "class":
+                        return ClassDefinition.GetFullName(_definingXmlElement.ParentNode as XmlElement);
+                    case "namespace":
+                        return this.NameSpace.CLRName;
+                    default:
+                        throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
+                }
+            }
+        }
+
+        public virtual string RealFullNativeName
+        {
+            get
+            {
+                if (SurroundingClass != null)
+                    return SurroundingClass.RealFullNativeName + "::" + Name;
+                else
+                    return NameSpace.NativeName + "::" + Name;
+            }
+        }
+
+        public virtual string FullNativeName
+        {
+            get { return RealFullNativeName; }
+        }
+
+        public virtual string FullCLRName
+        {
+            get
+            {
+                if (SurroundingClass != null)
+                {
+                    if (!SurroundingClass.IsInterface)
+                    {
+                        return SurroundingClass.FullCLRName + "::" + CLRName;
+                    }
+                    else
+                    {
+                        string name = SurroundingClass.FullCLRName.Replace("::" + SurroundingClass.CLRName, "::" + SurroundingClass.Name);
+                        return name + "::" + CLRName;
+                    }
+                }
+                else
+                {
+                    return NameSpace.CLRName + "::" + CLRName;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Used for standard types (like <see cref="DefInternal"/>, <see cref="DefUtfString"/>, and <see cref="DefString"/>)
+        /// that are not created from XML elements in the meta.xml file.
+        /// </summary>
+        /// <param name="nsDef">the namespace in which this type is defined. Must not be <c>null</c>.</param>
+        protected AbstractTypeDefinition(NamespaceDefinition nsDef) : base(nsDef.MetaDef)
+        {
+            // If the namespace is "null", then "nsDef.MetaDef" will throw a NullPointerException
+            this.NameSpace = nsDef;
+        }
+
+        /// <summary>
+        /// Used for types defined in the meta.xml file.
+        /// </summary>
+        /// <param name="nsDef">the namespace in which this type is defined. Must not be <c>null</c>.</param>
+        /// <param name="elem">the XML element describing the type</param>
+        protected AbstractTypeDefinition(NamespaceDefinition nsDef, XmlElement elem)
+            : base(nsDef.MetaDef)
+        {
+            this._definingXmlElement = elem;
+            this.NameSpace = nsDef;
+            this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
+        }
+
+        public static ProtectionLevel GetProtectionEnum(string prot)
+        {
+            if (prot == "")
+                return ProtectionLevel.Public;
+            else
+                return (ProtectionLevel)Enum.Parse(typeof(ProtectionLevel), prot, true);
+        }
+
+
+        public bool IsInternalTypeDef()
+        {
+            if (!(this is TypedefDefinition))
+                return false;
+
+            if (this.IsSharedPtr)
+                return false;
+
+            TypedefDefinition explicitType = this.IsNested ? this.SurroundingClass.FindType<TypedefDefinition>(this.Name) 
+                                                            : this.NameSpace.FindType<TypedefDefinition>(this.Name);
+            if (explicitType.IsSTLContainer)
+                return false;
+
+            if (explicitType.BaseType is DefInternal)
+                return true;
+
+            return false;
+        }
+        
+        public virtual bool HasWrapType(WrapTypes wrapType)
+        {
+            return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
+        }
+
         public AbstractTypeDefinition CreateExplicitType()
         {
             if (this.ReplaceByType != null)
@@ -127,12 +322,12 @@ namespace AutoWrap.Meta
             if (this is TypedefDefinition)
             {
                 return TypedefDefinition.CreateExplicitType((TypedefDefinition)this);
-            } else
+            }
+            else
             {
                 return this;
             }
         }
-
 
         public virtual string GetNativeTypeName(bool isConst, PassedByType passed)
         {
@@ -231,186 +426,9 @@ namespace AutoWrap.Meta
             return (this.IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : NameSpace.FindType<T>(name, raiseException);
         }
 
-        protected XmlElement _elem;
-
-        public XmlElement Element
-        {
-            get { return _elem; }
-        }
-
-        public virtual string Name
-        {
-            get { return _elem.GetAttribute("name"); }
-        }
-
         public override string ToString()
         {
             return Name;
-        }
-
-        public virtual string CLRName
-        {
-            get
-            {
-                if (HasAttribute<RenameAttribute>())
-                    return GetAttribute<RenameAttribute>().Name;
-                else
-                    return Name;
-            }
-        }
-
-        public virtual string IncludeFile
-        {
-            get
-            {
-                if (_elem == null)
-                    return null;
-                else
-                    return _elem.GetAttribute("includeFile");
-            }
-        }
-
-        public virtual bool IsSharedPtr
-        {
-            get { return false; }
-        }
-
-        public virtual bool IsReadOnly
-        {
-            get { return HasAttribute<ReadOnlyAttribute>(); }
-        }
-
-        public readonly NamespaceDefinition NameSpace;
-        public ProtectionLevel ProtectionLevel;
-        /// <summary>
-        /// The class this type is nested within or <c>null</c> if this type is not nested.
-        /// </summary>
-        /// <seealso cref="IsNested"/>
-        public ClassDefinition SurroundingClass;
-
-        /// <summary>
-        /// Denotes whether this type is nested within a surrounding class.
-        /// </summary>
-        public virtual bool IsNested
-        {
-            get { return SurroundingClass != null; }
-        }
-
-        public virtual string ParentNativeName
-        {
-            get
-            {
-                switch (_elem.ParentNode.Name)
-                {
-                    case "class":
-                        return ClassDefinition.GetName(_elem.ParentNode as XmlElement);
-                    case "namespace":
-                        return this.NameSpace.NativeName;
-                    default:
-                        throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
-                }
-            }
-        }
-
-        public virtual string ParentFullNativeName
-        {
-            get
-            {
-                switch (_elem.ParentNode.Name)
-                {
-                    case "class":
-                        return ClassDefinition.GetFullName(_elem.ParentNode as XmlElement);
-                    case "namespace":
-                        return this.NameSpace.CLRName;
-                    default:
-                        throw new Exception("Unknown parent type '" + _elem.ParentNode.Name + "'");
-                }
-            }
-        }
-
-        public virtual string RealFullNativeName
-        {
-            get
-            {
-                if (SurroundingClass != null)
-                    return SurroundingClass.RealFullNativeName + "::" + Name;
-                else
-                    return NameSpace.NativeName + "::" + Name;
-            }
-        }
-
-        public virtual string FullNativeName
-        {
-            get { return RealFullNativeName; }
-        }
-
-        public virtual string FullCLRName
-        {
-            get
-            {
-                if (SurroundingClass != null)
-                {
-                    if (!SurroundingClass.IsInterface)
-                    {
-                        return SurroundingClass.FullCLRName + "::" + CLRName;
-                    }
-                    else
-                    {
-                        string name = SurroundingClass.FullCLRName.Replace("::" + SurroundingClass.CLRName, "::" + SurroundingClass.Name);
-                        return name + "::" + CLRName;
-                    }
-                }
-                else
-                {
-                    return NameSpace.CLRName + "::" + CLRName;
-                }
-            }
-        }
-
-        public virtual bool HasWrapType(WrapTypes wrapType)
-        {
-            return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
-        }
-
-        protected AbstractTypeDefinition(NamespaceDefinition nsDef) : base(nsDef.MetaDef)
-        {
-            this.NameSpace = nsDef;
-        }
-
-        protected AbstractTypeDefinition(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef.MetaDef)
-        {
-            this._elem = elem;
-            this.NameSpace = nsDef;
-            this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
-        }
-
-        public static ProtectionLevel GetProtectionEnum(string prot)
-        {
-            if (prot == "")
-                return ProtectionLevel.Public;
-            else
-                return (ProtectionLevel)Enum.Parse(typeof(ProtectionLevel), prot, true);
-        }
-
-
-        public bool IsInternalTypeDef()
-        {
-            if (!(this is TypedefDefinition))
-                return false;
-
-            if (this.IsSharedPtr)
-                return false;
-
-            TypedefDefinition explicitType = this.IsNested ? this.SurroundingClass.FindType<TypedefDefinition>(this.Name) 
-                                                            : this.NameSpace.FindType<TypedefDefinition>(this.Name);
-            if (explicitType.IsSTLContainer)
-                return false;
-
-            if (explicitType.BaseType is DefInternal)
-                return true;
-
-            return false;
         }
     }
 }

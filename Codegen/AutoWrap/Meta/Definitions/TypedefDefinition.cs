@@ -114,7 +114,7 @@ namespace AutoWrap.Meta
             }
             else if (typedef.Name == "String")
             {
-                expl = new DefStringTypeDef(typedef.NameSpace, typedef.Element);
+                expl = new DefStringTypeDef(typedef.NameSpace, typedef.DefiningXmlElement);
             }
 
             if (expl != null)

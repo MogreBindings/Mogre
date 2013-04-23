@@ -180,7 +180,7 @@ namespace AutoWrap.Meta
                 case "std::deque":
                     return DefStdDeque.CreateExplicitType(typedef);
                 case "std::list":
-                    return new DefStdList(typedef.NameSpace, typedef.Element);
+                    return new DefStdList(typedef.NameSpace, typedef.DefiningXmlElement);
                 case "HashedVector":
                     return DefHashedVector.CreateExplicitType(typedef);
                 case "std::map":

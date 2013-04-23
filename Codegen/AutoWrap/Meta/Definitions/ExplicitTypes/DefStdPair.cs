@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefStdPair(typedef.NameSpace, typedef.Element);
+            return new DefStdPair(typedef.NameSpace, typedef.DefiningXmlElement);
         }
 
         public DefStdPair(NamespaceDefinition nsDef, XmlElement elem)
