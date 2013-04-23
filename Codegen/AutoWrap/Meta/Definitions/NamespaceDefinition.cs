@@ -143,6 +143,18 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Finds a type (e.g. a class) within this namespace. This namespace and all parent namespaces
+        /// will be searched (where this namespace will be searched first). Child namespace won't be searched.
+        /// The type is searched for as if it would be used directly within a <c>namespace</c> block (or within a nested
+        /// class directly inside a <c>namespace</c> block).
+        /// </summary>
+        /// <param name="name">the name of the type. Can be fully qualified (i.e. with namespace and surrounding
+        /// class).</param>
+        /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
+        /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
+        /// the type couldn't be found.</param>
+        /// <returns></returns>
         public AbstractTypeDefinition FindType(string name, bool raiseException = true)
         {
             return FindType<AbstractTypeDefinition>(name, raiseException);
@@ -150,7 +162,9 @@ namespace AutoWrap.Meta
 
         /// <summary>
         /// Finds a type (e.g. a class) within this namespace. This namespace and all parent namespaces
-        /// will be searched (where this namespace will be searched first).
+        /// will be searched (where this namespace will be searched first). Child namespace won't be searched.
+        /// The type is searched for as if it would be used directly within a <c>namespace</c> block (or within a nested
+        /// class directly inside a <c>namespace</c> block).
         /// </summary>
         /// <typeparam name="T">the type of the definition to be returned (e.g. <see cref="ClassDefinition"/>).</typeparam>
         /// <param name="name">the name of the type. The name must be specified without namespace. </param>
@@ -158,16 +172,16 @@ namespace AutoWrap.Meta
         /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
         /// the type couldn't be found.</param>
         /// <returns></returns>
+        /// <seealso cref="AbstractTypeDefinition.FindType"/>
         public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
+            // Search this namespace
             AbstractTypeDefinition type = FindTypeInList<T>(name, _containedTypes);
+            // Search parent namespace for the type.
             if (type == null)
             {
                 if (ParentNamespace != null)
-                {
-                    // Search parent namespace for the type.
                     return ParentNamespace.FindType<T>(name, raiseException);
-                }
 
                 if (raiseException)
                     throw new Exception("Could not find type");
@@ -240,6 +254,11 @@ namespace AutoWrap.Meta
                 throw new Exception(String.Format("DefType not found for '{0}'", name));
 
             return type;
+        }
+
+        public override string ToString()
+        {
+            return "Namespace: " + CLRName;
         }
     }
 }

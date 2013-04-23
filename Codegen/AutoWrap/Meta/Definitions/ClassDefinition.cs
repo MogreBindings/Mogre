@@ -1041,6 +1041,15 @@ namespace AutoWrap.Meta
                 return attr;
         }
 
+        /// <summary>
+        /// Finds a type (e.g. class, enum, typedef) as if it was used directly at a certain position in the code
+        /// (i.e. from the type definition's perspective). See base method for more information.
+        /// </summary>
+        /// <param name="name">the name of the type. Can be fully qualified (i.e. with namespace and surrounding
+        /// class).</param>
+        /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
+        /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
+        /// the type couldn't be found.</param>
         public override T FindType<T>(string name, bool raiseException = true)
         {
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
@@ -1205,6 +1214,11 @@ namespace AutoWrap.Meta
                 throw new Exception("class element with no 'fullName' attribute");
 
             return pfullname;
+        }
+
+        public override string ToString()
+        {
+            return "Class: " + CLRName;
         }
     }
 }

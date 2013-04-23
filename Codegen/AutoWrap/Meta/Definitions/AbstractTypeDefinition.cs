@@ -347,11 +347,54 @@ namespace AutoWrap.Meta
 
         #endregion
 
+        /// <summary>
+        /// Finds a type (e.g. class, enum, typedef) as if it was used directly at a certain position in the code
+        /// (i.e. from the type definition's perspective). See the other overload for more information.
+        /// </summary>
+        /// <param name="name">the name of the type. Can be fully qualified (i.e. with namespace and surrounding
+        /// class).</param>
+        /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
+        /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
+        /// the type couldn't be found.</param>
+        /// <returns></returns>
         public AbstractTypeDefinition FindType(string name, bool raiseException = true)
         {
             return FindType<AbstractTypeDefinition>(name, raiseException);
         }
 
+        /// <summary>
+        /// Finds a type (e.g. class, enum, typedef) as if it was used directly at a certain position in the code
+        /// (i.e. from the type definition's perspective). Consider the following C# code example:
+        /// 
+        /// <code>
+        /// namespace MyNamespace {
+        ///   public class MyClass {
+        ///   }
+        ///   
+        ///   public class MySecondClass {
+        ///     public MyClass MyVar; // Using MyClass
+        ///   }
+        ///   
+        ///   public class MyThirdClass {
+        ///     public MyClass MyVar; // Using MyClass
+        ///     
+        ///     public class MyClass {
+        ///     }
+        ///   }
+        /// }
+        /// </code>
+        /// 
+        /// The type returned for <c>MyClass</c> will be different depending on where the type is used.
+        /// If it's used by <c>MySecondClass</c> it's the first class <c>MyClass</c>. If it's used
+        /// by <c>MyThirdClass</c> it's the inner class.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name">the name of the type. Can be fully qualified (i.e. with namespace and surrounding
+        /// class).</param>
+        /// <param name="raiseException">indicates whether an exception is to be thrown when the type can't
+        /// be found. If this is <c>false</c>, an instance of <see cref="DefInternal"/> will be returned when
+        /// the type couldn't be found.</param>
+        /// <returns></returns>
         public virtual T FindType<T>(string name, bool raiseException = true) where T : AbstractTypeDefinition
         {
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
