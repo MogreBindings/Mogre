@@ -224,15 +224,7 @@ namespace AutoWrap.Meta
                 throw new ArgumentException("Namespaces don't match.");
             }
             SurroundingClass = surroundingClass;
-            this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
-        }
-
-        public static ProtectionLevel GetProtectionEnum(string prot)
-        {
-            if (prot == "")
-                return ProtectionLevel.Public;
-            else
-                return (ProtectionLevel)Enum.Parse(typeof(ProtectionLevel), prot, true);
+            ProtectionLevel = ProtectionLevelExtensions.ParseProtectionLevel(elem.GetAttribute("protection"));
         }
 
 

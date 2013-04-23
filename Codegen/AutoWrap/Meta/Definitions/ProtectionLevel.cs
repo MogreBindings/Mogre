@@ -31,5 +31,13 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
             }
         }
+
+        public static ProtectionLevel ParseProtectionLevel(string level)
+        {
+            if (level == "")
+                return ProtectionLevel.Public;
+            
+            return (ProtectionLevel) Enum.Parse(typeof (ProtectionLevel), level, true);
+        }
     }
 }

@@ -153,7 +153,7 @@ namespace AutoWrap.Meta
         {
             _containingClass = containingClass;
             IsStatic = elem.GetAttribute("static") == "yes";
-            ProtectionLevel = AbstractTypeDefinition.GetProtectionEnum(elem.GetAttribute("protection"));
+            ProtectionLevel = ProtectionLevelExtensions.ParseProtectionLevel(elem.GetAttribute("protection"));
             _passedByType = (PassedByType)Enum.Parse(typeof(PassedByType), elem.GetAttribute("passedBy"), true);
 
             foreach (XmlElement child in elem.ChildNodes)
