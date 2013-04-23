@@ -31,7 +31,16 @@ namespace AutoWrap
 
             MetaDefinition meta = new MetaDefinition(META_XML_FILE, "Ogre", "Mogre",
                                                 new MogreConstructFactory(), new MogreCodeStyleDef());
-            meta.AddAttributes(ATTRIBUTES_FILE);
+            
+            try
+            {
+                meta.AddAttributes(ATTRIBUTES_FILE);
+            }
+            catch (UnkownAttributeException e)
+            {
+                MessageBox.Show("Unknown attribute found: " + e.Message, "Error");
+                return;
+            }
 
             //check if auto directories exists, and create it if needed
             if (!Directory.Exists(INCLUDES_DEST_DIR))

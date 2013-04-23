@@ -216,8 +216,14 @@ namespace AutoWrap.Meta
             string typename = elem.Name.Substring(1);
             string nameSpace = typeof(WrapTypeAttribute).Namespace;
 
-            Type type = Assembly.GetExecutingAssembly().GetType(nameSpace + "." + typename + "Attribute", true, true);
-            return (AutoWrapAttribute) type.GetMethod("FromElement").Invoke(null, new object[] {elem});
+            try {
+                Type type = Assembly.GetExecutingAssembly().GetType(nameSpace + "." + typename + "Attribute", true, true);
+                return (AutoWrapAttribute)type.GetMethod("FromElement").Invoke(null, new object[] { elem });
+            }
+            catch (TypeLoadException)
+            {
+                throw new UnkownAttributeException(typename);
+            }
         }
 
         private AutoWrapAttribute CreateAttribute(XmlAttribute attr)
@@ -258,6 +264,13 @@ namespace AutoWrap.Meta
 
             NamespaceDefinition spc = Factory.CreateNamespace(this, elem);
             _namespaces[spc.NativeName] = spc;
+        }
+    }
+
+    public class UnkownAttributeException : Exception
+    {
+        public UnkownAttributeException(string attributeName) : base(attributeName)
+        {
         }
     }
 }
