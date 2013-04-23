@@ -206,11 +206,6 @@ namespace AutoWrap.Meta
             get { return _isAbstractClass; }
         }
 
-        protected virtual bool IsConstructable
-        {
-            get { return !_definition.HasAttribute<NotConstructableAttribute>(); }
-        }
-
         protected virtual bool AllowVirtualMethods
         {
             get { return _definition.AllowSubClassing; }

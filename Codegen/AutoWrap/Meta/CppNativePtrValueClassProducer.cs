@@ -44,7 +44,7 @@ namespace AutoWrap.Meta
         {
             base.AddPublicDeclarations();
 
-            if (!IsReadOnly && IsConstructable)
+            if (!IsReadOnly)
             {
                 _code.AppendEmptyLine();
                 AddCreators();

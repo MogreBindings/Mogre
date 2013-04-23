@@ -79,7 +79,6 @@
     <Compile Include="Meta\Attributes\NativeValueContainerAttribute.cs" />
     <Compile Include="Meta\Attributes\NoDefaultParamOverloadsAttribute.cs" />
     <Compile Include="Meta\Attributes\NoFinalizerAttribute.cs" />
-    <Compile Include="Meta\Attributes\NotConstructableAttribute.cs" />
     <Compile Include="Meta\Attributes\PropertyAttribute.cs" />
     <Compile Include="Meta\Attributes\PureManagedClassAttribute.cs" />
     <Compile Include="Meta\Attributes\RawPointerParamAttribute.cs" />

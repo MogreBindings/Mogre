@@ -258,10 +258,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("public:");
             _code.IncreaseIndent();
 
-            if (IsConstructable)
-            {
-                AddPublicConstructors();
-            }
+            AddPublicConstructors();
 
             _code.AppendEmptyLine();
             AddPublicFields();

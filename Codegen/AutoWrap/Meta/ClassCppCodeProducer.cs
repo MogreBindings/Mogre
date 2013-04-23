@@ -90,8 +90,7 @@ namespace AutoWrap.Meta
 
 		protected override void AddPublicDeclarations()
 		{
-			if ((!_definition.IsNativeAbstractClass || _definition.IsInterface)
-					&& IsConstructable)
+			if (!_definition.IsNativeAbstractClass || _definition.IsInterface)
 			{
 				if (_definition.Constructors.Length > 0)
 				{

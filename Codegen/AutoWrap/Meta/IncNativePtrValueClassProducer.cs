@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
             _code.AppendLine("}");
 
-            if (!IsReadOnly && IsConstructable)
+            if (!IsReadOnly)
             {
                 _code.AppendEmptyLine();
                 AddCreators();
