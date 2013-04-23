@@ -276,7 +276,7 @@ namespace AutoWrap.Meta
                 {
                     AbstractTypeDefinition type = t.FindType<AbstractTypeDefinition>(t.Name);
 
-                    if (type.FullNativeName.StartsWith(_metaDef.NativeNamespace + "::")
+                    if (type.FullyQualifiedNativeName.StartsWith(this._metaDef.NativeNamespace + "::")
                         && type is ClassDefinition && !type.IsTemplate)
                     {
                         if (!typesForMakePublic.Contains(type))
@@ -305,7 +305,7 @@ namespace AutoWrap.Meta
 
             foreach (AbstractTypeDefinition type in typesForMakePublic)
             {
-                builder.AppendLine("#pragma make_public( " + type.FullNativeName + " )");
+                builder.AppendLine("#pragma make_public( " + type.FullyQualifiedNativeName + " )");
             }
 
             WriteToFile(_includePath + "\\MakePublicDeclarations.h", builder.ToString(), true);
@@ -832,9 +832,9 @@ namespace AutoWrap.Meta
             string baseClass = basename.Substring(s + 1, e - s - 1).Trim();
             //string nativeClass = _nativePrefix + "::" + baseClass;
             AbstractTypeDefinition baseType = type.FindType<AbstractTypeDefinition>(baseClass);
-            string nativeClass = baseType.FullNativeName;
+            string nativeClass = baseType.FullyQualifiedNativeName;
 
-            string className = type.FullCLRName;
+            string className = type.FullyQualifiedCLRName;
             if (className.Contains("::"))
                 className = className.Substring(className.IndexOf("::") + 2);
 
@@ -852,11 +852,11 @@ namespace AutoWrap.Meta
             sb.AppendLine("{");
             sb.AppendLine("public protected:");
             sb.IncreaseIndent();
-            sb.AppendLine("\t" + type.FullNativeName + "* _sharedPtr;");
+            sb.AppendLine("\t" + type.FullyQualifiedNativeName + "* _sharedPtr;");
             sb.AppendEmptyLine();
-            sb.AppendLine(type.Name + "(" + type.FullNativeName + "& sharedPtr) : " + baseClass + "( sharedPtr.getPointer() )");
+            sb.AppendLine(type.Name + "(" + type.FullyQualifiedNativeName + "& sharedPtr) : " + baseClass + "( sharedPtr.getPointer() )");
             sb.AppendLine("{");
-            sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "(sharedPtr);");
+            sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "(sharedPtr);");
             sb.AppendLine("}");
             sb.AppendEmptyLine();
             sb.AppendLine("!" + type.Name + "()");
@@ -903,7 +903,7 @@ namespace AutoWrap.Meta
                     sb.AppendLine("if (CLR_NULL == ptr) return nullptr;");
                     sb.AppendLine("void* castptr = dynamic_cast<" + nativeClass + "*>(ptr->_native);");
                     sb.AppendLine("if (castptr == 0) throw gcnew InvalidCastException(\"The underlying type of the ResourcePtr object is not of type " + baseClass + ".\");");
-                    sb.AppendLine("return gcnew " + type.Name + "( (" + type.FullNativeName + ") *(ptr->_sharedPtr) );");
+                    sb.AppendLine("return gcnew " + type.Name + "( (" + type.FullyQualifiedNativeName + ") *(ptr->_sharedPtr) );");
                     sb.DecreaseIndent();
                     sb.AppendLine("}");
                     sb.AppendEmptyLine();
@@ -920,7 +920,7 @@ namespace AutoWrap.Meta
                 string proxyName = NativeProxyClassProducer.GetProxyName(baseType as ClassDefinition);
                 sb.AppendLine(type.Name + "(" + baseType.CLRName + "^ obj) : " + baseClass + "( static_cast<" + proxyName + "*>( (" + nativeClass + "*)obj ) )");
                 sb.AppendLine("{");
-                sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
+                sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
                 sb.AppendLine("}");
                 sb.AppendEmptyLine();
             }
@@ -928,7 +928,7 @@ namespace AutoWrap.Meta
             {
                 sb.AppendLine(type.Name + "(" + baseClass + "^ obj) : " + baseClass + "( obj->_native )");
                 sb.AppendLine("{");
-                sb.AppendLine("\t_sharedPtr = new " + type.FullNativeName + "( static_cast<" + nativeClass + "*>(obj->_native) );");
+                sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + nativeClass + "*>(obj->_native) );");
                 sb.AppendLine("}");
                 sb.AppendEmptyLine();
             }
@@ -1168,12 +1168,12 @@ namespace AutoWrap.Meta
             string prefix;
             if (!t.IsNested)
             {
-                prefix = t.FullNativeName;
+                prefix = t.FullyQualifiedNativeName;
                 prefix = prefix.Substring(0, prefix.LastIndexOf("::"));
             }
             else
             {
-                prefix = t.SurroundingClass.FullNativeName;
+                prefix = t.SurroundingClass.FullyQualifiedNativeName;
             }
 
             if (prefix.Contains("::"))
@@ -1242,9 +1242,9 @@ namespace AutoWrap.Meta
             }
 
             if (t.IsMapIterator)
-                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName + " )\n");
+                sb.Append("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeMembers[0].MemberType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName + " )\n");
             else
-                sb.Append("( " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )\n");
+                sb.Append("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeMembers[0].MemberType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )\n");
 
             sb.AppendEmptyLine();
         }
@@ -1254,12 +1254,12 @@ namespace AutoWrap.Meta
             string prefix;
             if (!t.IsNested)
             {
-                prefix = t.FullNativeName;
+                prefix = t.FullyQualifiedNativeName;
                 prefix = prefix.Substring(0, prefix.LastIndexOf("::"));
             }
             else
             {
-                prefix = t.SurroundingClass.FullNativeName;
+                prefix = t.SurroundingClass.FullyQualifiedNativeName;
             }
 
             if (prefix.Contains("::"))
@@ -1283,9 +1283,9 @@ namespace AutoWrap.Meta
             }
 
             if (t.IsMapIterator)
-                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName);
+                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeMembers[0].MemberType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName);
             else
-                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullNativeName + ", " + t.TypeMembers[0].MemberType.FullCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName);
+                sb.Append("( " + prefix + ", " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeMembers[0].MemberType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName);
 
             if (!noConstructor)
             {
@@ -1307,7 +1307,7 @@ namespace AutoWrap.Meta
             sb.AppendIndent("");
             if (t.IsNested)
                 sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
-            sb.Append("typedef " + t.FullNativeName + " " + t.CLRName + ";\n\n");
+            sb.Append("typedef " + t.FullyQualifiedNativeName + " " + t.CLRName + ";\n\n");
         }
 
         public void IncAddValueTypeTypeDef(TypedefDefinition t, SourceCodeStringBuilder sb)
@@ -1315,7 +1315,7 @@ namespace AutoWrap.Meta
             sb.AppendIndent("");
             if (t.IsNested)
                 sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
-            sb.Append("typedef " + t.BaseType.FullCLRName + " " + t.CLRName + ";\n\n");
+            sb.Append("typedef " + t.BaseType.FullyQualifiedCLRName + " " + t.CLRName + ";\n\n");
         }
 
         private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)

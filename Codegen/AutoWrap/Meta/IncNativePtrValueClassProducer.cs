@@ -56,14 +56,14 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _code.AppendLine(_definition.FullNativeName + "* _native;");
+            _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
 
-            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullNativeName + " )");
+            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullyQualifiedNativeName + " )");
             _code.AppendEmptyLine();
 
             _code.AppendEmptyLine();

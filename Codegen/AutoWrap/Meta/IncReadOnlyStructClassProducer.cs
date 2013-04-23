@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             }
             _code.AppendEmptyLine();
 
-            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "& obj)");
+            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullyQualifiedNativeName + "& obj)");
             _code.AppendLine("{");
             _code.IncreaseIndent();
             _code.AppendLine(_definition.CLRName + "^ clr = gcnew " + _definition.CLRName + ";");
@@ -87,7 +87,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("}");
 
             _code.AppendEmptyLine();
-            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullNativeName + "* pObj)");
+            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullyQualifiedNativeName + "* pObj)");
             _code.AppendLine("{");
             _code.AppendLine("\treturn *pObj;");
             _code.AppendLine("}");

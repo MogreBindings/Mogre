@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
         protected override string GetClassName()
         {
-            string full = _definition.FullCLRName;
+            string full = _definition.FullyQualifiedCLRName;
             int index = full.IndexOf("::");
             string name = full.Substring(index + 2);
 
@@ -71,7 +71,7 @@ namespace AutoWrap.Meta
 
         protected override void AddMethod(MemberMethodDefinition f)
         {
-            string def = f.Definition.Replace(f.ContainingClass.FullNativeName, GetClassName()) + "(";
+            string def = f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
                 def = def.Substring("virtual ".Length);
             _code.AppendIndent(def);

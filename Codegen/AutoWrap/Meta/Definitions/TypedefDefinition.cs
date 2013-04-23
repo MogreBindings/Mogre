@@ -28,24 +28,22 @@ namespace AutoWrap.Meta
 
         public override string GetCLRParamTypeName(ParamDefinition param)
         {
-            string s = BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullCLRName, FullCLRName);
+            string s = BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName);
             if (s.Contains("Mogre::int32"))
                 return s;
-            return
-                BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+
+            return BaseType.GetCLRParamTypeName(param).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName).Replace(BaseType.FullyQualifiedNativeName, FullyQualifiedNativeName);
         }
 
         public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.ProducePreCallParamConversionCode(param, out newname).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProducePreCallParamConversionCode(param, out newname).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
-                return
-                    BaseType.ProducePreCallParamConversionCode(param, out newname)
-                            .Replace(BaseType.FullCLRName, FullCLRName)
-                            .Replace(BaseType.FullNativeName, FullNativeName);
+
+                return BaseType.ProducePreCallParamConversionCode(param, out newname).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName).Replace(BaseType.FullyQualifiedNativeName, FullyQualifiedNativeName);
             }
 
             return base.ProducePreCallParamConversionCode(param, out newname);
@@ -55,11 +53,11 @@ namespace AutoWrap.Meta
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
-                return
-                    BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+                
+                return BaseType.ProducePostCallParamConversionCleanupCode(param).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName).Replace(BaseType.FullyQualifiedNativeName, FullyQualifiedNativeName);
             }
 
             return base.ProducePostCallParamConversionCleanupCode(param);
@@ -67,21 +65,21 @@ namespace AutoWrap.Meta
 
         public override string GetCLRTypeName(ITypeMember m)
         {
-            string s = BaseType.GetCLRTypeName(m).Replace(BaseType.FullCLRName, FullCLRName);
+            string s = BaseType.GetCLRTypeName(m).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName);
             if (s.Contains("Mogre::int32"))
                 return s;
-            return BaseType.GetCLRTypeName(m).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+            return BaseType.GetCLRTypeName(m).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName).Replace(BaseType.FullyQualifiedNativeName, FullyQualifiedNativeName);
         }
 
         public override string ProduceNativeCallConversionCode(string expr, ITypeMember m)
         {
             if (!(this is DefTemplateOneType || this is DefTemplateTwoTypes) && BaseType is DefInternal)
             {
-                string s = BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullCLRName, FullCLRName);
+                string s = BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName);
                 if (s.Contains("Mogre::int32"))
                     return s;
                 return
-                    BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullCLRName, FullCLRName).Replace(BaseType.FullNativeName, FullNativeName);
+                    BaseType.ProduceNativeCallConversionCode(expr, m).Replace(BaseType.FullyQualifiedCLRName, FullyQualifiedCLRName).Replace(BaseType.FullyQualifiedNativeName, FullyQualifiedNativeName);
             }
 
             return base.ProduceNativeCallConversionCode(expr, m);

@@ -163,7 +163,7 @@ namespace AutoWrap.Meta
                 {
                     if (f.IsDeclarableFunction)
                     {
-                        _code.AppendLine(cls.FullCLRName + "::" + f.CLRName + "Handler^ " + NameToPrivate(f.NativeName) + ";");
+                        _code.AppendLine(cls.FullyQualifiedCLRName + "::" + f.CLRName + "Handler^ " + NameToPrivate(f.NativeName) + ";");
                     }
                     else
                         continue;
@@ -211,7 +211,7 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition cls in _interfaces)
             {
-                _code.AppendLine("virtual " + cls.FullNativeName + "* _" + cls.CLRName + "_GetNativePtr() = " + cls.CLRName + "::_GetNativePtr;");
+                _code.AppendLine("virtual " + cls.FullyQualifiedNativeName + "* _" + cls.CLRName + "_GetNativePtr() = " + cls.CLRName + "::_GetNativePtr;");
                 _code.AppendEmptyLine();
             }
         }
@@ -412,7 +412,7 @@ namespace AutoWrap.Meta
                 {
                     if (f.IsDeclarableFunction)
                     {
-                        string handler = cls.FullCLRName + "::" + f.CLRName + "Handler^";
+                        string handler = cls.FullyQualifiedCLRName + "::" + f.CLRName + "Handler^";
                         string privField = NameToPrivate(f.NativeName);
                         string listener = NameToPrivate(cls.Name);
                         _code.AppendLine("event " + handler + " " + f.CLRName);
@@ -468,7 +468,7 @@ namespace AutoWrap.Meta
                             _code.IncreaseIndent();
                             string list = privField + "Delegates";
                             string stopret = cls.GetAttribute<StopDelegationForReturnAttribute>().Return;
-                            _code.AppendLine(f.MemberType.FullCLRName + " mp_return;");
+                            _code.AppendLine(f.MemberType.FullyQualifiedCLRName + " mp_return;");
                             _code.AppendLine("for (int i=0; i < " + list + "->Length; i++)");
                             _code.AppendLine("{");
                             _code.IncreaseIndent();
@@ -617,7 +617,7 @@ namespace AutoWrap.Meta
                     AddTypeDependancy(it);
                     string itname = it.CLRName;
                     if (it.IsNested)
-                        itname = it.SurroundingClass.FullCLRName + "::" + itname;
+                        itname = it.SurroundingClass.FullyQualifiedCLRName + "::" + itname;
                     baseclass += "public " + itname + ", ";
                 }
                 baseclass = baseclass.Substring(0, baseclass.Length - ", ".Length);

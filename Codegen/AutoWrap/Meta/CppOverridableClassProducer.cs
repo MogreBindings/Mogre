@@ -132,9 +132,9 @@ namespace AutoWrap.Meta
 
                     if (IsCachedFunction(f))
                     {
-                        sb.AppendLine("STATIC_ASSERT( sizeof(" + f.MemberType.FullNativeName + ") <= CACHED_RETURN_SIZE )");
-                        sb.AppendLine("memcpy( Mogre::Implementation::cachedReturn, &" + returnExpr + ", sizeof(" + f.MemberType.FullNativeName + ") );");
-                        sb.AppendLine("return *reinterpret_cast<" + f.MemberType.FullNativeName + "*>(Mogre::Implementation::cachedReturn);");
+                        sb.AppendLine("STATIC_ASSERT( sizeof(" + f.MemberType.FullyQualifiedNativeName + ") <= CACHED_RETURN_SIZE )");
+                        sb.AppendLine("memcpy( Mogre::Implementation::cachedReturn, &" + returnExpr + ", sizeof(" + f.MemberType.FullyQualifiedNativeName + ") );");
+                        sb.AppendLine("return *reinterpret_cast<" + f.MemberType.FullyQualifiedNativeName + "*>(Mogre::Implementation::cachedReturn);");
                     }
                     else
                     {
@@ -250,8 +250,8 @@ namespace AutoWrap.Meta
                 SourceCodeStringBuilder tempsb = _code;
                 _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
                 base.Add();
-                string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
-                string res = _code.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
+                string fname = _definition.FullyQualifiedCLRName.Replace(_definition.CLRName, _definition.Name);
+                string res = _code.ToString().Replace(_definition.FullyQualifiedCLRName + "::", fname + "::");
                 fname = GetClassName().Replace(_definition.CLRName, _definition.Name);
                 res = res.Replace(GetClassName() + "::", fname + "::");
 
@@ -311,7 +311,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.NativeName;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullyQualifiedNativeName + "::" + field.NativeName;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)
@@ -404,7 +404,7 @@ namespace AutoWrap.Meta
                 _code.DecreaseIndent();
                 _code.AppendLine("}");
                 _code.AppendLine("else");
-                _code.AppendIndent("\t_native = new " + _definition.FullNativeName + "(");
+                _code.AppendIndent("\t_native = new " + _definition.FullyQualifiedNativeName + "(");
 
                 if (count > 0)
                 {

@@ -13,7 +13,7 @@ namespace AutoWrap.Meta
         public override string ProducePreCallParamConversionCode(ParamDefinition param, out string newname)
         {
             if (param.PassedByType == PassedByType.Pointer)
-                newname = "(" + param.Type.FullNativeName + "*) " + param.Name;
+                newname = "(" + param.Type.FullyQualifiedNativeName + "*) " + param.Name;
             else
                 newname = param.Name;
             return string.Empty;
@@ -32,9 +32,9 @@ namespace AutoWrap.Meta
                 case PassedByType.Value:
                     if (param.PassedByType == PassedByType.Reference && !param.IsConst)
                         throw new Exception("Unexpected");
-                    return FullCLRName;
+                    return FullyQualifiedCLRName;
                 case PassedByType.Pointer:
-                    return FullCLRName + "*";
+                    return FullyQualifiedCLRName + "*";
                 default:
                     throw new Exception("Unexpected");
             }
@@ -46,9 +46,9 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                 case PassedByType.Value:
-                    return FullCLRName;
+                    return FullyQualifiedCLRName;
                 case PassedByType.Pointer:
-                    return FullCLRName + "*";
+                    return FullyQualifiedCLRName + "*";
                 default:
                     throw new Exception("Unexpected");
             }

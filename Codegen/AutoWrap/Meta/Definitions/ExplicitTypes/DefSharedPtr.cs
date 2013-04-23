@@ -22,7 +22,7 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                 case PassedByType.Value:
-                    return FullCLRName + "^";
+                    return FullyQualifiedCLRName + "^";
                 default:
                     throw new Exception("Unexpected");
             }

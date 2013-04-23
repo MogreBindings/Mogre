@@ -312,7 +312,7 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.PointerPointer:
-                    preConversion = FullCLRName + "^ out_" + param.Name + ";";
+                    preConversion = FullyQualifiedCLRName + "^ out_" + param.Name + ";";
                     conversion = "out_" + param.Name;
                     postConversion = "if (" + param.Name + ") *" + param.Name + " = out_" + param.Name + ";";
                     return;
@@ -364,7 +364,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            string nativetype = FullNativeName;
+            string nativetype = FullyQualifiedNativeName;
 
             if (HasAttribute<PureManagedClassAttribute>())
             {
@@ -427,7 +427,7 @@ namespace AutoWrap.Meta
 
                 case PassedByType.PointerPointer:
                     newname = "&out_" + param.Name;
-                    return (param.IsConst ? "const " : "") + FullNativeName + "* out_" + param.Name + ";\n";
+                    return (param.IsConst ? "const " : "") + FullyQualifiedNativeName + "* out_" + param.Name + ";\n";
 
                 default:
                     return base.ProducePreCallParamConversionCode(param, out newname);
@@ -489,7 +489,7 @@ namespace AutoWrap.Meta
                         if (m.HasAttribute<ArrayTypeAttribute>())
                         {
                             int len = m.GetAttribute<ArrayTypeAttribute>().Length;
-                            return "GetValueArrayFromNativeArray<" + FullCLRName + ", " + FullNativeName + ">( " + expr + " , " + len + " )";
+                            return "GetValueArrayFromNativeArray<" + FullyQualifiedCLRName + ", " + FullyQualifiedNativeName + ">( " + expr + " , " + len + " )";
                         }
                         else if (HasWrapType(WrapTypes.NativePtrValueType))
                         {
@@ -522,7 +522,7 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.PointerPointer:
-                    return "[Out] " + FullCLRName + (IsValueType ? "%" : "^%");
+                    return "[Out] " + FullyQualifiedCLRName + (IsValueType ? "%" : "^%");
                 default:
                     return GetCLRTypeName(param);
             }
@@ -536,7 +536,7 @@ namespace AutoWrap.Meta
                 {
                     case PassedByType.Pointer:
                         //return "array<" + FullCLRName + "^>^";
-                        string name = FullCLRName + "::NativeValue*";
+                        string name = FullyQualifiedCLRName + "::NativeValue*";
                         if (m.IsConst)
                             name = "const " + name;
                         return name;
@@ -550,30 +550,30 @@ namespace AutoWrap.Meta
                     {
                         if (m.HasAttribute<ArrayTypeAttribute>())
                         {
-                            return "array<" + FullCLRName + ">^";
+                            return "array<" + FullyQualifiedCLRName + ">^";
                         }
                         else if (HasWrapType(WrapTypes.NativePtrValueType))
                         {
-                            return FullCLRName;
+                            return FullyQualifiedCLRName;
                         }
                         else
                         {
-                            string name = FullCLRName + "*";
+                            string name = FullyQualifiedCLRName + "*";
                             if (m.IsConst)
                                 name = "const " + name;
                             return name;
                         }
                     }
                     else
-                        return FullCLRName + "^";
+                        return FullyQualifiedCLRName + "^";
                 case PassedByType.Reference:
                 case PassedByType.Value:
                     if (IsSharedPtr)
-                        return FullCLRName + "^";
+                        return FullyQualifiedCLRName + "^";
                     else if (IsValueType)
-                        return FullCLRName;
+                        return FullyQualifiedCLRName;
                     else
-                        return FullCLRName + "^";
+                        return FullyQualifiedCLRName + "^";
                 case PassedByType.PointerPointer:
                 default:
                     throw new Exception("Unexpected");

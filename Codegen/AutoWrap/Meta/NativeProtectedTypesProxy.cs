@@ -31,7 +31,7 @@ namespace AutoWrap.Meta
     {
         public static string GetProtectedTypesProxyName(AbstractTypeDefinition type)
         {
-            string name = type.FullNativeName;
+            string name = type.FullyQualifiedNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
             name = name.Replace("::", "_");
             name = "Mogre::" + name + "_ProtectedTypesProxy";
@@ -51,12 +51,12 @@ namespace AutoWrap.Meta
             {
                 string className = GetProtectedTypesProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _code.AppendLine("class " + className + " : public " + _definition.FullNativeName);
+                _code.AppendLine("class " + className + " : public " + _definition.FullyQualifiedNativeName);
                 _code.AppendLine("{");
                 _code.AppendLine("public:");
                 _code.IncreaseIndent();
 
-                className = _definition.FullCLRName;
+                className = _definition.FullyQualifiedCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
                 if (_definition.IsInterface)
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
         {
             if (nested.IsSTLContainer)
             {
-                _code.AppendLine("typedef " + _definition.FullNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
+                _code.AppendLine("typedef " + _definition.FullyQualifiedNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
             }
             else
                 throw new Exception("Unexpected");
@@ -185,7 +185,7 @@ namespace AutoWrap.Meta
     {
         public static string GetProtectedStaticsProxyName(AbstractTypeDefinition type)
         {
-            string name = type.FullNativeName;
+            string name = type.FullyQualifiedNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
             name = name.Replace("::", "_");
             name = "Mogre::" + name + "_ProtectedStaticsProxy";
@@ -205,12 +205,12 @@ namespace AutoWrap.Meta
             {
                 string className = GetProtectedStaticsProxyName(_definition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _code.AppendLine("class " + className + " : public " + _definition.FullNativeName);
+                _code.AppendLine("class " + className + " : public " + _definition.FullyQualifiedNativeName);
                 _code.AppendLine("{");
                 _code.AppendLine("public:");
                 _code.IncreaseIndent();
 
-                className = _definition.FullCLRName;
+                className = _definition.FullyQualifiedCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
                 if (_definition.IsInterface)

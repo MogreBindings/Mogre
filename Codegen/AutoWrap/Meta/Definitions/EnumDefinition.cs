@@ -10,14 +10,14 @@ namespace AutoWrap.Meta
             get { return true; }
         }
 
-        public override string FullNativeName
+        public override string FullyQualifiedNativeName
         {
             get
             {
                 if (ProtectionLevel == ProtectionLevel.Protected)
                     return NativeProtectedTypesProxy.GetProtectedTypesProxyName(SurroundingClass) + "::" + Name;
-                
-                return base.FullNativeName;
+
+                return base.FullyQualifiedNativeName;
             }
         }
 
@@ -28,11 +28,11 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.Pointer:
-                    preConversion = FullCLRName + " out_" + param.Name + ";";
+                    preConversion = FullyQualifiedCLRName + " out_" + param.Name + ";";
                     conversion = "out_" + param.Name;
                     return;
                 default:
-                    conversion = FullCLRName + "::" + param.DefaultValue;
+                    conversion = FullyQualifiedCLRName + "::" + param.DefaultValue;
                     return;
             }
         }
@@ -42,13 +42,13 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.Reference:
-                    newname = "*(" + FullNativeName + "*)p_" + param.Name;
-                    return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                    newname = "*(" + FullyQualifiedNativeName + "*)p_" + param.Name;
+                    return "pin_ptr<" + FullyQualifiedCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
                 case PassedByType.Pointer:
-                    newname = "(" + FullNativeName + "*)p_" + param.Name;
-                    return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                    newname = "(" + FullyQualifiedNativeName + "*)p_" + param.Name;
+                    return "pin_ptr<" + FullyQualifiedCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
                 case PassedByType.Value:
-                    newname = "(" + FullNativeName + ")" + param.Name;
+                    newname = "(" + FullyQualifiedNativeName + ")" + param.Name;
                     return string.Empty;
                 default:
                     throw new Exception("Unexpected");
@@ -61,7 +61,7 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                 case PassedByType.Pointer:
-                    return "[Out] " + FullCLRName + "%";
+                    return "[Out] " + FullyQualifiedCLRName + "%";
                 default:
                     return GetCLRTypeName(param);
             }
@@ -72,7 +72,7 @@ namespace AutoWrap.Meta
             switch (m.PassedByType)
             {
                 case PassedByType.Value:
-                    return "(" + FullCLRName + ")" + expr;
+                    return "(" + FullyQualifiedCLRName + ")" + expr;
                 default:
                     throw new Exception("Unexpected");
             }
@@ -83,7 +83,7 @@ namespace AutoWrap.Meta
             switch (m.PassedByType)
             {
                 case PassedByType.Value:
-                    return FullCLRName;
+                    return FullyQualifiedCLRName;
                 default:
                     throw new Exception("Unexpected");
             }
@@ -94,9 +94,9 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.Pointer:
-                    preConversion = FullCLRName + " out_" + param.Name + ";";
+                    preConversion = FullyQualifiedCLRName + " out_" + param.Name + ";";
                     conversion = "out_" + param.Name;
-                    postConversion = "if (" + param.Name + ") *" + param.Name + " = (" + FullNativeName + ")out_" + param.Name + ";";
+                    postConversion = "if (" + param.Name + ") *" + param.Name + " = (" + FullyQualifiedNativeName + ")out_" + param.Name + ";";
                     return;
             }
 
@@ -136,7 +136,7 @@ namespace AutoWrap.Meta
 
             for (int i = 0; i < DefiningXmlElement.ChildNodes.Count; i++)
             {
-                string parentName = FullNativeName;
+                string parentName = FullyQualifiedNativeName;
                 parentName = parentName.Substring(0, parentName.LastIndexOf("::"));
                 string nativeName = (DefiningXmlElement.ChildNodes[i] as XmlElement).GetAttribute("name");
                 //if (ProtectionType == ProtectionType.Protected)

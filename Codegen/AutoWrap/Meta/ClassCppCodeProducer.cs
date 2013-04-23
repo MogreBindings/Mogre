@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
             if (_definition.HasAttribute<CLRObjectAttribute>(true)) {
                 _code.AppendLine("__declspec(dllexport) " + _wrapper.GetInitCLRObjectFuncSignature(_definition));
                 _code.AppendLine("{");
-                _code.AppendLine("\t*pClrObj = gcnew " + _definition.FullCLRName + "(pClrObj);");
+                _code.AppendLine("\t*pClrObj = gcnew " + _definition.FullyQualifiedCLRName + "(pClrObj);");
                 _code.AppendLine("}");
             }
 
@@ -80,9 +80,9 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition cls in _interfaces)
             {
-                _code.AppendLine(cls.FullNativeName + "* " + GetClassName() + "::_" + cls.CLRName + "_GetNativePtr()");
+                _code.AppendLine(cls.FullyQualifiedNativeName + "* " + GetClassName() + "::_" + cls.CLRName + "_GetNativePtr()");
                 _code.AppendLine("{");
-                _code.AppendLine("\treturn static_cast<" + cls.FullNativeName + "*>( " + GetNativeInvokationTarget() + " );");
+                _code.AppendLine("\treturn static_cast<" + cls.FullyQualifiedNativeName + "*>( " + GetNativeInvokationTarget() + " );");
                 _code.AppendLine("}");
                 _code.AppendEmptyLine();
             }
@@ -153,7 +153,7 @@ namespace AutoWrap.Meta
             else
                 AddMethodParameters(f, count);
 
-            string nativeType = GetTopClass(_definition).FullNativeName;
+            string nativeType = GetTopClass(_definition).FullyQualifiedNativeName;
             if (GetTopBaseClassName() == "Wrapper")
                 nativeType = "CLRObject";
 
@@ -178,7 +178,7 @@ namespace AutoWrap.Meta
                     _code.AppendLine(preCall);
             }
 
-            _code.AppendIndent("_native = new " + _definition.FullNativeName + "(");
+            _code.AppendIndent("_native = new " + _definition.FullyQualifiedNativeName + "(");
 
             if (count > 0)
             {
@@ -228,7 +228,7 @@ namespace AutoWrap.Meta
                     }
                     else
                     {
-                        _code.Append(m.ContainingClass.FullNativeName);
+                        _code.Append(m.ContainingClass.FullyQualifiedNativeName);
                         _code.Append("::" + m.NativeName + ";\n");
                     }
                 }
@@ -477,7 +477,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    invoke = _definition.FullNativeName + "::" + f.NativeName + "(";
+                    invoke = _definition.FullyQualifiedNativeName + "::" + f.NativeName + "(";
                 }
             }
             else
@@ -715,7 +715,7 @@ namespace AutoWrap.Meta
                     _code.AppendLine("    if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                     _code.AppendLine("    if (clr->_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'obj' is null.\");");
                     _code.AppendEmptyLine();
-                    _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullNativeName + "*>(clr->_native));");
+                    _code.AppendLine("    return " + GetNativeInvokationTargetObject() + " == *(static_cast<" + _definition.FullyQualifiedNativeName + "*>(clr->_native));");
                     _code.AppendLine("}\n");
 
                     if (!_definition.HasWrapType(WrapTypes.NativePtrValueType))

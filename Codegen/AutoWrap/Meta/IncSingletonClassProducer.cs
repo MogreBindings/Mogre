@@ -58,7 +58,7 @@ namespace AutoWrap.Meta
 
         protected override void AddDisposerBody()
         {
-            _code.AppendLine("_native = " + _definition.FullNativeName + "::getSingletonPtr();");
+            _code.AppendLine("_native = " + _definition.FullyQualifiedNativeName + "::getSingletonPtr();");
 
             base.AddDisposerBody();
 
@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
 
             if (_definition.BaseClass == null)
             {
-                _code.AppendLine(_definition.FullNativeName + "* _native;");
+                _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
                 _code.AppendLine("bool _createdByCLR;");
             }
         }
@@ -83,9 +83,9 @@ namespace AutoWrap.Meta
             base.AddInternalConstructors();
 
             if (_definition.BaseClass == null)
-                _code.AppendLine(_definition.CLRName + "( " + _definition.FullNativeName + "* obj ) : _native(obj)");
+                _code.AppendLine(_definition.CLRName + "( " + _definition.FullyQualifiedNativeName + "* obj ) : _native(obj)");
             else
-                _code.AppendLine(_definition.CLRName + "( " + _definition.FullNativeName + "* obj ) : " + _definition.BaseClass.CLRName + "(obj)");
+                _code.AppendLine(_definition.CLRName + "( " + _definition.FullyQualifiedNativeName + "* obj ) : " + _definition.BaseClass.CLRName + "(obj)");
 
             _code.AppendLine("{");
             _code.IncreaseIndent();
@@ -103,7 +103,7 @@ namespace AutoWrap.Meta
             _code.AppendLine("{");
             _code.IncreaseIndent();
                 
-            _code.AppendLine(_definition.FullNativeName + "* ptr = " + _definition.FullNativeName + "::getSingletonPtr();");
+            _code.AppendLine(_definition.FullyQualifiedNativeName + "* ptr = " + _definition.FullyQualifiedNativeName + "::getSingletonPtr();");
             _code.AppendLine("if (_singleton == CLR_NULL || _singleton->_native != ptr)");
             _code.AppendLine("{");
             _code.IncreaseIndent();

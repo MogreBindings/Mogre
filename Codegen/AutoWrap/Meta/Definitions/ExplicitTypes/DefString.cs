@@ -4,7 +4,7 @@ namespace AutoWrap.Meta
 {
     class DefString : AbstractTypeDefinition, IDefString
     {
-        public override string FullNativeName
+        public override string FullyQualifiedNativeName
         {
             get { return "std::string"; }
         }
@@ -86,7 +86,7 @@ namespace AutoWrap.Meta
                     newname = "o_" + name;
                     return "DECLARE_NATIVE_STRING( o_" + name + ", " + name + " )\n";
                 case PassedByType.Pointer:
-                    string expr = FullNativeName + "* arr_" + name + " = new " + FullNativeName + "[" + name + "->Length];\n";
+                    string expr = FullyQualifiedNativeName + "* arr_" + name + " = new " + FullyQualifiedNativeName + "[" + name + "->Length];\n";
                     expr += "for (int i=0; i < " + name + "->Length; i++)\n";
                     expr += "{\n";
                     expr += "\tSET_NATIVE_STRING( arr_" + name + "[i], " + name + "[i] )\n";

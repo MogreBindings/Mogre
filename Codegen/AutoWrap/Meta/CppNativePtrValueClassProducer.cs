@@ -101,7 +101,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreatorOverload(MemberMethodDefinition f, int count)
         {
-            _code.AppendIndent(_definition.FullCLRName + " " + GetClassName() + "::Create");
+            _code.AppendIndent(_definition.FullyQualifiedCLRName + " " + GetClassName() + "::Create");
             if (f == null)
                 _code.Append("()");
             else
@@ -123,7 +123,7 @@ namespace AutoWrap.Meta
             }
 
             _code.AppendLine(_definition.CLRName + " ptr;");
-            _code.AppendIndent("ptr._native = new " + _definition.FullNativeName + "(");
+            _code.AppendIndent("ptr._native = new " + _definition.FullyQualifiedNativeName + "(");
 
             if (count > 0)
             {

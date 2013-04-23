@@ -196,7 +196,7 @@ namespace AutoWrap.Meta
 
         protected override void AddMethod(MemberMethodDefinition f)
         {
-            _code.AppendIndent(f.Definition.Replace(f.ContainingClass.FullNativeName + "::", "") + "(");
+            _code.AppendIndent(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
@@ -214,7 +214,7 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _code.AppendLine("class " + DirectorName + " : public " + _definition.FullNativeName);
+            _code.AppendLine("class " + DirectorName + " : public " + _definition.FullyQualifiedNativeName);
         }
 
         protected override void AddProtectedDeclarations()

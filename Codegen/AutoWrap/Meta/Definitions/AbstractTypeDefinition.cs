@@ -113,30 +113,14 @@ namespace AutoWrap.Meta
             get { return _definingXmlElement; }
         }
 
-        public virtual string Name
-        {
-            get { return _definingXmlElement.GetAttribute("name"); }
-        }
-
-        public virtual string CLRName
-        {
-            get
-            {
-                if (HasAttribute<RenameAttribute>())
-                    return GetAttribute<RenameAttribute>().Name;
-                else
-                    return Name;
-            }
-        }
-
         public virtual string IncludeFile
         {
             get
             {
                 if (_definingXmlElement == null)
                     return null;
-                else
-                    return _definingXmlElement.GetAttribute("includeFile");
+                
+                return _definingXmlElement.GetAttribute("includeFile");
             }
         }
 
@@ -148,6 +132,22 @@ namespace AutoWrap.Meta
         public virtual bool IsReadOnly
         {
             get { return HasAttribute<ReadOnlyAttribute>(); }
+        }
+
+        public virtual string Name
+        {
+            get { return _definingXmlElement.GetAttribute("name"); }
+        }
+
+        public virtual string CLRName
+        {
+            get
+            {
+                if (HasAttribute<RenameAttribute>())
+                    return GetAttribute<RenameAttribute>().Name;
+                
+                return Name;
+            }
         }
 
         /// <summary>
@@ -166,79 +166,34 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Denotes whether this type is nested within a surrounding class.
         /// </summary>
+        /// <seealso cref="SurroundingClass"/>
         public virtual bool IsNested
         {
             get { return SurroundingClass != null; }
         }
 
-        public virtual string ParentNativeName
-        {
-            get
-            {
-                switch (_definingXmlElement.ParentNode.Name)
-                {
-                    case "class":
-                        return ClassDefinition.GetName(_definingXmlElement.ParentNode as XmlElement);
-                    case "namespace":
-                        return Namespace.NativeName;
-                    default:
-                        throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
-                }
-            }
-        }
-
-        public virtual string ParentFullNativeName
-        {
-            get
-            {
-                switch (_definingXmlElement.ParentNode.Name)
-                {
-                    case "class":
-                        return ClassDefinition.GetFullName(_definingXmlElement.ParentNode as XmlElement);
-                    case "namespace":
-                        return Namespace.CLRName;
-                    default:
-                        throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
-                }
-            }
-        }
-
-        public virtual string RealFullNativeName
+        /// <summary>
+        /// The fully qualified name of this type (i.e. prefixed with the FQN of the surrounding class or namespace).
+        /// </summary>
+        public virtual string FullyQualifiedNativeName
         {
             get
             {
                 if (SurroundingClass != null)
-                    return SurroundingClass.RealFullNativeName + "::" + Name;
-                else
-                    return Namespace.NativeName + "::" + Name;
+                    return SurroundingClass.FullyQualifiedNativeName + "::" + Name;
+
+                return Namespace.NativeName + "::" + Name;
             }
         }
 
-        public virtual string FullNativeName
-        {
-            get { return RealFullNativeName; }
-        }
-
-        public virtual string FullCLRName
+        public virtual string FullyQualifiedCLRName
         {
             get
             {
                 if (SurroundingClass != null)
-                {
-                    if (!SurroundingClass.IsInterface)
-                    {
-                        return SurroundingClass.FullCLRName + "::" + CLRName;
-                    }
-                    else
-                    {
-                        string name = SurroundingClass.FullCLRName.Replace("::" + SurroundingClass.CLRName, "::" + SurroundingClass.Name);
-                        return name + "::" + CLRName;
-                    }
-                }
-                else
-                {
-                    return Namespace.CLRName + "::" + CLRName;
-                }
+                    return SurroundingClass.FullyQualifiedCLRName + "::" + CLRName;
+
+                return Namespace.CLRName + "::" + CLRName;
             }
         }
 
@@ -257,6 +212,8 @@ namespace AutoWrap.Meta
         /// Used for types defined in the meta.xml file.
         /// </summary>
         /// <param name="nsDef">the namespace in which this type is defined. Must not be <c>null</c>.</param>
+        /// <param name="surroundingClass">The class this type definition is nested in or <c>null</c> if it's not nested.
+        /// In the former case the namespace of the class must be identical to the namespace passed as argument.</param>
         /// <param name="elem">the XML element describing the type</param>
         protected AbstractTypeDefinition(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef.MetaDef)
@@ -345,7 +302,7 @@ namespace AutoWrap.Meta
                 default:
                     throw new Exception("Unexpected");
             }
-            return (isConst ? "const " : "") + FullNativeName + postfix;
+            return (isConst ? "const " : "") + FullyQualifiedNativeName + postfix;
         }
 
         public abstract string GetCLRTypeName(ITypeMember m);

@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
 
             if (_definition.BaseClass == null)
             {
-                _code.AppendLine(_definition.FullNativeName + "* _native;");
+                _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
                 _code.AppendLine("bool _createdByCLR;");
                 _code.AppendEmptyLine();
             }
@@ -69,8 +69,8 @@ namespace AutoWrap.Meta
                 _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
             else
             {
-                string clrName = _definition.FullCLRName.Substring(_definition.FullCLRName.IndexOf("::") + 2);
-                string nativeName = _definition.FullNativeName.Substring(_definition.FullNativeName.IndexOf("::") + 2);
+                string clrName = _definition.FullyQualifiedCLRName.Substring(_definition.FullyQualifiedCLRName.IndexOf("::") + 2);
+                string nativeName = _definition.FullyQualifiedNativeName.Substring(_definition.FullyQualifiedNativeName.IndexOf("::") + 2);
                 _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
             }
         }
@@ -81,12 +81,12 @@ namespace AutoWrap.Meta
 
             if (_definition.BaseClass == null)
             {
-                _code.AppendFormatIndent("{0}( " + _definition.FullNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _definition.CLRName);
+                _code.AppendFormatIndent("{0}( " + _definition.FullyQualifiedNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _definition.CLRName);
             }
             else
             {
                 ClassDefinition topclass = GetTopClass(_definition);
-                _code.AppendFormatIndent("{0}( " + topclass.FullNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _definition.CLRName);
+                _code.AppendFormatIndent("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _definition.CLRName);
             }
             _code.AppendLine("{");
             _code.IncreaseIndent();

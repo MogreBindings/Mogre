@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _code.AppendIndent("class " + ProxyName + " : public " + _definition.FullNativeName);
+            _code.AppendIndent("class " + ProxyName + " : public " + _definition.FullyQualifiedNativeName);
             if (_definition.IsInterface)
                 _code.Append(", public CLRObject");
             _code.Append("\n");
@@ -67,7 +67,7 @@ namespace AutoWrap.Meta
             string className;
             if (_definition.IsNested)
             {
-                className = _definition.SurroundingClass.FullCLRName + "::" + _definition.Name;
+                className = _definition.SurroundingClass.FullyQualifiedCLRName + "::" + _definition.Name;
             }
             else
             {
@@ -118,7 +118,7 @@ namespace AutoWrap.Meta
             string className;
             if (_definition.IsNested)
             {
-                className = _definition.SurroundingClass.FullCLRName + "::" + _definition.Name;
+                className = _definition.SurroundingClass.FullyQualifiedCLRName + "::" + _definition.Name;
             }
             else
             {
@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
 
             if (f != null)
             {
-                _code.AppendIndent("\t" + _definition.FullNativeName + "(");
+                _code.AppendIndent("\t" + _definition.FullyQualifiedNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -192,8 +192,8 @@ namespace AutoWrap.Meta
                 SourceCodeStringBuilder tempsb = _code;
                 _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
                 base.Add();
-                string fname = _definition.FullCLRName.Replace(_definition.CLRName, _definition.Name);
-                string res = _code.ToString().Replace(_definition.FullCLRName + "::", fname + "::");
+                string fname = _definition.FullyQualifiedCLRName.Replace(_definition.CLRName, _definition.Name);
+                string res = _code.ToString().Replace(_definition.FullyQualifiedCLRName + "::", fname + "::");
                 _code = tempsb;
                 _code.AppendLine(res);
             }
@@ -288,7 +288,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullNativeName + "::" + field.NativeName;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullyQualifiedNativeName + "::" + field.NativeName;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)
@@ -387,7 +387,7 @@ namespace AutoWrap.Meta
 
         protected override string GetBaseAndInterfaces()
         {
-            return _definition.FullCLRName;
+            return _definition.FullyQualifiedCLRName;
         }
 
         protected override void AddPrivateDeclarations()

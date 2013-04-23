@@ -192,7 +192,7 @@ namespace AutoWrap.Meta
 
         public virtual string ClassFullNativeName
         {
-            get { return _definition.FullNativeName; }
+            get { return _definition.FullyQualifiedNativeName; }
         }
 
         public virtual bool IsNativeClass
@@ -308,7 +308,7 @@ namespace AutoWrap.Meta
             else
             {
                 if (f.ProtectionLevel == ProtectionLevel.Public)
-                    return f.ContainingClass.FullNativeName + "::" + f.NativeName;
+                    return f.ContainingClass.FullyQualifiedNativeName + "::" + f.NativeName;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(f.ContainingClass) + "::" + f.NativeName;
             }
@@ -332,7 +332,7 @@ namespace AutoWrap.Meta
             else
             {
                 if (field.ProtectionLevel == ProtectionLevel.Public)
-                    return field.ContainingClass.FullNativeName + "::" + field.NativeName;
+                    return field.ContainingClass.FullyQualifiedNativeName + "::" + field.NativeName;
                 else
                     return NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(field.ContainingClass) + "::" + field.NativeName;
             }
@@ -457,7 +457,7 @@ namespace AutoWrap.Meta
 
         protected virtual string GetClassName()
         {
-            string full = _definition.FullCLRName;
+            string full = _definition.FullyQualifiedCLRName;
             int index = full.IndexOf("::");
             return full.Substring(index + 2);
         }

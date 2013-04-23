@@ -38,7 +38,7 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                 case PassedByType.Value:
-                    newname = "ToNative<" + ConversionTypeName + ", " + FullNativeName + ">( " + param.Name + ")";
+                    newname = "ToNative<" + ConversionTypeName + ", " + FullyQualifiedNativeName + ">( " + param.Name + ")";
                     return "";
                 default:
                     throw new Exception("Unexpected");
@@ -63,7 +63,7 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                 case PassedByType.Value:
-                    return "ToManaged<" + ConversionTypeName + ", " + FullNativeName + ">( " + expr + " )";
+                    return "ToManaged<" + ConversionTypeName + ", " + FullyQualifiedNativeName + ">( " + expr + " )";
                 default:
                     throw new Exception("Unexpected");
             }

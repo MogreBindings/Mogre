@@ -36,7 +36,7 @@ namespace AutoWrap.Meta
 
         public static string GetProxyName(ClassDefinition type)
         {
-            string name = type.FullNativeName;
+            string name = type.FullyQualifiedNativeName;
             name = name.Substring(name.IndexOf("::") + 2);
             return name.Replace("::", "_") + "_Proxy";
         }

@@ -21,14 +21,14 @@ namespace AutoWrap.Meta
             }
         }
 
-        public override string FullCLRName
+        public override string FullyQualifiedCLRName
         {
             get
             {
                 if (IsUnnamedSTLContainer)
                     return CLRName;
 
-                return base.FullCLRName;
+                return base.FullyQualifiedCLRName;
             }
         }
 
@@ -58,9 +58,9 @@ namespace AutoWrap.Meta
                 case PassedByType.Reference:
                 case PassedByType.Pointer:
                     if (param.IsConst)
-                        return FullCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
-                    
-                    return FullCLRName + "^";
+                        return FullyQualifiedCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
+
+                    return FullyQualifiedCLRName + "^";
                 default:
                     throw new Exception("Unexpected");
             }
@@ -84,14 +84,14 @@ namespace AutoWrap.Meta
                 case PassedByType.Reference:
                 case PassedByType.Pointer:
                     if (m.IsConst)
-                        return FullCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
-                    
-                    return FullCLRName + "^";
+                        return FullyQualifiedCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
+
+                    return FullyQualifiedCLRName + "^";
                 case PassedByType.Value:
                     if (m.IsConst || IsReadOnly)
-                        return FullCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
-                    
-                    return FullCLRName + "^";
+                        return FullyQualifiedCLRName.Replace(CLRName, "Const_" + CLRName) + "^";
+
+                    return FullyQualifiedCLRName + "^";
                 default:
                     throw new Exception("Unexpected");
             }
@@ -106,15 +106,15 @@ namespace AutoWrap.Meta
                     return expr;
                 case PassedByType.Value:
                     if (m.IsConst || IsReadOnly)
-                        return FullCLRName + "::ByValue( " + expr + " )->ReadOnlyInstance";
-                    
-                    return FullCLRName + "::ByValue( " + expr + " )";
+                        return FullyQualifiedCLRName + "::ByValue( " + expr + " )->ReadOnlyInstance";
+
+                    return FullyQualifiedCLRName + "::ByValue( " + expr + " )";
                 default:
                     throw new Exception("Unexpected");
             }
         }
 
-        public override string FullNativeName
+        public override string FullyQualifiedNativeName
         {
             get
             {
@@ -124,7 +124,7 @@ namespace AutoWrap.Meta
                 if (ProtectionLevel == ProtectionLevel.Protected)
                     return NativeProtectedTypesProxy.GetProtectedTypesProxyName(SurroundingClass) + "::" + Name;
 
-                return base.FullNativeName;
+                return base.FullyQualifiedNativeName;
             }
         }
 

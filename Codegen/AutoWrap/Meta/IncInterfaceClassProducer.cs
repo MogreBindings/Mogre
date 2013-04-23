@@ -58,8 +58,8 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _definition.CLRName + ", " + _definition.FullNativeName + " )\n");
-            _code.AppendLine("virtual " + _definition.FullNativeName + "* _GetNativePtr();\n");
+            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _definition.CLRName + ", " + _definition.FullyQualifiedNativeName + " )\n");
+            _code.AppendLine("virtual " + _definition.FullyQualifiedNativeName + "* _GetNativePtr();\n");
             base.AddPublicDeclarations();
         }
 

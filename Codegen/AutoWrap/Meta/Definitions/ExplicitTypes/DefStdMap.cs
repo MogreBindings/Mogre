@@ -64,7 +64,7 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
                 }
 
-                return "FillMapFromSortedList<" + FullNativeName + ", " + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">";
+                return "FillMapFromSortedList<" + FullyQualifiedNativeName + ", " + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">";
             }
         }
 
@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
                     throw new Exception("Unexpected");
                 }
 
-                return "GetSortedListFromMap<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ", " + FullNativeName + ">";
+                return "GetSortedListFromMap<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ", " + FullyQualifiedNativeName + ">";
             }
         }
 
@@ -112,15 +112,15 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.Reference:
-                    expr = FullNativeName + " o_" + param.Name + ";\n";
+                    expr = FullyQualifiedNativeName + " o_" + param.Name + ";\n";
                     expr += PreCallConversionFunction + "(o_" + param.Name + ", " + param.Name + ");\n";
                     newname = "o_" + param.Name;
                     return expr;
                 case PassedByType.Pointer:
                     if (param.IsConst)
                     {
-                        expr = FullNativeName + "* p_" + param.Name + " = 0;\n";
-                        expr += FullNativeName + " o_" + param.Name + ";\n";
+                        expr = FullyQualifiedNativeName + "* p_" + param.Name + " = 0;\n";
+                        expr += FullyQualifiedNativeName + " o_" + param.Name + ";\n";
                         expr += "if (" + param.Name + " != CLR_NULL)\n{\n";
                         expr += "\t" + PreCallConversionFunction + "(o_" + param.Name + ", " + param.Name + ");\n";
                         expr += "\tp_" + param.Name + " = &o_" + param.Name + ";\n";

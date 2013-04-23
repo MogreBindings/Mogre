@@ -48,7 +48,7 @@ namespace AutoWrap.Meta
                 case PassedByType.Pointer:
                     if (!param.IsConst)
                     {
-                        preConversion = FullCLRName + " out_" + param.Name + ";";
+                        preConversion = FullyQualifiedCLRName + " out_" + param.Name + ";";
                         conversion = "out_" + param.Name;
                         return;
                     }
@@ -118,12 +118,12 @@ namespace AutoWrap.Meta
             {
                 case PassedByType.Reference:
                     newname = "*p_" + param.Name;
-                    return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                    return "pin_ptr<" + FullyQualifiedCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
                 case PassedByType.Pointer:
                     if (!param.IsConst && !param.HasAttribute<RawPointerParamAttribute>())
                     {
                         newname = "p_" + param.Name;
-                        return "pin_ptr<" + FullCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
+                        return "pin_ptr<" + FullyQualifiedCLRName + "> p_" + param.Name + " = &" + param.Name + ";\n";
                     }
 
                     //Treat it as array
@@ -171,7 +171,7 @@ namespace AutoWrap.Meta
                         return "void*";
                     
                     if (m.HasAttribute<ArrayTypeAttribute>())
-                        return "array<" + FullCLRName + ">^";
+                        return "array<" + FullyQualifiedCLRName + ">^";
                     
                     string name = Name + "*";
                     if (m.IsConst)
@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
                     if (m.HasAttribute<ArrayTypeAttribute>())
                     {
                         int len = m.GetAttribute<ArrayTypeAttribute>().Length;
-                        return "GetValueArrayFromNativeArray<" + FullCLRName + ", " + FullNativeName + ">( " + expr + " , " + len + " )";
+                        return "GetValueArrayFromNativeArray<" + FullyQualifiedCLRName + ", " + FullyQualifiedNativeName + ">( " + expr + " , " + len + " )";
                     }
                     
                     return expr;
@@ -218,12 +218,12 @@ namespace AutoWrap.Meta
             get { return _name; }
         }
 
-        public override string FullCLRName
+        public override string FullyQualifiedCLRName
         {
             get { return Name; }
         }
 
-        public override string FullNativeName
+        public override string FullyQualifiedNativeName
         {
             get { return Name; }
         }

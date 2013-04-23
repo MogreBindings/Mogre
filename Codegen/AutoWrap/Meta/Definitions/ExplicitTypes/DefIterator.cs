@@ -65,7 +65,7 @@ namespace AutoWrap.Meta
             switch (param.PassedByType)
             {
                 case PassedByType.Value:
-                    return FullCLRName + "^";
+                    return FullyQualifiedCLRName + "^";
                 default:
                     throw new Exception("Unexpected");
             }
@@ -76,7 +76,7 @@ namespace AutoWrap.Meta
             switch (m.PassedByType)
             {
                 case PassedByType.Value:
-                    return FullCLRName + "^";
+                    return FullyQualifiedCLRName + "^";
                 default:
                     throw new Exception("Unexpected");
             }
