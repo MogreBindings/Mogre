@@ -644,9 +644,12 @@ namespace AutoWrap.Meta
             get { return _isDirectSubclassOfCLRObject; }
         }
 
-        protected bool _baseClassSearched = false;
-        protected ClassDefinition _baseClass = null;
-
+        private bool _baseClassSearched = false;
+        private ClassDefinition _baseClass = null;
+        /// <summary>
+        /// The base class of this class. Is <c>null</c>, if there is no base class (i.e. the base class is
+        /// <c>object</c>).
+        /// </summary>
         public virtual ClassDefinition BaseClass
         {
             get
@@ -658,6 +661,7 @@ namespace AutoWrap.Meta
 
                 if (HasAttribute<BaseClassAttribute>())
                 {
+                    // Explicit base class name
                     string basename = GetAttribute<BaseClassAttribute>().Name;
                     _baseClass = this.FindType<ClassDefinition>(basename);
                 }
