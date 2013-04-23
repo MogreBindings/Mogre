@@ -294,6 +294,11 @@ namespace AutoWrap.Meta
             return false;
         }
         
+        /// <summary>
+        /// Denotes whether this type definition has the specified wrap type. This is it has the <see cref="WrapTypeAttribute"/>
+        /// defined with the specified value.
+        /// </summary>
+        /// <param name="wrapType">the expected wrap type</param>
         public virtual bool HasWrapType(WrapTypes wrapType)
         {
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
