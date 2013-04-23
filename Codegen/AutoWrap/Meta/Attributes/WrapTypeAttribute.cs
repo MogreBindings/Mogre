@@ -26,15 +26,32 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// The wrap types used for the <see cref="WrapTypeAttribute"/>. Note that each type definition
+    /// can only have one of these types.
+    /// </summary>
     public enum WrapTypes
     {
+        /// <summary>
+        /// Denotes that the class can't be subclassed (i.e. that it's <c>sealed</c>).
+        /// </summary>
         NonOverridable, 
         /// <summary>
         /// Denotes that the class can be subclassed (i.e. inherited from).
         /// </summary>
-        Overridable, 
-        NativeDirector, 
+        Overridable,
+        /// <summary>
+        /// ???
+        /// </summary>
+        NativeDirector,
+        /// <summary>
+        /// Denotes that the type is an CLR interface. A C++ class must be abstract and none of its methods
+        /// must be implemented.
+        /// </summary>
         Interface,
+        /// <summary>
+        /// Denotes a singleton. Generating classes: <see cref="IncSingletonClassProducer"/> and <see cref="CppSingletonClassProducer"/>
+        /// </summary>
         Singleton, 
         SharedPtr, 
         ReadOnlyStruct, 
@@ -44,6 +61,10 @@ namespace AutoWrap.Meta
         PlainWrapper
     }
 
+    /// <summary>
+    /// This attribute specifies how the specified type is wrapped. More precisly: Specifies which code producer
+    /// class to be used (see <see cref="Wrapper.IncAddType"/>).
+    /// </summary>
     public class WrapTypeAttribute : AutoWrapAttribute
     {
         public WrapTypes WrapType;

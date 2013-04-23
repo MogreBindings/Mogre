@@ -83,9 +83,8 @@ namespace AutoWrap.Meta
                     //   which then would lead to "FindType()" failing (as the type hasn't been added yet).
                     if (_container != "")
                     {
-                        _memberType = CreateExplicitContainerType(_containingClass.NameSpace, _container, _containerKey,
+                        _memberType = TypedefDefinition.CreateExplicitCollectionType(_containingClass, _container, _containerKey,
                             (_containerValue != "") ? _containerValue : _typeName);
-                        _memberType.SurroundingClass = ContainingClass;
                     } else
                         _memberType = ContainingClass.FindType<AbstractTypeDefinition>(_typeName, false);
                 }

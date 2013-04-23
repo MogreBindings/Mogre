@@ -44,11 +44,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefStdMultiMap(typedef.NameSpace, typedef.DefiningXmlElement);
+            return new DefStdMultiMap(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
         }
 
-        public DefStdMultiMap(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public DefStdMultiMap(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
         }
     }

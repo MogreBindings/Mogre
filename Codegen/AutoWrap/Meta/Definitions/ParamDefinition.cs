@@ -102,8 +102,7 @@ namespace AutoWrap.Meta
                     //   which then would lead to "FindType()" failing (as the type hasn't been added yet).
                     if (Container != "")
                     {
-                        _type = CreateExplicitContainerType(Function.ContainingClass.NameSpace, Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
-                        _type.SurroundingClass = Function.ContainingClass;
+                        _type = TypedefDefinition.CreateExplicitCollectionType(Function.ContainingClass, Container, ContainerKey, (ContainerValue != "") ? ContainerValue : TypeName);
                     }
                     else
                         _type = Function.ContainingClass.FindType<AbstractTypeDefinition>(TypeName, false);
@@ -113,6 +112,9 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// The type 
+        /// </summary>
         public virtual string Container
         {
             get { return (_elem.ChildNodes[0] as XmlElement).GetAttribute("container"); }

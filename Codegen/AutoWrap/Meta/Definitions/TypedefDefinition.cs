@@ -114,17 +114,42 @@ namespace AutoWrap.Meta
             }
             else if (typedef.Name == "String")
             {
-                expl = new DefStringTypeDef(typedef.NameSpace, typedef.DefiningXmlElement);
+                expl = new DefStringTypeDef(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
             }
 
             if (expl != null)
             {
-                expl.SurroundingClass = typedef.SurroundingClass;
                 expl.LinkAttributes(typedef);
                 return expl;
             }
 
             return typedef;
+        }
+
+        /// <summary>
+        /// Creates a type definition for a collection type (e.g. a list or a map).
+        /// </summary>
+        public static TypedefDefinition CreateExplicitCollectionType(ClassDefinition surroundingClass, string container, string key, string val)
+        {
+            string stdcont = "std::" + container;
+            XmlDocument doc = new XmlDocument();
+
+            XmlElement elem = doc.CreateElement("typedef");
+            elem.SetAttribute("basetype", stdcont);
+            elem.SetAttribute("name", stdcont);
+
+            XmlElement te = doc.CreateElement("type");
+            te.InnerText = val;
+            elem.AppendChild(te);
+
+            if (key != "")
+            {
+                te = doc.CreateElement("type");
+                te.InnerText = key;
+                elem.InsertAfter(te, null);
+            }
+
+            return CreateExplicitType(surroundingClass.Namespace.MetaDef.Factory.CreateTypedef(surroundingClass.Namespace, surroundingClass, elem));
         }
 
         public override bool IsIgnored
@@ -209,8 +234,8 @@ namespace AutoWrap.Meta
             get { return BaseTypeName.StartsWith("SharedPtr"); }
         }
 
-        public TypedefDefinition(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public TypedefDefinition(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
             if (elem.Name != "typedef")
                 throw new Exception("Not typedef element");

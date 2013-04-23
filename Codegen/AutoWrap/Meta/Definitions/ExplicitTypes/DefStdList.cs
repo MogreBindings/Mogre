@@ -180,7 +180,7 @@ namespace AutoWrap.Meta
                 case "std::deque":
                     return DefStdDeque.CreateExplicitType(typedef);
                 case "std::list":
-                    return new DefStdList(typedef.NameSpace, typedef.DefiningXmlElement);
+                    return new DefStdList(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
                 case "HashedVector":
                     return DefHashedVector.CreateExplicitType(typedef);
                 case "std::map":
@@ -190,8 +190,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefStdList(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public DefStdList(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
         }
     }

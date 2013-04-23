@@ -91,29 +91,6 @@ namespace AutoWrap.Meta
             return true;
         }
 
-        /// <summary>
-        /// Creates a typedefinition.
-        /// </summary>
-        protected virtual AbstractTypeDefinition CreateExplicitContainerType(NamespaceDefinition nsDef, string container, string key, string val)
-        {
-            string stdcont = "std::" + container;
-            XmlDocument doc = new XmlDocument();
-            XmlElement elem = doc.CreateElement("typedef");
-            elem.SetAttribute("basetype", stdcont);
-            elem.SetAttribute("name", stdcont);
-            XmlElement te = doc.CreateElement("type");
-            te.InnerText = val;
-            elem.AppendChild(te);
-            if (key != "")
-            {
-                te = doc.CreateElement("type");
-                te.InnerText = key;
-                elem.InsertAfter(te, null);
-            }
-
-            return TypedefDefinition.CreateExplicitType(this.MetaDef.Factory.CreateTypedef(nsDef, elem));
-        }
-
         protected virtual string NameToPrivate(string name)
         {
             return "_" + Char.ToLower(name[0]) + name.Substring(1);

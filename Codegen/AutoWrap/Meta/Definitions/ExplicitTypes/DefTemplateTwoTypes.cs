@@ -147,8 +147,8 @@ namespace AutoWrap.Meta
             }
         }
 
-        public DefTemplateTwoTypes(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public DefTemplateTwoTypes(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
         }
     }

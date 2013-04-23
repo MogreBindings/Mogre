@@ -96,7 +96,7 @@ namespace AutoWrap.Meta
                     if (SurroundingClass != null)
                         _replaceByType = SurroundingClass.FindType(name, false);
                     else
-                        _replaceByType = NameSpace.FindType(name, false);
+                        _replaceByType = Namespace.FindType(name, false);
                 }
 
                 return _replaceByType;
@@ -153,7 +153,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// The namespace this type is defined in. Is never <c>null</c>.
         /// </summary>
-        public readonly NamespaceDefinition NameSpace;
+        public readonly NamespaceDefinition Namespace;
         
         public ProtectionLevel ProtectionLevel;
 
@@ -161,7 +161,7 @@ namespace AutoWrap.Meta
         /// The class this type is nested within or <c>null</c> if this type is not nested.
         /// </summary>
         /// <seealso cref="IsNested"/>
-        public ClassDefinition SurroundingClass;
+        public readonly ClassDefinition SurroundingClass;
 
         /// <summary>
         /// Denotes whether this type is nested within a surrounding class.
@@ -180,7 +180,7 @@ namespace AutoWrap.Meta
                     case "class":
                         return ClassDefinition.GetName(_definingXmlElement.ParentNode as XmlElement);
                     case "namespace":
-                        return this.NameSpace.NativeName;
+                        return Namespace.NativeName;
                     default:
                         throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
                 }
@@ -196,7 +196,7 @@ namespace AutoWrap.Meta
                     case "class":
                         return ClassDefinition.GetFullName(_definingXmlElement.ParentNode as XmlElement);
                     case "namespace":
-                        return this.NameSpace.CLRName;
+                        return Namespace.CLRName;
                     default:
                         throw new Exception("Unknown parent type '" + _definingXmlElement.ParentNode.Name + "'");
                 }
@@ -210,7 +210,7 @@ namespace AutoWrap.Meta
                 if (SurroundingClass != null)
                     return SurroundingClass.RealFullNativeName + "::" + Name;
                 else
-                    return NameSpace.NativeName + "::" + Name;
+                    return Namespace.NativeName + "::" + Name;
             }
         }
 
@@ -237,7 +237,7 @@ namespace AutoWrap.Meta
                 }
                 else
                 {
-                    return NameSpace.CLRName + "::" + CLRName;
+                    return Namespace.CLRName + "::" + CLRName;
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace AutoWrap.Meta
         protected AbstractTypeDefinition(NamespaceDefinition nsDef) : base(nsDef.MetaDef)
         {
             // If the namespace is "null", then "nsDef.MetaDef" will throw a NullPointerException
-            this.NameSpace = nsDef;
+            Namespace = nsDef;
         }
 
         /// <summary>
@@ -258,11 +258,15 @@ namespace AutoWrap.Meta
         /// </summary>
         /// <param name="nsDef">the namespace in which this type is defined. Must not be <c>null</c>.</param>
         /// <param name="elem">the XML element describing the type</param>
-        protected AbstractTypeDefinition(NamespaceDefinition nsDef, XmlElement elem)
+        protected AbstractTypeDefinition(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef.MetaDef)
         {
             this._definingXmlElement = elem;
-            this.NameSpace = nsDef;
+            Namespace = nsDef;
+            if (surroundingClass != null && surroundingClass.Namespace != nsDef) {
+                throw new ArgumentException("Namespaces don't match.");
+            }
+            SurroundingClass = surroundingClass;
             this.ProtectionLevel = GetProtectionEnum(elem.GetAttribute("protection"));
         }
 
@@ -283,8 +287,8 @@ namespace AutoWrap.Meta
             if (this.IsSharedPtr)
                 return false;
 
-            TypedefDefinition explicitType = this.IsNested ? this.SurroundingClass.FindType<TypedefDefinition>(this.Name) 
-                                                            : this.NameSpace.FindType<TypedefDefinition>(this.Name);
+            TypedefDefinition explicitType = IsNested ? SurroundingClass.FindType<TypedefDefinition>(Name)
+                                                            : Namespace.FindType<TypedefDefinition>(Name);
             if (explicitType.IsSTLContainer)
                 return false;
 
@@ -404,10 +408,10 @@ namespace AutoWrap.Meta
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return NameSpace.FindType<T>(name, raiseException);
+                return Namespace.FindType<T>(name, raiseException);
             }
 
-            return (this.IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : NameSpace.FindType<T>(name, raiseException);
+            return (IsNested) ? SurroundingClass.FindType<T>(name, raiseException) : Namespace.FindType<T>(name, raiseException);
         }
 
         public override string ToString()

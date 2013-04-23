@@ -137,7 +137,7 @@ namespace AutoWrap.Meta
             //
             foreach (XmlElement child in elem.ChildNodes)
             {
-                AbstractTypeDefinition type = MetaDef.Factory.CreateType(this, child);
+                AbstractTypeDefinition type = MetaDef.Factory.CreateType(this, null, child);
                 if (type != null)
                     _containedTypes.Add(type);
             }

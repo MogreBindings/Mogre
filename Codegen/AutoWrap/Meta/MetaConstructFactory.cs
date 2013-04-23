@@ -15,24 +15,24 @@ namespace AutoWrap.Meta
             return new NamespaceDefinition(metaDef, elem);
         }
   
-        public virtual ClassDefinition CreateClass(NamespaceDefinition nsDef, XmlElement elem)
+        public virtual ClassDefinition CreateClass(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
         {
-            return new ClassDefinition(nsDef, elem);
-        }
-          
-        public virtual StructDefinition CreateStruct(NamespaceDefinition nsDef, XmlElement elem)
-        {
-            return new StructDefinition(nsDef, elem);
+            return new ClassDefinition(nsDef, surroundingClass, elem);
         }
 
-        public virtual TypedefDefinition CreateTypedef(NamespaceDefinition nsDef, XmlElement elem)
+        public virtual StructDefinition CreateStruct(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
         {
-            return new TypedefDefinition(nsDef, elem);
+            return new StructDefinition(nsDef, surroundingClass, elem);
         }
 
-        public virtual EnumDefinition CreateEnum(NamespaceDefinition nsDef, XmlElement elem)
+        public virtual TypedefDefinition CreateTypedef(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
         {
-            return new EnumDefinition(nsDef, elem);
+            return new TypedefDefinition(nsDef, surroundingClass, elem);
+        }
+
+        public virtual EnumDefinition CreateEnum(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+        {
+            return new EnumDefinition(nsDef, surroundingClass, elem);
         }
 
         /// <summary>
@@ -40,18 +40,18 @@ namespace AutoWrap.Meta
         /// create an instance from an apropriate subclass (e.g. <see cref="ClassDefinition"/> for a class).
         /// </summary>
         /// <returns>Returns the new instance or "null" in case of a global variable.</returns>
-        public AbstractTypeDefinition CreateType(NamespaceDefinition nsDef, XmlElement elem)
+        public AbstractTypeDefinition CreateType(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
         {
             switch (elem.Name)
             {
                 case "class":
-                    return CreateClass(nsDef, elem);
+                    return CreateClass(nsDef, surroundingClass, elem);
                 case "struct":
-                    return CreateStruct(nsDef, elem);
+                    return CreateStruct(nsDef, surroundingClass, elem);
                 case "typedef":
-                    return CreateTypedef(nsDef, elem);
+                    return CreateTypedef(nsDef, surroundingClass, elem);
                 case "enumeration":
-                    return CreateEnum(nsDef, elem);
+                    return CreateEnum(nsDef, surroundingClass, elem);
                 case "variable":
                     //It's global variables, ignore them
                     return null;

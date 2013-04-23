@@ -42,11 +42,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefSharedPtr(typedef.NameSpace, typedef.DefiningXmlElement);
+            return new DefSharedPtr(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
         }
 
-        public DefSharedPtr(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public DefSharedPtr(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
         }
     }

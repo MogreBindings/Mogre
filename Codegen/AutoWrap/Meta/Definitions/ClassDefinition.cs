@@ -593,6 +593,13 @@ namespace AutoWrap.Meta
             return ContainsFunctionSignature(signature, allowInheritedSignature, out f);
         }
 
+        /// <summary>
+        /// Indicates whether a method with the specified signature is part of this class.
+        /// </summary>
+        /// <param name="signature">the signature</param>
+        /// <param name="allowInheritedSignature">if this is <c>false</c> only this class will be
+        /// checked for the signature. Otherwise all base classes will be checked as well.</param>
+        /// <param name="basefunc">the method matching the signature</param>
         public virtual bool ContainsFunctionSignature(MethodSignature signature, bool allowInheritedSignature, out MemberMethodDefinition basefunc)
         {
             basefunc = null;
@@ -1039,7 +1046,7 @@ namespace AutoWrap.Meta
             if (name.StartsWith(this.MetaDef.NativeNamespace + "::"))
             {
                 name = name.Substring(name.IndexOf("::") + 2);
-                return NameSpace.FindType<T>(name, raiseException);
+                return Namespace.FindType<T>(name, raiseException);
             }
 
             List<AbstractTypeDefinition> list = new List<AbstractTypeDefinition>();
@@ -1064,7 +1071,7 @@ namespace AutoWrap.Meta
                 if (SurroundingClass != null)
                     return SurroundingClass.FindType<T>(name, raiseException);
                 else
-                    return NameSpace.FindType<T>(name, raiseException);
+                    return Namespace.FindType<T>(name, raiseException);
             }
             else if (list.Count > 1)
                 throw new Exception("Found more than one type");
@@ -1074,11 +1081,10 @@ namespace AutoWrap.Meta
             }
         }
 
-        public ClassDefinition(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public ClassDefinition(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
-            if (this.GetType() == typeof(ClassDefinition)
-                && elem.Name != "class")
+            if (GetType() == typeof(ClassDefinition) && elem.Name != "class")
                 throw new Exception("Not class element");
 
             foreach (XmlElement child in elem.ChildNodes)
@@ -1131,8 +1137,7 @@ namespace AutoWrap.Meta
                         break;
 
                     default:
-                        AbstractTypeDefinition type = MetaDef.Factory.CreateType(NameSpace, child);
-                        type.SurroundingClass = this;
+                        AbstractTypeDefinition type = MetaDef.Factory.CreateType(Namespace, this, child);
                         NestedTypes.Add(type);
                         break;
                 }

@@ -1,5 +1,8 @@
 ﻿namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// The native (C++) signature of a method. That is: method name, parameters (
+    /// </summary>
     public class MethodSignature
     {
         private readonly string _partialSignature;
@@ -10,6 +13,11 @@
             _partialSignature = methodDef.NativeName;
             foreach (ParamDefinition param in methodDef.Parameters)
             {
+                if (param.Container != "" || param.Array != "")
+                {
+                    int x = 0;
+                    x++;
+                }
                 _partialSignature += "|" + param.TypeName + "#" + param.PassedByType + "#" + param.Container + "#" + param.Array;
             }
 

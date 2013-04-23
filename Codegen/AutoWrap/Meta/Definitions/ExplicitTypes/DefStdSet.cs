@@ -16,11 +16,11 @@ namespace AutoWrap.Meta
 
         public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            return new DefStdSet(typedef.NameSpace, typedef.DefiningXmlElement);
+            return new DefStdSet(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
         }
 
-        public DefStdSet(NamespaceDefinition nsDef, XmlElement elem)
-            : base(nsDef, elem)
+        public DefStdSet(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
+            : base(nsDef, surroundingClass, elem)
         {
         }
     }
