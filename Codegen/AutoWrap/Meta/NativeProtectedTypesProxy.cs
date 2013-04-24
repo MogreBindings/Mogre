@@ -49,26 +49,26 @@ namespace AutoWrap.Meta
 
             if (HasProtectedTypes() || HasProtectedStaticFields())
             {
-                string className = GetProtectedTypesProxyName(_definition);
+                string className = GetProtectedTypesProxyName(_classDefinition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _code.AppendLine("class " + className + " : public " + _definition.FullyQualifiedNativeName);
-                _code.AppendLine("{");
-                _code.AppendLine("public:");
-                _code.IncreaseIndent();
+                _codeBuilder.AppendLine("class " + className + " : public " + _classDefinition.FullyQualifiedNativeName);
+                _codeBuilder.AppendLine("{");
+                _codeBuilder.AppendLine("public:");
+                _codeBuilder.IncreaseIndent();
 
-                className = _definition.FullyQualifiedCLRName;
+                className = _classDefinition.FullyQualifiedCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
-                if (_definition.IsInterface)
+                if (_classDefinition.IsInterface)
                 {
-                    className = className.Replace(_definition.CLRName, _definition.Name);
+                    className = className.Replace(_classDefinition.CLRName, _classDefinition.Name);
                 }
 
                 className = this.MetaDef.ManagedNamespace + "::" + className;
 
-                _code.AppendLine("friend ref class " + className + ";");
+                _codeBuilder.AppendLine("friend ref class " + className + ";");
 
-                foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
+                foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
                 {
                     AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
@@ -79,14 +79,14 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                _code.DecreaseIndent();
-                _code.AppendLine("};\n");
+                _codeBuilder.DecreaseIndent();
+                _codeBuilder.AppendLine("};\n");
             }
         }
 
         protected virtual bool HasProtectedTypes()
         {
-            foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
             {
                 AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
 
         protected virtual bool HasProtectedStaticFields()
         {
-            foreach (MemberFieldDefinition field in _definition.Fields)
+            foreach (MemberFieldDefinition field in _classDefinition.Fields)
             {
                 if (field.ProtectionLevel == ProtectionLevel.Protected
                     && field.IsStatic
@@ -119,7 +119,7 @@ namespace AutoWrap.Meta
         {
             if (nested.IsSTLContainer)
             {
-                _code.AppendLine("typedef " + _definition.FullyQualifiedNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
+                _codeBuilder.AppendLine("typedef " + _classDefinition.FullyQualifiedNativeName + "::" + nested.Name + " " + nested.CLRName + ";");
             }
             else
                 throw new Exception("Unexpected");
@@ -203,37 +203,37 @@ namespace AutoWrap.Meta
 
             if (HasProtectedStatics())
             {
-                string className = GetProtectedStaticsProxyName(_definition);
+                string className = GetProtectedStaticsProxyName(_classDefinition);
                 className = className.Substring(className.IndexOf("::") + 2);
-                _code.AppendLine("class " + className + " : public " + _definition.FullyQualifiedNativeName);
-                _code.AppendLine("{");
-                _code.AppendLine("public:");
-                _code.IncreaseIndent();
+                _codeBuilder.AppendLine("class " + className + " : public " + _classDefinition.FullyQualifiedNativeName);
+                _codeBuilder.AppendLine("{");
+                _codeBuilder.AppendLine("public:");
+                _codeBuilder.IncreaseIndent();
 
-                className = _definition.FullyQualifiedCLRName;
+                className = _classDefinition.FullyQualifiedCLRName;
                 className = className.Substring(className.IndexOf("::") + 2);
 
-                if (_definition.IsInterface)
+                if (_classDefinition.IsInterface)
                 {
-                    className = className.Replace(_definition.CLRName, _definition.Name);
+                    className = className.Replace(_classDefinition.CLRName, _classDefinition.Name);
                 }
 
                 className = this.MetaDef.ManagedNamespace + "::" + className;
 
-                _code.AppendLine("friend ref class " + className + ";");
+                _codeBuilder.AppendLine("friend ref class " + className + ";");
 
-                AddFriends(className, _definition);
+                AddFriends(className, _classDefinition);
 
                 foreach (ClassDefinition iface in _interfaces)
                 {
-                    if (iface == _definition)
+                    if (iface == _classDefinition)
                         continue;
 
                     AddFriends(className, iface);
                 }
 
-                _code.DecreaseIndent();
-                _code.AppendLine("};\n");
+                _codeBuilder.DecreaseIndent();
+                _codeBuilder.AppendLine("};\n");
             }
         }
 
@@ -242,9 +242,9 @@ namespace AutoWrap.Meta
             foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
-                    && !(field.IsStatic && type != _definition) )
+                    && !(field.IsStatic && type != _classDefinition) )
                 {
-                    _code.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
+                    _codeBuilder.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
                 }
             }
 
@@ -252,23 +252,23 @@ namespace AutoWrap.Meta
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionLevel == ProtectionLevel.Protected
-                    && !(func.IsStatic && type != _definition)
+                    && !(func.IsStatic && type != _classDefinition)
                     && func.IsProperty
                     && !func.IsVirtual)
                 {
-                    _code.AppendLine("friend ref class " + className + "::" + func.CLRName + ";");
+                    _codeBuilder.AppendLine("friend ref class " + className + "::" + func.CLRName + ";");
                 }
             }
         }
 
         protected virtual bool HasProtectedStatics()
         {
-            if (HasProtectedStatics(_definition))
+            if (HasProtectedStatics(_classDefinition))
                 return true;
 
             foreach (ClassDefinition iface in _interfaces)
             {
-                if (iface == _definition)
+                if (iface == _classDefinition)
                     continue;
 
                 if (HasProtectedStatics(iface))
@@ -283,7 +283,7 @@ namespace AutoWrap.Meta
             foreach (MemberFieldDefinition field in type.ProtectedFields)
             {
                 if (!field.IsIgnored
-                    && !(field.IsStatic && type != _definition))
+                    && !(field.IsStatic && type != _classDefinition))
                 {
                     return true;
                 }
@@ -293,7 +293,7 @@ namespace AutoWrap.Meta
             {
                 if (func.IsDeclarableFunction
                     && func.ProtectionLevel == ProtectionLevel.Protected
-                    && !(func.IsStatic && type != _definition)
+                    && !(func.IsStatic && type != _classDefinition)
                     && !func.IsVirtual)
                 {
                     return true;

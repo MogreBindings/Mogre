@@ -78,7 +78,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_proxyName == null)
-                    _proxyName = GetProxyName(_definition);
+                    _proxyName = GetProxyName(_classDefinition);
 
                 return _proxyName;
             }
@@ -89,30 +89,30 @@ namespace AutoWrap.Meta
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
-                _code.Append(" ");
+                _codeBuilder.Append(" ");
 
-                _code.Append(param.MemberTypeNativeName);
-                _code.Append(" " + param.Name);
+                _codeBuilder.Append(param.MemberTypeNativeName);
+                _codeBuilder.Append(" " + param.Name);
 
-                if (i < f.Parameters.Count - 1) _code.Append(",");
+                if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
         }
 
         protected override void AddPreBody()
         {
-            _code.AppendLine("//################################################################");
-            _code.AppendLine("//" + ProxyName);
-            _code.AppendLine("//################################################################\n");
+            _codeBuilder.AppendLine("//################################################################");
+            _codeBuilder.AppendLine("//" + ProxyName);
+            _codeBuilder.AppendLine("//################################################################\n");
         }
 
         protected override void AddBody()
         {
             AddFields();
 
-            _code.AppendEmptyLine();
-            if (_definition.Constructors.Length > 0)
+            _codeBuilder.AppendEmptyLine();
+            if (_classDefinition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _definition.Constructors)
+                foreach (MemberMethodDefinition func in _classDefinition.Constructors)
                     AddConstructor(func);
             }
             else
@@ -120,7 +120,7 @@ namespace AutoWrap.Meta
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
                 AddOverridableFunction(func);
             }
 

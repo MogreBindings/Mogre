@@ -27,11 +27,11 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class ClassCodeProducer : AbstractCodeProducer 
+    public abstract class ClassCodeProducer : AbstractCodeProducer
     {
         protected readonly Wrapper _wrapper;
-        protected readonly ClassDefinition _definition;
-        protected SourceCodeStringBuilder _code;
+        protected readonly ClassDefinition _classDefinition;
+        protected SourceCodeStringBuilder _codeBuilder;
         protected readonly List<ClassDefinition> _listeners = new List<ClassDefinition>();
         protected readonly List<MemberPropertyDefinition> _interfaceProperties = new List<MemberPropertyDefinition>();
         protected readonly List<MemberMethodDefinition> _abstractFunctions = new List<MemberMethodDefinition>();
@@ -46,26 +46,78 @@ namespace AutoWrap.Meta
 
         protected readonly List<MemberDefinitionBase> _cachedMembers = new List<MemberDefinitionBase>();
 
+        private bool _initCalled;
+    
+        public virtual string ClassFullNativeName
+        {
+            get { return _classDefinition.FullyQualifiedNativeName; }
+        }
+    
+        public virtual bool IsNativeClass
+        {
+            get { return false; }
+        }
+    
+        private bool _isAbstractClass;
+        public bool IsAbstractClass
+        {
+            get { return _isAbstractClass; }
+        }
+    
+        protected virtual bool AllowVirtualMethods
+        {
+            get { return _classDefinition.AllowSubClassing; }
+        }
+    
+        protected virtual bool AllowProtectedMembers
+        {
+            get { return false; }
+        }
+    
+        protected virtual bool AllowSubclassing
+        {
+            get { return _classDefinition.AllowSubClassing; }
+        }
+    
+        protected virtual bool AllowMethodOverloads
+        {
+            get { return true; }
+        }
+    
+        protected virtual bool AllowMethodIndexAttributes
+        {
+            get { return false; }
+        }
+    
+        protected virtual bool AllowCachedMemberFields
+        {
+            get { return !_classDefinition.HasWrapType(WrapTypes.NativePtrValueType) && !_classDefinition.HasWrapType(WrapTypes.ValueType); }
+        }
+    
+        protected virtual bool IsReadOnly
+        {
+            get { return _classDefinition.HasAttribute<ReadOnlyAttribute>(); }
+        }
+    
         public ClassCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb) : base(metaDef)
         {
             this._wrapper = wrapper;
-            this._definition = t;
-            this._code = sb;
+            _classDefinition = t;
+            _codeBuilder = sb;
 
-            foreach (ClassDefinition iface in _definition.GetInterfaces())
+            foreach (ClassDefinition iface in _classDefinition.GetInterfaces())
             {
                 AddTypeDependancy(iface);
                 _interfaces.Add(iface);
             }
 
-            if (_definition.IsInterface)
+            if (_classDefinition.IsInterface)
             {
                 // Declaring an overridable class for interface
-                _interfaces.Add(_definition);
+                _interfaces.Add(_classDefinition);
             }
         }
 
-        private bool _initCalled = false;
         protected virtual void Init()
         {
             if (_initCalled)
@@ -73,7 +125,7 @@ namespace AutoWrap.Meta
 
             _initCalled = true;
 
-            foreach (MemberMethodDefinition f in _definition.PublicMethods)
+            foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsListenerAdder && !f.IsIgnored)
                 {
@@ -81,12 +133,12 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (ClassDefinition iface in _definition.GetInterfaces())
+            foreach (ClassDefinition iface in _classDefinition.GetInterfaces())
             {
                 // Add attributes of interface methods from the interface classes
                 foreach (MemberMethodDefinition f in iface.Methods)
                 {
-                    MemberMethodDefinition tf = _definition.GetMethodWithSignature(f.Signature);
+                    MemberMethodDefinition tf = _classDefinition.GetMethodWithSignature(f.Signature);
                     if (tf != null)
                         tf.AddAttributes(f.Attributes);
                 }
@@ -103,7 +155,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (MemberFieldDefinition field in _definition.Fields)
+            foreach (MemberFieldDefinition field in _classDefinition.Fields)
             {
                 if (!field.IsIgnored && field.MemberType.IsSTLContainer)
                 {
@@ -115,7 +167,7 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition iface in _interfaces)
             {
-                if (iface == _definition)
+                if (iface == _classDefinition)
                     continue;
 
                 foreach (MemberFieldDefinition field in iface.Fields)
@@ -130,12 +182,12 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (MemberMethodDefinition func in _definition.AbstractFunctions)
+            foreach (MemberMethodDefinition func in _classDefinition.AbstractFunctions)
             {
                 if (func.ProtectionLevel == ProtectionLevel.Public
                         || (AllowProtectedMembers && func.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if ((func.ContainingClass.AllowSubClassing || (func.ContainingClass == _definition && AllowSubclassing)) && !func.IsProperty)
+                    if ((func.ContainingClass.AllowSubClassing || (func.ContainingClass == _classDefinition && AllowSubclassing)) && !func.IsProperty)
                     {
                         _isAbstractClass = true;
                         _abstractFunctions.Add(func);
@@ -143,10 +195,10 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (MemberPropertyDefinition prop in _definition.AbstractProperties)
+            foreach (MemberPropertyDefinition prop in _classDefinition.AbstractProperties)
             {
                 if (IsPropertyAllowed(prop) && (prop.ContainingClass.AllowSubClassing
-                    || (prop.ContainingClass == _definition && AllowSubclassing)))
+                    || (prop.ContainingClass == _classDefinition && AllowSubclassing)))
                 {
                     if (prop.ProtectionLevel == ProtectionLevel.Public
                         || (AllowProtectedMembers && prop.ProtectionLevel == ProtectionLevel.Protected))
@@ -158,7 +210,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            SearchOverridableFunctions(_definition);
+            SearchOverridableFunctions(_classDefinition);
             //SearchProtectedFields(_t);
 
             foreach (ClassDefinition iface in _interfaces)
@@ -171,7 +223,7 @@ namespace AutoWrap.Meta
 
             //Find cached members
 
-            foreach (MemberDefinitionBase m in _definition.Members)
+            foreach (MemberDefinitionBase m in _classDefinition.Members)
             {
                 if (m.HasAttribute<CachedGetAccessorAttribute>())
                     MarkCachedMember(m);
@@ -179,7 +231,7 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition iface in _interfaces)
             {
-                if (iface == _definition)
+                if (iface == _classDefinition)
                     continue;
 
                 foreach (MemberDefinitionBase m in iface.Members)
@@ -188,57 +240,6 @@ namespace AutoWrap.Meta
                         MarkCachedMember(m);
                 }
             }
-        }
-
-        public virtual string ClassFullNativeName
-        {
-            get { return _definition.FullyQualifiedNativeName; }
-        }
-
-        public virtual bool IsNativeClass
-        {
-            get { return false; }
-        }
-
-        private bool _isAbstractClass;
-        public bool IsAbstractClass
-        {
-            get { return _isAbstractClass; }
-        }
-
-        protected virtual bool AllowVirtualMethods
-        {
-            get { return _definition.AllowSubClassing; }
-        }
-
-        protected virtual bool AllowProtectedMembers
-        {
-            get { return false; }
-        }
-
-        protected virtual bool AllowSubclassing
-        {
-            get { return _definition.AllowSubClassing; }
-        }
-
-        protected virtual bool AllowMethodOverloads
-        {
-            get { return true; }
-        }
-
-        protected virtual bool AllowMethodIndexAttributes
-        {
-            get { return false; }
-        }
-
-        protected virtual bool AllowCachedMemberFields
-        {
-            get { return !_definition.HasWrapType(WrapTypes.NativePtrValueType) && !_definition.HasWrapType(WrapTypes.ValueType); }
-        }
-
-        protected virtual bool IsReadOnly
-        {
-            get { return _definition.HasAttribute<ReadOnlyAttribute>(); }
         }
 
         protected virtual bool DeclareAsVirtual(MemberMethodDefinition f)
@@ -291,7 +292,7 @@ namespace AutoWrap.Meta
                 {
                     if (!f.IsVirtual)
                     {
-                        string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
+                        string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_classDefinition);
                         return "static_cast<" + proxyName + "*>(_native)->" + f.NativeName;
                     }
                     else
@@ -318,7 +319,7 @@ namespace AutoWrap.Meta
                 }
                 else if (field.ProtectionLevel == ProtectionLevel.Protected)
                 {
-                    string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_definition);
+                    string proxyName = NativeProtectedStaticsProxy.GetProtectedStaticsProxyName(_classDefinition);
                     return "static_cast<" + proxyName + "*>(_native)->" + field.NativeName;
                 }
                 else
@@ -417,13 +418,13 @@ namespace AutoWrap.Meta
 
         public virtual void AddFirst()
         {
-            SourceCodeStringBuilder orig = _code;
-            _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
+            SourceCodeStringBuilder orig = _codeBuilder;
+            _codeBuilder = new SourceCodeStringBuilder(MetaDef.CodeStyleDef);
 
             Add();
 
-            orig.InsertAt(0, _code.ToString());
-            _code = orig;
+            orig.InsertAt(0, _codeBuilder.ToString());
+            _codeBuilder = orig;
         }
 
         protected virtual string ReplaceCustomVariables(string txt)
@@ -452,7 +453,7 @@ namespace AutoWrap.Meta
 
         protected virtual string GetClassName()
         {
-            string full = _definition.FullyQualifiedCLRName;
+            string full = _classDefinition.FullyQualifiedCLRName;
             int index = full.IndexOf("::");
             return full.Substring(index + 2);
         }
@@ -464,7 +465,7 @@ namespace AutoWrap.Meta
 
         protected virtual string GetBaseClassName()
         {
-            return (_definition.BaseClass == null || _definition.BaseClass.HasWrapType(WrapTypes.NativeDirector)) ? GetTopBaseClassName() : _definition.BaseClass.Name;
+            return (_classDefinition.BaseClass == null || _classDefinition.BaseClass.HasWrapType(WrapTypes.NativeDirector)) ? GetTopBaseClassName() : _classDefinition.BaseClass.Name;
         }
 
         protected bool HasStaticCachedFields()
@@ -482,7 +483,7 @@ namespace AutoWrap.Meta
         {
             // If there are nested NativeDirectors, declare them before the declaration
             // of this class
-            foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
@@ -492,9 +493,9 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _code.AppendLine("//################################################################");
-            _code.AppendLine("//" + _definition.CLRName);
-            _code.AppendLine("//################################################################\n");
+            _codeBuilder.AppendLine("//################################################################");
+            _codeBuilder.AppendLine("//" + _classDefinition.CLRName);
+            _codeBuilder.AppendLine("//################################################################\n");
         }
 
         protected virtual void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
@@ -504,21 +505,21 @@ namespace AutoWrap.Meta
         protected virtual void AddBody()
         {
             AddPreNestedTypes();
-            _code.AppendLine("//Nested Types");
+            _codeBuilder.AppendLine("//Nested Types");
             AddAllNestedTypes();
             AddPostNestedTypes();
-            _code.AppendLine("//Private Declarations");
+            _codeBuilder.AppendLine("//Private Declarations");
             AddPrivateDeclarations();
-            _code.Append("\n");
-            _code.AppendLine("//Internal Declarations");
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("//Internal Declarations");
             AddInternalDeclarations();
-            _code.Append("\n");
-            _code.AppendLine("//Public Declarations");
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("//Public Declarations");
             AddPublicDeclarations();
-            _code.Append("\n");
-            _code.AppendLine("//Protected Declarations");
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("//Protected Declarations");
             AddProtectedDeclarations();
-            _code.Append("\n");
+            _codeBuilder.Append("\n");
         }
 
         protected virtual void AddPostBody()
@@ -539,7 +540,7 @@ namespace AutoWrap.Meta
             if (HasStaticCachedFields())
             {
                 AddStaticConstructor();
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
             }
         }
 
@@ -563,11 +564,12 @@ namespace AutoWrap.Meta
             List<AbstractTypeDefinition> typedefs = new List<AbstractTypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
-            if(_definition.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer))) {
+            if (_classDefinition.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer)))
+            {
                 return;
             }
 
-            foreach (AbstractTypeDefinition nested in _definition.NestedTypes)
+            foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
@@ -635,7 +637,7 @@ namespace AutoWrap.Meta
 
             List<string> stls = new List<string>();
 
-            foreach (MemberDefinitionBase m in _definition.Members)
+            foreach (MemberDefinitionBase m in _classDefinition.Members)
             {
                 if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                     && !m.IsIgnored
@@ -653,7 +655,7 @@ namespace AutoWrap.Meta
 
             foreach (ClassDefinition iface in _interfaces)
             {
-                if (iface == _definition)
+                if (iface == _classDefinition)
                     continue;
 
                 foreach (MemberDefinitionBase m in iface.Members)
@@ -680,7 +682,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicDeclarations()
         {
-            foreach (MemberFieldDefinition field in _definition.PublicFields)
+            foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
                 if (!field.IsIgnored)
                 {
@@ -689,11 +691,11 @@ namespace AutoWrap.Meta
                     //else
                         AddPropertyField(field);
 
-                    _code.AppendEmptyLine();
+                        _codeBuilder.AppendEmptyLine();
                 }
             }
 
-            foreach (MemberPropertyDefinition p in _definition.GetProperties())
+            foreach (MemberPropertyDefinition p in _classDefinition.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
                     ( p.ProtectionLevel == ProtectionLevel.Public
@@ -701,11 +703,11 @@ namespace AutoWrap.Meta
                      || (AllowProtectedMembers && p.ProtectionLevel == ProtectionLevel.Protected) ) )
                 {
                     AddProperty(EnhanceProperty(p));
-                    _code.Append("\n");
+                    _codeBuilder.Append("\n");
                 }
             }
 
-            foreach (MemberMethodDefinition f in _definition.PublicMethods)
+            foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsOperatorOverload)
                 {
@@ -713,31 +715,31 @@ namespace AutoWrap.Meta
                     {
                       if( !f.IsIgnored )
                         AddPredefinedMethods( PredefinedMethods.Equals );
-                        _code.AppendEmptyLine();
+                      _codeBuilder.AppendEmptyLine();
                     }
                     else if (f.NativeName.EndsWith("="))
                     {
                       if(!f.IsIgnored)
                         AddPredefinedMethods(PredefinedMethods.CopyTo);
-                        _code.AppendEmptyLine();
+                      _codeBuilder.AppendEmptyLine();
                     }
                 }
                 else if (f.IsDeclarableFunction)
                 {
                     AddMethod(f);
-                    _code.Append("\n");
+                    _codeBuilder.Append("\n");
                 }
             }
 
-            if (_definition.HasAttribute<IncludePredefinedMethodAttribute>())
+            if (_classDefinition.HasAttribute<IncludePredefinedMethodAttribute>())
             {
-                AddPredefinedMethods(_definition.GetAttribute<IncludePredefinedMethodAttribute>().Methods);
-                _code.AppendEmptyLine();
+                AddPredefinedMethods(_classDefinition.GetAttribute<IncludePredefinedMethodAttribute>().Methods);
+                _codeBuilder.AppendEmptyLine();
             }
 
             foreach (ClassDefinition cls in _interfaces)
             {
-                if (cls == _definition)
+                if (cls == _classDefinition)
                     continue;
 
                 AddInterfaceImplementation(cls);
@@ -746,9 +748,9 @@ namespace AutoWrap.Meta
 
         protected virtual void AddInterfaceImplementation(ClassDefinition iface)
         {
-            _code.AppendLine("//------------------------------------------------------------");
-            _code.AppendLine("// Implementation for " + iface.CLRName);
-            _code.AppendLine("//------------------------------------------------------------\n");
+            _codeBuilder.AppendLine("//------------------------------------------------------------");
+            _codeBuilder.AppendLine("// Implementation for " + iface.CLRName);
+            _codeBuilder.AppendLine("//------------------------------------------------------------\n");
 
             foreach (MemberPropertyDefinition ip in iface.GetProperties())
             {
@@ -759,10 +761,10 @@ namespace AutoWrap.Meta
                     || (AllowSubclassing && !ip.IsVirtual)
                     || (AllowProtectedMembers && ip.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (!ip.IsContainedIn(_definition, true))
+                    if (!ip.IsContainedIn(_classDefinition, true))
                     {
                         AddInterfaceProperty(ip);
-                        _code.Append("\n");
+                        _codeBuilder.Append("\n");
                     }
                 }
             }
@@ -776,10 +778,10 @@ namespace AutoWrap.Meta
                     || (AllowSubclassing && !inf.IsVirtual)
                     || (AllowProtectedMembers && inf.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (!_definition.ContainsFunctionSignature(inf.Signature, false))
+                    if (!_classDefinition.ContainsFunctionSignature(inf.Signature, false))
                     {
                         AddInterfaceMethod(inf);
-                        _code.Append("\n");
+                        _codeBuilder.Append("\n");
                     }
                 }
             }
@@ -800,7 +802,7 @@ namespace AutoWrap.Meta
                         //else
                             AddInterfacePropertyField(field);
 
-                        _code.AppendEmptyLine();
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
             }
@@ -830,7 +832,7 @@ namespace AutoWrap.Meta
         {
             if (AllowSubclassing)
             {
-                foreach (MemberFieldDefinition field in _definition.ProtectedFields)
+                foreach (MemberFieldDefinition field in _classDefinition.ProtectedFields)
                 {
                     if (!field.IsIgnored)
                     {
@@ -839,17 +841,17 @@ namespace AutoWrap.Meta
                         //else
                             AddPropertyField(field);
 
-                        _code.AppendEmptyLine();
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
 
-                foreach (MemberMethodDefinition f in _definition.ProtectedMethods)
+                foreach (MemberMethodDefinition f in _classDefinition.ProtectedMethods)
                 {
                     if (f.IsDeclarableFunction &&
                         (AllowProtectedMembers || f.IsStatic || !f.IsVirtual) )
                     {
                         AddMethod(f);
-                        _code.Append("\n");
+                        _codeBuilder.Append("\n");
                     }
                 }
             }
@@ -858,7 +860,7 @@ namespace AutoWrap.Meta
         protected MemberPropertyDefinition EnhanceProperty(MemberPropertyDefinition property)
         {
             MemberPropertyDefinition prop = property.Clone();
-            if (_definition.BaseClass != null)
+            if (_classDefinition.BaseClass != null)
             {
                 if (!prop.CanWrite)
                 {
@@ -872,7 +874,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.GetterFunction))
                     {
-                        MemberPropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
+                        MemberPropertyDefinition bp = _classDefinition.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanWrite)
                         {
                             prop.SetterFunction = bp.SetterFunction;
@@ -892,7 +894,7 @@ namespace AutoWrap.Meta
 
                     if (!DeclareAsVirtual(prop.SetterFunction))
                     {
-                        MemberPropertyDefinition bp = _definition.BaseClass.GetProperty(prop.Name, true);
+                        MemberPropertyDefinition bp = _classDefinition.BaseClass.GetProperty(prop.Name, true);
                         if (bp != null && bp.CanRead)
                         {
                             prop.GetterFunction = bp.GetterFunction;

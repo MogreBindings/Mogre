@@ -58,23 +58,23 @@ namespace AutoWrap.Meta
 
         protected override void AddDisposerBody()
         {
-            _code.AppendLine("_native = " + _definition.FullyQualifiedNativeName + "::getSingletonPtr();");
+            _codeBuilder.AppendLine("_native = " + _classDefinition.FullyQualifiedNativeName + "::getSingletonPtr();");
 
             base.AddDisposerBody();
 
-            _code.AppendLine("if (_createdByCLR && _native) { delete _native; _native = 0; }");
-            _code.AppendLine("_singleton = nullptr;");
+            _codeBuilder.AppendLine("if (_createdByCLR && _native) { delete _native; _native = 0; }");
+            _codeBuilder.AppendLine("_singleton = nullptr;");
         }
 
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _code.AppendLine("static " + _definition.CLRName + "^ _singleton;");
+            _codeBuilder.AppendLine("static " + _classDefinition.CLRName + "^ _singleton;");
 
-            if (_definition.BaseClass == null)
+            if (_classDefinition.BaseClass == null)
             {
-                _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
-                _code.AppendLine("bool _createdByCLR;");
+                _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* _native;");
+                _codeBuilder.AppendLine("bool _createdByCLR;");
             }
         }
 
@@ -82,47 +82,47 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
 
-            if (_definition.BaseClass == null)
-                _code.AppendLine(_definition.CLRName + "( " + _definition.FullyQualifiedNativeName + "* obj ) : _native(obj)");
+            if (_classDefinition.BaseClass == null)
+                _codeBuilder.AppendLine(_classDefinition.CLRName + "( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : _native(obj)");
             else
-                _code.AppendLine(_definition.CLRName + "( " + _definition.FullyQualifiedNativeName + "* obj ) : " + _definition.BaseClass.CLRName + "(obj)");
+                _codeBuilder.AppendLine(_classDefinition.CLRName + "( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : " + _classDefinition.BaseClass.CLRName + "(obj)");
 
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
             base.AddConstructorBody();
-            _code.DecreaseIndent();
-            _code.AppendLine("}\n");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}\n");
         }
 
         protected override void AddPublicFields()
         {
-            _code.AppendLine("static property " + _definition.CLRName + "^ Singleton");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
-            _code.AppendLine(_definition.CLRName + "^ get()");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine("static property " + _classDefinition.CLRName + "^ Singleton");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
+            _codeBuilder.AppendLine(_classDefinition.CLRName + "^ get()");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
                 
-            _code.AppendLine(_definition.FullyQualifiedNativeName + "* ptr = " + _definition.FullyQualifiedNativeName + "::getSingletonPtr();");
-            _code.AppendLine("if (_singleton == CLR_NULL || _singleton->_native != ptr)");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
-            _code.AppendLine("if (_singleton != CLR_NULL)");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
-            _code.AppendLine("_singleton->_native = 0;");
-            _code.AppendLine("_singleton = nullptr;");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* ptr = " + _classDefinition.FullyQualifiedNativeName + "::getSingletonPtr();");
+            _codeBuilder.AppendLine("if (_singleton == CLR_NULL || _singleton->_native != ptr)");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
+            _codeBuilder.AppendLine("if (_singleton != CLR_NULL)");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
+            _codeBuilder.AppendLine("_singleton->_native = 0;");
+            _codeBuilder.AppendLine("_singleton = nullptr;");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
 
-            _code.AppendLine("if ( ptr ) _singleton = gcnew " + _definition.CLRName + "( ptr );");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
-            _code.AppendLine("return _singleton;");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.AppendLine("if ( ptr ) _singleton = gcnew " + _classDefinition.CLRName + "( ptr );");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
+            _codeBuilder.AppendLine("return _singleton;");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
 
             base.AddPublicFields();
         }

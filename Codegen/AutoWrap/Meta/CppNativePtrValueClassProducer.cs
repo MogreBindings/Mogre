@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
             if (!IsReadOnly)
             {
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
                 AddCreators();
             }
         }
@@ -57,18 +57,18 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreators()
         {
-            if (!_definition.IsNativeAbstractClass)
+            if (!_classDefinition.IsNativeAbstractClass)
             {
-                if (_definition.Constructors.Length > 0)
+                if (_classDefinition.Constructors.Length > 0)
                 {
-                    foreach (MemberMethodDefinition func in _definition.Constructors)
+                    foreach (MemberMethodDefinition func in _classDefinition.Constructors)
                         if (func.ProtectionLevel == ProtectionLevel.Public)
                             AddCreator(func);
                 }
                 else
                     AddCreator(null);
 
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
             }
         }
 
@@ -101,15 +101,15 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreatorOverload(MemberMethodDefinition f, int count)
         {
-            _code.AppendIndent(_definition.FullyQualifiedCLRName + " " + GetClassName() + "::Create");
+            _codeBuilder.AppendIndent(_classDefinition.FullyQualifiedCLRName + " " + GetClassName() + "::Create");
             if (f == null)
-                _code.Append("()");
+                _codeBuilder.Append("()");
             else
                 AddMethodParameters(f, count);
 
-            _code.Append("\n");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
 
             string preCall = null, postCall = null;
 
@@ -119,11 +119,11 @@ namespace AutoWrap.Meta
                 postCall = GetMethodPostNativeCall(f, count);
 
                 if (!String.IsNullOrEmpty(preCall))
-                    _code.AppendLine(preCall);
+                    _codeBuilder.AppendLine(preCall);
             }
 
-            _code.AppendLine(_definition.CLRName + " ptr;");
-            _code.AppendIndent("ptr._native = new " + _definition.FullyQualifiedNativeName + "(");
+            _codeBuilder.AppendLine(_classDefinition.CLRName + " ptr;");
+            _codeBuilder.AppendIndent("ptr._native = new " + _classDefinition.FullyQualifiedNativeName + "(");
 
             if (count > 0)
             {
@@ -132,24 +132,24 @@ namespace AutoWrap.Meta
                     ParamDefinition p = f.Parameters[i];
                     string newname;
                     p.Type.ProducePreCallParamConversionCode(p, out newname);
-                    _code.Append(" " + newname);
-                    if (i < count - 1) _code.Append(",");
+                    _codeBuilder.Append(" " + newname);
+                    if (i < count - 1) _codeBuilder.Append(",");
                 }
             }
 
-            _code.Append(");\n");
+            _codeBuilder.Append(");\n");
 
             if (!String.IsNullOrEmpty(postCall))
             {
-                _code.AppendEmptyLine();
-                _code.AppendLine(postCall);
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
+                _codeBuilder.AppendLine(postCall);
+                _codeBuilder.AppendEmptyLine();
             }
 
-            _code.AppendLine("return ptr;");
+            _codeBuilder.AppendLine("return ptr;");
 
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
         }
 
         public CppNativePtrValueClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

@@ -36,12 +36,12 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _code.AppendIndent("");
-            if (!_definition.IsNested)
-                _code.Append("public ");
+            _codeBuilder.AppendIndent("");
+            if (!_classDefinition.IsNested)
+                _codeBuilder.Append("public ");
             else
-                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _code.AppendFormat("ref class {0}\n", _definition.CLRName);
+                _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _codeBuilder.AppendFormat("ref class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPublicConstructors()
@@ -51,46 +51,46 @@ namespace AutoWrap.Meta
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _code.AppendLine(_definition.CLRName + "()");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine(_classDefinition.CLRName + "()");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
             base.AddConstructorBody();
-            _code.DecreaseIndent();
-            _code.AppendLine("}\n");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}\n");
         }
 
         protected override void AddInternalDeclarations()
         {
             base.AddInternalDeclarations();
-            foreach (MemberFieldDefinition field in _definition.PublicFields)
+            foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
                 if (!field.IsIgnored)
-                    _code.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
+                    _codeBuilder.AppendLine(field.MemberTypeCLRName + " " + NameToPrivate(field) + ";");
             }
-            _code.AppendEmptyLine();
+            _codeBuilder.AppendEmptyLine();
 
-            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullyQualifiedNativeName + "& obj)");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
-            _code.AppendLine(_definition.CLRName + "^ clr = gcnew " + _definition.CLRName + ";");
-            foreach (MemberFieldDefinition field in _definition.PublicFields)
+            _codeBuilder.AppendLine("static operator " + _classDefinition.CLRName + "^ (const " + _classDefinition.FullyQualifiedNativeName + "& obj)");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
+            _codeBuilder.AppendLine(_classDefinition.CLRName + "^ clr = gcnew " + _classDefinition.CLRName + ";");
+            foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
                 if (!field.IsIgnored)
                 {
                     string conv = field.MemberType.ProduceNativeCallConversionCode("obj." + field.NativeName, field);
-                    _code.AppendLine("clr->" + NameToPrivate(field) + " = " + conv + ";");
+                    _codeBuilder.AppendLine("clr->" + NameToPrivate(field) + " = " + conv + ";");
                 }
             }
-            _code.AppendEmptyLine();
-            _code.AppendLine("return clr;");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("return clr;");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("static operator " + _definition.CLRName + "^ (const " + _definition.FullyQualifiedNativeName + "* pObj)");
-            _code.AppendLine("{");
-            _code.AppendLine("\treturn *pObj;");
-            _code.AppendLine("}");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("static operator " + _classDefinition.CLRName + "^ (const " + _classDefinition.FullyQualifiedNativeName + "* pObj)");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\treturn *pObj;");
+            _codeBuilder.AppendLine("}");
         }
 
         protected override void AddPropertyField(MemberFieldDefinition field)
@@ -98,13 +98,13 @@ namespace AutoWrap.Meta
             //TODO comments for fields
             //AddComments(field);
             string ptype = GetCLRTypeName(field);
-            _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
-            _code.IncreaseIndent();
-            _code.AppendLine(ptype + " get()\n{");
-            _code.AppendLine("\treturn " + NameToPrivate(field) + ";");
-            _code.AppendLine("}");
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+            _codeBuilder.IncreaseIndent();
+            _codeBuilder.AppendLine(ptype + " get()\n{");
+            _codeBuilder.AppendLine("\treturn " + NameToPrivate(field) + ";");
+            _codeBuilder.AppendLine("}");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
         }
 
         public IncReadOnlyStructClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

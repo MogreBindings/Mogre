@@ -37,10 +37,10 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _code.AppendIndent("class " + ProxyName + " : public " + _definition.FullyQualifiedNativeName);
-            if (_definition.IsInterface)
-                _code.Append(", public CLRObject");
-            _code.Append("\n");
+            _codeBuilder.AppendIndent("class " + ProxyName + " : public " + _classDefinition.FullyQualifiedNativeName);
+            if (_classDefinition.IsInterface)
+                _codeBuilder.Append(", public CLRObject");
+            _codeBuilder.Append("\n");
         }
 
         protected override void AddPreBody()
@@ -49,32 +49,32 @@ namespace AutoWrap.Meta
 
             AddDefinition();
 
-            _code.AppendLine("{");
-            _code.AppendLine("public:");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("public:");
+            _codeBuilder.IncreaseIndent();
         }
 
         protected override void AddPostBody()
         {
             base.AddPostBody();
 
-            _code.DecreaseIndent();
-            _code.AppendLine("};\n");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("};\n");
         }
 
         protected override void AddFields()
         {
             string className;
-            if (_definition.IsNested)
+            if (_classDefinition.IsNested)
             {
-                className = _definition.SurroundingClass.FullyQualifiedCLRName + "::" + _definition.Name;
+                className = _classDefinition.SurroundingClass.FullyQualifiedCLRName + "::" + _classDefinition.Name;
             }
             else
             {
-                className = this.MetaDef.ManagedNamespace + "::" + _definition.Name;
+                className = this.MetaDef.ManagedNamespace + "::" + _classDefinition.Name;
             }
 
-            _code.AppendLine("friend ref class " + className + ";");
+            _codeBuilder.AppendLine("friend ref class " + className + ";");
 
             //Because of a possible compiler bug, in order for properties to access
             //protected members of a native class, they must be explicitely declared
@@ -83,25 +83,25 @@ namespace AutoWrap.Meta
             {
                 if (   (prop.CanRead  && prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected)
                     || (prop.CanWrite && prop.SetterFunction.ProtectionLevel == ProtectionLevel.Protected))
-                    _code.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
+                    _codeBuilder.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }
 
-            if (_definition.IsInterface)
+            if (_classDefinition.IsInterface)
             {
-                foreach (MemberFieldDefinition field in _definition.Fields)
+                foreach (MemberFieldDefinition field in _classDefinition.Fields)
                 {
                     if (!field.IsIgnored
                         && field.ProtectionLevel == ProtectionLevel.Protected
                         && !field.IsStatic)
-                        _code.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
+                        _codeBuilder.AppendLine("friend ref class " + className + "::" + field.NativeName + ";");
                 }
             }
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("bool* _overriden;");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("bool* _overriden;");
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("gcroot<" + className + "^> _managed;");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("gcroot<" + className + "^> _managed;");
 
             //_sb.AppendLine();
             //foreach (DefField field in _protectedFields)
@@ -109,66 +109,66 @@ namespace AutoWrap.Meta
             //    _sb.AppendLine(field.NativeTypeName + "& ref_" + field.Name + ";");
             //}
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("virtual void _Init_CLRObject() override { *static_cast<CLRObject*>(this) = _managed; }");
         }
 
         protected override void AddConstructor(MemberMethodDefinition f)
         {
             string className;
-            if (_definition.IsNested)
+            if (_classDefinition.IsNested)
             {
-                className = _definition.SurroundingClass.FullyQualifiedCLRName + "::" + _definition.Name;
+                className = _classDefinition.SurroundingClass.FullyQualifiedCLRName + "::" + _classDefinition.Name;
             }
             else
             {
-                className = this.MetaDef.ManagedNamespace + "::" + _definition.Name;
+                className = this.MetaDef.ManagedNamespace + "::" + _classDefinition.Name;
             }
-            _code.AppendIndent(ProxyName + "( " + className + "^ managedObj");
+            _codeBuilder.AppendIndent(ProxyName + "( " + className + "^ managedObj");
             if (f != null)
             {
                 foreach (ParamDefinition param in f.Parameters)
-                    _code.Append(", " + param.MemberTypeNativeName + " " + param.Name);
+                    _codeBuilder.Append(", " + param.MemberTypeNativeName + " " + param.Name);
             }
 
-            _code.Append(" ) :\n");
+            _codeBuilder.Append(" ) :\n");
 
             if (f != null)
             {
-                _code.AppendIndent("\t" + _definition.FullyQualifiedNativeName + "(");
+                _codeBuilder.AppendIndent("\t" + _classDefinition.FullyQualifiedNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
-                    _code.Append(" " + param.Name);
+                    _codeBuilder.Append(" " + param.Name);
                     if (i < f.Parameters.Count - 1)
-                        _code.Append(",");
+                        _codeBuilder.Append(",");
                 }
-                _code.Append(" ),\n");
+                _codeBuilder.Append(" ),\n");
             }
 
-            _code.AppendIndent("\t_managed(managedObj)");
+            _codeBuilder.AppendIndent("\t_managed(managedObj)");
 
             //foreach (DefField field in _protectedFields)
             //{
             //    _sb.Append(",\n");
             //    _sb.AppendIndent("\tref_" + field.Name + "(" + field.Name + ")");
             //}
-            _code.Append("\n");
-            _code.AppendLine("{");
-            _code.AppendLine("}");
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("}");
         }
 
         protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
-            _code.AppendIndent("");
+            _codeBuilder.AppendIndent("");
             if (f.IsVirtual)
-                _code.Append("virtual ");
-            _code.Append(f.MemberTypeNativeName + " " + f.NativeName + "(");
+                _codeBuilder.Append("virtual ");
+            _codeBuilder.Append(f.MemberTypeNativeName + " " + f.NativeName + "(");
             AddNativeMethodParams(f);
-            _code.Append(" ) ");
+            _codeBuilder.Append(" ) ");
             if (f.IsConstMethod)
-                _code.Append("const ");
-            _code.Append("override;\n");
+                _codeBuilder.Append("const ");
+            _codeBuilder.Append("override;\n");
         }
 
         //protected override void AddProtectedFunction(DefFunction f)
@@ -187,15 +187,15 @@ namespace AutoWrap.Meta
     {
         public override void Add()
         {
-            if (_definition.IsInterface)
+            if (_classDefinition.IsInterface)
             {
-                SourceCodeStringBuilder tempsb = _code;
-                _code = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
+                SourceCodeStringBuilder tempsb = _codeBuilder;
+                _codeBuilder = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
                 base.Add();
-                string fname = _definition.FullyQualifiedCLRName.Replace(_definition.CLRName, _definition.Name);
-                string res = _code.ToString().Replace(_definition.FullyQualifiedCLRName + "::", fname + "::");
-                _code = tempsb;
-                _code.AppendLine(res);
+                string fname = _classDefinition.FullyQualifiedCLRName.Replace(_classDefinition.CLRName, _classDefinition.Name);
+                string res = _codeBuilder.ToString().Replace(_classDefinition.FullyQualifiedCLRName + "::", fname + "::");
+                _codeBuilder = tempsb;
+                _codeBuilder.AppendLine(res);
             }
             else
                 base.Add();
@@ -203,29 +203,29 @@ namespace AutoWrap.Meta
 
         protected override void AddPreDeclarations()
         {
-            if (!_definition.IsNested)
+            if (!_classDefinition.IsNested)
             {
-                _wrapper.AddPreDeclaration("ref class " + _definition.Name + ";");
-                _wrapper.AddPragmaMakePublicForType(_definition);
+                _wrapper.AddPreDeclaration("ref class " + _classDefinition.Name + ";");
+                _wrapper.AddPragmaMakePublicForType(_classDefinition);
 
             }
         }
 
         protected override void AddDefinition()
         {
-            if (_definition.IsInterface)
+            if (_classDefinition.IsInterface)
             {
                 //put _t.Name instead of _t.CLRName
-                _code.AppendIndent("");
-                if (!_definition.IsNested)
-                    _code.Append("public ");
+                _codeBuilder.AppendIndent("");
+                if (!_classDefinition.IsNested)
+                    _codeBuilder.Append("public ");
                 else
-                    _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
+                    _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
-                    _code.AppendFormat("ref class {0}{1} : {2}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
+                    _codeBuilder.AppendFormat("ref class {0}{1} : {2}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
                 else
-                    _code.AppendFormat("ref class {0}{1}\n", _definition.Name, (IsAbstractClass) ? " abstract" : "");
+                    _codeBuilder.AppendFormat("ref class {0}{1}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "");
             }
             else
                 base.AddDefinition();
@@ -258,7 +258,7 @@ namespace AutoWrap.Meta
         public IncOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(metaDef, _wrapper, _definition, _code));
+            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
         }
 
         private string _proxyName;
@@ -267,7 +267,7 @@ namespace AutoWrap.Meta
             get
             {
                 if (_proxyName == null)
-                    _proxyName = NativeProxyClassProducer.GetProxyName(_definition);
+                    _proxyName = NativeProxyClassProducer.GetProxyName(_classDefinition);
 
                 return _proxyName;
             }
@@ -288,7 +288,7 @@ namespace AutoWrap.Meta
 
         protected override string GetNativeInvokationTarget(MemberFieldDefinition field)
         {
-            return "static_cast<" + ProxyName + "*>(_native)->" + _definition.FullyQualifiedNativeName + "::" + field.NativeName;
+            return "static_cast<" + ProxyName + "*>(_native)->" + _classDefinition.FullyQualifiedNativeName + "::" + field.NativeName;
         }
 
         //protected override string GetNativeInvokationTarget(DefFunction f)
@@ -369,8 +369,8 @@ namespace AutoWrap.Meta
 
         protected override void AddPreDeclarations()
         {
-            if (!_definition.IsNested)
-                _wrapper.AddPragmaMakePublicForType(_definition);
+            if (!_classDefinition.IsNested)
+                _wrapper.AddPragmaMakePublicForType(_classDefinition);
         }
 
         protected override void AddAllNestedTypes()
@@ -387,7 +387,7 @@ namespace AutoWrap.Meta
 
         protected override string GetBaseAndInterfaces()
         {
-            return _definition.FullyQualifiedCLRName;
+            return _classDefinition.FullyQualifiedCLRName;
         }
 
         protected override void AddPrivateDeclarations()
@@ -399,19 +399,19 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            _code.DecreaseIndent();
-            _code.AppendLine("public:");
-            _code.IncreaseIndent();
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("public:");
+            _codeBuilder.IncreaseIndent();
 
             AddPublicConstructors();
 
-            _code.AppendEmptyLine();
+            _codeBuilder.AppendEmptyLine();
             foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
                 if (!prop.IsAbstract)
                 {
                     AddProperty(prop);
-                    _code.AppendEmptyLine();
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
 
@@ -421,23 +421,23 @@ namespace AutoWrap.Meta
                     && !func.IsAbstract)
                 {
                     AddMethod(func);
-                    _code.AppendEmptyLine();
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
         }
 
         protected override void AddProtectedDeclarations()
         {
-            _code.DecreaseIndent();
-            _code.AppendLine("protected public:");
-            _code.IncreaseIndent();
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("protected public:");
+            _codeBuilder.IncreaseIndent();
 
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Protected)
                 {
                     AddMethod(func);
-                    _code.AppendEmptyLine();
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
         }

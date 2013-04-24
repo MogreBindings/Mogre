@@ -46,26 +46,26 @@ namespace AutoWrap.Meta
 
         protected override string GetClassName()
         {
-            string full = _definition.FullyQualifiedCLRName;
+            string full = _classDefinition.FullyQualifiedCLRName;
             int index = full.IndexOf("::");
             string name = full.Substring(index + 2);
 
             index = name.LastIndexOf("::");
             if (index == -1)
-                return GetNativeDirectorName(_definition);
+                return GetNativeDirectorName(_classDefinition);
 
-            if (!_definition.IsNested)
+            if (!_classDefinition.IsNested)
             {
-                return name.Substring(0, index + 2) + GetNativeDirectorName(_definition);
+                return name.Substring(0, index + 2) + GetNativeDirectorName(_classDefinition);
             }
             else
             {
                 name = name.Substring(0, index);
                 index = name.LastIndexOf("::");
                 if (index == -1)
-                    return GetNativeDirectorName(_definition);
+                    return GetNativeDirectorName(_classDefinition);
                 else
-                    return name.Substring(0, index + 2) + GetNativeDirectorName(_definition);
+                    return name.Substring(0, index + 2) + GetNativeDirectorName(_classDefinition);
             }
         }
 
@@ -74,42 +74,42 @@ namespace AutoWrap.Meta
             string def = f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
                 def = def.Substring("virtual ".Length);
-            _code.AppendIndent(def);
+            _codeBuilder.AppendIndent(def);
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
-                _code.Append(" ");
+                _codeBuilder.Append(" ");
                 AddNativeMethodParam(param);
-                if (i < f.Parameters.Count - 1) _code.Append(",");
+                if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
-            _code.Append(" )\n");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.Append(" )\n");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
 
-            _code.AppendLine("if (doCallFor" + f.CLRName + ")");
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine("if (doCallFor" + f.CLRName + ")");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
 
-            CppNativeProxyClassProducer.AddNativeProxyMethodBody(f, "_receiver", _code);
+            CppNativeProxyClassProducer.AddNativeProxyMethodBody(f, "_receiver", _codeBuilder);
 
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
             if (!f.HasReturnValue)
             {
                 if (!f.HasAttribute<DefaultReturnValueAttribute>())
                     throw new Exception("Default return value not set.");
 
-                _code.AppendLine("else");
-                _code.AppendLine("\treturn " + f.GetAttribute<DefaultReturnValueAttribute>().Name + ";");
+                _codeBuilder.AppendLine("else");
+                _codeBuilder.AppendLine("\treturn " + f.GetAttribute<DefaultReturnValueAttribute>().Name + ";");
             }
 
-            _code.DecreaseIndent();
-            _code.AppendLine("}");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}");
         }
 
         protected virtual void AddNativeMethodParam(ParamDefinition param)
         {
-            _code.Append(param.MemberTypeNativeName + " " + param.Name);
+            _codeBuilder.Append(param.MemberTypeNativeName + " " + param.Name);
         }
     }
 }

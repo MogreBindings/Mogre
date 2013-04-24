@@ -36,59 +36,59 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _code.AppendIndent("");
-            if (!_definition.IsNested)
-                _code.Append("public ");
+            _codeBuilder.AppendIndent("");
+            if (!_classDefinition.IsNested)
+                _codeBuilder.Append("public ");
             else
-                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _code.AppendFormat("value class {0}\n", _definition.CLRName);
+                _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _codeBuilder.AppendFormat("value class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPreDeclarations()
         {
-            if (!_definition.IsNested)
+            if (!_classDefinition.IsNested)
             {
-                _wrapper.AddPreDeclaration("value class " + _definition.CLRName + ";");
-                _wrapper.AddPragmaMakePublicForType(_definition);
+                _wrapper.AddPreDeclaration("value class " + _classDefinition.CLRName + ";");
+                _wrapper.AddPragmaMakePublicForType(_classDefinition);
             }
         }
 
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
+            _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* _native;");
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
 
-            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _definition.FullyQualifiedNativeName + " )");
-            _code.AppendEmptyLine();
+            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _classDefinition.FullyQualifiedNativeName + " )");
+            _codeBuilder.AppendEmptyLine();
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("property IntPtr NativePtr");
-            _code.AppendLine("{");
-            _code.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
-            _code.AppendLine("}");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("property IntPtr NativePtr");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
+            _codeBuilder.AppendLine("}");
 
             if (!IsReadOnly)
             {
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
                 AddCreators();
 
-                _code.AppendEmptyLine();
-                _code.AppendLine("void DestroyNativePtr()");
-                _code.AppendLine("{");
-                _code.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
-                _code.AppendLine("}");
+                _codeBuilder.AppendEmptyLine();
+                _codeBuilder.AppendLine("void DestroyNativePtr()");
+                _codeBuilder.AppendLine("{");
+                _codeBuilder.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
+                _codeBuilder.AppendLine("}");
             }
 
-            _code.AppendEmptyLine();
-            _code.AppendLine("property bool IsNull");
-            _code.AppendLine("{");
-            _code.AppendLine("\tbool get() { return (_native == 0); }");
-            _code.AppendLine("}");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("property bool IsNull");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\tbool get() { return (_native == 0); }");
+            _codeBuilder.AppendLine("}");
         }
 
         protected override void AddPublicConstructors()
@@ -97,12 +97,12 @@ namespace AutoWrap.Meta
 
         protected virtual void AddCreators()
         {
-            if (_definition.IsNativeAbstractClass)
+            if (_classDefinition.IsNativeAbstractClass)
                 return;
 
-            if (_definition.Constructors.Length > 0)
+            if (_classDefinition.Constructors.Length > 0)
             {
-                foreach (MemberMethodDefinition func in _definition.Constructors)
+                foreach (MemberMethodDefinition func in _classDefinition.Constructors)
                     if (func.ProtectionLevel == ProtectionLevel.Public)
                         AddCreator(func);
             }
@@ -113,7 +113,7 @@ namespace AutoWrap.Meta
         protected virtual void AddCreator(MemberMethodDefinition f)
         {
             if (f == null)
-                _code.AppendLine("static " + _definition.CLRName + " Create();");
+                _codeBuilder.AppendLine("static " + _classDefinition.CLRName + " Create();");
             else
             {
                 int defcount = 0;
@@ -131,9 +131,9 @@ namespace AutoWrap.Meta
                     if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                         continue;
 
-                    _code.AppendIndent("static " + _definition.CLRName + " Create");
+                    _codeBuilder.AppendIndent("static " + _classDefinition.CLRName + " Create");
                     AddMethodParameters(f, f.Parameters.Count - dc);
-                    _code.Append(";\n");
+                    _codeBuilder.Append(";\n");
                 }
 
             }

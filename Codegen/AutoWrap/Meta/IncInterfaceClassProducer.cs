@@ -44,10 +44,10 @@ namespace AutoWrap.Meta
 
         protected override void AddPreDeclarations()
         {
-            if (!_definition.IsNested)
+            if (!_classDefinition.IsNested)
             {
-                _wrapper.AddPreDeclaration("interface class " + _definition.CLRName + ";");
-                _wrapper.AddPragmaMakePublicForType(_definition);
+                _wrapper.AddPreDeclaration("interface class " + _classDefinition.CLRName + ";");
+                _wrapper.AddPragmaMakePublicForType(_classDefinition);
             }
         }
 
@@ -58,8 +58,8 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicDeclarations()
         {
-            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _definition.CLRName + ", " + _definition.FullyQualifiedNativeName + " )\n");
-            _code.AppendLine("virtual " + _definition.FullyQualifiedNativeName + "* _GetNativePtr();\n");
+            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _classDefinition.CLRName + ", " + _classDefinition.FullyQualifiedNativeName + " )\n");
+            _codeBuilder.AppendLine("virtual " + _classDefinition.FullyQualifiedNativeName + "* _GetNativePtr();\n");
             base.AddPublicDeclarations();
         }
 
@@ -77,12 +77,12 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _code.AppendIndent("");
-            if (!_definition.IsNested)
-                _code.Append("public ");
+            _codeBuilder.AppendIndent("");
+            if (!_classDefinition.IsNested)
+                _codeBuilder.Append("public ");
             else
-                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _code.Append("interface class " + _definition.CLRName + "\n");
+                _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _codeBuilder.Append("interface class " + _classDefinition.CLRName + "\n");
         }
 
         protected override void AddProtectedDeclarations()

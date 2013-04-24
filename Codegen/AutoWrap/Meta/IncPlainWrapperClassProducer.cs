@@ -37,23 +37,23 @@ namespace AutoWrap.Meta
 
         protected override bool RequiresCleanUp
         {
-            get { return _definition.BaseClass == null; }
+            get { return _classDefinition.BaseClass == null; }
         }
 
         protected override bool DoCleanupInFinalizer
         {
-            get { return !_definition.HasAttribute<NoFinalizerAttribute>(); }
+            get { return !_classDefinition.HasAttribute<NoFinalizerAttribute>(); }
         }
 
         protected override void AddInternalDeclarations()
         {
             base.AddInternalDeclarations();
 
-            if (_definition.BaseClass == null)
+            if (_classDefinition.BaseClass == null)
             {
-                _code.AppendLine(_definition.FullyQualifiedNativeName + "* _native;");
-                _code.AppendLine("bool _createdByCLR;");
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* _native;");
+                _codeBuilder.AppendLine("bool _createdByCLR;");
+                _codeBuilder.AppendEmptyLine();
             }
         }
 
@@ -65,13 +65,13 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            if (_definition.Name == _definition.CLRName)
-                _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
+            if (_classDefinition.Name == _classDefinition.CLRName)
+                _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
             else
             {
-                string clrName = _definition.FullyQualifiedCLRName.Substring(_definition.FullyQualifiedCLRName.IndexOf("::") + 2);
-                string nativeName = _definition.FullyQualifiedNativeName.Substring(_definition.FullyQualifiedNativeName.IndexOf("::") + 2);
-                _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
+                string clrName = _classDefinition.FullyQualifiedCLRName.Substring(_classDefinition.FullyQualifiedCLRName.IndexOf("::") + 2);
+                string nativeName = _classDefinition.FullyQualifiedNativeName.Substring(_classDefinition.FullyQualifiedNativeName.IndexOf("::") + 2);
+                _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
             }
         }
 
@@ -79,35 +79,35 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
 
-            if (_definition.BaseClass == null)
+            if (_classDefinition.BaseClass == null)
             {
-                _code.AppendFormatIndent("{0}( " + _definition.FullyQualifiedNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _definition.CLRName);
+                _codeBuilder.AppendFormatIndent("{0}( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _classDefinition.CLRName);
             }
             else
             {
-                ClassDefinition topclass = GetTopClass(_definition);
-                _code.AppendFormatIndent("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _definition.CLRName);
+                ClassDefinition topclass = GetTopClass(_classDefinition);
+                _codeBuilder.AppendFormatIndent("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _classDefinition.CLRName);
             }
-            _code.AppendLine("{");
-            _code.IncreaseIndent();
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.IncreaseIndent();
 
             //NOTE: SuppressFinalize should not be called when the class is 'wrapped' by a SharedPtr class, (i.e DataStreamPtr -> DataStream)
             //so that the SharedPtr class gets a chance to clean up. Look for a way to have SuppressFinalize without this kind of problems.
             //_sb.AppendLine("System::GC::SuppressFinalize(this);");
 
             base.AddConstructorBody();
-            _code.DecreaseIndent();
-            _code.AppendLine("}\n");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("}\n");
         }
 
         protected override void AddDisposerBody()
         {
             base.AddDisposerBody();
-            _code.AppendLine("if (_createdByCLR &&_native)");
-            _code.AppendLine("{");
-            _code.AppendLine("\tdelete _native;");
-            _code.AppendLine("\t_native = 0;");
-            _code.AppendLine("}");
+            _codeBuilder.AppendLine("if (_createdByCLR &&_native)");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\tdelete _native;");
+            _codeBuilder.AppendLine("\t_native = 0;");
+            _codeBuilder.AppendLine("}");
         }
 
         public IncPlainWrapperClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

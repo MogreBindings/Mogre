@@ -36,23 +36,24 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            if (_definition.HasAttribute<SequentialLayoutAttribute> ()) {
-                _code.AppendIndent ("");
-                _code.Append ("[StructLayout(LayoutKind::Sequential)]\n");
+            if (_classDefinition.HasAttribute<SequentialLayoutAttribute> ())
+            {
+                _codeBuilder.AppendIndent ("");
+                _codeBuilder.Append ("[StructLayout(LayoutKind::Sequential)]\n");
             }
 
-            _code.AppendIndent("");
-            if (!_definition.IsNested)
-                _code.Append("public ");
+            _codeBuilder.AppendIndent("");
+            if (!_classDefinition.IsNested)
+                _codeBuilder.Append("public ");
             else
-                _code.Append(_definition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _code.AppendFormat("value class {0}\n", _definition.CLRName);
+                _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
+            _codeBuilder.AppendFormat("value class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPreDeclarations()
         {
-            if (!_definition.IsNested)
-                _wrapper.AddPragmaMakePublicForType(_definition);
+            if (!_classDefinition.IsNested)
+                _wrapper.AddPragmaMakePublicForType(_classDefinition);
         }
 
         protected override void AddInternalDeclarations()
@@ -61,18 +62,18 @@ namespace AutoWrap.Meta
 
             if (IsReadOnly)
             {
-                foreach (MemberFieldDefinition field in _definition.PublicFields)
+                foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
                 {
-                    _code.AppendLine(field.MemberType.FullyQualifiedCLRName + " " + NameToPrivate(field) + ";");
+                    _codeBuilder.AppendLine(field.MemberType.FullyQualifiedCLRName + " " + NameToPrivate(field) + ";");
                 }
-                _code.AppendEmptyLine();
+                _codeBuilder.AppendEmptyLine();
             }
         }
 
         protected override void AddPublicDeclarations()
         {
             base.AddPublicDeclarations();
-            _code.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
+            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
         }
 
         protected override void AddPublicConstructors()
@@ -87,17 +88,17 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _code.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
-                _code.IncreaseIndent();
-                _code.AppendLine(ptype + " get()\n{");
-                _code.AppendLine("\treturn " + NameToPrivate(field) + ";");
-                _code.AppendLine("}");
-                _code.DecreaseIndent();
-                _code.AppendLine("}");
+                _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+                _codeBuilder.IncreaseIndent();
+                _codeBuilder.AppendLine(ptype + " get()\n{");
+                _codeBuilder.AppendLine("\treturn " + NameToPrivate(field) + ";");
+                _codeBuilder.AppendLine("}");
+                _codeBuilder.DecreaseIndent();
+                _codeBuilder.AppendLine("}");
             }
             else
             {
-                _code.AppendLine(field.MemberType.FullyQualifiedCLRName + " " + field.NativeName + ";");
+                _codeBuilder.AppendLine(field.MemberType.FullyQualifiedCLRName + " " + field.NativeName + ";");
             }
         }
 

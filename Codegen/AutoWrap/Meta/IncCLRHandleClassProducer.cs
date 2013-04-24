@@ -37,22 +37,22 @@ namespace AutoWrap.Meta
 
         protected override bool DoCleanupInFinalizer
         {
-            get { return _definition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
+            get { return _classDefinition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
         }
 
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _code.AppendEmptyLine();
-            _code.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
-            _code.AppendLine("{");
-            _code.AppendLine("\t_native = 0;");
-            _code.AppendLine("}");
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\t_native = 0;");
+            _codeBuilder.AppendLine("}");
         }
 
         protected override void AddManagedNativeConversionsDefinition()
         {
-            _code.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
+            _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
         }
 
         public IncCLRHandleClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

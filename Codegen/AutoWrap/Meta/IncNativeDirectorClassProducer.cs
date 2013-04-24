@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return GetNativeDirectorReceiverInterfaceName(_definition);
+                return GetNativeDirectorReceiverInterfaceName(_classDefinition);
             }
         }
 
@@ -65,28 +65,28 @@ namespace AutoWrap.Meta
         {
             get
             {
-                return GetNativeDirectorName(_definition);
+                return GetNativeDirectorName(_classDefinition);
             }
         }
 
         protected override void AddPreBody()
         {
-            _code.AppendLine("interface class " + ReceiverInterfaceName + "\n{");
-            _code.IncreaseIndent();
-            foreach (MemberMethodDefinition f in _definition.PublicMethods)
+            _codeBuilder.AppendLine("interface class " + ReceiverInterfaceName + "\n{");
+            _codeBuilder.IncreaseIndent();
+            foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
                     base.AddMethod(f);
-                    _code.AppendEmptyLine();
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
-            _code.DecreaseIndent();
-            _code.AppendLine("};\n");
+            _codeBuilder.DecreaseIndent();
+            _codeBuilder.AppendLine("};\n");
 
-            if (!_definition.IsNested)
+            if (!_classDefinition.IsNested)
             {
-                AddMethodHandlersClass(_definition, _code);
+                AddMethodHandlersClass(_classDefinition, _codeBuilder);
             }
 
             base.AddPreBody();
@@ -163,58 +163,58 @@ namespace AutoWrap.Meta
         protected override void AddPrivateDeclarations()
         {
             base.AddPrivateDeclarations();
-            _code.AppendLine("gcroot<" + ReceiverInterfaceName + "^> _receiver;");
+            _codeBuilder.AppendLine("gcroot<" + ReceiverInterfaceName + "^> _receiver;");
         }
 
         protected override void AddPublicConstructors()
         {
-            _code.AppendLine(DirectorName + "( " + ReceiverInterfaceName + "^ recv )");
-            _code.AppendIndent("\t: _receiver(recv)");
-            foreach (MemberMethodDefinition f in _definition.PublicMethods)
+            _codeBuilder.AppendLine(DirectorName + "( " + ReceiverInterfaceName + "^ recv )");
+            _codeBuilder.AppendIndent("\t: _receiver(recv)");
+            foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
-                    _code.Append(", doCallFor" + f.CLRName + "(false)");
+                    _codeBuilder.Append(", doCallFor" + f.CLRName + "(false)");
                 }
             }
-            _code.Append("\n");
-            _code.AppendLine("{");
-            _code.AppendLine("}");
+            _codeBuilder.Append("\n");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("}");
         }
 
         protected override void AddPublicFields()
         {
             base.AddPublicFields();
-            foreach (MemberMethodDefinition f in _definition.PublicMethods)
+            foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
-                    _code.AppendLine("bool doCallFor" + f.CLRName + ";");
+                    _codeBuilder.AppendLine("bool doCallFor" + f.CLRName + ";");
                 }
             }
         }
 
         protected override void AddMethod(MemberMethodDefinition f)
         {
-            _code.AppendIndent(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
+            _codeBuilder.AppendIndent(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];
-                _code.Append(" ");
+                _codeBuilder.Append(" ");
                 AddNativeMethodParam(param);
-                if (i < f.Parameters.Count - 1) _code.Append(",");
+                if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
-            _code.Append(" ) override;\n");
+            _codeBuilder.Append(" ) override;\n");
         }
 
         protected virtual void AddNativeMethodParam(ParamDefinition param)
         {
-            _code.Append(param.MemberTypeNativeName + " " + param.Name);
+            _codeBuilder.Append(param.MemberTypeNativeName + " " + param.Name);
         }
 
         protected override void AddDefinition()
         {
-            _code.AppendLine("class " + DirectorName + " : public " + _definition.FullyQualifiedNativeName);
+            _codeBuilder.AppendLine("class " + DirectorName + " : public " + _classDefinition.FullyQualifiedNativeName);
         }
 
         protected override void AddProtectedDeclarations()
