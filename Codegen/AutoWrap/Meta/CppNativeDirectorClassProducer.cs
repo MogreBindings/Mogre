@@ -96,13 +96,11 @@ namespace AutoWrap.Meta
             _code.AppendLine("}");
             if (!f.HasReturnValue)
             {
-                _code.AppendLine("else");
-                string ret = null;
-                if (f.HasAttribute<DefaultReturnValueAttribute>())
-                    ret = f.GetAttribute<DefaultReturnValueAttribute>().Name;
-                else
+                if (!f.HasAttribute<DefaultReturnValueAttribute>())
                     throw new Exception("Default return value not set.");
-                _code.AppendLine("\treturn " + ret + ";");
+
+                _code.AppendLine("else");
+                _code.AppendLine("\treturn " + f.GetAttribute<DefaultReturnValueAttribute>().Name + ";");
             }
 
             _code.DecreaseIndent();
