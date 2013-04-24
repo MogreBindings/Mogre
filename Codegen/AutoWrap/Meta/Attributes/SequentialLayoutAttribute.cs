@@ -25,6 +25,10 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Classes and structs with this attribute will get the <see cref="StructLayout"/> with <c>LayoutKind.Sequential</c>
+    /// added. See documentation on <c>StructLayout</c> for more information.
+    /// </summary>
     public class SequentialLayoutAttribute : AutoWrapAttribute
     {
         public static SequentialLayoutAttribute FromElement(XmlElement elem)
