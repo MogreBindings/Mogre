@@ -1760,7 +1760,7 @@ diff -r -u -N -w Main\include\auto\MogreRoot.h Main\include\auto\MogreRoot.h
 +    // Destructor - this runs in the main thread -- if the user calls Dispose()
      ~Root()
      {
--    	this->!Root();
+-      this->!Root();
 -    }
 -    !Root()
 -    {

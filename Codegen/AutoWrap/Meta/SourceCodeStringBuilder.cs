@@ -116,6 +116,11 @@ namespace AutoWrap.Meta
     
         private string CreateAppendableString(string str, bool firstLineIndent, bool otherLinesIndent)
         {
+            if (_codeStyleDef.IndentionLevelString != "\t") {
+                // Replace remaining tabs with the correct indention style
+                str = str.Replace("\t", _codeStyleDef.IndentionLevelString);
+            }
+
             string[] lines = str.Replace("\r\n", "\n").Split('\n');
             string result;
 
