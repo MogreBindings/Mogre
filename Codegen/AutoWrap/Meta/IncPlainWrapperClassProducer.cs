@@ -45,9 +45,9 @@ namespace AutoWrap.Meta
             get { return !_classDefinition.HasAttribute<NoFinalizerAttribute>(); }
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
-            base.AddInternalDeclarations();
+            base.GenerateCodeInternalDeclarations();
 
             if (_classDefinition.BaseClass == null)
             {
@@ -57,9 +57,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
             AddManagedNativeConversionsDefinition();
         }
 
@@ -95,7 +95,7 @@ namespace AutoWrap.Meta
             //so that the SharedPtr class gets a chance to clean up. Look for a way to have SuppressFinalize without this kind of problems.
             //_sb.AppendLine("System::GC::SuppressFinalize(this);");
 
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}\n");
         }

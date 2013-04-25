@@ -92,25 +92,25 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendFormat("ref class {0}{1}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "");
         }
 
-        protected override void AddInterfaceMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeInterfaceMethod(MemberMethodDefinition f)
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine(f.ProtectionLevel.GetCLRProtectionName() + ":");
             _codeBuilder.IncreaseIndent();
-            base.AddInterfaceMethod(f);
+            base.GenerateCodeInterfaceMethod(f);
         }
 
-        protected override void AddInterfaceMethodsForField(MemberFieldDefinition field)
+        protected override void GenerateCodeInterfaceMethodsForField(MemberFieldDefinition field)
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
             _codeBuilder.IncreaseIndent();
-            base.AddInterfaceMethodsForField(field);
+            base.GenerateCodeInterfaceMethodsForField(field);
         }
 
-        protected override void AddPreBody()
+        protected override void GenerateCodePreBody()
         {
-            base.AddPreBody();
+            base.GenerateCodePreBody();
 
             AddComments();
             AddDefinition();
@@ -119,15 +119,15 @@ namespace AutoWrap.Meta
             _codeBuilder.IncreaseIndent();
         }
 
-        protected override void AddPostBody()
+        protected override void GenerateCodePostBody()
         {
-            base.AddPostBody();
+            base.GenerateCodePostBody();
 
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("};\n");
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             if (IsNativeClass)
@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
             else
                 _codeBuilder.AppendLine("private protected:");
             _codeBuilder.IncreaseIndent();
-            base.AddPrivateDeclarations();
+            base.GenerateCodePrivateDeclarations();
 
             AddCachedFields();
 
@@ -146,7 +146,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddStaticConstructor()
+        protected override void GenerateCodeStaticConstructor()
         {
             if (_classDefinition.IsInterface)
                 _codeBuilder.AppendLine("static " + _classDefinition.Name + "();");
@@ -183,12 +183,12 @@ namespace AutoWrap.Meta
             get { return _classDefinition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("public protected:");
             _codeBuilder.IncreaseIndent();
-            base.AddInternalDeclarations();
+            base.GenerateCodeInternalDeclarations();
 
             AddInternalConstructors();
 
@@ -252,7 +252,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("public:");
@@ -268,12 +268,12 @@ namespace AutoWrap.Meta
             {
                 AddEventMethods();
             }
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
         }
 
-        protected override void AddPreNestedTypes()
+        protected override void GenerateCodePreNestedTypes()
         {
-            base.AddPreNestedTypes();
+            base.GenerateCodePreNestedTypes();
 
             if (_classDefinition.HasAttribute<CustomIncPreDeclarationAttribute>())
             {
@@ -284,9 +284,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPostNestedTypes()
+        protected override void GenerateCodePostNestedTypes()
         {
-            base.AddPostNestedTypes();
+            base.GenerateCodePostNestedTypes();
 
             if (_classDefinition.HasAttribute<CustomIncDeclarationAttribute>())
             {
@@ -512,12 +512,12 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddProtectedDeclarations()
+        protected override void GenerateCodeProtectedDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("protected public:");
             _codeBuilder.IncreaseIndent();
-            base.AddProtectedDeclarations();
+            base.GenerateCodeProtectedDeclarations();
 
             if (_listeners.Count > 0)
             {
@@ -525,9 +525,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddStaticField(MemberFieldDefinition field)
+        protected override void GenerateCodeStaticField(MemberFieldDefinition field)
         {
-            base.AddStaticField(field);
+            base.GenerateCodeStaticField(field);
             _codeBuilder.AppendIndent("");
             if (field.IsConst)
                 _codeBuilder.Append("const ");
@@ -536,13 +536,13 @@ namespace AutoWrap.Meta
             _codeBuilder.Append(GetCLRTypeName(field) + " " + field.NativeName + " = " + field.MemberType.ProduceNativeCallConversionCode(field.FullNativeName, field) + ";\n\n");
         }
 
-        protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
+        protected override void GenerateCodeNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
-            base.AddNestedType(nested);
+            base.GenerateCodeNestedType(nested);
             _wrapper.IncAddType(nested, _codeBuilder);
         }
 
-        protected override void AddAllNestedTypes()
+        protected override void GenerateCodeAllNestedTypes()
         {
             //Predeclare all nested classes in case there are classes referencing their "siblings"
             foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
@@ -562,10 +562,10 @@ namespace AutoWrap.Meta
 
             _codeBuilder.AppendEmptyLine();
 
-            base.AddAllNestedTypes();
+            base.GenerateCodeAllNestedTypes();
         }
 
-        protected override void AddNestedType(AbstractTypeDefinition nested)
+        protected override void GenerateCodeNestedType(AbstractTypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {
@@ -575,7 +575,7 @@ namespace AutoWrap.Meta
                 return;
             }
 
-            base.AddNestedType(nested);
+            base.GenerateCodeNestedType(nested);
             _wrapper.IncAddType(nested, _codeBuilder);
         }
 
@@ -636,7 +636,7 @@ namespace AutoWrap.Meta
             return baseclass;
         }
 
-        protected override void AddMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
             if (f.HasAttribute<CustomIncDeclarationAttribute>())
             {
@@ -726,7 +726,7 @@ namespace AutoWrap.Meta
             AddMethodParameters(f, f.Parameters.Count);
         }
 
-        protected override void AddProperty(MemberPropertyDefinition p)
+        protected override void GenerateCodeProperty(MemberPropertyDefinition p)
         {
             //TODO comments for properties
             //AddComments(p);
@@ -799,7 +799,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        protected override void AddPropertyField(MemberFieldDefinition field)
+        protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);
@@ -897,7 +897,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethodsForField(MemberFieldDefinition field)
+        protected override void GenerateCodeMethodsForField(MemberFieldDefinition field)
         {
             _codeBuilder.AppendLine(GetCLRTypeName(field) + " get_" + field.NativeName + "();");
             ParamDefinition param = new ParamDefinition(this.MetaDef, field, "value");
@@ -914,7 +914,7 @@ namespace AutoWrap.Meta
             //TODO
         }
 
-        protected override void AddPredefinedMethods(PredefinedMethods pm)
+        protected override void GenerateCodePredefinedMethods(PredefinedMethods pm)
         {
             string clrType = _classDefinition.CLRName + (_classDefinition.IsValueType ? "" : "^");
 

@@ -35,9 +35,9 @@ namespace AutoWrap.Meta
             return "Wrapper";
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
             AddManagedNativeConversionsDefinition();
         }
 
@@ -52,14 +52,14 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _classDefinition.Name);
             _codeBuilder.AppendLine("{");
             _codeBuilder.IncreaseIndent();
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}\n");
         }
 
-        protected override void AddPostBody()
+        protected override void GenerateCodePostBody()
         {
-            base.AddPostBody();
+            base.GenerateCodePostBody();
             AddDefaultImplementationClass();
         }
 

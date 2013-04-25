@@ -243,13 +243,13 @@ namespace AutoWrap.Meta
 
     class CppOverridableClassProducer : CppNonOverridableClassProducer
     {
-        public override void Add()
+        public override void GenerateCode()
         {
             if (_classDefinition.IsInterface)
             {
                 SourceCodeStringBuilder tempsb = _codeBuilder;
                 _codeBuilder = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
-                base.Add();
+                base.GenerateCode();
                 string fname = _classDefinition.FullyQualifiedCLRName.Replace(_classDefinition.CLRName, _classDefinition.Name);
                 string res = _codeBuilder.ToString().Replace(_classDefinition.FullyQualifiedCLRName + "::", fname + "::");
                 fname = GetClassName().Replace(_classDefinition.CLRName, _classDefinition.Name);
@@ -259,7 +259,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine(res);
             }
             else
-                base.Add();
+                base.GenerateCode();
         }
 
         protected override bool AllowProtectedMembers
@@ -430,7 +430,7 @@ namespace AutoWrap.Meta
             }
 
             _codeBuilder.AppendEmptyLine();
-            AddConstructorBody();
+            GenerateCodeConstructorBody();
 
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}");
@@ -463,19 +463,19 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddAllNestedTypes()
+        protected override void GenerateCodeAllNestedTypes()
         {
         }
 
-        protected override void AddPreNestedTypes()
+        protected override void GenerateCodePreNestedTypes()
         {
         }
 
-        protected override void AddPostNestedTypes()
+        protected override void GenerateCodePostNestedTypes()
         {
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
             if (_classDefinition.Constructors.Length > 0)
             {
@@ -488,7 +488,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendEmptyLine();
             foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
-                AddProperty(prop);
+                GenerateCodeProperty(prop);
                 _codeBuilder.AppendEmptyLine();
             }
 
@@ -496,19 +496,19 @@ namespace AutoWrap.Meta
             {
                 if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Public)
                 {
-                    AddMethod(func);
+                    GenerateCodeMethod(func);
                     _codeBuilder.AppendEmptyLine();
                 }
             }
         }
 
-        protected override void AddProtectedDeclarations()
+        protected override void GenerateCodeProtectedDeclarations()
         {
             foreach (MemberMethodDefinition func in _overridableFunctions)
             {
                 if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Protected)
                 {
-                    AddMethod(func);
+                    GenerateCodeMethod(func);
                     _codeBuilder.AppendEmptyLine();
                 }
             }

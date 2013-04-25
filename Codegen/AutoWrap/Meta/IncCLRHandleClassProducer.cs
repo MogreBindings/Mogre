@@ -40,9 +40,9 @@ namespace AutoWrap.Meta
             get { return _classDefinition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
-            base.AddPrivateDeclarations();
+            base.GenerateCodePrivateDeclarations();
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
             _codeBuilder.AppendLine("{");

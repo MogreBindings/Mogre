@@ -59,9 +59,9 @@ namespace AutoWrap.Meta
             return param.Type.GetCLRParamTypeName(param);
         }
 
-        protected override void AddPostBody()
+        protected override void GenerateCodePostBody()
         {
-            base.AddPostBody();
+            base.GenerateCodePostBody();
             _codeBuilder.AppendEmptyLine();
 
             if (_classDefinition.HasAttribute<CLRObjectAttribute>(true)) {
@@ -74,9 +74,9 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendEmptyLine();
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
-            base.AddInternalDeclarations();
+            base.GenerateCodeInternalDeclarations();
 
             foreach (ClassDefinition cls in _interfaces)
             {
@@ -88,7 +88,7 @@ namespace AutoWrap.Meta
             }
         }
 
-		protected override void AddPublicDeclarations()
+		protected override void GenerateCodePublicDeclarations()
 		{
 			if (!_classDefinition.IsNativeAbstractClass || _classDefinition.IsInterface)
 			{
@@ -111,7 +111,7 @@ namespace AutoWrap.Meta
 				_codeBuilder.AppendEmptyLine();
 			}
 
-			base.AddPublicDeclarations();
+			base.GenerateCodePublicDeclarations();
 		}
 
         protected virtual void AddPublicConstructor(MemberMethodDefinition function)
@@ -200,13 +200,13 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendEmptyLine();
             }
 
-            AddConstructorBody();
+            GenerateCodeConstructorBody();
 
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}");
         }
 
-        protected override void AddStaticConstructor()
+        protected override void GenerateCodeStaticConstructor()
         {
             if (_classDefinition.IsInterface)
                 _codeBuilder.AppendLine("static " + _classDefinition.Name + "::" + _classDefinition.Name + "()");
@@ -236,9 +236,9 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        protected override void AddPostNestedTypes()
+        protected override void GenerateCodePostNestedTypes()
         {
-            base.AddPostNestedTypes();
+            base.GenerateCodePostNestedTypes();
 
             if (_classDefinition.HasAttribute<CustomCppDeclarationAttribute>())
             {
@@ -249,13 +249,13 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
+        protected override void GenerateCodeNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
-            base.AddNestedType(nested);
+            base.GenerateCodeNestedType(nested);
             _wrapper.CppAddType(nested, _codeBuilder);
         }
 
-        protected override void AddNestedType(AbstractTypeDefinition nested)
+        protected override void GenerateCodeNestedType(AbstractTypeDefinition nested)
         {
             if (nested.HasWrapType(WrapTypes.NativeDirector))
             {
@@ -263,11 +263,11 @@ namespace AutoWrap.Meta
                 return;
             }
 
-            base.AddNestedType(nested);
+            base.GenerateCodeNestedType(nested);
             _wrapper.CppAddType(nested, _codeBuilder);
         }
 
-        protected override void AddMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
             if (f.HasAttribute<CustomCppDeclarationAttribute>())
             {
@@ -528,7 +528,7 @@ namespace AutoWrap.Meta
             return newname;
         }
 
-        protected override void AddProperty(MemberPropertyDefinition p)
+        protected override void GenerateCodeProperty(MemberPropertyDefinition p)
         {
             string ptype = GetCLRTypeName(p);
             string pname =  GetClassName() + "::" + p.Name;
@@ -585,7 +585,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPropertyField(MemberFieldDefinition field)
+        protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
             string ptype = GetCLRTypeName(field);
             string pname = GetClassName () + "::" + (field.HasAttribute<RenameAttribute>() ? field.GetAttribute<RenameAttribute> ().Name : field.NativeName);
@@ -680,7 +680,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethodsForField(MemberFieldDefinition field)
+        protected override void GenerateCodeMethodsForField(MemberFieldDefinition field)
         {
             string managedType = field.MemberType.ProduceNativeCallConversionCode(GetNativeInvokationTarget(field), field);
 
@@ -698,7 +698,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        protected override void AddPredefinedMethods(PredefinedMethods pm)
+        protected override void GenerateCodePredefinedMethods(PredefinedMethods pm)
         {
             string cls = GetClassName();
             switch (pm)

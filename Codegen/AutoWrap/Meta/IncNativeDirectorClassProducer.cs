@@ -49,7 +49,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
         }
 
@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPreBody()
+        protected override void GenerateCodePreBody()
         {
             _codeBuilder.AppendLine("interface class " + ReceiverInterfaceName + "\n{");
             _codeBuilder.IncreaseIndent();
@@ -77,7 +77,7 @@ namespace AutoWrap.Meta
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
                 {
-                    base.AddMethod(f);
+                    base.GenerateCodeMethod(f);
                     _codeBuilder.AppendEmptyLine();
                 }
             }
@@ -89,7 +89,7 @@ namespace AutoWrap.Meta
                 AddMethodHandlersClass(_classDefinition, _codeBuilder);
             }
 
-            base.AddPreBody();
+            base.GenerateCodePreBody();
         }
 
         public static void AddMethodHandlersClass(ClassDefinition type, SourceCodeStringBuilder sb)
@@ -160,9 +160,9 @@ namespace AutoWrap.Meta
 
         //}
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
-            base.AddPrivateDeclarations();
+            base.GenerateCodePrivateDeclarations();
             _codeBuilder.AppendLine("gcroot<" + ReceiverInterfaceName + "^> _receiver;");
         }
 
@@ -194,7 +194,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
             _codeBuilder.AppendIndent(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
             for (int i = 0; i < f.Parameters.Count; i++)
@@ -217,7 +217,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("class " + DirectorName + " : public " + _classDefinition.FullyQualifiedNativeName);
         }
 
-        protected override void AddProtectedDeclarations()
+        protected override void GenerateCodeProtectedDeclarations()
         {
         }
     }

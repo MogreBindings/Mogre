@@ -407,21 +407,29 @@ namespace AutoWrap.Meta
         //    return false;
         //}
 
-        public virtual void Add()
+        /// <summary>
+        /// Generates the classes' code and insertsit at end of the already generated code.
+        /// </summary>
+        /// <seealso cref="GenerateCodeAtBeginning"/>
+        public virtual void GenerateCode()
         {
             Init();
 
-            AddPreBody();
-            AddBody();
-            AddPostBody();
+            GenerateCodePreBody();
+            GenerateCodeBody();
+            GenerateCodePostBody();
         }
 
-        public virtual void AddFirst()
+        /// <summary>
+        /// Generates the classes' code and inserts it before all other code already generated.
+        /// </summary>
+        /// <seealso cref="GenerateCode"/>
+        public virtual void GenerateCodeAtBeginning()
         {
             SourceCodeStringBuilder orig = _codeBuilder;
             _codeBuilder = new SourceCodeStringBuilder(MetaDef.CodeStyleDef);
 
-            Add();
+            GenerateCode();
 
             orig.InsertAt(0, _codeBuilder.ToString());
             _codeBuilder = orig;
@@ -479,7 +487,7 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected virtual void AddPreBody()
+        protected virtual void GenerateCodePreBody()
         {
             // If there are nested NativeDirectors, declare them before the declaration
             // of this class
@@ -489,7 +497,7 @@ namespace AutoWrap.Meta
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if (nested.HasWrapType(WrapTypes.NativeDirector))
-                        AddNestedTypeBeforeMainType(nested);
+                        GenerateCodeNestedTypeBeforeMainType(nested);
                 }
             }
 
@@ -498,31 +506,31 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("//################################################################\n");
         }
 
-        protected virtual void AddNestedTypeBeforeMainType(AbstractTypeDefinition nested)
+        protected virtual void GenerateCodeNestedTypeBeforeMainType(AbstractTypeDefinition nested)
         {
         }
 
-        protected virtual void AddBody()
+        protected virtual void GenerateCodeBody()
         {
-            AddPreNestedTypes();
+            GenerateCodePreNestedTypes();
             _codeBuilder.AppendLine("//Nested Types");
-            AddAllNestedTypes();
-            AddPostNestedTypes();
+            GenerateCodeAllNestedTypes();
+            GenerateCodePostNestedTypes();
             _codeBuilder.AppendLine("//Private Declarations");
-            AddPrivateDeclarations();
+            GenerateCodePrivateDeclarations();
             _codeBuilder.Append("\n");
             _codeBuilder.AppendLine("//Internal Declarations");
-            AddInternalDeclarations();
+            GenerateCodeInternalDeclarations();
             _codeBuilder.Append("\n");
             _codeBuilder.AppendLine("//Public Declarations");
-            AddPublicDeclarations();
+            GenerateCodePublicDeclarations();
             _codeBuilder.Append("\n");
             _codeBuilder.AppendLine("//Protected Declarations");
-            AddProtectedDeclarations();
+            GenerateCodeProtectedDeclarations();
             _codeBuilder.Append("\n");
         }
 
-        protected virtual void AddPostBody()
+        protected virtual void GenerateCodePostBody()
         {
         }
 
@@ -531,37 +539,37 @@ namespace AutoWrap.Meta
             get { return (_interfaces.Count == 0); }
         }
 
-        protected virtual void AddConstructorBody()
+        protected virtual void GenerateCodeConstructorBody()
         {
         }
 
-        protected virtual void AddPrivateDeclarations()
+        protected virtual void GenerateCodePrivateDeclarations()
         {
             if (HasStaticCachedFields())
             {
-                AddStaticConstructor();
+                GenerateCodeStaticConstructor();
                 _codeBuilder.AppendEmptyLine();
             }
         }
 
-        protected virtual void AddStaticConstructor()
+        protected virtual void GenerateCodeStaticConstructor()
         {
         }
 
-        protected virtual void AddInternalDeclarations()
+        protected virtual void GenerateCodeInternalDeclarations()
         {
         }
 
-        protected virtual void AddPreNestedTypes()
+        protected virtual void GenerateCodePreNestedTypes()
         {
         }
 
-        protected virtual void AddAllNestedTypes()
+        protected virtual void GenerateCodeAllNestedTypes()
         {
             List<AbstractTypeDefinition> enums = new List<AbstractTypeDefinition>();
             List<AbstractTypeDefinition> nativePtrClasses = new List<AbstractTypeDefinition>();
-            List<AbstractTypeDefinition> rest = new List<AbstractTypeDefinition>();
             List<AbstractTypeDefinition> typedefs = new List<AbstractTypeDefinition>();
+            List<AbstractTypeDefinition> rest = new List<AbstractTypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
             if (_classDefinition.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer)))
@@ -598,17 +606,27 @@ namespace AutoWrap.Meta
             }
 
             foreach (TypedefDefinition nested in typedefs)
+            {
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
-                    AddNestedType(nested);
+                {
+                    GenerateCodeNestedType(nested);
+                }
+            }
 
             foreach (AbstractTypeDefinition nested in enums)
-                AddNestedType(nested);
+            {
+                GenerateCodeNestedType(nested);
+            }
 
             foreach (AbstractTypeDefinition nested in nativePtrClasses)
-                AddNestedType(nested);
+            {
+                GenerateCodeNestedType(nested);
+            }
 
             foreach (AbstractTypeDefinition nested in rest)
-                AddNestedType(nested);
+            {
+                GenerateCodeNestedType(nested);
+            }
 
             List<AbstractTypeDefinition> iterators = new List<AbstractTypeDefinition>();
 
@@ -621,12 +639,14 @@ namespace AutoWrap.Meta
                 if (AbstractCodeProducer.IsIteratorWrapper((TypedefDefinition)nested))
                     iterators.Add(nested);
                 else
-                    AddNestedType(nested);
+                    GenerateCodeNestedType(nested);
             }
 
             //Add iterators last
             foreach (AbstractTypeDefinition nested in iterators)
-                AddNestedType(nested);
+            {
+                GenerateCodeNestedType(nested);
+            }
 
             // Exit out here if this is CPP
             if((this is CppOverridableClassProducer)) {
@@ -647,7 +667,7 @@ namespace AutoWrap.Meta
                     if (m.MemberType.IsUnnamedSTLContainer
                         && !stls.Contains(m.MemberType.CLRName))
                     {
-                        AddNestedType(m.MemberType);
+                        GenerateCodeNestedType(m.MemberType);
                         stls.Add(m.MemberType.CLRName);
                     }
                 }
@@ -668,7 +688,7 @@ namespace AutoWrap.Meta
                         if (m.MemberType.IsUnnamedSTLContainer
                             && !stls.Contains(m.MemberType.CLRName))
                         {
-                            AddNestedType(m.MemberType);
+                            GenerateCodeNestedType(m.MemberType);
                             stls.Add(m.MemberType.CLRName);
                         }
                     }
@@ -676,11 +696,11 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddPostNestedTypes()
+        protected virtual void GenerateCodePostNestedTypes()
         {
         }
 
-        protected virtual void AddPublicDeclarations()
+        protected virtual void GenerateCodePublicDeclarations()
         {
             foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
@@ -689,7 +709,7 @@ namespace AutoWrap.Meta
                     //if (CheckTypeMemberForGetProperty(field) == false)
                     //    AddMethodsForField(field);
                     //else
-                        AddPropertyField(field);
+                    GenerateCodePropertyField(field);
 
                         _codeBuilder.AppendEmptyLine();
                 }
@@ -702,7 +722,7 @@ namespace AutoWrap.Meta
                      || ( AllowSubclassing && (p.IsStatic || !p.IsVirtual) )
                      || (AllowProtectedMembers && p.ProtectionLevel == ProtectionLevel.Protected) ) )
                 {
-                    AddProperty(EnhanceProperty(p));
+                    GenerateCodeProperty(EnhanceProperty(p));
                     _codeBuilder.Append("\n");
                 }
             }
@@ -714,26 +734,26 @@ namespace AutoWrap.Meta
                     if (f.NativeName.EndsWith("=="))
                     {
                       if( !f.IsIgnored )
-                        AddPredefinedMethods( PredefinedMethods.Equals );
+                          GenerateCodePredefinedMethods(PredefinedMethods.Equals);
                       _codeBuilder.AppendEmptyLine();
                     }
                     else if (f.NativeName.EndsWith("="))
                     {
                       if(!f.IsIgnored)
-                        AddPredefinedMethods(PredefinedMethods.CopyTo);
+                          GenerateCodePredefinedMethods(PredefinedMethods.CopyTo);
                       _codeBuilder.AppendEmptyLine();
                     }
                 }
                 else if (f.IsDeclarableFunction)
                 {
-                    AddMethod(f);
+                    GenerateCodeMethod(f);
                     _codeBuilder.Append("\n");
                 }
             }
 
             if (_classDefinition.HasAttribute<IncludePredefinedMethodAttribute>())
             {
-                AddPredefinedMethods(_classDefinition.GetAttribute<IncludePredefinedMethodAttribute>().Methods);
+                GenerateCodePredefinedMethods(_classDefinition.GetAttribute<IncludePredefinedMethodAttribute>().Methods);
                 _codeBuilder.AppendEmptyLine();
             }
 
@@ -742,11 +762,11 @@ namespace AutoWrap.Meta
                 if (cls == _classDefinition)
                     continue;
 
-                AddInterfaceImplementation(cls);
+                GenerateCodeInterfaceImplementation(cls);
             }
         }
 
-        protected virtual void AddInterfaceImplementation(ClassDefinition iface)
+        protected virtual void GenerateCodeInterfaceImplementation(ClassDefinition iface)
         {
             _codeBuilder.AppendLine("//------------------------------------------------------------");
             _codeBuilder.AppendLine("// Implementation for " + iface.CLRName);
@@ -763,7 +783,7 @@ namespace AutoWrap.Meta
                 {
                     if (!ip.IsContainedIn(_classDefinition, true))
                     {
-                        AddInterfaceProperty(ip);
+                        GenerateCodeInterfaceProperty(ip);
                         _codeBuilder.Append("\n");
                     }
                 }
@@ -780,7 +800,7 @@ namespace AutoWrap.Meta
                 {
                     if (!_classDefinition.ContainsFunctionSignature(inf.Signature, false))
                     {
-                        AddInterfaceMethod(inf);
+                        GenerateCodeInterfaceMethod(inf);
                         _codeBuilder.Append("\n");
                     }
                 }
@@ -800,7 +820,7 @@ namespace AutoWrap.Meta
                         //if (CheckTypeMemberForGetProperty(field) == false)
                         //    AddInterfaceMethodsForField(field);
                         //else
-                            AddInterfacePropertyField(field);
+                        GenerateCodeInterfacePropertyField(field);
 
                         _codeBuilder.AppendEmptyLine();
                     }
@@ -808,27 +828,27 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected virtual void AddInterfaceProperty(MemberPropertyDefinition prop)
+        protected virtual void GenerateCodeInterfaceProperty(MemberPropertyDefinition prop)
         {
-            AddProperty(prop);
+            GenerateCodeProperty(prop);
         }
 
-        protected virtual void AddInterfaceMethod(MemberMethodDefinition f)
+        protected virtual void GenerateCodeInterfaceMethod(MemberMethodDefinition f)
         {
-            AddMethod(f);
+            GenerateCodeMethod(f);
         }
 
-        protected virtual void AddInterfacePropertyField(MemberFieldDefinition field)
+        protected virtual void GenerateCodeInterfacePropertyField(MemberFieldDefinition field)
         {
-            AddPropertyField(field);
+            GenerateCodePropertyField(field);
         }
 
-        protected virtual void AddInterfaceMethodsForField(MemberFieldDefinition field)
+        protected virtual void GenerateCodeInterfaceMethodsForField(MemberFieldDefinition field)
         {
-            AddMethodsForField(field);
+            GenerateCodeMethodsForField(field);
         }
 
-        protected virtual void AddProtectedDeclarations()
+        protected virtual void GenerateCodeProtectedDeclarations()
         {
             if (AllowSubclassing)
             {
@@ -839,7 +859,7 @@ namespace AutoWrap.Meta
                         //if (CheckTypeMemberForGetProperty(field) == false)
                         //    AddMethodsForField(field);
                         //else
-                            AddPropertyField(field);
+                        GenerateCodePropertyField(field);
 
                         _codeBuilder.AppendEmptyLine();
                     }
@@ -850,7 +870,7 @@ namespace AutoWrap.Meta
                     if (f.IsDeclarableFunction &&
                         (AllowProtectedMembers || f.IsStatic || !f.IsVirtual) )
                     {
-                        AddMethod(f);
+                        GenerateCodeMethod(f);
                         _codeBuilder.Append("\n");
                     }
                 }
@@ -906,31 +926,31 @@ namespace AutoWrap.Meta
             return prop;
         }
 
-        protected virtual void AddStaticField(MemberFieldDefinition field)
+        protected virtual void GenerateCodeStaticField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddMethodsForField(MemberFieldDefinition field)
+        protected virtual void GenerateCodeMethodsForField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddPropertyField(MemberFieldDefinition field)
+        protected virtual void GenerateCodePropertyField(MemberFieldDefinition field)
         {
         }
 
-        protected virtual void AddNestedType(AbstractTypeDefinition nested)
+        protected virtual void GenerateCodeNestedType(AbstractTypeDefinition nested)
         {
         }
 
-        protected virtual void AddMethod(MemberMethodDefinition func)
+        protected virtual void GenerateCodeMethod(MemberMethodDefinition func)
         {
         }
 
-        protected virtual void AddProperty(MemberPropertyDefinition prop)
+        protected virtual void GenerateCodeProperty(MemberPropertyDefinition prop)
         {
         }
 
-        protected virtual void AddPredefinedMethods(PredefinedMethods pm)
+        protected virtual void GenerateCodePredefinedMethods(PredefinedMethods pm)
         {
         }
     }

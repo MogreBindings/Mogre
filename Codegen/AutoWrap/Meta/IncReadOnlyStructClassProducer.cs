@@ -54,14 +54,14 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine(_classDefinition.CLRName + "()");
             _codeBuilder.AppendLine("{");
             _codeBuilder.IncreaseIndent();
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}\n");
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
-            base.AddInternalDeclarations();
+            base.GenerateCodeInternalDeclarations();
             foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
                 if (!field.IsIgnored)
@@ -93,7 +93,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        protected override void AddPropertyField(MemberFieldDefinition field)
+        protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);

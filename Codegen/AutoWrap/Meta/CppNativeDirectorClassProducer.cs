@@ -69,7 +69,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
             string def = f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))

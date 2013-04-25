@@ -43,9 +43,9 @@ namespace AutoWrap.Meta
             _codeBuilder.Append("\n");
         }
 
-        protected override void AddPreBody()
+        protected override void GenerateCodePreBody()
         {
-            base.AddPreBody();
+            base.GenerateCodePreBody();
 
             AddDefinition();
 
@@ -54,9 +54,9 @@ namespace AutoWrap.Meta
             _codeBuilder.IncreaseIndent();
         }
 
-        protected override void AddPostBody()
+        protected override void GenerateCodePostBody()
         {
-            base.AddPostBody();
+            base.GenerateCodePostBody();
 
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("};\n");
@@ -185,20 +185,20 @@ namespace AutoWrap.Meta
 
     class IncOverridableClassProducer : IncNonOverridableClassProducer
     {
-        public override void Add()
+        public override void GenerateCode()
         {
             if (_classDefinition.IsInterface)
             {
                 SourceCodeStringBuilder tempsb = _codeBuilder;
                 _codeBuilder = new SourceCodeStringBuilder(this.MetaDef.CodeStyleDef);
-                base.Add();
+                base.GenerateCode();
                 string fname = _classDefinition.FullyQualifiedCLRName.Replace(_classDefinition.CLRName, _classDefinition.Name);
                 string res = _codeBuilder.ToString().Replace(_classDefinition.FullyQualifiedCLRName + "::", fname + "::");
                 _codeBuilder = tempsb;
                 _codeBuilder.AppendLine(res);
             }
             else
-                base.Add();
+                base.GenerateCode();
         }
 
         protected override void AddPreDeclarations()
@@ -373,15 +373,15 @@ namespace AutoWrap.Meta
                 _wrapper.AddPragmaMakePublicForType(_classDefinition);
         }
 
-        protected override void AddAllNestedTypes()
+        protected override void GenerateCodeAllNestedTypes()
         {
         }
 
-        protected override void AddPreNestedTypes()
+        protected override void GenerateCodePreNestedTypes()
         {
         }
 
-        protected override void AddPostNestedTypes()
+        protected override void GenerateCodePostNestedTypes()
         {
         }
 
@@ -390,14 +390,14 @@ namespace AutoWrap.Meta
             return _classDefinition.FullyQualifiedCLRName;
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
             //_sb.DecreaseIndent();
             //_sb.AppendLine("private:");
             //_sb.IncreaseIndent();
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("public:");
@@ -410,7 +410,7 @@ namespace AutoWrap.Meta
             {
                 if (!prop.IsAbstract)
                 {
-                    AddProperty(prop);
+                    GenerateCodeProperty(prop);
                     _codeBuilder.AppendEmptyLine();
                 }
             }
@@ -420,13 +420,13 @@ namespace AutoWrap.Meta
                 if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Public
                     && !func.IsAbstract)
                 {
-                    AddMethod(func);
+                    GenerateCodeMethod(func);
                     _codeBuilder.AppendEmptyLine();
                 }
             }
         }
 
-        protected override void AddProtectedDeclarations()
+        protected override void GenerateCodeProtectedDeclarations()
         {
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("protected public:");
@@ -436,7 +436,7 @@ namespace AutoWrap.Meta
             {
                 if (!func.IsProperty && func.ProtectionLevel == ProtectionLevel.Protected)
                 {
-                    AddMethod(func);
+                    GenerateCodeMethod(func);
                     _codeBuilder.AppendEmptyLine();
                 }
             }

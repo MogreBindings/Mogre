@@ -53,15 +53,15 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
-            base.AddPrivateDeclarations();
+            base.GenerateCodePrivateDeclarations();
             _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* _native;");
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
 
             _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _classDefinition.FullyQualifiedNativeName + " )");
             _codeBuilder.AppendEmptyLine();

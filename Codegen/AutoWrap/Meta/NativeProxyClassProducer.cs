@@ -98,14 +98,14 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPreBody()
+        protected override void GenerateCodePreBody()
         {
             _codeBuilder.AppendLine("//################################################################");
             _codeBuilder.AppendLine("//" + ProxyName);
             _codeBuilder.AppendLine("//################################################################\n");
         }
 
-        protected override void AddBody()
+        protected override void GenerateCodeBody()
         {
             AddFields();
 

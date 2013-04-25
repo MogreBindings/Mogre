@@ -30,9 +30,9 @@ namespace AutoWrap.Meta
 {
     class CppCLRHandleClassProducer : CppPlainWrapperClassProducer
     {
-        protected override void AddConstructorBody()
+        protected override void GenerateCodeConstructorBody()
         {
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("_native->_CLRHandle._MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }

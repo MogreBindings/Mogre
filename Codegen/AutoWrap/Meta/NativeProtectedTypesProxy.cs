@@ -43,7 +43,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        public override void Add()
+        public override void GenerateCode()
         {
             Init();
 
@@ -75,7 +75,7 @@ namespace AutoWrap.Meta
                     if (type.ProtectionLevel == ProtectionLevel.Protected
                         && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
                     {
-                        AddNestedType(type);
+                        GenerateCodeNestedType(type);
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace AutoWrap.Meta
             return false;
         }
 
-        protected override void AddNestedType(AbstractTypeDefinition nested)
+        protected override void GenerateCodeNestedType(AbstractTypeDefinition nested)
         {
             if (nested.IsSTLContainer)
             {
@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        public override void Add()
+        public override void GenerateCode()
         {
             Init();
 

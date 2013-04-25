@@ -35,15 +35,15 @@ namespace AutoWrap.Meta
             return "Wrapper";
         }
 
-        protected override void AddPostBody()
+        protected override void GenerateCodePostBody()
         {
-            base.AddPostBody();
+            base.GenerateCodePostBody();
             AddDefaultImplementationClass();
         }
 
-        protected override void AddConstructorBody()
+        protected override void GenerateCodeConstructorBody()
         {
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("_native->_MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }

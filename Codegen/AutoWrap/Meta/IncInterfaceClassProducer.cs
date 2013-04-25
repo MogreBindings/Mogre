@@ -56,22 +56,22 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
             _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _classDefinition.CLRName + ", " + _classDefinition.FullyQualifiedNativeName + " )\n");
             _codeBuilder.AppendLine("virtual " + _classDefinition.FullyQualifiedNativeName + "* _GetNativePtr();\n");
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
         }
 
         protected override void AddPublicConstructors()
         {
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
         }
 
@@ -85,20 +85,20 @@ namespace AutoWrap.Meta
             _codeBuilder.Append("interface class " + _classDefinition.CLRName + "\n");
         }
 
-        protected override void AddProtectedDeclarations()
+        protected override void GenerateCodeProtectedDeclarations()
         {
         }
 
-        protected override void AddMethod(MemberMethodDefinition f)
+        protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
             if (f.IsVirtual)
-                base.AddMethod(f);
+                base.GenerateCodeMethod(f);
         }
 
-        protected override void AddProperty(MemberPropertyDefinition p)
+        protected override void GenerateCodeProperty(MemberPropertyDefinition p)
         {
             if (p.IsVirtual)
-                base.AddProperty(p);
+                base.GenerateCodeProperty(p);
         }
     }
 }

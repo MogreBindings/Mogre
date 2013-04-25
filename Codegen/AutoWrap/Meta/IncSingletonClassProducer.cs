@@ -66,9 +66,9 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("_singleton = nullptr;");
         }
 
-        protected override void AddPrivateDeclarations()
+        protected override void GenerateCodePrivateDeclarations()
         {
-            base.AddPrivateDeclarations();
+            base.GenerateCodePrivateDeclarations();
             _codeBuilder.AppendLine("static " + _classDefinition.CLRName + "^ _singleton;");
 
             if (_classDefinition.BaseClass == null)
@@ -89,7 +89,7 @@ namespace AutoWrap.Meta
 
             _codeBuilder.AppendLine("{");
             _codeBuilder.IncreaseIndent();
-            base.AddConstructorBody();
+            base.GenerateCodeConstructorBody();
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}\n");
         }

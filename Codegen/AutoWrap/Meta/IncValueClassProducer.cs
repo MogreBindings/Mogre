@@ -56,9 +56,9 @@ namespace AutoWrap.Meta
                 _wrapper.AddPragmaMakePublicForType(_classDefinition);
         }
 
-        protected override void AddInternalDeclarations()
+        protected override void GenerateCodeInternalDeclarations()
         {
-            base.AddInternalDeclarations();
+            base.GenerateCodeInternalDeclarations();
 
             if (IsReadOnly)
             {
@@ -70,9 +70,9 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
             _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
         }
 
@@ -80,7 +80,7 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected override void AddPropertyField(MemberFieldDefinition field)
+        protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
             //TODO comments for fields
             //AddComments(field);

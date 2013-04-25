@@ -40,9 +40,9 @@ namespace AutoWrap.Meta
             return "*_native";
         }
 
-        protected override void AddPublicDeclarations()
+        protected override void GenerateCodePublicDeclarations()
         {
-            base.AddPublicDeclarations();
+            base.GenerateCodePublicDeclarations();
 
             if (!IsReadOnly)
             {
