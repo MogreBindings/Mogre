@@ -510,24 +510,31 @@ namespace AutoWrap.Meta
         {
         }
 
+        /// <summary>
+        /// Generates the main part of the classes' code.
+        /// </summary>
         protected virtual void GenerateCodeBody()
         {
             GenerateCodePreNestedTypes();
             _codeBuilder.AppendLine("//Nested Types");
             GenerateCodeAllNestedTypes();
             GenerateCodePostNestedTypes();
+
             _codeBuilder.AppendLine("//Private Declarations");
             GenerateCodePrivateDeclarations();
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
+
             _codeBuilder.AppendLine("//Internal Declarations");
             GenerateCodeInternalDeclarations();
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
+
             _codeBuilder.AppendLine("//Public Declarations");
             GenerateCodePublicDeclarations();
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
+
             _codeBuilder.AppendLine("//Protected Declarations");
             GenerateCodeProtectedDeclarations();
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected virtual void GenerateCodePostBody()
@@ -543,33 +550,28 @@ namespace AutoWrap.Meta
         {
         }
 
-        protected virtual void GenerateCodePrivateDeclarations()
-        {
-            if (HasStaticCachedFields())
-            {
-                GenerateCodeStaticConstructor();
-                _codeBuilder.AppendEmptyLine();
-            }
-        }
-
         protected virtual void GenerateCodeStaticConstructor()
         {
         }
 
-        protected virtual void GenerateCodeInternalDeclarations()
-        {
-        }
-
+        /// <summary>
+        /// Generates code that goes before the code for nested types.
+        /// </summary>
         protected virtual void GenerateCodePreNestedTypes()
         {
         }
 
+        /// <summary>
+        /// Generates the code for all types (enums, classes, typedefs, ...) that are nested within the current class.
+        /// </summary>
+        /// <seealso cref="GenerateCodePreNestedTypes"/>
+        /// <seealso cref="GenerateCodePostNestedTypes"/>
         protected virtual void GenerateCodeAllNestedTypes()
         {
             List<AbstractTypeDefinition> enums = new List<AbstractTypeDefinition>();
             List<AbstractTypeDefinition> nativePtrClasses = new List<AbstractTypeDefinition>();
             List<AbstractTypeDefinition> typedefs = new List<AbstractTypeDefinition>();
-            List<AbstractTypeDefinition> rest = new List<AbstractTypeDefinition>();
+            List<AbstractTypeDefinition> otherTypes = new List<AbstractTypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
             if (_classDefinition.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer)))
@@ -600,11 +602,12 @@ namespace AutoWrap.Meta
                             typedefs.Add(nested);
                         }
                         else
-                            rest.Add(nested);
+                            otherTypes.Add(nested);
                     }
                 }
             }
 
+            // Add typedefs for value types
             foreach (TypedefDefinition nested in typedefs)
             {
                 if (nested.BaseType.Name == "uint32" || nested.BaseType.HasAttribute<ValueTypeAttribute>())
@@ -623,7 +626,7 @@ namespace AutoWrap.Meta
                 GenerateCodeNestedType(nested);
             }
 
-            foreach (AbstractTypeDefinition nested in rest)
+            foreach (AbstractTypeDefinition nested in otherTypes)
             {
                 GenerateCodeNestedType(nested);
             }
@@ -696,10 +699,66 @@ namespace AutoWrap.Meta
             }
         }
 
+        /// <summary>
+        /// Generates the code that goes after the code for nested types (but before any declarations of the class itself).
+        /// </summary>
         protected virtual void GenerateCodePostNestedTypes()
         {
         }
 
+        /// <summary>
+        /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>private</c>.
+        /// </summary>
+        protected virtual void GenerateCodePrivateDeclarations()
+        {
+            if (HasStaticCachedFields())
+            {
+                GenerateCodeStaticConstructor();
+                _codeBuilder.AppendEmptyLine();
+            }
+        }
+        
+        /// <summary>
+        /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>internal</c>.
+        /// </summary>
+        protected virtual void GenerateCodeInternalDeclarations()
+        {
+        }
+        
+        /// <summary>
+        /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>protected</c>.
+        /// </summary>
+        protected virtual void GenerateCodeProtectedDeclarations()
+        {
+            if (AllowSubclassing)
+            {
+                foreach (MemberFieldDefinition field in _classDefinition.ProtectedFields)
+                {
+                    if (!field.IsIgnored)
+                    {
+                        //if (CheckTypeMemberForGetProperty(field) == false)
+                        //    AddMethodsForField(field);
+                        //else
+                        GenerateCodePropertyField(field);
+        
+                        _codeBuilder.AppendEmptyLine();
+                    }
+                }
+        
+                foreach (MemberMethodDefinition f in _classDefinition.ProtectedMethods)
+                {
+                    if (f.IsDeclarableFunction && (AllowProtectedMembers || f.IsStatic || !f.IsVirtual))
+                    {
+                        GenerateCodeMethod(f);
+                        _codeBuilder.Append("\n");
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>public</c>.
+        /// </summary>
         protected virtual void GenerateCodePublicDeclarations()
         {
             foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
@@ -846,35 +905,6 @@ namespace AutoWrap.Meta
         protected virtual void GenerateCodeInterfaceMethodsForField(MemberFieldDefinition field)
         {
             GenerateCodeMethodsForField(field);
-        }
-
-        protected virtual void GenerateCodeProtectedDeclarations()
-        {
-            if (AllowSubclassing)
-            {
-                foreach (MemberFieldDefinition field in _classDefinition.ProtectedFields)
-                {
-                    if (!field.IsIgnored)
-                    {
-                        //if (CheckTypeMemberForGetProperty(field) == false)
-                        //    AddMethodsForField(field);
-                        //else
-                        GenerateCodePropertyField(field);
-
-                        _codeBuilder.AppendEmptyLine();
-                    }
-                }
-
-                foreach (MemberMethodDefinition f in _classDefinition.ProtectedMethods)
-                {
-                    if (f.IsDeclarableFunction &&
-                        (AllowProtectedMembers || f.IsStatic || !f.IsVirtual) )
-                    {
-                        GenerateCodeMethod(f);
-                        _codeBuilder.Append("\n");
-                    }
-                }
-            }
         }
 
         protected MemberPropertyDefinition EnhanceProperty(MemberPropertyDefinition property)
