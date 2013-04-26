@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class IncSingletonClassProducer : ClassInclCodeProducer
+    class SingletonClassInclProducer : ClassInclProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
             base.AddPublicFields();
         }
 
-        public IncSingletonClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public SingletonClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

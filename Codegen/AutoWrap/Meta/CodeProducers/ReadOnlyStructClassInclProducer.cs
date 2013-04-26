@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncReadOnlyStructClassProducer : ClassInclCodeProducer
+    class ReadOnlyStructClassInclProducer : ClassInclProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -107,7 +107,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        public IncReadOnlyStructClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public ReadOnlyStructClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

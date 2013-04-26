@@ -27,6 +27,9 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Base class for all classes producing code for classes.
+    /// </summary>
     public abstract class ClassCodeProducer : AbstractCodeProducer
     {
         protected readonly Wrapper _wrapper;
@@ -574,7 +577,7 @@ namespace AutoWrap.Meta
             List<AbstractTypeDefinition> otherTypes = new List<AbstractTypeDefinition>();
 
             // Only output nested types on interfaces if we are the abstract class
-            if (_classDefinition.IsInterface && !((this is IncOverridableClassProducer) || (this is CppOverridableClassProducer)))
+            if (_classDefinition.IsInterface && !((this is IncOverridableClassProducer) || (this is OverridableClassCppProducer)))
             {
                 return;
             }
@@ -652,7 +655,8 @@ namespace AutoWrap.Meta
             }
 
             // Exit out here if this is CPP
-            if((this is CppOverridableClassProducer)) {
+            if ((this is OverridableClassCppProducer))
+            {
                 return;
             }
 

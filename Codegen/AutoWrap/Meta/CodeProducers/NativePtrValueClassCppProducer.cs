@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppNativePtrValueClassProducer : ClassCppCodeProducer
+    class NativePtrValueClassCppProducer : ClassCppProducer
     {
         protected override string GetNativeInvokationTarget(bool isConst)
         {
@@ -152,7 +152,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("}");
         }
 
-        public CppNativePtrValueClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public NativePtrValueClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

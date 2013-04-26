@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncValueClassProducer : ClassInclCodeProducer
+    class ValueClassInclProducer : ClassInclProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncValueClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public ValueClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

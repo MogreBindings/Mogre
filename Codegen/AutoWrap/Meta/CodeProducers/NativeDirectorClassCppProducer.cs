@@ -28,14 +28,14 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppNativeDirectorClassProducer : ClassCppCodeProducer
+    class NativeDirectorClassCppProducer : ClassCppProducer
     {
         public override bool IsNativeClass
         {
             get { return true; }
         }
 
-        public CppNativeDirectorClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public NativeDirectorClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }
@@ -90,7 +90,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("{");
             _codeBuilder.IncreaseIndent();
 
-            CppNativeProxyClassProducer.AddNativeProxyMethodBody(f, "_receiver", _codeBuilder);
+            NativeProxyClassCppProducer.AddNativeProxyMethodBody(f, "_receiver", _codeBuilder);
 
             _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendLine("}");

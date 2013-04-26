@@ -28,9 +28,34 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppSingletonClassProducer : ClassCppCodeProducer
+    class CLRHandleClassInclProducer : PlainWrapperClassInclProducer
     {
-        public CppSingletonClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        protected override string GetTopBaseClassName()
+        {
+            return "INativePointer";
+        }
+
+        protected override bool DoCleanupInFinalizer
+        {
+            get { return _classDefinition.HasAttribute<DoCleanupInFinalizerAttribute>(); }
+        }
+
+        protected override void GenerateCodePrivateDeclarations()
+        {
+            base.GenerateCodePrivateDeclarations();
+            _codeBuilder.AppendEmptyLine();
+            _codeBuilder.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
+            _codeBuilder.AppendLine("{");
+            _codeBuilder.AppendLine("\t_native = 0;");
+            _codeBuilder.AppendLine("}");
+        }
+
+        protected override void AddManagedNativeConversionsDefinition()
+        {
+            _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
+        }
+
+        public CLRHandleClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

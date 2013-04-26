@@ -50,7 +50,7 @@ namespace AutoWrap.Meta
         /// </summary>
         Interface,
         /// <summary>
-        /// Denotes a singleton. Generating classes: <see cref="IncSingletonClassProducer"/> and <see cref="CppSingletonClassProducer"/>
+        /// Denotes a singleton. Generating classes: <see cref="SingletonClassInclProducer"/> and <see cref="SingletonClassCppProducer"/>
         /// </summary>
         Singleton, 
         SharedPtr, 

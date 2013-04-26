@@ -28,9 +28,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppPlainWrapperClassProducer : ClassCppCodeProducer
+    class SingletonClassCppProducer : ClassCppProducer
     {
-        public CppPlainWrapperClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public SingletonClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

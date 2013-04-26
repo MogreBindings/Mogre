@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppCLRHandleClassProducer : CppPlainWrapperClassProducer
+    class CLRHandleClassCppProducer : PlainWrapperClassCppProducer
     {
         protected override void GenerateCodeConstructorBody()
         {
@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendLine("_native->_CLRHandle._MapToCLRObject(this, System::Runtime::InteropServices::GCHandleType::Normal);");
         }
 
-        public CppCLRHandleClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public CLRHandleClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

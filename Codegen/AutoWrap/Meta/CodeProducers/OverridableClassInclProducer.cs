@@ -28,9 +28,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class IncNativeProxyClassProducer : NativeProxyClassProducer
+    class NativeProxyClassInclProducer : NativeProxyClassProducer
     {
-        public IncNativeProxyClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public NativeProxyClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }
@@ -183,7 +183,7 @@ namespace AutoWrap.Meta
         //}
     }
 
-    class IncOverridableClassProducer : IncNonOverridableClassProducer
+    class IncOverridableClassProducer : NonOverridableClassInclProducer
     {
         public override void GenerateCode()
         {
@@ -258,7 +258,7 @@ namespace AutoWrap.Meta
         public IncOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new IncNativeProxyClassProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
+            _wrapper.PostClassProducers.Add(new NativeProxyClassInclProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
         }
 
         private string _proxyName;

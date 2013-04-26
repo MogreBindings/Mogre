@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    class CppNonOverridableClassProducer : ClassCppCodeProducer
+    class NonOverridableClassCppProducer : ClassCppProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -104,7 +104,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public CppNonOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public NonOverridableClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

@@ -625,35 +625,35 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new IncNonOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NonOverridableClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Overridable:
                             new IncOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.NativeDirector:
-                            new IncNativeDirectorClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NativeDirectorClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Interface:
-                            new IncInterfaceClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new InterfaceClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             new IncOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Singleton:
-                            new IncSingletonClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new SingletonClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.ReadOnlyStruct:
-                            new IncReadOnlyStructClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new ReadOnlyStructClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.ValueType:
-                            new IncValueClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new ValueClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new IncNativePtrValueClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NativePtrValueClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.CLRHandle:
-                            new IncCLRHandleClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new CLRHandleClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new IncPlainWrapperClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new PlainWrapperClassInclProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.SharedPtr:
                             IncAddSharedPtrType(t, sb);
@@ -709,28 +709,28 @@ namespace AutoWrap.Meta
                     switch (t.GetAttribute<WrapTypeAttribute>().WrapType)
                     {
                         case WrapTypes.NonOverridable:
-                            new CppNonOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NonOverridableClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Overridable:
-                            new CppOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new OverridableClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Interface:
-                            new CppOverridableClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new OverridableClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.NativeDirector:
-                            new CppNativeDirectorClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NativeDirectorClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.NativePtrValueType:
-                            new CppNativePtrValueClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new NativePtrValueClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.Singleton:
-                            new CppSingletonClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new SingletonClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.CLRHandle:
-                            new CppCLRHandleClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new CLRHandleClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                         case WrapTypes.PlainWrapper:
-                            new CppPlainWrapperClassProducer(_metaDef, this, t as ClassDefinition, sb).GenerateCode();
+                            new PlainWrapperClassCppProducer(this._metaDef, this, t as ClassDefinition, sb).GenerateCode();
                             break;
                     }
                 }

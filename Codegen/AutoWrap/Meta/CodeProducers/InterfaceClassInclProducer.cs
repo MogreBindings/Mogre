@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncInterfaceClassProducer : ClassInclCodeProducer
+    class InterfaceClassInclProducer : ClassInclProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -51,7 +51,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncInterfaceClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public InterfaceClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }

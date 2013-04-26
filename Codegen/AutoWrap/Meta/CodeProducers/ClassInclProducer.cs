@@ -28,9 +28,9 @@ using System.Reflection;
 
 namespace AutoWrap.Meta
 {
-    abstract class ClassInclCodeProducer : ClassCodeProducer 
+    abstract class ClassInclProducer : ClassCodeProducer
     {
-        public ClassInclCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public ClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
             AddPreDeclarations();
@@ -571,7 +571,7 @@ namespace AutoWrap.Meta
             {
                 //Interface and native director are already declared before the declaration of this class.
                 //Just declare the method handlers of the class.
-                IncNativeDirectorClassProducer.AddMethodHandlersClass((ClassDefinition)nested, _codeBuilder);
+                NativeDirectorClassInclProducer.AddMethodHandlersClass((ClassDefinition)nested, _codeBuilder);
                 return;
             }
 

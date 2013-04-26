@@ -27,7 +27,7 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    class IncNativePtrValueClassProducer : ClassInclCodeProducer
+    class NativePtrValueClassInclProducer : ClassInclProducer
     {
         protected override string GetTopBaseClassName()
         {
@@ -139,7 +139,7 @@ namespace AutoWrap.Meta
             }
         }
 
-        public IncNativePtrValueClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+        public NativePtrValueClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
         }
