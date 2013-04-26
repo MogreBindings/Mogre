@@ -28,23 +28,17 @@ using System.Text;
 
 namespace AutoWrap.Meta
 {
-    public class IncludeFileWrapEventArgs : EventArgs
-    {
-        private string _include;
-
-        public string IncludeFile
-        {
-            get { return _include; }
-        }
-
-        public IncludeFileWrapEventArgs(string include)
-        {
-            _include = include;
-        }
-    }
-
     public class Wrapper
     {
+        /// <summary>
+        /// Header text for all auto-generated source files.
+        /// </summary>
+        public static readonly string HEADER_TEXT =
+              "/*  This file was produced by the C++/CLI AutoWrapper utility.\n"
+            + " *          Copyright (c) 2006 by Argiris Kirtzidis\n"
+            + " *          Copyright (c) 2010 by Manski\n"
+            + " */\n\n";
+    
         public event EventHandler<IncludeFileWrapEventArgs> IncludeFileWrapped;
 
         private string _includePath;
@@ -1379,15 +1373,19 @@ namespace AutoWrap.Meta
                 AddTypeDependancy(type);
             }
         }
+    }
 
+    public class IncludeFileWrapEventArgs : EventArgs
+    {
+        private string _include;
+        public string IncludeFile
+        {
+            get { return _include; }
+        }
 
-        /// <summary>
-        /// Header text for all auto-generated source files.
-        /// </summary>
-        public static readonly string HEADER_TEXT =
-             "/*  This file was produced by the C++/CLI AutoWrapper utility.\n"
-            +" *          Copyright (c) 2006 by Argiris Kirtzidis\n"
-            +" *          Copyright (c) 2010 by Manski\n"
-            +" */\n\n";
+        public IncludeFileWrapEventArgs(string include)
+        {
+            _include = include;
+        }
     }
 }
