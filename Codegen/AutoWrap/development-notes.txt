@@ -3,6 +3,16 @@
 This file contains some notes on how to understand and how to extend
 AutoWrap's code. It also contains some warnings and design issues.
 
+Terminology
+-----------
+Some terms as they're used in the documentation:
+ * native code: Means C++ code (opposed to CLR code). This is the code from which the CLR
+     code will be generated.
+ * CLR code: Means C++/CLR (.NET) code (opposed to native code). This is the code that will
+     be generated.
+ * Producing: A synonym for "generating"; i.e. we have "code producers" (and not "code generators).
+
+
 Lazy-evaluating of properties
 -----------------------------
 Many properties of the definition classes (like "ClassDefinition" or "MemberMehodDefinition")
@@ -42,3 +52,16 @@ There are (besides the "Attribute.xml" file) a few classes that allow tweaking t
  * CodeStyleDefinition : allows to tweak some settings regarding the generated code (like
                          naming or whitespacing).
 
+File writing
+------------
+For every one of OGRE's .h files a MOGRE .h file and (in most cases) a MOGRE .cpp file will
+be generated (called "produced" here). The entry method for the generation process is
+"Wrapper.GenerateCodeFiles()".
+
+The class used to write the actual code is "SourceCodeStringBuilder". This class is used
+by all code producer classes to produce their code.
+
+What code will be produced for each single type is determined by the code producer class
+used for this type. All code producing classes can be found in "Meta\CodeProducers". Classes
+whose name ends with "InclProducer" will produce ".h" files, classes whose name ends with
+"CppProducer" will produce ".cpp" files.
