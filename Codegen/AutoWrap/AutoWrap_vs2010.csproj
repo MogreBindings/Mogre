@@ -136,6 +136,7 @@
     <Compile Include="Meta\MetaConstructFactory.cs" />
     <Compile Include="Meta\MetaDefBasedClass.cs" />
     <Compile Include="Meta\SourceCodeStringBuilder.cs" />
+    <Compile Include="Meta\WrappedFile.cs" />
     <Compile Include="Mogre\Mogre17.cs" />
     <Compile Include="Meta\CodeProducers\NativeProtectedTypesProxy.cs" />
     <Compile Include="Meta\CodeProducers\OverridableClassCppProducer.cs" />

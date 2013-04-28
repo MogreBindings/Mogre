@@ -411,7 +411,7 @@ namespace AutoWrap.Meta
         //}
 
         /// <summary>
-        /// Generates the classes' code and insertsit at end of the already generated code.
+        /// Generates the classes' code and inserts it at end of the already generated code.
         /// </summary>
         /// <seealso cref="GenerateCodeAtBeginning"/>
         public virtual void GenerateCode()

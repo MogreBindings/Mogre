@@ -47,7 +47,7 @@ namespace AutoWrap.Meta
         /// 2. native pointer value types
         /// 3. everything else (mostly classes)
         /// </summary>
-        public readonly SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
+        internal readonly SortedList<string, WrappedFile> IncludeFiles = new SortedList<string, WrappedFile>();
     
         /// <summary>
         /// This event is fired whenever a native .h files has been wrapped (i.e. when the corresponding
@@ -98,33 +98,33 @@ namespace AutoWrap.Meta
                     if (!IsTypeWrappable(typeDef))
                         continue;
 
-                    List<AbstractTypeDefinition> list;
-                    if (!IncludeFiles.TryGetValue(typeDef.IncludeFileName, out list))
+                    WrappedFile inclFile;
+                    if (!IncludeFiles.TryGetValue(typeDef.IncludeFileName, out inclFile))
                     {
-                        list = new List<AbstractTypeDefinition>();
-                        IncludeFiles.Add(typeDef.IncludeFileName, list);
+                        inclFile = new WrappedFile();
+                        IncludeFiles.Add(typeDef.IncludeFileName, inclFile);
                     }
 
                     // Insert type into the list. See documentation of "IncludeFiles" for the ordering.
                     if (typeDef is EnumDefinition || typeDef.IsInternalTypeDef)
                     {
-                        list.Insert(0, typeDef);
+                        inclFile.ContainedTypes.Insert(0, typeDef);
                     }
                     else if (typeDef.HasWrapType(WrapTypes.NativePtrValueType))
                     {
                         //put it after enums and before other classes
                         int i;
                         // Find the first type that is neither enum nor internal type. Insert type there.
-                        for (i = 0; i < list.Count; i++)
+                        for (i = 0; i < inclFile.ContainedTypes.Count; i++)
                         {
                             if (!(typeDef is EnumDefinition) && !typeDef.IsInternalTypeDef)
                                 break;
                         }
 
-                        list.Insert(i, typeDef);
+                        inclFile.ContainedTypes.Insert(i, typeDef);
                     }
                     else
-                        list.Add(typeDef);
+                        inclFile.ContainedTypes.Add(typeDef);
 
                     if (typeDef.HasWrapType(WrapTypes.Overridable))
                         _overridables.Add((ClassDefinition)typeDef);
@@ -134,8 +134,8 @@ namespace AutoWrap.Meta
                 {
                     if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFileName))
                     {
-                        if (!IncludeFiles[type.IncludeFileName].Contains(type))
-                            IncludeFiles[type.IncludeFileName].Insert(0, type);
+                        if (!IncludeFiles[type.IncludeFileName].ContainedTypes.Contains(type))
+                            IncludeFiles[type.IncludeFileName].ContainedTypes.Insert(0, type);
                     }
                 }
             }
@@ -370,7 +370,7 @@ namespace AutoWrap.Meta
 
             foreach (string include in IncludeFiles.Keys)
             {
-                foreach (AbstractTypeDefinition t in IncludeFiles[include])
+                foreach (AbstractTypeDefinition t in IncludeFiles[include].ContainedTypes)
                     AddCLRObjects(t, clrObjs);
             }
 
@@ -502,7 +502,7 @@ namespace AutoWrap.Meta
             _postClassProducers.Clear();
 
             SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
-            foreach (AbstractTypeDefinition t in IncludeFiles[includeFile])
+            foreach (AbstractTypeDefinition t in IncludeFiles[includeFile].ContainedTypes)
             {
                 IncAddType(t, sbTypes);
             }
@@ -550,7 +550,7 @@ namespace AutoWrap.Meta
             //
             // Generate content
             //
-            foreach (AbstractTypeDefinition t in IncludeFiles[includeFileName]) 
+            foreach (AbstractTypeDefinition t in IncludeFiles[includeFileName].ContainedTypes)
             {
                 CppAddType(t, contentsb);
             }
