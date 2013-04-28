@@ -34,6 +34,9 @@ namespace AutoWrap.Meta
     /// </summary>
     public class MetaDefinition
     {
+        private const string META_TAG = "meta";
+        private const string NAMESPACE_TAG = "namespace";
+
         private readonly XmlDocument _doc = new XmlDocument();
 
         private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
@@ -74,12 +77,20 @@ namespace AutoWrap.Meta
             Factory = factory;
             CodeStyleDef = codeStyleDef;
 
-            XmlElement root = (XmlElement)_doc.GetElementsByTagName("meta")[0];
-
-            foreach (XmlNode elem in root.ChildNodes)
+            // Find the root tag - assumes we only have one meta tag.
+            XmlElement root = (XmlElement)_doc.GetElementsByTagName(META_TAG)[0];
+            
+            // Iterate through all namespaces
+            foreach (XmlNode nsNode in root.ChildNodes)
             {
-                if (elem is XmlElement)
-                    AddNamespace(elem as XmlElement);
+                XmlElement nsElement = nsNode as XmlElement;
+                if (nsElement == null || nsElement.LocalName != NAMESPACE_TAG)
+                {
+                    // Not an XML element or not an namespace element, but something else.
+                    continue;
+                }
+
+                AddNamespace(nsElement);
             }
         }
 
@@ -93,17 +104,28 @@ namespace AutoWrap.Meta
             XmlDocument doc = new XmlDocument();
             doc.Load(file);
 
-            // Find the root tag.
-            XmlElement root = (XmlElement)doc.GetElementsByTagName("meta")[0];
+            // Find the root tag - assumes we only have one meta tag.
+            XmlElement root = (XmlElement)doc.GetElementsByTagName(META_TAG)[0];
 
-            foreach (XmlNode node in root.ChildNodes)
+            // Iterate through all namespaces
+            foreach (XmlNode nsNode in root.ChildNodes)
             {
-                XmlElement elem = node as XmlElement;
-                if (elem == null)
-                    // Not an XML element, but something else.
+                XmlElement nsElement = nsNode as XmlElement;
+                if (nsElement == null || nsElement.LocalName != NAMESPACE_TAG)
+                {
+                    // Not an XML element or not an namespace element, but something else.
                     continue;
-    
-                AddAttributesInNamespace(GetNameSpace(elem.GetAttribute("name")), elem);
+                }
+
+                NamespaceDefinition nsDef = GetNameSpace(nsElement.GetAttribute("name"));
+                foreach (XmlNode typeNode in nsElement.ChildNodes)
+                {
+                    XmlElement typeElement = typeNode as XmlElement;
+                    if (typeElement == null)
+                        continue;
+
+                    AddAttributesInType(nsDef.GetDefType(typeElement.GetAttribute("name")), typeElement);
+                }
             }
 
             foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in _holders)
@@ -112,13 +134,14 @@ namespace AutoWrap.Meta
             }
         }
 
-        private void AddAttributesInNamespace(NamespaceDefinition nameSpace, XmlElement elem)
+        /// <summary>
+        /// Processes the attributes of a type (child element of <c>&lt;namespace&gt;</c>) and then
+        /// adds the 
+        /// </summary>
+        /// <param name="nameSpace"></param>
+        /// <param name="elem"></param>
+        private void AddTypeForProcessing2(NamespaceDefinition nameSpace, XmlElement elem)
         {
-            foreach (XmlNode child in elem.ChildNodes)
-            {
-                if (child is XmlElement)
-                    AddAttributesInType(nameSpace.GetDefType((child as XmlElement).GetAttribute("name")), child as XmlElement);
-            }
         }
 
         private void AddAttributesInType(AbstractTypeDefinition type, XmlElement elem)
