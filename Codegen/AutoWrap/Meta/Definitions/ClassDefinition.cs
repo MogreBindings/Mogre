@@ -1227,10 +1227,5 @@ namespace AutoWrap.Meta
 
             return pfullname;
         }
-
-        public override string ToString()
-        {
-            return "Class: " + CLRName;
-        }
     }
 }

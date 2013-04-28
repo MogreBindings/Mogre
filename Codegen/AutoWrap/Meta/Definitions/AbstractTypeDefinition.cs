@@ -408,7 +408,10 @@ namespace AutoWrap.Meta
 
         public override string ToString()
         {
-            return Name;
+            if (GetType() == typeof(AbstractTypeDefinition))
+                return "Unknown construct: " + Name;
+ 
+            return GetType().Name.Replace("Definition", "") + ": " + Name;
         }
     }
 }
