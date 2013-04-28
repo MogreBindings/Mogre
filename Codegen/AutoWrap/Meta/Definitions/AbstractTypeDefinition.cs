@@ -58,7 +58,7 @@ namespace AutoWrap.Meta
         }
         
         public bool IsTemplate {
-            get { return _definingXmlElement.GetAttribute("template") == "true"; }
+            get { return DefiningXmlElement.GetAttribute("template") == "true"; }
         }
 
         /// <summary>
@@ -103,26 +103,16 @@ namespace AutoWrap.Meta
             }
         }
 
-        private readonly XmlElement _definingXmlElement;
-
         /// <summary>
         /// The XML element that defines this type. Is <c>null</c> for standard types like strings (that are not
         /// defined in the meta.xml file).
         /// </summary>
-        public XmlElement DefiningXmlElement {
-            get { return _definingXmlElement; }
-        }
+        public readonly XmlElement DefiningXmlElement;
 
-        public virtual string IncludeFile
-        {
-            get
-            {
-                if (_definingXmlElement == null)
-                    return null;
-                
-                return _definingXmlElement.GetAttribute("includeFile");
-            }
-        }
+        /// <summary>
+        /// The native .h file in which this type is defined. Is <c>null</c> for standard C/STL/CLR types.
+        /// </summary>
+        public readonly string IncludeFileName;
 
         public virtual bool IsSharedPtr
         {
@@ -136,7 +126,7 @@ namespace AutoWrap.Meta
 
         public virtual string Name
         {
-            get { return _definingXmlElement.GetAttribute("name"); }
+            get { return DefiningXmlElement.GetAttribute("name"); }
         }
 
         public virtual string CLRName
@@ -197,6 +187,31 @@ namespace AutoWrap.Meta
             }
         }
 
+        public bool IsInternalTypeDef
+        {
+            get
+            {
+                if (!(this is TypedefDefinition))
+                {
+                    return false;
+                }
+                
+                if (IsSharedPtr)
+                {
+                    return false;
+                }
+                
+                TypedefDefinition explicitType = this.IsNested ? this.SurroundingClass.DetermineType<TypedefDefinition>(this.Name)
+                                                                : this.Namespace.DetermineType<TypedefDefinition>(this.Name);
+                if (explicitType.IsSTLContainer)
+                {
+                    return false;
+                }
+                
+                return (explicitType.BaseType is DefInternal);
+            }
+        }
+
         /// <summary>
         /// Used for standard types (like <see cref="DefInternal"/>, <see cref="DefUtfString"/>, and <see cref="DefString"/>)
         /// that are not created from XML elements in the meta.xml file.
@@ -206,6 +221,8 @@ namespace AutoWrap.Meta
         {
             // If the namespace is "null", then "nsDef.MetaDef" will throw a NullPointerException
             Namespace = nsDef;
+            DefiningXmlElement = null;
+            IncludeFileName = null;
         }
 
         /// <summary>
@@ -214,39 +231,22 @@ namespace AutoWrap.Meta
         /// <param name="nsDef">the namespace in which this type is defined. Must not be <c>null</c>.</param>
         /// <param name="surroundingClass">The class this type definition is nested in or <c>null</c> if it's not nested.
         /// In the former case the namespace of the class must be identical to the namespace passed as argument.</param>
-        /// <param name="elem">the XML element describing the type</param>
+        /// <param name="elem">the XML element describing the type; must not be <c>null</c></param>
         protected AbstractTypeDefinition(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef.MetaDef)
         {
-            this._definingXmlElement = elem;
+            DefiningXmlElement = elem;
+            IncludeFileName = elem.GetAttribute("includeFile");
+
             Namespace = nsDef;
             if (surroundingClass != null && surroundingClass.Namespace != nsDef) {
                 throw new ArgumentException("Namespaces don't match.");
             }
             SurroundingClass = surroundingClass;
+
             ProtectionLevel = ProtectionLevelExtensions.ParseProtectionLevel(elem.GetAttribute("protection"));
         }
 
-
-        public bool IsInternalTypeDef()
-        {
-            if (!(this is TypedefDefinition))
-                return false;
-
-            if (this.IsSharedPtr)
-                return false;
-
-            TypedefDefinition explicitType = IsNested ? SurroundingClass.DetermineType<TypedefDefinition>(Name) 
-                                                        : Namespace.DetermineType<TypedefDefinition>(Name);
-            if (explicitType.IsSTLContainer)
-                return false;
-
-            if (explicitType.BaseType is DefInternal)
-                return true;
-
-            return false;
-        }
-        
         /// <summary>
         /// Denotes whether this type definition has the specified wrap type. This is it has the <see cref="WrapTypeAttribute"/>
         /// defined with the specified value.

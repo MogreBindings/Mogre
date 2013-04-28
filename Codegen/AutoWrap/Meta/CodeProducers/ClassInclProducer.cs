@@ -40,8 +40,8 @@ namespace AutoWrap.Meta
 
             if (AllowSubclassing)
             {
-                _wrapper.PreClassProducers.Add(new NativeProtectedTypesProxy(metaDef, _wrapper, _classDefinition, _codeBuilder));
-                _wrapper.PostClassProducers.Add(new NativeProtectedStaticsProxy(metaDef, _wrapper, _classDefinition, _codeBuilder));
+                _wrapper.AddPreClassProducer(new NativeProtectedTypesProxy(metaDef, _wrapper, _classDefinition, _codeBuilder));
+                _wrapper.AddPostClassProducer(new NativeProtectedStaticsProxy(metaDef, _wrapper, _classDefinition, _codeBuilder));
                 //_wrapper.PreClassProducers.Add(new IncNativeProtectedTypesProxy(_wrapper, _t, _code));
             }
         }
@@ -590,7 +590,7 @@ namespace AutoWrap.Meta
                     if (m.IsStatic)
                     {
                         _codeBuilder.Append("static ");
-                        _wrapper.UsedTypes.Add(m.MemberType);
+                        _wrapper.AddUsedType(m.MemberType);
                     }
 
                     _codeBuilder.Append(m.MemberTypeCLRName + " " + NameToPrivate(m) + ";\n");

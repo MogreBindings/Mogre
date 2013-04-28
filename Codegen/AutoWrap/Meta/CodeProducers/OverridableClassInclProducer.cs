@@ -258,7 +258,7 @@ namespace AutoWrap.Meta
         public IncOverridableClassProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new NativeProxyClassInclProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
+            _wrapper.AddPostClassProducer(new NativeProxyClassInclProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
         }
 
         private string _proxyName;

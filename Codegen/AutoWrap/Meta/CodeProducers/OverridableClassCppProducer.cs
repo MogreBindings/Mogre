@@ -68,7 +68,7 @@ namespace AutoWrap.Meta
         public OverridableClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
             : base(metaDef, wrapper, t, sb)
         {
-            _wrapper.PostClassProducers.Add(new NativeProxyClassCppProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
+            _wrapper.AddPostClassProducer(new NativeProxyClassCppProducer(metaDef, _wrapper, _classDefinition, _codeBuilder));
         }
 
         private string _proxyName;

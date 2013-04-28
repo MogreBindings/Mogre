@@ -81,7 +81,8 @@ namespace AutoWrap.Meta
         
         private readonly List<AbstractTypeDefinition> _containedTypes = new List<AbstractTypeDefinition>();
         /// <summary>
-        /// Contains the type definitions (mostly class definitions) contained in this namespace.
+        /// The type definitions (mostly class definitions) contained in this namespace. Classes contained in child 
+        /// namespaces are not returned but can be obtained through use of <see cref="ChildNamespaces"/>.
         /// </summary>
         // TODO by manski: What happens when a subclass returns different types for types in this list (like
         //   MOGRE returning "DefUtfString" for "DisplayString")? Then this can't be used for search type or what?

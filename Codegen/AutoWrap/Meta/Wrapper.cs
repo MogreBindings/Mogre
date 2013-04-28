@@ -38,20 +38,29 @@ namespace AutoWrap.Meta
             + " *          Copyright (c) 2006 by Argiris Kirtzidis\n"
             + " *          Copyright (c) 2010 by Manski\n"
             + " */\n\n";
+
+        /// <summary>
+        /// Contains a list of all source .h files for which code is going to be generated. For each file there is
+        /// a list containing all wrappable (see <see cref="IsTypeWrappable"/>) types defined in this include file.
+        /// The types in the lists have the following order:
+        /// 1. enums and internal defs
+        /// 2. native pointer value types
+        /// 3. everything else (mostly classes)
+        /// </summary>
+        public readonly SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
     
         public event EventHandler<IncludeFileWrapEventArgs> IncludeFileWrapped;
 
-        private string _includePath;
-        private string _sourcePath;
-        private MetaDefinition _metaDef;
+        private readonly string _includePath;
+        private readonly string _sourcePath;
+        private readonly MetaDefinition _metaDef;
 
-        public List<string> PreDeclarations = new List<string>();
-        public List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
-        public List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
-        public SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
-        public List<ClassDefinition> Overridables = new List<ClassDefinition>();
-        public List<ClassCodeProducer> PostClassProducers = new List<ClassCodeProducer>();
-        public List<ClassCodeProducer> PreClassProducers = new List<ClassCodeProducer>();
+        private readonly List<ClassCodeProducer> PostClassProducers = new List<ClassCodeProducer>();
+        private readonly List<ClassCodeProducer> PreClassProducers = new List<ClassCodeProducer>();
+        private readonly List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
+        private readonly List<string> PreDeclarations = new List<string>();
+        private readonly List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
+        private readonly List<ClassDefinition> Overridables = new List<ClassDefinition>();
 
         public Wrapper(MetaDefinition meta, string includePath, string sourcePath)
         {
@@ -68,13 +77,13 @@ namespace AutoWrap.Meta
                         continue;
 
                     List<AbstractTypeDefinition> list;
-                    if (!IncludeFiles.TryGetValue(typeDef.IncludeFile, out list))
+                    if (!IncludeFiles.TryGetValue(typeDef.IncludeFileName, out list))
                     {
                         list = new List<AbstractTypeDefinition>();
-                        IncludeFiles.Add(typeDef.IncludeFile, list);
+                        IncludeFiles.Add(typeDef.IncludeFileName, list);
                     }
 
-                    if (typeDef is EnumDefinition || typeDef.IsInternalTypeDef())
+                    if (typeDef is EnumDefinition || typeDef.IsInternalTypeDef)
                     {
                         list.Insert(0, typeDef);
                     }
@@ -82,9 +91,10 @@ namespace AutoWrap.Meta
                     {
                         //put it after enums and before other classes
                         int i;
+                        // Find the first type that is neither enum nor internal type. Insert type there.
                         for (i = 0; i < list.Count; i++)
                         {
-                            if (!(typeDef is EnumDefinition || typeDef.IsInternalTypeDef()))
+                            if (!(typeDef is EnumDefinition) && !typeDef.IsInternalTypeDef)
                                 break;
                         }
 
@@ -99,11 +109,26 @@ namespace AutoWrap.Meta
 
                 foreach (AbstractTypeDefinition type in nsDef.ContainedTypes)
                 {
-                    if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFile))
-                        if (!IncludeFiles[type.IncludeFile].Contains(type))
-                            IncludeFiles[type.IncludeFile].Insert(0, type);
+                    if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFileName))
+                        if (!IncludeFiles[type.IncludeFileName].Contains(type))
+                            IncludeFiles[type.IncludeFileName].Insert(0, type);
                 }
             }
+        }
+
+        public void AddPreClassProducer(ClassCodeProducer producer)
+        {
+            PreClassProducers.Add(producer);
+        }
+
+        public void AddPostClassProducer(ClassCodeProducer producer)
+        {
+            PostClassProducers.Add(producer);
+        }
+
+        public void AddUsedType(AbstractTypeDefinition type)
+        {
+            UsedTypes.Add(type);
         }
 
         /// <summary>
@@ -1310,14 +1335,14 @@ namespace AutoWrap.Meta
 
             foreach (AbstractTypeDefinition type in usedTypes)
             {
-                if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
+                if (String.IsNullOrEmpty(type.IncludeFileName) || type.IncludeFileName == include)
                     continue;
 
-                if (added.Contains(type.IncludeFile))
+                if (added.Contains(type.IncludeFileName))
                     continue;
 
-                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFile) + "\"");
-                added.Add(type.IncludeFile);
+                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFileName) + "\"");
+                added.Add(type.IncludeFileName);
             }
 
             sb.AppendEmptyLine();
@@ -1331,14 +1356,14 @@ namespace AutoWrap.Meta
 
             foreach (AbstractTypeDefinition type in usedTypes)
             {
-                if (String.IsNullOrEmpty(type.IncludeFile) || type.IncludeFile == include)
+                if (String.IsNullOrEmpty(type.IncludeFileName) || type.IncludeFileName == include)
                     continue;
 
-                if (added.Contains(type.IncludeFile))
+                if (added.Contains(type.IncludeFileName))
                     continue;
 
-                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFile) + "\"");
-                added.Add(type.IncludeFile);
+                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFileName) + "\"");
+                added.Add(type.IncludeFileName);
             }
 
             sb.AppendEmptyLine();
