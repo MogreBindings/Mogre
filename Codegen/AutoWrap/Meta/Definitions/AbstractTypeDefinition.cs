@@ -257,21 +257,20 @@ namespace AutoWrap.Meta
             return HasAttribute<WrapTypeAttribute>() && GetAttribute<WrapTypeAttribute>().WrapType == wrapType;
         }
 
-        public AbstractTypeDefinition CreateExplicitType()
+        /// <summary>
+        /// Resolves this type definition to its actual type. This has two applications:
+        /// 
+        /// 1. For a type that is replaced by another type the other type will be returned.
+        /// 2. For a <c>typedef</c> this returns the actual underlying type of the typedef.
+        /// </summary>
+        public virtual AbstractTypeDefinition ResolveType()
         {
             if (this.ReplaceByType != null)
             {
                 return this.ReplaceByType;
             }
 
-            if (this is TypedefDefinition)
-            {
-                return TypedefDefinition.CreateExplicitType((TypedefDefinition)this);
-            }
-            else
-            {
-                return this;
-            }
+            return this;
         }
 
         public virtual string GetNativeTypeName(bool isConst, PassedByType passed)

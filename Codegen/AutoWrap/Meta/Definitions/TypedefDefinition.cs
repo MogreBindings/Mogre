@@ -85,28 +85,35 @@ namespace AutoWrap.Meta
             return base.ProduceNativeCallConversionCode(expr, m);
         }
 
-        public static AbstractTypeDefinition CreateExplicitType(TypedefDefinition typedef)
+        /// <summary>
+        /// Resolves this type definition to its actual type. This has two applications:
+        /// 
+        /// 1. For a type that is replaced by another type the other type will be returned.
+        /// 2. For a <c>typedef</c> this returns the actual underlying type of the typedef.
+        /// </summary>
+        public override AbstractTypeDefinition ResolveType()
         {
+            if (ReplaceByType != null) {
+                return ReplaceByType;
+            }
+
             AbstractTypeDefinition expl = null;
 
-            if (typedef.BaseTypeName.Contains("<") || typedef.BaseTypeName.Contains("std::") || Mogre17.IsCollection(typedef.BaseTypeName))
+            if (BaseTypeName.Contains("<") || BaseTypeName.Contains("std::") || Mogre17.IsCollection(BaseTypeName))
             {
                 // Standard types
-                expl = typedef.MetaDef.Factory.StandardTypesFactory.FindStandardType(typedef);
-            }
-            else if (typedef.Name == "String")
+                expl = MetaDef.Factory.StandardTypesFactory.FindStandardType(this);
+            } else if (Name == "String")
             {
                 // Typdef "String", which is (obviously) a string.
-                expl = new DefStringTypeDef(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
+                expl = new DefStringTypeDef(Namespace, SurroundingClass, DefiningXmlElement);
             }
 
-            if (expl != null)
-            {
-                expl.LinkAttributes(typedef);
-                return expl;
-            }
+            if (expl == null)
+                return this;
 
-            return typedef;
+            expl.LinkAttributes(this);
+            return expl;
         }
 
         /// <summary>
@@ -132,7 +139,8 @@ namespace AutoWrap.Meta
                 elem.InsertAfter(te, null);
             }
 
-            return CreateExplicitType(surroundingClass.Namespace.MetaDef.Factory.CreateTypedef(surroundingClass.Namespace, surroundingClass, elem));
+            TypedefDefinition newTypedef = surroundingClass.Namespace.MetaDef.Factory.CreateTypedef(surroundingClass.Namespace, surroundingClass, elem);
+            return newTypedef.ResolveType();
         }
 
         public override bool IsIgnored

@@ -1098,7 +1098,7 @@ namespace AutoWrap.Meta
                 throw new Exception("Found more than one type");
             else
             {
-                return (T)(object)list[0].CreateExplicitType();
+                return (T)(object)list[0].ResolveType();
             }
         }
 

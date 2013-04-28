@@ -197,7 +197,7 @@ namespace AutoWrap.Meta
                 return (T)type;
             }
 
-            return (T)type.CreateExplicitType();
+            return (T)type.ResolveType();
         }
 
         /// <summary>
