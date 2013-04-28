@@ -89,12 +89,17 @@ namespace AutoWrap.Meta
             return (T)_attributes[typeof(T)];
         }
 
-        // FIXME: Check whether this is really necessary.
-        public void LinkAttributes(AttributeSet set)
+        /// <summary>
+        /// Links the attributes of one type definition to another (newly created) type definition. This
+        /// is primarily used for <c>typedef</c> definitions so that the actual/underlying type that is 
+        /// represented by the typedef gets the same attributes as the typedef itself (and vice versa). 
+        /// </summary>
+        /// <param name="linkedSet">the (original) set that is to be linked to this (new) set. Note that
+        /// the attributes on this (new) set are discarded.</param>
+        public void LinkAttributes(AttributeSet linkedSet)
         {
-            // NOTE: This is needed at one location and it's not enough to copy the elements.
-            //   We need to use the same reference.
-            _attributes = set._attributes;
+            // NOTE: It's not enough to copy the elements. We need to use the same reference (i.e. link it).
+            _attributes = linkedSet._attributes;
         }
     }
 }

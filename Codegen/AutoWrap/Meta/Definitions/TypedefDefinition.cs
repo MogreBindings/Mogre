@@ -91,10 +91,12 @@ namespace AutoWrap.Meta
 
             if (typedef.BaseTypeName.Contains("<") || typedef.BaseTypeName.Contains("std::") || Mogre17.IsCollection(typedef.BaseTypeName))
             {
+                // Standard types
                 expl = typedef.MetaDef.Factory.StandardTypesFactory.FindStandardType(typedef);
             }
             else if (typedef.Name == "String")
             {
+                // Typdef "String", which is (obviously) a string.
                 expl = new DefStringTypeDef(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
             }
 
