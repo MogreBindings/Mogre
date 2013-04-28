@@ -61,7 +61,7 @@
     <Compile Include="Meta\Attributes\CustomClassCppDefinitionAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomCppDeclarationAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomDisposingAttribute.cs" />
-    <Compile Include="Meta\Attributes\CustomIncClassDeclarationAttribute.cs" />
+    <Compile Include="Meta\Attributes\CustomClassInclCodeAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomIncDeclarationAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomIncPreDeclarationAttribute.cs" />
     <Compile Include="Meta\Attributes\CustomNativeProxyDeclarationAttribute.cs" />

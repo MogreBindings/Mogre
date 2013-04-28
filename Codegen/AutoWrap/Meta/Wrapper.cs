@@ -174,7 +174,7 @@ namespace AutoWrap.Meta
             type = (type.IsNested) ? type.SurroundingClass.DetermineType(type.Name)
                        : type.Namespace.DetermineType(type.Name);
 
-            if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
+            if (type.HasAttribute<CustomClassInclCodeAttribute>())
                 return true;
 
             // Check for "Ignore" only AFTER checking for a custom implementation (see previous condition).
@@ -491,9 +491,9 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
-        /// Generates the C++/CLI code for .h file.
+        /// Generates the C++/CLI code for the CLR .h file.
         /// </summary>
-        /// <param name="includeFile">the name of the .h file from which to generate the code</param>
+        /// <param name="includeFile">the name of the native .h file from which to generate the code</param>
         public string GenerateIncludeFileCodeForIncludeFile(string includeFile)
         {
             _usedTypes.Clear();
@@ -537,7 +537,7 @@ namespace AutoWrap.Meta
         /// Genereates the content of a CLR .cpp file for a native .h file. Returns <c>null</c>, if there is no content
         /// for a .cpp file (i.e. if no .cpp file shall be created).
         /// </summary>
-        /// <param name="includeFileName">the name of the native .h file</param>
+        /// <param name="includeFile">the name of the native .h file from which to generate the code</param>
         public string GenerateCppFileCodeForIncludeFile(string includeFileName)
         {
             _usedTypes.Clear();
@@ -685,9 +685,9 @@ namespace AutoWrap.Meta
 
         public void IncAddType(AbstractTypeDefinition t, SourceCodeStringBuilder sb)
         {
-            if (t.HasAttribute<CustomIncClassDefinitionAttribute>())
+            if (t.HasAttribute<CustomClassInclCodeAttribute>())
             {
-                sb.AppendLine(t.GetAttribute<CustomIncClassDefinitionAttribute>().Text);
+                sb.AppendLine(t.GetAttribute<CustomClassInclCodeAttribute>().Text);
                 return;
             }
 

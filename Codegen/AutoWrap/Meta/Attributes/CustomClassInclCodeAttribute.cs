@@ -25,18 +25,22 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
-    public class CustomIncClassDefinitionAttribute : AutoWrapAttribute
+    /// <summary>
+    /// If a class has this attribute, the value of this attribute will be used as class definition in
+    /// the classes' CLR .h file. No code will be generated automatically for this class.
+    /// </summary>
+    public class CustomClassInclCodeAttribute : AutoWrapAttribute
     {
         public string Text;
 
-        public CustomIncClassDefinitionAttribute(string decl)
+        public CustomClassInclCodeAttribute(string decl)
         {
-            this.Text = decl;
+            Text = decl;
         }
 
-        public static CustomIncClassDefinitionAttribute FromElement(XmlElement elem)
+        public static CustomClassInclCodeAttribute FromElement(XmlElement elem)
         {
-            return new CustomIncClassDefinitionAttribute(elem.InnerText);
+            return new CustomClassInclCodeAttribute(elem.InnerText);
         }
     }
 }

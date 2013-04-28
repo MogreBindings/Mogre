@@ -530,12 +530,12 @@ public: property String^ DevicePattern
     <class name="Box" ValueType=""/>
     <class name="PixelBox" ValueType=""/>
     <class name="VertexElement" ReadOnlyForFields="" PureManagedClass="data">
-      <_CustomIncClassDefinition>
+      <_CustomClassInclCode>
 // Can't use a value class inside an array unless it's fully defined.
 // Include the ported VertexElement definition.
 // Update: I changed it to ref class but keep it this way in case it goes back to being value
 #include "Custom\MogreVertexElement.i"
-      </_CustomIncClassDefinition>
+      </_CustomClassInclCode>
     </class>
 
     <class name="SceneNode">
