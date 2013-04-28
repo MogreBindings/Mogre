@@ -165,6 +165,7 @@ The following XML elements are available (under <namespace>):
   * <variable> : denotes a classes'/struct's member variable
   * <function> : denotes a classes' method
   
+TODO: See XML class documentation under "Meta\Attributes".
 
 The following XML attributes can be added to the above mentioned XML elements:
 
