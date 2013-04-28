@@ -67,16 +67,16 @@ namespace AutoWrap.Meta
 
         private readonly MetaDefinition _metaDef;
 
-        private readonly List<ClassCodeProducer> PostClassProducers = new List<ClassCodeProducer>();
-        private readonly List<ClassCodeProducer> PreClassProducers = new List<ClassCodeProducer>();
-        private readonly List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
-        private readonly List<string> PreDeclarations = new List<string>();
-        private readonly List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
+        private readonly List<ClassCodeProducer> _postClassProducers = new List<ClassCodeProducer>();
+        private readonly List<ClassCodeProducer> _preClassProducers = new List<ClassCodeProducer>();
+        private readonly List<AbstractTypeDefinition> _usedTypes = new List<AbstractTypeDefinition>();
+        private readonly List<string> _preDeclarations = new List<string>();
+        private readonly List<AbstractTypeDefinition> _pragmaMakePublicTypes = new List<AbstractTypeDefinition>();
 
         /// <summary>
         /// All classes that are not sealed.
         /// </summary>
-        private readonly List<ClassDefinition> Overridables = new List<ClassDefinition>();
+        private readonly List<ClassDefinition> _overridables = new List<ClassDefinition>();
 
         /// <summary>
         /// Constructor.
@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
                         list.Add(typeDef);
 
                     if (typeDef.HasWrapType(WrapTypes.Overridable))
-                        Overridables.Add((ClassDefinition)typeDef);
+                        _overridables.Add((ClassDefinition)typeDef);
                 }
 
                 foreach (AbstractTypeDefinition type in nsDef.ContainedTypes)
@@ -143,17 +143,17 @@ namespace AutoWrap.Meta
 
         public void AddPreClassProducer(ClassCodeProducer producer)
         {
-            PreClassProducers.Add(producer);
+            _preClassProducers.Add(producer);
         }
 
         public void AddPostClassProducer(ClassCodeProducer producer)
         {
-            PostClassProducers.Add(producer);
+            _postClassProducers.Add(producer);
         }
 
         public void AddUsedType(AbstractTypeDefinition type)
         {
-            UsedTypes.Add(type);
+            _usedTypes.Add(type);
         }
 
         /// <summary>
@@ -271,8 +271,8 @@ namespace AutoWrap.Meta
         public void GenerateCodeFiles()
         {
             StringBuilder builder = new StringBuilder();
-            PreDeclarations.Clear();
-            PragmaMakePublicTypes.Clear();
+            _preDeclarations.Clear();
+            _pragmaMakePublicTypes.Clear();
 
             //
             // Generate all source files from header files.
@@ -309,7 +309,7 @@ namespace AutoWrap.Meta
             // Create PreDeclarations.h
             //
             builder.Clear();
-            foreach (string decl in PreDeclarations)
+            foreach (string decl in _preDeclarations)
             {
                 builder.AppendLine(decl);
             }
@@ -322,7 +322,7 @@ namespace AutoWrap.Meta
             builder.Clear();
             List<AbstractTypeDefinition> typesForMakePublic = new List<AbstractTypeDefinition>();
 
-            foreach (AbstractTypeDefinition t in PragmaMakePublicTypes)
+            foreach (AbstractTypeDefinition t in _pragmaMakePublicTypes)
             {
                 if (!(t is ClassDefinition) || t.IsNested || t.IsIgnored)
                     continue;
@@ -426,11 +426,11 @@ namespace AutoWrap.Meta
         public void ProduceSubclassCodeFiles(System.Windows.Forms.ProgressBar bar)
         {
             bar.Minimum = 0;
-            bar.Maximum = Overridables.Count;
+            bar.Maximum = _overridables.Count;
             bar.Step = 1;
             bar.Value = 0;
 
-            foreach (ClassDefinition type in Overridables)
+            foreach (ClassDefinition type in _overridables)
             {
                 string wrapFile = "Subclass" + type.Name;
                 string incFile = _includePath + "\\" + wrapFile + ".h";
@@ -496,10 +496,10 @@ namespace AutoWrap.Meta
         /// <param name="includeFile">the name of the .h file from which to generate the code</param>
         public string GenerateIncludeFileCodeForIncludeFile(string includeFile)
         {
-            UsedTypes.Clear();
+            _usedTypes.Clear();
 
-            PreClassProducers.Clear();
-            PostClassProducers.Clear();
+            _preClassProducers.Clear();
+            _postClassProducers.Clear();
 
             SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
             foreach (AbstractTypeDefinition t in IncludeFiles[includeFile])
@@ -507,12 +507,12 @@ namespace AutoWrap.Meta
                 IncAddType(t, sbTypes);
             }
 
-            foreach (ClassCodeProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in _postClassProducers)
             {
                 producer.GenerateCode();
             }
 
-            foreach (ClassCodeProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in _preClassProducers)
             {
                 producer.GenerateCodeAtBeginning();
             }
@@ -520,7 +520,7 @@ namespace AutoWrap.Meta
             SourceCodeStringBuilder sb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
-            IncAddIncludeFiles(includeFile, UsedTypes, sb);
+            IncAddIncludeFiles(includeFile, _usedTypes, sb);
 
             sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
@@ -534,34 +534,33 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
-        /// Genereates the content of a CLR .cpp file for a native .h file.
+        /// Genereates the content of a CLR .cpp file for a native .h file. Returns <c>null</c>, if there is no content
+        /// for a .cpp file (i.e. if no .cpp file shall be created).
         /// </summary>
-        /// <param name="include"></param>
-        /// <param name="hasContent"></param>
-        /// <returns></returns>
-        public string GenerateCppFileCodeForIncludeFile(string include)
+        /// <param name="includeFileName">the name of the native .h file</param>
+        public string GenerateCppFileCodeForIncludeFile(string includeFileName)
         {
-            UsedTypes.Clear();
+            _usedTypes.Clear();
 
-            PreClassProducers.Clear();
-            PostClassProducers.Clear();
+            _preClassProducers.Clear();
+            _postClassProducers.Clear();
 
             SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
          
             //
             // Generate content
             //
-            foreach (AbstractTypeDefinition t in IncludeFiles[include])
+            foreach (AbstractTypeDefinition t in IncludeFiles[includeFileName]) 
             {
                 CppAddType(t, contentsb);
             }
 
-            foreach (ClassCodeProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in _postClassProducers)
             {
                 producer.GenerateCode();
             }
 
-            foreach (ClassCodeProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in _preClassProducers)
             {
                 producer.GenerateCodeAtBeginning();
             }
@@ -578,9 +577,9 @@ namespace AutoWrap.Meta
             //
             contentsb.Clear();
 
-            CppAddIncludeFiles(include, UsedTypes, contentsb);
+            CppAddIncludeFiles(includeFileName, _usedTypes, contentsb);
 
-            contentsb.AppendFormat("namespace {0}\n{{\n", this._metaDef.ManagedNamespace);
+            contentsb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
 
             contentsb.IncreaseIndent();
             contentsb.AppendLine(content);
@@ -594,10 +593,10 @@ namespace AutoWrap.Meta
 
         public string GenerateIncludeFileCodeForOverridable(ClassDefinition type)
         {
-            UsedTypes.Clear();
+            _usedTypes.Clear();
 
-            PreClassProducers.Clear();
-            PostClassProducers.Clear();
+            _preClassProducers.Clear();
+            _postClassProducers.Clear();
 
             SourceCodeStringBuilder sbTypes = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
 
@@ -611,14 +610,14 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (ClassCodeProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in _postClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
                     producer.GenerateCode();
             }
 
-            foreach (ClassCodeProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in _preClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
@@ -650,8 +649,8 @@ namespace AutoWrap.Meta
 
             sb.IncreaseIndent();
 
-            PreClassProducers.Clear();
-            PostClassProducers.Clear();
+            _preClassProducers.Clear();
+            _postClassProducers.Clear();
 
             new CppSubclassingClassProducer(this._metaDef, this, type, sb, null).GenerateCode();
             if (type.HasAttribute<InterfacesForOverridableAttribute>())
@@ -663,14 +662,14 @@ namespace AutoWrap.Meta
                 }
             }
 
-            foreach (ClassCodeProducer producer in PostClassProducers)
+            foreach (ClassCodeProducer producer in _postClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
                     producer.GenerateCode();
             }
 
-            foreach (ClassCodeProducer producer in PreClassProducers)
+            foreach (ClassCodeProducer producer in _preClassProducers) 
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
@@ -898,7 +897,7 @@ namespace AutoWrap.Meta
 
             if (!type.IsNested)
             {
-                PreDeclarations.Add("ref class " + type.Name + ";");
+                _preDeclarations.Add("ref class " + type.Name + ";");
                 sb.AppendIndent("public ");
             }
             else
@@ -1414,20 +1413,20 @@ namespace AutoWrap.Meta
 
         public virtual void AddTypeDependancy(AbstractTypeDefinition type)
         {
-            if (!UsedTypes.Contains(type))
-                UsedTypes.Add(type);
+            if (!_usedTypes.Contains(type))
+                _usedTypes.Add(type);
         }
 
         public virtual void AddPreDeclaration(string decl)
         {
-            if (!PreDeclarations.Contains(decl))
-                PreDeclarations.Add(decl);
+            if (!_preDeclarations.Contains(decl))
+                _preDeclarations.Add(decl);
         }
 
         public virtual void AddPragmaMakePublicForType(AbstractTypeDefinition type)
         {
-            if (!PragmaMakePublicTypes.Contains(type))
-                PragmaMakePublicTypes.Add(type);
+            if (!_pragmaMakePublicTypes.Contains(type))
+                _pragmaMakePublicTypes.Add(type);
         }
 
         public virtual void CheckTypeForDependancy(AbstractTypeDefinition type)
