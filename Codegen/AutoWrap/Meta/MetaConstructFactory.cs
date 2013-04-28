@@ -10,6 +10,21 @@ namespace AutoWrap.Meta
     /// </summary>
     public class MetaConstructFactory
     {
+        private readonly StandardTypesFactory _factory;
+        public StandardTypesFactory StandardTypesFactory
+        {
+            get { return _factory; }
+        }
+
+        public MetaConstructFactory() : this(new StandardTypesFactory())
+        {
+        }
+
+        public MetaConstructFactory(StandardTypesFactory factory)
+        {
+            _factory = factory;
+        }
+
         public virtual NamespaceDefinition CreateNamespace(MetaDefinition metaDef, XmlElement elem)
         {
             return new NamespaceDefinition(metaDef, elem);

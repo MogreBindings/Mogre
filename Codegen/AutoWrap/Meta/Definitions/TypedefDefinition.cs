@@ -85,30 +85,13 @@ namespace AutoWrap.Meta
             return base.ProduceNativeCallConversionCode(expr, m);
         }
 
-        public static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
+        public static AbstractTypeDefinition CreateExplicitType(TypedefDefinition typedef)
         {
-            TypedefDefinition expl = null;
+            AbstractTypeDefinition expl = null;
 
             if (typedef.BaseTypeName.Contains("<") || typedef.BaseTypeName.Contains("std::") || Mogre17.IsCollection(typedef.BaseTypeName))
             {
-                if (typedef.BaseTypeName == "std::vector" || typedef.BaseTypeName == "std::list")
-                {
-                    expl = DefTemplateOneType.CreateExplicitType(typedef);
-                }
-                else
-                {
-                    switch (typedef.TypeNames.Length)
-                    {
-                        case 1:
-                            expl = DefTemplateOneType.CreateExplicitType(typedef);
-                            break;
-                        case 2:
-                            expl = DefTemplateTwoTypes.CreateExplicitType(typedef);
-                            break;
-                        default:
-                            throw new Exception("Unexpected");
-                    }
-                }
+                expl = typedef.MetaDef.Factory.StandardTypesFactory.FindStandardType(typedef);
             }
             else if (typedef.Name == "String")
             {
@@ -127,7 +110,7 @@ namespace AutoWrap.Meta
         /// <summary>
         /// Creates a type definition for a collection type (e.g. a list or a map).
         /// </summary>
-        public static TypedefDefinition CreateExplicitCollectionType(ClassDefinition surroundingClass, string container, string key, string val)
+        public static AbstractTypeDefinition CreateExplicitCollectionType(ClassDefinition surroundingClass, string container, string key, string val)
         {
             string stdcont = "std::" + container;
             XmlDocument doc = new XmlDocument();

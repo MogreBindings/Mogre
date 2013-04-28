@@ -98,6 +98,7 @@
     <Compile Include="Meta\CodeProducers\PlainWrapperClassCppProducer.cs" />
     <Compile Include="Meta\Definitions\ClassDefinition.cs" />
     <Compile Include="Meta\Definitions\EnumDefinition.cs" />
+    <Compile Include="Meta\Definitions\ExplicitTypes\StandardTypesFactory.cs" />
     <Compile Include="Meta\Definitions\IRenamable.cs" />
     <Compile Include="Meta\Definitions\MemberFieldDefinition.cs" />
     <Compile Include="Meta\Definitions\MemberMethodDefinition.cs" />
