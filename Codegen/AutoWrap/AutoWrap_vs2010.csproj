@@ -195,6 +195,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="c++cli-cheat-sheet.txt" />
     <Content Include="development-notes.txt" />
     <Content Include="readme.txt" />
   </ItemGroup>
