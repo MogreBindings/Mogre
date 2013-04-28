@@ -30,6 +30,7 @@ namespace AutoWrap.Meta
     /// A set of attributes (identified by their type; see sub classes of <see cref="AutoWrapAttribute"/>) associated with
     /// a source code element. Note that only source code elements coming from the original C++ code have associated attributes.
     /// Source code elements generated from the C++ sources (like CLR properties or types) won't be derived from this class.
+    /// Note also that attributes may be added to this set at any time (prior to generating the wrapper source code).
     /// </summary>
     public abstract class AttributeSet : AbstractCodeProducer
     {
