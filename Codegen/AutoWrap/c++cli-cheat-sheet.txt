@@ -127,8 +127,8 @@ Notes:
   * Don't forget to terminate a type declaration (even classes and structs) with a semicolon;
     i.e. use "ref class MyClass { };". Otherwise you will get compiler errors. (Just added this
     here as this is not necessary in C#.)
-  * In C++/CLI a CLR type can be used as a handle or not directly on the stack, i.e.:
-    "MyCLRType^ myHandleVar" <=> "MyCLRType myStackVar"
+  * In C++/CLI a CLR type can be used as a handle or directly on the stack, i.e.:
+    "MyCLRType^ myHandleVar" (handle on heap) vs. "MyCLRType myStackVar" (stack)
 
 
 Modifiers: visibility
@@ -189,10 +189,10 @@ Inheritance
 Inheritance for CLR types is like you know it from C#. Therefore just some notes:
 
  * Only public inheritance is allowed for CLR types. This doesn't work:
-   ref class Derived1 : private Base {};
+   ref class Derived1 : private Base {}; // which would be allowed in C++
    If no visibility is specified, "public" will be assumed automatically.
  * Multiple inheritance isn't supported by the CLR (although it is by C++).
- * "value" types can only inherit interfaces.
+ * "value" types can only inherit interfaces but not classes.
  * "value" types are automatically sealed.
 
 
@@ -202,7 +202,7 @@ Arrays are defined like this in C++/CLI:
 
  * array<int>^ myArr1
  * array<String^>^ myArr2
- * array<String^> myArr3
+ * array<String^> myArr3  // sits on the stack
 
 Arrays (if they're a handle) are created using "gcnew":
 
