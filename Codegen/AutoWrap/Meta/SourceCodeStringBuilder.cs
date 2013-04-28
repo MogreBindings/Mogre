@@ -27,6 +27,15 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
+        /// Clears this string builder.
+        /// </summary>
+        public void Clear()
+        {
+            _builder.Clear();
+            _curIndention = "";
+        }
+
+        /// <summary>
         /// Increases the indention by one level.
         /// </summary>
         public void IncreaseIndent()

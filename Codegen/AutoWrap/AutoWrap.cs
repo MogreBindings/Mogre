@@ -73,10 +73,7 @@ namespace AutoWrap
             if (_showHeaderFiles)
                 _sourceCodeField.Text = _wrapper.GenerateIncludeFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString()).Replace("\n", "\r\n");
             else
-            {
-                bool hasContent;
-                _sourceCodeField.Text = _wrapper.GenerateCppFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString(), out hasContent).Replace("\n", "\r\n");
-            }
+                _sourceCodeField.Text = _wrapper.GenerateCppFileCodeForIncludeFile(_inputFilesList.SelectedItem.ToString()).Replace("\n", "\r\n");
         }
     }
 }

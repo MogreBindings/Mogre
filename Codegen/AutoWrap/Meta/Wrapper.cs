@@ -40,7 +40,7 @@ namespace AutoWrap.Meta
             + " */\n\n";
 
         /// <summary>
-        /// Contains a list of all source .h files for which code is going to be generated. For each file there is
+        /// Contains a list of all native .h files for which code is going to be generated. For each file there is
         /// a list containing all wrappable (see <see cref="IsTypeWrappable"/>) types defined in this include file.
         /// The types in the lists have the following order:
         /// 1. enums and internal defs
@@ -49,10 +49,22 @@ namespace AutoWrap.Meta
         /// </summary>
         public readonly SortedList<string, List<AbstractTypeDefinition>> IncludeFiles = new SortedList<string, List<AbstractTypeDefinition>>();
     
+        /// <summary>
+        /// This event is fired whenever a native .h files has been wrapped (i.e. when the corresponding
+        /// CLR .cpp and .h files were generated).
+        /// </summary>
         public event EventHandler<IncludeFileWrapEventArgs> IncludeFileWrapped;
 
+        /// <summary>
+        /// Path where to store the generated .h files.
+        /// </summary>
         private readonly string _includePath;
+
+        /// <summary>
+        /// Path where to store the generated .cpp files.
+        /// </summary>
         private readonly string _sourcePath;
+
         private readonly MetaDefinition _metaDef;
 
         private readonly List<ClassCodeProducer> PostClassProducers = new List<ClassCodeProducer>();
@@ -60,8 +72,18 @@ namespace AutoWrap.Meta
         private readonly List<AbstractTypeDefinition> UsedTypes = new List<AbstractTypeDefinition>();
         private readonly List<string> PreDeclarations = new List<string>();
         private readonly List<AbstractTypeDefinition> PragmaMakePublicTypes = new List<AbstractTypeDefinition>();
+
+        /// <summary>
+        /// All classes that are not sealed.
+        /// </summary>
         private readonly List<ClassDefinition> Overridables = new List<ClassDefinition>();
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="meta">the information about the data type to be wrapped</param>
+        /// <param name="includePath">the path where to store the generated .h files</param>
+        /// <param name="sourcePath">the path where to store the generated .cpp files</param>
         public Wrapper(MetaDefinition meta, string includePath, string sourcePath)
         {
             _includePath = includePath;
@@ -83,6 +105,7 @@ namespace AutoWrap.Meta
                         IncludeFiles.Add(typeDef.IncludeFileName, list);
                     }
 
+                    // Insert type into the list. See documentation of "IncludeFiles" for the ordering.
                     if (typeDef is EnumDefinition || typeDef.IsInternalTypeDef)
                     {
                         list.Insert(0, typeDef);
@@ -110,8 +133,10 @@ namespace AutoWrap.Meta
                 foreach (AbstractTypeDefinition type in nsDef.ContainedTypes)
                 {
                     if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFileName))
+                    {
                         if (!IncludeFiles[type.IncludeFileName].Contains(type))
                             IncludeFiles[type.IncludeFileName].Insert(0, type);
+                    }
                 }
             }
         }
@@ -255,7 +280,7 @@ namespace AutoWrap.Meta
             foreach (string includeFile in IncludeFiles.Keys)
             {
                 // Strip ".h" from the file name
-                string baseFileName = GetManagedIncludeFileName(includeFile.Substring(0, includeFile.Length - 2));
+                string baseFileName = GetCLRIncludeFileName(includeFile.Substring(0, includeFile.Length - 2));
 
                 string incFile = _includePath + "\\" + baseFileName + ".h";
                 string cppFile = _sourcePath + "\\" + baseFileName + ".cpp";
@@ -269,15 +294,15 @@ namespace AutoWrap.Meta
                 WriteToFile(incFile, builder.ToString(), true);
 
                 // Source file
-                bool hasContent;
-                string txt = GenerateCppFileCodeForIncludeFile(includeFile, out hasContent);
-                if (hasContent)
+                string content = GenerateCppFileCodeForIncludeFile(includeFile);
+                if (content != null)
                 {
                     // There is a .cpp file for the .h file.
-                    WriteToFile(cppFile, txt, true);
+                    WriteToFile(cppFile, content, true);
                 }
 
-                IncludeFileWrapped(this, new IncludeFileWrapEventArgs(includeFile));
+                if (IncludeFileWrapped != null)
+                    IncludeFileWrapped(this, new IncludeFileWrapEventArgs(includeFile));
             }
 
             //
@@ -449,15 +474,20 @@ namespace AutoWrap.Meta
             }
         }
 
-        protected string GetManagedIncludeFileName(string name)
+        /// <summary>
+        /// Returns the CLR .h file name for a native .h file name.
+        /// </summary>
+        /// <param name="nativeIncludeFileName">the native .h file name</param>
+        protected string GetCLRIncludeFileName(string nativeIncludeFileName)
         {
-            name = name.Replace('/', '_').Replace('\\', '_');
-            if (name.StartsWith(_metaDef.NativeNamespace))
-                name = _metaDef.ManagedNamespace + name.Substring(_metaDef.NativeNamespace.Length);
-            else
-                name = _metaDef.ManagedNamespace + "-" + name;
+            // Native files from subdirectories (e.g. "WIN32") will go directly in the CLR directory
+            // with their directory names being part of the file name (e.g. "WIN32_MyFileName.h").
+            nativeIncludeFileName = nativeIncludeFileName.Replace('/', '_').Replace('\\', '_');
+      
+            if (nativeIncludeFileName.StartsWith(_metaDef.NativeNamespace))
+                return _metaDef.ManagedNamespace + nativeIncludeFileName.Substring(_metaDef.NativeNamespace.Length);
 
-            return name;
+            return _metaDef.ManagedNamespace + "-" + nativeIncludeFileName;
         }
 
         /// <summary>
@@ -503,7 +533,13 @@ namespace AutoWrap.Meta
             return sb.ToString();
         }
 
-        public string GenerateCppFileCodeForIncludeFile(string include, out bool hasContent)
+        /// <summary>
+        /// Genereates the content of a CLR .cpp file for a native .h file.
+        /// </summary>
+        /// <param name="include"></param>
+        /// <param name="hasContent"></param>
+        /// <returns></returns>
+        public string GenerateCppFileCodeForIncludeFile(string include)
         {
             UsedTypes.Clear();
 
@@ -511,6 +547,10 @@ namespace AutoWrap.Meta
             PostClassProducers.Clear();
 
             SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
+         
+            //
+            // Generate content
+            //
             foreach (AbstractTypeDefinition t in IncludeFiles[include])
             {
                 CppAddType(t, contentsb);
@@ -526,27 +566,30 @@ namespace AutoWrap.Meta
                 producer.GenerateCodeAtBeginning();
             }
 
-            SourceCodeStringBuilder sb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
-            hasContent = false;
-
-            CppAddIncludeFiles(include, UsedTypes, sb);
-
-            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
-
-            sb.IncreaseIndent();
-
-            string txt = contentsb.ToString();
-            if (txt != "")
+            string content = contentsb.ToString();
+            if (content == "")
             {
-                hasContent = true;
-                sb.AppendLine(txt);
+                // No content for the .cpp file. Happens for some constructs that'll only have .h files.
+                return null;
             }
 
-            sb.DecreaseIndent();
+            //
+            // Generate surroundings (include statements and namespace block)
+            //
+            contentsb.Clear();
 
-            sb.AppendLine("}");
+            CppAddIncludeFiles(include, UsedTypes, contentsb);
 
-            return sb.ToString();
+            contentsb.AppendFormat("namespace {0}\n{{\n", this._metaDef.ManagedNamespace);
+
+            contentsb.IncreaseIndent();
+            contentsb.AppendLine(content);
+
+            contentsb.DecreaseIndent();
+
+            contentsb.AppendLine("}");
+
+            return contentsb.ToString();
         }
 
         public string GenerateIncludeFileCodeForOverridable(ClassDefinition type)
@@ -1341,7 +1384,7 @@ namespace AutoWrap.Meta
                 if (added.Contains(type.IncludeFileName))
                     continue;
 
-                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFileName) + "\"");
+                sb.AppendLine("#include \"" + GetCLRIncludeFileName(type.IncludeFileName) + "\"");
                 added.Add(type.IncludeFileName);
             }
 
@@ -1351,7 +1394,7 @@ namespace AutoWrap.Meta
         private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
-            sb.AppendFormat("#include \"{0}\"\n", GetManagedIncludeFileName(include));
+            sb.AppendFormat("#include \"{0}\"\n", GetCLRIncludeFileName(include));
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)
@@ -1362,7 +1405,7 @@ namespace AutoWrap.Meta
                 if (added.Contains(type.IncludeFileName))
                     continue;
 
-                sb.AppendLine("#include \"" + GetManagedIncludeFileName(type.IncludeFileName) + "\"");
+                sb.AppendLine("#include \"" + GetCLRIncludeFileName(type.IncludeFileName) + "\"");
                 added.Add(type.IncludeFileName);
             }
 
