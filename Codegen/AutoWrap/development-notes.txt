@@ -52,6 +52,19 @@ There are (besides the "Attribute.xml" file) a few classes that allow tweaking t
  * CodeStyleDefinition : allows to tweak some settings regarding the generated code (like
                          naming or whitespacing).
 
+Attributes
+----------
+Each attribute has its own class. The name of the class is the attribute name with the
+word "Attribute" appended (like "IgnoreAttribute" for "Ignore"). Moreover the following
+requirements must be met:
+
+ * The file must (should) be place in the folder "Meta\Attributes"
+ * The class must inherit from "AutoWrapAttribute"
+ * The class must be defined in the same namespace as "AutoWrapAttribute"
+
+The code for finding the type of a certain attribute is located in "AutoWrapAttribute.FindAttribute()".
+
+
 File writing
 ------------
 For every one of OGRE's .h files a MOGRE .h file and (in most cases) a MOGRE .cpp file will

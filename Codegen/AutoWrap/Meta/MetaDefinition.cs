@@ -39,8 +39,6 @@ namespace AutoWrap.Meta
 
         private readonly XmlDocument _doc = new XmlDocument();
 
-        private readonly List<KeyValuePair<AttributeSet, AutoWrapAttribute>> _holders = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
-
         public readonly string NativeNamespace;
         public readonly string ManagedNamespace;
 
@@ -107,6 +105,9 @@ namespace AutoWrap.Meta
             // Find the root tag - assumes we only have one meta tag.
             XmlElement root = (XmlElement)doc.GetElementsByTagName(META_TAG)[0];
 
+            List<KeyValuePair<AttributeSet, AutoWrapAttribute>> unprocessedAttributes
+                = new List<KeyValuePair<AttributeSet, AutoWrapAttribute>>();
+
             // Iterate through all namespaces
             foreach (XmlNode nsNode in root.ChildNodes)
             {
@@ -117,6 +118,7 @@ namespace AutoWrap.Meta
                     continue;
                 }
 
+                // Process types in the current namespace
                 NamespaceDefinition nsDef = GetNameSpace(nsElement.GetAttribute("name"));
                 foreach (XmlNode typeNode in nsElement.ChildNodes)
                 {
@@ -124,90 +126,100 @@ namespace AutoWrap.Meta
                     if (typeElement == null)
                         continue;
 
-                    AddAttributesInType(nsDef.GetDefType(typeElement.GetAttribute("name")), typeElement);
+                    AddAttributesForType(nsDef.FindTypeDefinition(typeElement.GetAttribute("name")), typeElement, unprocessedAttributes);
                 }
             }
 
-            foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in _holders)
+            // Post process all unprocessed attributes
+            foreach (KeyValuePair<AttributeSet, AutoWrapAttribute> pair in unprocessedAttributes)
             {
                 pair.Value.PostProcessAttributes(pair.Key);
             }
         }
 
-        /// <summary>
-        /// Processes the attributes of a type (child element of <c>&lt;namespace&gt;</c>) and then
-        /// adds the 
-        /// </summary>
-        /// <param name="nameSpace"></param>
-        /// <param name="elem"></param>
-        private void AddTypeForProcessing2(NamespaceDefinition nameSpace, XmlElement elem)
+        private void AddAttributesForType(AbstractTypeDefinition type, XmlElement elem, List<KeyValuePair<AttributeSet, AutoWrapAttribute>> unprocessedAttributes)
         {
-        }
-
-        private void AddAttributesInType(AbstractTypeDefinition type, XmlElement elem)
-        {
+            // Add
             foreach (XmlAttribute attr in elem.Attributes)
             {
                 if (attr.Name != "name")
-                    AddAttributeInHolder(type, CreateAttribute(attr));
+                    AddAttributeToSet(type, CreateAttributeFromXmlAttribute(attr), unprocessedAttributes);
             }
 
-            foreach (XmlNode child in elem.ChildNodes)
+            foreach (XmlNode childNode in elem.ChildNodes)
             {
-                if (!(child is XmlElement))
-                    continue;
+                XmlElement childElement = childNode as XmlElement;
 
-                if (child.Name[0] == '_')
+                if (childElement == null)
                 {
-                    AddAttributeInHolder(type, CreateAttribute(child as XmlElement));
+                    // Not an XML element
                     continue;
                 }
 
-                switch (child.Name)
+                // Attached Attribute
+                if (IsAttachedProperty(childElement))
+                {
+                    AddAttributeToSet(type, CreateAttributeFromAttachedAttribute(childElement), unprocessedAttributes);
+                    continue;
+                }
+
+                // Not an attached attribute
+                switch (childElement.Name)
                 {
                     case "class":
                     case "struct":
                     case "enumeration":
                     case "typedef":
-                        AddAttributesInType((type as ClassDefinition).GetNestedType((child as XmlElement).GetAttribute("name")), child as XmlElement);
+                        AddAttributesForType(((ClassDefinition)type).GetNestedType(childElement.GetAttribute("name")), childElement, unprocessedAttributes);
                         break;
                     case "function":
                     case "variable":
-                        foreach (MemberDefinitionBase m in (type as ClassDefinition).GetMembers((child as XmlElement).GetAttribute("name")))
-                            AddAttributesInMember(m, child as XmlElement);
+                        foreach (MemberDefinitionBase m in ((ClassDefinition)type).GetMembers(childElement.GetAttribute("name")))
+                        {
+                            AddAttributesInMember(m, childElement, unprocessedAttributes);
+                        }
                         break;
+
                     default:
                         throw new Exception("Unexpected");
                 }
             }
         }
 
-        private void AddAttributesInMember(MemberDefinitionBase member, XmlElement elem)
+        private void AddAttributesInMember(MemberDefinitionBase member, XmlElement elem, List<KeyValuePair<AttributeSet, AutoWrapAttribute>> unprocessedAttributes)
         {
             foreach (XmlAttribute attr in elem.Attributes)
             {
                 if (attr.Name != "name")
-                    AddAttributeInHolder(member, CreateAttribute(attr));
+                {
+                    AddAttributeToSet(member, CreateAttributeFromXmlAttribute(attr), unprocessedAttributes);
+                }
             }
 
-            foreach (XmlNode child in elem.ChildNodes)
+            foreach (XmlNode childNode in elem.ChildNodes)
             {
-                if (!(child is XmlElement))
-                    continue;
-
-                if (child.Name[0] == '_')
+                XmlElement childElement = childNode as XmlElement;
+            
+                if (childElement == null)
                 {
-                    AddAttributeInHolder(member, CreateAttribute(child as XmlElement));
+                    // Not an XML element
                     continue;
                 }
-
-                switch (child.Name)
+            
+                // Attached property
+                if (IsAttachedProperty(childElement))
+                {
+                    AddAttributeToSet(member, CreateAttributeFromAttachedAttribute(childElement), unprocessedAttributes);
+                    continue;
+                }
+            
+                switch (childElement.Name)
                 {
                     case "param":
                         if (!(member is MemberMethodDefinition))
                             throw new Exception("Unexpected");
-
-                        string name = (child as XmlElement).GetAttribute("name");
+            
+                        string name = childElement.GetAttribute("name");
                         ParamDefinition param = null;
                         foreach (ParamDefinition p in (member as MemberMethodDefinition).Parameters)
                         {
@@ -217,50 +229,70 @@ namespace AutoWrap.Meta
                                 break;
                             }
                         }
+            
                         if (param == null)
                             return;
-                            //throw new Exception("Wrong param name");
-
-                        foreach (XmlAttribute attr in child.Attributes)
+                        //throw new Exception("Wrong param name");
+            
+                        // Add all attributes (except for "name") to the set
+                        foreach (XmlAttribute attr in childElement.Attributes)
                         {
                             if (attr.Name != "name")
-                                AddAttributeInHolder(param, CreateAttribute(attr));
+                                AddAttributeToSet(param, CreateAttributeFromXmlAttribute(attr), unprocessedAttributes);
                         }
                         break;
-
+            
                     default:
                         throw new Exception("Unexpected");
                 }
             }
         }
 
-        private AutoWrapAttribute CreateAttribute(XmlElement elem)
+        /// <summary>
+        /// Create an <see cref="AutoWrapAttribute"/> instance from a so called attached attribute. An attached attribute is
+        /// an XML child element of the element the attribute is defined for. See "readme-attributes.txt" for more information.
+        /// </summary>
+        /// <param name="elem">the attribute as attached attribute XML element</param>
+        private static AutoWrapAttribute CreateAttributeFromAttachedAttribute(XmlElement elem)
         {
+            // Strip underscore (indicator for attached attributes)
             string typename = elem.Name.Substring(1);
-            string nameSpace = typeof(WrapTypeAttribute).Namespace;
-
-            try {
-                Type type = Assembly.GetExecutingAssembly().GetType(nameSpace + "." + typename + "Attribute", true, true);
-                return (AutoWrapAttribute)type.GetMethod("FromElement").Invoke(null, new object[] { elem });
-            }
-            catch (TypeLoadException)
-            {
-                throw new UnkownAttributeException(typename);
-            }
+            Type type = AutoWrapAttribute.FindAttribute(typename);
+            return (AutoWrapAttribute)type.GetMethod("FromElement").Invoke(null, new object[] { elem });
         }
 
-        private AutoWrapAttribute CreateAttribute(XmlAttribute attr)
+        /// <summary>
+        /// Create an <see cref="AutoWrapAttribute"/> instance from an XML attribute.
+        /// </summary>
+        /// <param name="attr">the XML attribute to create this instance from</param>
+        /// <seealso cref="CreateAttributeFromAttachedAttribute"/>
+        private static AutoWrapAttribute CreateAttributeFromXmlAttribute(XmlAttribute attr)
         {
             XmlDocument doc = new XmlDocument();
             XmlElement elem = doc.CreateElement("_" + attr.Name);
             elem.InnerText = attr.Value;
-            return CreateAttribute(elem);
+            return CreateAttributeFromAttachedAttribute(elem);
         }
 
-        private void AddAttributeInHolder(AttributeSet holder, AutoWrapAttribute attr)
+        /// <summary>
+        /// Checks whether the specified XML element is an attached property.
+        /// </summary>
+        private static bool IsAttachedProperty(XmlElement elem)
         {
-            holder.AddAttribute(attr);
-            _holders.Add(new KeyValuePair<AttributeSet, AutoWrapAttribute>(holder, attr));
+            return (elem.Name[0] == '_');
+        }
+    
+        /// <summary>
+        /// Adds an attribute to an attribute set and marks the attribute as "not yet processed" so that it can
+        /// be processed later.
+        /// </summary>
+        /// <param name="attributeSet">the set the attribute is to be added to</param>
+        /// <param name="attrib">the attribute to be added</param>
+        /// <param name="unprocessedAttributes">the list of unprocessed attributes</param>
+        private static void AddAttributeToSet(AttributeSet attributeSet, AutoWrapAttribute attrib, List<KeyValuePair<AttributeSet, AutoWrapAttribute>> unprocessedAttributes)
+        {
+            attributeSet.AddAttribute(attrib);
+            unprocessedAttributes.Add(new KeyValuePair<AttributeSet, AutoWrapAttribute>(attributeSet, attrib));
         }
 
 
@@ -287,13 +319,6 @@ namespace AutoWrap.Meta
 
             NamespaceDefinition spc = Factory.CreateNamespace(this, elem);
             _namespaces[spc.NativeName] = spc;
-        }
-    }
-
-    public class UnkownAttributeException : Exception
-    {
-        public UnkownAttributeException(string attributeName) : base(attributeName)
-        {
         }
     }
 }

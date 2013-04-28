@@ -36,9 +36,9 @@ namespace AutoWrap
             {
                 meta.AddAttributes(ATTRIBUTES_FILE);
             }
-            catch (UnkownAttributeException e)
+            catch (InvalidAttributeException e)
             {
-                MessageBox.Show("Unknown attribute found: " + e.Message, "Error");
+                MessageBox.Show("Invalid attribute found: " + e.Message, "Error");
                 return;
             }
 

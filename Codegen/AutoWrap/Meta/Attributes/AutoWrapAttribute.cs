@@ -21,6 +21,9 @@
  */
 #endregion
 
+using System;
+using System.Reflection;
+
 namespace AutoWrap.Meta
 {
     /// <summary>
@@ -28,11 +31,46 @@ namespace AutoWrap.Meta
     /// </summary>
     public abstract class AutoWrapAttribute
     {
+        private static readonly Type THIS_CLASS = typeof(AutoWrapAttribute);
+        private static readonly string ATTRIBUTES_NAMESPACE = THIS_CLASS.Namespace;
+
         /// <summary>
         /// Called for each new attribute that has been added to the set.
         /// </summary>
         /// <param name="attributes">the set to which the attribute has been added</param>
         public virtual void PostProcessAttributes(AttributeSet attributes)
+        {
+        }
+
+        /// <summary>
+        /// Finds the type for the specified attribute. If the attribute could not be found, a <see cref="InvalidAttributeException"/>
+        /// will be thrown.
+        /// </summary>
+        /// <param name="attribName">the attribute to look for</param>
+        public static Type FindAttribute(string attribName)
+        {
+            try
+            {
+                Type type = Assembly.GetExecutingAssembly().GetType(ATTRIBUTES_NAMESPACE + "." + attribName + "Attribute", true, true);
+                if (!THIS_CLASS.IsAssignableFrom(type))
+                {
+                    throw new InvalidAttributeException("The attribute \"" + attribName + "\" isn't derived from " + THIS_CLASS.Name);
+                }
+                return type;
+            }
+            catch (TypeLoadException)
+            {
+                throw new InvalidAttributeException("Could not find class for attribute: " + attribName);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Thrown when an auto wrap attribute couldn't be found.
+    /// </summary>
+    public class InvalidAttributeException : Exception
+    {
+        public InvalidAttributeException(string msg) : base(msg)
         {
         }
     }

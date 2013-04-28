@@ -239,9 +239,16 @@ namespace AutoWrap.Meta
             return type;
         }
 
-        public AbstractTypeDefinition GetDefType(string name)
+        /// <summary>
+        /// Returns the type definition for the specified type or throws a <see cref="KeyNotFoundException"/>
+        /// if the type is not part of this namespace.
+        /// </summary>
+        /// <param name="name">the name of the type to look for. Must come without namespace prepended (i.e.
+        /// just the class/type name).</param>
+        public AbstractTypeDefinition FindTypeDefinition(string name)
         {
             AbstractTypeDefinition type = null;
+
             foreach (AbstractTypeDefinition t in _containedTypes)
             {
                 if (t.Name == name)
@@ -252,7 +259,7 @@ namespace AutoWrap.Meta
             }
 
             if (type == null)
-                throw new Exception(String.Format("DefType not found for '{0}'", name));
+                throw new KeyNotFoundException(String.Format("DefType not found for '{0}'", name));
 
             return type;
         }
