@@ -585,16 +585,14 @@ namespace AutoWrap.Meta
             foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
+                    || ((AllowProtectedMembers || AllowSubclassing) 
+                    && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (nested is EnumDefinition || Wrapper.IsTypeWrappable(nested))
+                    if (nested is EnumDefinition)
+                        enums.Add(nested);
+                    else if (Wrapper.IsTypeWrappable(nested))
                     {
-                        if (nested is EnumDefinition)
-                        {
-                            enums.Add(nested);
-                        }
-                        else if (nested.HasWrapType(WrapTypes.NativePtrValueType))
-                        {
+                        if (nested.HasWrapType(WrapTypes.NativePtrValueType)) {
                             if (nested.HasAttribute<DefinitionIndexAttribute>())
                                 nativePtrClasses.Insert(nested.GetAttribute<DefinitionIndexAttribute>().Index, nested);
                             else

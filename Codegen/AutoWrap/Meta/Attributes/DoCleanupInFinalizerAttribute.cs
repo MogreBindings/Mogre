@@ -26,7 +26,10 @@ using System.Xml;
 namespace AutoWrap.Meta
 {
     /// <summary>
-    /// For including finalizer to do the cleaning up
+    /// With this attribute all cleanup is done in the classes finalizer and 
+    /// in its destructor. Without it the cleanup is only done in the destructor
+    /// (which won't be called automatically by the garbage collector). Basically
+    /// this only calls the destructor from the finalizer.
     /// </summary>
     public class DoCleanupInFinalizerAttribute : AutoWrapAttribute
     {

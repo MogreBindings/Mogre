@@ -25,6 +25,9 @@ using System.Xml;
 
 namespace AutoWrap.Meta
 {
+    /// <summary>
+    /// Defines at which position a native pointer will be inserted (some how? TODO)
+    /// </summary>
     public class DefinitionIndexAttribute : AutoWrapAttribute
     {
         public int Index;
