@@ -14,11 +14,6 @@ namespace AutoWrap.Meta
             get { return "STLHASHEDVECTOR<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ">"; }
         }
 
-        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
-        {
-            return new DefHashedVector(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
-        }
-
         public DefHashedVector(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef, surroundingClass, elem)
         {

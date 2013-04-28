@@ -19,11 +19,6 @@ namespace AutoWrap.Meta
             get { return "GetArrayFromVector"; }
         }
 
-        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
-        {
-            return new DefStdVector(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
-        }
-
         public DefStdVector(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef, surroundingClass, elem)
         {

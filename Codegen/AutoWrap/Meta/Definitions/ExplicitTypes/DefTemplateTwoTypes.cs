@@ -128,25 +128,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
-        {
-            string baseTypeName = Mogre17.GetBaseType(typedef);
-
-            switch (baseTypeName)
-            {
-                case "::std::hash_map":
-                    return DefStdHashMap.CreateExplicitType(typedef);
-                case "std::map":
-                    return DefStdMap.CreateExplicitType(typedef);
-                case "std::multimap":
-                    return DefStdMultiMap.CreateExplicitType(typedef);
-                case "std::pair":
-                    return DefStdPair.CreateExplicitType(typedef);
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
         public DefTemplateTwoTypes(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef, surroundingClass, elem)
         {

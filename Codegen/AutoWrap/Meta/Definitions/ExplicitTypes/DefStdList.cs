@@ -167,29 +167,6 @@ namespace AutoWrap.Meta
         //        return base.GetNativeCallConversion(expr, m);
         //}
 
-        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
-        {
-            string baseTypeName = Mogre17.GetBaseType(typedef);
-
-            switch (baseTypeName)
-            {
-                case "std::vector":
-                    return DefStdVector.CreateExplicitType(typedef);
-                case "std::set":
-                    return DefStdSet.CreateExplicitType(typedef);
-                case "std::deque":
-                    return DefStdDeque.CreateExplicitType(typedef);
-                case "std::list":
-                    return new DefStdList(typedef.Namespace, typedef.SurroundingClass, typedef.DefiningXmlElement);
-                case "HashedVector":
-                    return DefHashedVector.CreateExplicitType(typedef);
-                case "std::map":
-                    return DefStdMap.CreateExplicitType(typedef);
-                default:
-                    throw new Exception("Unexpected");
-            }
-        }
-
         public DefStdList(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef, surroundingClass, elem)
         {

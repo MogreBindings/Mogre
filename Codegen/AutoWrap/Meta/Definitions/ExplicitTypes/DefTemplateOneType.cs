@@ -128,20 +128,6 @@ namespace AutoWrap.Meta
             }
         }
 
-        public new static TypedefDefinition CreateExplicitType(TypedefDefinition typedef)
-        {
-            if (typedef.IsSharedPtr)
-                return DefSharedPtr.CreateExplicitType(typedef);
-            
-            if (IsIteratorWrapper(typedef))
-                return DefIterator.CreateExplicitType(typedef);
-            
-            if (typedef.BaseTypeName.StartsWith("TRect"))
-                return DefTRect.CreateExplicitType(typedef);
-            
-            return DefStdList.CreateExplicitType(typedef);
-        }
-
         public DefTemplateOneType(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)
             : base(nsDef, surroundingClass, elem)
         {
