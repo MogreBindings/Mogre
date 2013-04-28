@@ -59,44 +59,45 @@ namespace AutoWrap.Meta
             _sourcePath = sourcePath;
             _metaDef = meta;
 
-            foreach (NamespaceDefinition space in meta.Namespaces)
+            foreach (NamespaceDefinition nsDef in meta.Namespaces)
             {
-                foreach (AbstractTypeDefinition type in space.ContainedTypes)
+                foreach (AbstractTypeDefinition typeDef in nsDef.ContainedTypes)
                 {
-                    if (!TypeIsWrappable(type))
+                    // If we can't wrap this type (for whatever reasons), skip it.
+                    if (!IsTypeWrappable(typeDef))
                         continue;
 
                     List<AbstractTypeDefinition> list;
-                    if (!IncludeFiles.TryGetValue(type.IncludeFile, out list))
+                    if (!IncludeFiles.TryGetValue(typeDef.IncludeFile, out list))
                     {
                         list = new List<AbstractTypeDefinition>();
-                        IncludeFiles.Add(type.IncludeFile, list);
+                        IncludeFiles.Add(typeDef.IncludeFile, list);
                     }
 
-                    if (type is EnumDefinition || type.IsInternalTypeDef())
+                    if (typeDef is EnumDefinition || typeDef.IsInternalTypeDef())
                     {
-                        list.Insert(0, type);
+                        list.Insert(0, typeDef);
                     }
-                    else if (type.HasWrapType(WrapTypes.NativePtrValueType))
+                    else if (typeDef.HasWrapType(WrapTypes.NativePtrValueType))
                     {
                         //put it after enums and before other classes
                         int i;
                         for (i = 0; i < list.Count; i++)
                         {
-                            if (!(type is EnumDefinition || type.IsInternalTypeDef()))
+                            if (!(typeDef is EnumDefinition || typeDef.IsInternalTypeDef()))
                                 break;
                         }
 
-                        list.Insert(i, type);
+                        list.Insert(i, typeDef);
                     }
                     else
-                        list.Add(type);
+                        list.Add(typeDef);
 
-                    if (type.HasWrapType(WrapTypes.Overridable))
-                        Overridables.Add((ClassDefinition)type);
+                    if (typeDef.HasWrapType(WrapTypes.Overridable))
+                        Overridables.Add((ClassDefinition)typeDef);
                 }
 
-                foreach (AbstractTypeDefinition type in space.ContainedTypes)
+                foreach (AbstractTypeDefinition type in nsDef.ContainedTypes)
                 {
                     if (type is EnumDefinition && IncludeFiles.ContainsKey(type.IncludeFile))
                         if (!IncludeFiles[type.IncludeFile].Contains(type))
@@ -105,7 +106,11 @@ namespace AutoWrap.Meta
             }
         }
 
-        public bool TypeIsWrappable(AbstractTypeDefinition type)
+        /// <summary>
+        /// Determines whether the specified type can be wrapped (i.e. whether code files can be produced for it).
+        /// </summary>
+        /// <param name="type">the type to be checked</param>
+        public static bool IsTypeWrappable(AbstractTypeDefinition type)
         {
             if (type.Name.StartsWith("DLL_"))
                 //It's DLL function pointers of OgrePlatformManager.h
@@ -122,6 +127,7 @@ namespace AutoWrap.Meta
             if (type.HasAttribute<CustomIncClassDefinitionAttribute>())
                 return true;
 
+            // Check for "Ignore" only AFTER checking for a custom implementation (see previous condition).
             if (type.IsIgnored)
                 return false;
 
@@ -136,6 +142,10 @@ namespace AutoWrap.Meta
             
             if (type is ClassDefinition)
             {
+                //
+                // Classes
+                //
+                // Allow only classes marked as CLRObject or Singleton.
                 ClassDefinition cls = type as ClassDefinition;
                 if (cls.HasAttribute<CLRObjectAttribute>(true))
                 {
@@ -155,12 +165,15 @@ namespace AutoWrap.Meta
             
             if (type is TypedefDefinition)
             {
+                //
+                // Typedefs
+                //
                 if (type.IsSTLContainer)
                 {
                     foreach (ITypeMember m in (type as TypedefDefinition).TypeMembers)
                     {
                         AbstractTypeDefinition mt = m.MemberType;
-                        if (!mt.IsValueType && !mt.IsPureManagedClass && !TypeIsWrappable(mt))
+                        if (!mt.IsValueType && !mt.IsPureManagedClass && !IsTypeWrappable(mt))
                             return false;
                     }
 
@@ -169,7 +182,10 @@ namespace AutoWrap.Meta
                 
                 if (type is DefIterator)
                 {
-                    if (TypeIsWrappable((type as DefIterator).TypeMembers[0].MemberType))
+                    //
+                    // Iterators
+                    //
+                    if (IsTypeWrappable((type as DefIterator).TypeMembers[0].MemberType))
                     {
                         if ((type as DefIterator).IsConstIterator)
                         {
@@ -190,10 +206,10 @@ namespace AutoWrap.Meta
                     return false;
                 }
                 
-                if ((type as TypedefDefinition).BaseType is DefInternal || (type as TypedefDefinition).BaseType.HasAttribute<ValueTypeAttribute>())
+                if (((TypedefDefinition)type).BaseType is DefInternal || ((TypedefDefinition)type).BaseType.HasAttribute<ValueTypeAttribute>())
                     return true;
                 
-                return TypeIsWrappable((type as TypedefDefinition).BaseType);
+                return IsTypeWrappable((type as TypedefDefinition).BaseType);
             }
             
             return false;

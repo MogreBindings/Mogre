@@ -587,7 +587,7 @@ namespace AutoWrap.Meta
                 if (nested.ProtectionLevel == ProtectionLevel.Public
                     || ((AllowProtectedMembers || AllowSubclassing) && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
-                    if (nested is EnumDefinition || _wrapper.TypeIsWrappable(nested))
+                    if (nested is EnumDefinition || Wrapper.IsTypeWrappable(nested))
                     {
                         if (nested is EnumDefinition)
                         {

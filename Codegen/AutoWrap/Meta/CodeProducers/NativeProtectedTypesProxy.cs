@@ -73,7 +73,7 @@ namespace AutoWrap.Meta
                     AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
                     if (type.ProtectionLevel == ProtectionLevel.Protected
-                        && type.IsSTLContainer && _wrapper.TypeIsWrappable(type))
+                        && type.IsSTLContainer && Wrapper.IsTypeWrappable(type))
                     {
                         GenerateCodeNestedType(type);
                     }
@@ -91,7 +91,7 @@ namespace AutoWrap.Meta
                 AbstractTypeDefinition type = nested.DetermineType<AbstractTypeDefinition>(nested.Name);
 
                 if (type.ProtectionLevel == ProtectionLevel.Protected
-                    && type.IsSTLContainer && _wrapper.TypeIsWrappable(type) )
+                    && type.IsSTLContainer && Wrapper.IsTypeWrappable(type) )
                 {
                     return true;
                 }
