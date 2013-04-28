@@ -107,7 +107,7 @@
     <Compile Include="Meta\Definitions\MemberPropertyDefinition.cs" />
     <Compile Include="Meta\Definitions\StructDefinition.cs" />
     <Compile Include="Meta\Definitions\TypedefDefinition.cs" />
-    <Compile Include="Meta\Definitions\TypeMemberDefinition.cs" />
+    <Compile Include="Meta\Definitions\TypeParamDefinition.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefHashedVector.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefInternal.cs" />
     <Compile Include="Meta\Definitions\ExplicitTypes\DefIterator.cs" />

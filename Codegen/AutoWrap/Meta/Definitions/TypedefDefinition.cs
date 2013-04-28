@@ -150,7 +150,7 @@ namespace AutoWrap.Meta
                 if (base.IsIgnored)
                     return true;
 
-                foreach (ITypeMember m in TypeMembers)
+                foreach (ITypeMember m in TypeParams)
                     if (m.MemberType.IsIgnored || m.MemberType.HasWrapType(WrapTypes.NativeDirector))
                         return true;
 
@@ -190,33 +190,33 @@ namespace AutoWrap.Meta
         }
 
         public string BaseTypeName;
-        public string[] TypeNames;
+        public string[] TypeParamNames;
 
         protected PassedByType[] _passed;
 
-        private ITypeMember[] _types;
+        private TypeParamDefinition[] _typeParams;
 
-        public virtual ITypeMember[] TypeMembers
+        public virtual TypeParamDefinition[] TypeParams
         {
             get
             {
-                if (_types == null)
+                if (_typeParams == null)
                 {
-                    _types = new ITypeMember[TypeNames.Length];
-                    for (int i = 0; i < TypeNames.Length; i++)
+                    _typeParams = new TypeParamDefinition[TypeParamNames.Length];
+                    for (int i = 0; i < TypeParamNames.Length; i++)
                     {
                         bool isConst = false;
-                        string name = TypeNames[i];
+                        string name = TypeParamNames[i];
                         if (name.StartsWith("const "))
                         {
                             isConst = true;
                             name = name.Substring("const ".Length);
                         }
-                        _types[i] = new TypeMemberDefinition(DetermineType<AbstractTypeDefinition>(name, false), _passed[i], isConst);
+                        _typeParams[i] = new TypeParamDefinition(DetermineType<AbstractTypeDefinition>(name, false), _passed[i], isConst);
                     }
                 }
 
-                return _types;
+                return _typeParams;
             }
         }
 
@@ -235,19 +235,19 @@ namespace AutoWrap.Meta
             string type = elem.GetAttribute("type");
             if (type == "")
             {
-                TypeNames = new string[elem.ChildNodes.Count];
+                TypeParamNames = new string[elem.ChildNodes.Count];
                 _passed = new PassedByType[elem.ChildNodes.Count];
                 for (int i = 0; i < elem.ChildNodes.Count; i++)
                 {
-                    TypeNames[i] = elem.ChildNodes[i].InnerText.Trim();
+                    TypeParamNames[i] = elem.ChildNodes[i].InnerText.Trim();
                     string pass = (elem.ChildNodes[i] as XmlElement).GetAttribute("passedBy");
                     _passed[i] = (pass == "") ? PassedByType.Value : (PassedByType) Enum.Parse(typeof (PassedByType), pass, true);
                 }
             }
             else
             {
-                TypeNames = new string[1];
-                TypeNames[0] = type.Trim();
+                TypeParamNames = new string[1];
+                TypeParamNames[0] = type.Trim();
                 _passed = new PassedByType[1];
                 string pass = elem.GetAttribute("passedBy");
                 _passed[0] = (pass == "") ? PassedByType.Value : (PassedByType) Enum.Parse(typeof (PassedByType), pass, true);

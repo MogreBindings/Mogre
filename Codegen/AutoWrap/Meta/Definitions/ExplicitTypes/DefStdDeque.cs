@@ -11,7 +11,7 @@ namespace AutoWrap.Meta
 
         public override string FullSTLContainerTypeName
         {
-            get { return "STLDeque<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ">"; }
+            get { return "STLDeque<" + TypeParams[0].MemberTypeCLRName + ", " + TypeParams[0].MemberTypeNativeName + ">"; }
         }
 
         public DefStdDeque(NamespaceDefinition nsDef, ClassDefinition surroundingClass, XmlElement elem)

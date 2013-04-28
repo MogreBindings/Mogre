@@ -17,7 +17,7 @@ namespace AutoWrap.Meta
 
         public override string FullSTLContainerTypeName
         {
-            get { return "STLMap<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ", " + TypeMembers[0].MemberTypeNativeName + ", " + TypeMembers[1].MemberTypeNativeName + ">"; }
+            get { return "STLMap<" + TypeParams[0].MemberTypeCLRName + ", " + TypeParams[1].MemberTypeCLRName + ", " + TypeParams[0].MemberTypeNativeName + ", " + TypeParams[1].MemberTypeNativeName + ">"; }
         }
 
         //public override void GetDefaultParamValueConversion(DefParam param, out string preConversion, out string conversion, out string postConversion)
@@ -40,15 +40,15 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (TypeMembers[0].MemberType is IDefString || TypeMembers[1].MemberType is IDefString)
+                if (TypeParams[0].ParamType is IDefString || TypeParams[1].ParamType is IDefString)
                 {
-                    if (TypeMembers[0].MemberType is IDefString && TypeMembers[1].MemberType is IDefString)
+                    if (TypeParams[0].ParamType is IDefString && TypeParams[1].ParamType is IDefString)
                         return "Collections::Specialized::NameValueCollection^";
                     
                     throw new Exception("Unexpected");
                 }
 
-                return "Collections::Generic::SortedList<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">^";
+                return "Collections::Generic::SortedList<" + TypeParams[0].MemberTypeCLRName + ", " + TypeParams[1].MemberTypeCLRName + ">^";
             }
         }
 
@@ -56,15 +56,15 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (TypeMembers[0].MemberType is IDefString || TypeMembers[1].MemberType is IDefString)
+                if (TypeParams[0].ParamType is IDefString || TypeParams[1].ParamType is IDefString)
                 {
-                    if (TypeMembers[0].MemberType is IDefString && TypeMembers[1].MemberType is IDefString)
+                    if (TypeParams[0].ParamType is IDefString && TypeParams[1].ParamType is IDefString)
                         return "FillMapFromNameValueCollection";
                     
                     throw new Exception("Unexpected");
                 }
 
-                return "FillMapFromSortedList<" + FullyQualifiedNativeName + ", " + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ">";
+                return "FillMapFromSortedList<" + FullyQualifiedNativeName + ", " + TypeParams[0].MemberTypeCLRName + ", " + TypeParams[1].MemberTypeCLRName + ">";
             }
         }
 
@@ -72,15 +72,15 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (TypeMembers[0].MemberType is IDefString || TypeMembers[1].MemberType is IDefString)
+                if (TypeParams[0].ParamType is IDefString || TypeParams[1].ParamType is IDefString)
                 {
-                    if (TypeMembers[0].MemberType is IDefString && TypeMembers[1].MemberType is IDefString)
+                    if (TypeParams[0].ParamType is IDefString && TypeParams[1].ParamType is IDefString)
                         return "GetNameValueCollectionFromMap";
                     
                     throw new Exception("Unexpected");
                 }
 
-                return "GetSortedListFromMap<" + TypeMembers[0].MemberTypeCLRName + ", " + TypeMembers[1].MemberTypeCLRName + ", " + FullyQualifiedNativeName + ">";
+                return "GetSortedListFromMap<" + TypeParams[0].MemberTypeCLRName + ", " + TypeParams[1].MemberTypeCLRName + ", " + FullyQualifiedNativeName + ">";
             }
         }
 

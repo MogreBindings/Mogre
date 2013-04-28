@@ -14,7 +14,7 @@ namespace AutoWrap.Meta
                     expl = CreateTemplateOneTypeParamType(typedef);
                 else
                 {
-                    switch (typedef.TypeNames.Length)
+                    switch (typedef.TypeParamNames.Length)
                     {
                         case 1:
                             expl = CreateTemplateOneTypeParamType(typedef);
