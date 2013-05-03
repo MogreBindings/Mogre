@@ -39,6 +39,11 @@ namespace AutoWrap.Meta
         {
             get
             {
+                // Normally object destruction would happen in the finalizer (!Root()) which runs in the garbage collection thread.
+                // But Ogre Root must always be disposed in the main thread of the application so we need to have a Dispose() method.
+                if (_classDefinition.FullyQualifiedNativeName == "Ogre::Root")
+                    return false;
+
                 return true;
             }
         }
