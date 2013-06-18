@@ -86,18 +86,13 @@
 					</xsl:for-each>
 				</xsl:if>
 				<!-- getting the right name of inner classes -->
-				<xsl:variable name="name" select="substring-after(compoundname,'::')"/>
-				<xsl:if test="contains($name,'::')">
-					<xsl:attribute name="name" select="substring-after($name,'::')"/>
-					<xsl:variable name="name" select="substring-after($name,'::')"/>
-					<xsl:if test="contains($name,'::')">
-						<xsl:attribute name="name" select="substring-after($name,'::')"/>
-						<xsl:variable name="name" select="substring-after($name,'::')"/>
-						<xsl:if test="contains($name,'::')">
-							<xsl:attribute name="name" select="substring-after($name,'::')"/>
-						</xsl:if>
-					</xsl:if>
-				</xsl:if>
+				<xsl:variable name="name">
+					<xsl:call-template name="substring-after-last">
+						<xsl:with-param name="string" select="compoundname" />
+						<xsl:with-param name="delimiter" select="'::'" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:attribute name="name" select="$name"/>
 				<!-- cursor on doxygen/compounddef[@kind="class"] -->
 				<!-- derivation -->
 				<xsl:call-template name="derivation">
@@ -333,11 +328,11 @@
 								<xsl:variable name="type1" select="substring-before($string1,', std::')"/>
 								<xsl:element name="typedef">
 									<xsl:attribute name="basetype" select="substring-before($type1,'&lt;')"/>
-									<xsl:variable name="string1" select="substring-after($type1,'&lt; ')"/>
+									<xsl:variable name="inner_string1" select="substring-after($type1,'&lt; ')"/>
 									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type" select="normalize-space(substring-before($string1,','))"/>
+										<xsl:with-param name="type" select="normalize-space(substring-before($inner_string1,','))"/>
 									</xsl:call-template>
-									<xsl:variable name="string2" select="substring-before($string1,' &gt;')"/>
+									<xsl:variable name="string2" select="substring-before($inner_string1,' &gt;')"/>
 									<xsl:call-template name="typeMap">
 										<xsl:with-param name="type" select="normalize-space(substring-after($string2,','))"/>
 									</xsl:call-template>
@@ -345,11 +340,11 @@
 								<xsl:variable name="type2" select="substring-after($string1,'&gt;, ')"/>
 								<xsl:element name="typedef">
 									<xsl:attribute name="basetype" select="substring-before($type2,'&lt;')"/>
-									<xsl:variable name="string1" select="substring-after($type2,'&lt; ')"/>
+									<xsl:variable name="inner_string1" select="substring-after($type2,'&lt; ')"/>
 									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type" select="normalize-space(substring-before($string1,','))"/>
+										<xsl:with-param name="type" select="normalize-space(substring-before($inner_string1,','))"/>
 									</xsl:call-template>
-									<xsl:variable name="string2" select="substring-before($string1,' &gt;')"/>
+									<xsl:variable name="string2" select="substring-before($inner_string1,' &gt;')"/>
 									<xsl:call-template name="typeMap">
 										<xsl:with-param name="type" select="normalize-space(substring-after($string2,','))"/>
 									</xsl:call-template>
@@ -792,6 +787,21 @@
 				</xsl:element>
 			</xsl:element>
 		</xsl:for-each>
+	</xsl:template>
+	<xsl:template name="substring-after-last">
+		<xsl:param name="string" />
+		<xsl:param name="delimiter" />
+		<xsl:choose>
+			<xsl:when test="contains($string, $delimiter)">
+				<xsl:call-template name="substring-after-last">
+					<xsl:with-param name="string" select="substring-after($string, $delimiter)" />
+					<xsl:with-param name="delimiter" select="$delimiter" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$string" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
 <!--
