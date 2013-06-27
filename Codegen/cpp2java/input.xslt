@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
-	<xd:doc type="stylesheet">
-		<xd:author>Hubert Rung</xd:author>
-		<xd:copyright>netAllied GmbH</xd:copyright>
-		<xd:cvsId>$Id: XSLTdocConfig.xml,v 1.21 2005/07/13 19:48:59 ibirrer Exp $</xd:cvsId>
-	</xd:doc>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+	<xsl:include href="helpers.xslt"/>
 	<xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes"/>
 	<!-- ############################## MAIN - calls namespace ############################## -->
 	<xsl:template match="/">
@@ -63,13 +59,10 @@
 			<xsl:element name="class">
 				<xsl:attribute name="name" select="substring-after(compoundname,'::')"/>
 				<xsl:attribute name="fullName" select="compoundname"/>
-
-				<!-- PIPAAAAAA-->
 				<xsl:attribute name="protection" select="@prot"/>
-				<!--<xsl:attribute name="includeFile" select="includes"/>-->
-        <xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
-
-        <!-- template attributes -->
+				<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
+				
+				<!-- template attributes -->
 				<xsl:if test="templateparamlist">
 					<xsl:attribute name="template" select="'true'"/>
 					<xsl:attribute name="templateType" select="templateparamlist/param/type"/>
@@ -123,7 +116,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
+				
 				<!-- static functions -->
 				<xsl:for-each select="sectiondef[@kind='public-static-func']">
 					<xsl:choose>
@@ -139,8 +132,7 @@
 						<xsl:with-param name="refid" select="@refid"/>
 					</xsl:call-template>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- static variables -->
 				<xsl:for-each select="sectiondef[@kind='public-static-attrib']">
 					<xsl:choose>
@@ -150,8 +142,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- public variables -->
 				<xsl:for-each select="sectiondef[@kind='public-attrib']">
 					<xsl:choose>
@@ -161,8 +152,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- protected functions -->
 				<xsl:for-each select="sectiondef[@kind='protected-func']">
 					<xsl:choose>
@@ -172,8 +162,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- protected variables -->
 				<xsl:for-each select="sectiondef[@kind='protected-attrib']">
 					<xsl:choose>
@@ -183,8 +172,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- protected static functions -->
 				<xsl:for-each select="sectiondef[@kind='protected-static-func']">
 					<xsl:choose>
@@ -194,8 +182,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
-				<!-- PIPAAAAAAAAAA -->
+				
 				<!-- protected static variables -->
 				<xsl:for-each select="sectiondef[@kind='protected-static-attrib']">
 					<xsl:choose>
@@ -205,7 +192,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-
+				
 			</xsl:element>
 		</xsl:for-each>
 	</xsl:template>
@@ -224,23 +211,13 @@
 		</xsl:if>
 		<xsl:if test="basecompoundref">
 			<xsl:element name="inherits">
-				<!--
-				<xsl:for-each select="basecompoundref">
-					 sort elements beginning with fewest virtual functions 
-					<xsl:sort select="count(root()//compounddef[@id=current()/@refid]/sectiondef[@kind='public-func']/memberdef[@virt='pure-virtual'])" order="ascending" data-type="number"/>
-					<xsl:element name="baseClass">
-						<xsl:value-of select="substring-after(@refid,'_1_1')"/>
-					</xsl:element>
-				</xsl:for-each>
-				-->
-
-				<!-- PIPAAAAAAAAAA -->
+                                
 				<xsl:if test="basecompoundref[@refid='classCLRObject']">
 					<xsl:element name="baseClass">
 						<xsl:value-of select="'CLRObject'"/>
 					</xsl:element>
 				</xsl:if>
-
+				
 				<xsl:for-each select="inheritancegraph/node[link/@refid=$refid]">
 					<xsl:for-each select="childnode">
 						<xsl:variable name="childid" select="@refid"/>
@@ -285,22 +262,17 @@
 	<xsl:template name="enumeration">
 		<xsl:for-each select="memberdef[@kind='enum']">
 			<!-- test if enum belongs to actual class -->
-			<!--commment this line for Mogre 1.7, with the new grouping scheme of ogre 1.7, enumeration in global scope can't pass this condition-->
-			<!--<xsl:if test="starts-with(@id,../../@id)">-->
-				<xsl:element name="enumeration">
-					<xsl:attribute name="name" select="name"/>
-
-					<!-- PIPAAAAA-->
-					<xsl:attribute name="protection" select="@prot"/>
-					<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
-
-					<xsl:for-each select="enumvalue">
-						<xsl:element name="enum">
-							<xsl:attribute name="name" select="name"/>
-						</xsl:element>
-					</xsl:for-each>
-				</xsl:element>
-			<!--</xsl:if>-->
+			<xsl:element name="enumeration">
+				<xsl:attribute name="name" select="name"/>
+				<xsl:attribute name="protection" select="@prot"/>
+				<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
+				
+				<xsl:for-each select="enumvalue">
+					<xsl:element name="enum">
+						<xsl:attribute name="name" select="name"/>
+					</xsl:element>
+				</xsl:for-each>
+			</xsl:element>
 		</xsl:for-each>
 	</xsl:template>
 	<!-- ##################### TYPEDEF - calls typeMap ######################### -->
@@ -310,10 +282,8 @@
 			<xsl:element name="typedef">
 				<xsl:attribute name="name" select="name"/>
 				<xsl:attribute name="protection" select="@prot"/>
-
-				<!-- PIPAAAAA-->
 				<xsl:attribute name="includeFile" select="substring-after(location/@file,'/include/')"/>
-
+				
 				<xsl:choose>
 					<xsl:when test="contains(type,'std::') or contains(type,',') or contains(type,'::type') or contains(type, 'HashedVector')">
 						<xsl:attribute name="basetype" select="substring-before(type,'&lt;')"/>
@@ -404,11 +374,6 @@
 										<xsl:variable name="string1" select="substring-after(type,'&lt;')"/>
 										<xsl:attribute name="type" select="normalize-space(substring-before($string1,'&gt;'))"/>
 									</xsl:otherwise>
-									<!--
-									<xsl:otherwise>
-										<xsl:attribute name="type" select="type/ref[@kindref='compound']"/>
-									</xsl:otherwise>
-									-->
 								</xsl:choose>
 							</xsl:when>
 						</xsl:choose>
@@ -443,73 +408,33 @@
 					</xsl:if>
 				</xsl:for-each>
 			</xsl:if>
-
-			<!-- PIPAAAAAAAAA -->
+			
 			<xsl:attribute name="protection" select="../@prot"/>
 			<xsl:attribute name="includeFile" select="../includes"/>
-
+			
 			<!-- struct attributes -->
 			<xsl:for-each select="memberdef[@kind='variable']">
-
-				<!-- PIPAAAAAAAAAA -->
 				<xsl:element name="variable">
-
+					
 					<xsl:attribute name="protection" select="@prot"/>
 					<xsl:attribute name="static" select="@static"/>
-
+					
 					<xsl:if test="type and type!='virtual'">
 						<xsl:call-template name="type"/>
 					</xsl:if>
 					<xsl:element name="definition">
 						<xsl:value-of select="definition"/>
 					</xsl:element>
-
+					
 					<xsl:element name="name">
 						<xsl:value-of select="name"/>
 					</xsl:element>
-
-					<!--  <xsl:call-template name="typeMap">
-						<xsl:with-param name="type" select="type"/>
-					</xsl:call-template> -->
-
 				</xsl:element>
 			</xsl:for-each>
 			<!-- struct functions -->
 			<xsl:for-each select="../sectiondef[@kind='public-func']">
 				<xsl:call-template name="function"/>
 			</xsl:for-each>
-			<!--
-			<xsl:for-each select="../sectiondef[@kind='public-func']/memberdef[@kind='function']">
-				<xsl:element name="function">
-					<xsl:element name="type">
-						<xsl:value-of select="type"/>
-					</xsl:element>
-					<xsl:element name="definition">
-						<xsl:value-of select="definition"/>
-					</xsl:element>
-					<xsl:element name="name">
-						<xsl:value-of select="name"/>
-					</xsl:element>
-					<xsl:if test="param">
-						<xsl:element name="parameters">
-							<xsl:for-each select="param">
-								<xsl:element name="parameter">
-									<xsl:element name="type">
-										<xsl:value-of select="type"/>
-									</xsl:element>
-									<xsl:element name="name">
-										<xsl:value-of select="name"/>
-									</xsl:element>
-								</xsl:element>
-							</xsl:for-each>
-						</xsl:element>
-					</xsl:if>
-					<xsl:call-template name="typeMap">
-						<xsl:with-param name="type" select="type"/>
-					</xsl:call-template>
-				</xsl:element>
-			</xsl:for-each>
-			-->
 		</xsl:element>
 	</xsl:template>
 	<!-- ############## FUNCTION - calls type ############## -->
@@ -524,11 +449,9 @@
 					<xsl:otherwise>
 						<xsl:element name="function">
 							<xsl:attribute name="virt" select="@virt"/>
-
-							<!-- PIPAAAAAAA -->
 							<xsl:attribute name="protection" select="@prot"/>
 							<xsl:attribute name="static" select="@static"/>
-
+							
 							<xsl:attribute name="const"><xsl:choose><xsl:when test="@const='yes'"><xsl:value-of select="'true'"/></xsl:when><xsl:when test="@const='no'"><xsl:value-of select="'false'"/></xsl:when></xsl:choose></xsl:attribute>
 							<!-- template attributes -->
 							<xsl:if test="templateparamlist">
@@ -571,14 +494,13 @@
 									<xsl:for-each select="param">
 										<xsl:element name="parameter">
 											<xsl:call-template name="type"/>
-
-											<!-- PIPAAAAAAA -->
+											
 											<xsl:if test="defval!=''">
 												<xsl:element name="defval">
 													<xsl:value-of select="defval"/>
 												</xsl:element>
 											</xsl:if>
-
+											
 										</xsl:element>
 									</xsl:for-each>
 								</xsl:element>
@@ -691,17 +613,15 @@
 				<xsl:if test="starts-with(type,'const')">
 					<xsl:attribute name="const" select="'true'"/>
 				</xsl:if>
-
-				<!-- PIPAAAA -->
 				
 				<!-- implement custom ogre container (vector replace std::vector) -->
-        <xsl:if test="contains(type,'vector')">
-          <xsl:attribute name="container" select="'vector'"/>
-        </xsl:if>
-        <xsl:if test="contains(type,'HashedVector')">
-          <xsl:attribute name="container" select="'HashedVector'"/>
-        </xsl:if>
-        <xsl:if test="contains(type,'list')">
+				<xsl:if test="contains(type,'vector')">
+					<xsl:attribute name="container" select="'vector'"/>
+				</xsl:if>
+				<xsl:if test="contains(type,'HashedVector')">
+					<xsl:attribute name="container" select="'HashedVector'"/>
+				</xsl:if>
+				<xsl:if test="contains(type,'list')">
 					<xsl:attribute name="container" select="'list'"/>
 				</xsl:if>
 				<xsl:if test="contains(type,'map')">
@@ -714,11 +634,11 @@
 					<xsl:attribute name="containerKey" select="substring-before(substring-after(type,'&lt; '),',')"/>
 					<xsl:attribute name="containerValue" select="substring-before(substring-after(type,', '),' &gt;')"/>
 				</xsl:if>
-
+				
 				<xsl:if test="array">
 					<xsl:attribute name="array" select="array"/>
 				</xsl:if>
-
+				
 				<xsl:choose>
 					<!-- passed by reference -->
 					<xsl:when test="contains($type,'&amp;')">
@@ -741,9 +661,9 @@
 					<xsl:when test="contains($type,'vector')">
 						<xsl:value-of select="normalize-space(substring-after($type,'vector'))"/>
 					</xsl:when>
-          <xsl:when test="contains($type,'HashedVector')">
-            <xsl:value-of select="normalize-space(substring-after($type,'HashedVector'))"/>
-          </xsl:when>
+					<xsl:when test="contains($type,'HashedVector')">
+						<xsl:value-of select="normalize-space(substring-after($type,'HashedVector'))"/>
+					</xsl:when>
 					<xsl:when test="contains($type,'list')">
 						<xsl:value-of select="normalize-space(substring-after($type,'list'))"/>
 					</xsl:when>
@@ -760,9 +680,9 @@
 						<xsl:value-of select="$type"/>
 					</xsl:otherwise>
 				</xsl:choose>
-
-			<!-- IT CONTAINED THE TYPEMAPS (Real -> float etc.) -->
-
+				
+				<!-- IT CONTAINED THE TYPEMAPS (Real -> float etc.) -->
+				
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -771,11 +691,10 @@
 	<xsl:template name="variable">
 		<xsl:for-each select="memberdef">
 			<xsl:element name="variable">
-
-				<!-- PIPAAAAAAAA -->
+				
 				<xsl:attribute name="protection" select="@prot"/>
 				<xsl:attribute name="static" select="@static"/>
-
+				
 				<xsl:if test="type and type!='virtual'">
 					<xsl:call-template name="type"/>
 				</xsl:if>
@@ -788,25 +707,4 @@
 			</xsl:element>
 		</xsl:for-each>
 	</xsl:template>
-	<xsl:template name="substring-after-last">
-		<xsl:param name="string" />
-		<xsl:param name="delimiter" />
-		<xsl:choose>
-			<xsl:when test="contains($string, $delimiter)">
-				<xsl:call-template name="substring-after-last">
-					<xsl:with-param name="string" select="substring-after($string, $delimiter)" />
-					<xsl:with-param name="delimiter" select="$delimiter" />
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$string" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
 </xsl:stylesheet>
-<!--
-Using the Stylesheet with version 2.0 with Saxon:
-java -jar "C:/Dokumente und Einstellungen/rung/Eigene Dateien/saxon8.2/saxon8.jar" -o meta.xml all.xml input.xslt
-memory problems, try this:
-java -jar -Xmx512M "C:/Dokumente und Einstellungen/rung/Eigene Dateien/saxon8.2/saxon8.jar" -o meta.xml all.xml input.xslt
--->
