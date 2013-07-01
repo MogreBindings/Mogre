@@ -22,14 +22,6 @@ namespace AutoWrap.Meta
         public List<AbstractTypeDefinition> NestedTypes = new List<AbstractTypeDefinition>();
 
         /// <summary>
-        /// This array contains the names of all subclasses of this class (or all subinterfaces of this
-        /// interface).
-        /// </summary>
-        public readonly string[] SubClassesNames;
-
-        public readonly string BaseClassName;
-
-        /// <summary>
         /// This array contains the names of the base class and all directly implemented interfaces
         /// (or the base interfaces, if this is an interface). The base 
         /// </summary>
@@ -767,30 +759,6 @@ namespace AutoWrap.Meta
             return _interfaces;
         }
 
-        protected ClassDefinition[] _derives = null;
-
-        public virtual ClassDefinition[] GetDerives()
-        {
-            if (_derives == null)
-            {
-                List<ClassDefinition> list = new List<ClassDefinition>();
-                foreach (string cls in SubClassesNames)
-                {
-                    try
-                    {
-                        list.Add(DetermineType<ClassDefinition>(cls));
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                _derives = list.ToArray();
-            }
-
-            return _derives;
-        }
-
         public virtual MemberPropertyDefinition GetProperty(string name, bool inherit)
         {
             MemberPropertyDefinition prop = null;
@@ -1124,17 +1092,6 @@ namespace AutoWrap.Meta
                         {
                             Members.Add(field);
                         }
-                        break;
-
-                    case "derives":
-                        List<string> list = new List<string>();
-                        foreach (XmlElement sub in child.ChildNodes)
-                        {
-                            if (sub.Name != "subClass")
-                                throw new Exception("Unknown element; expected 'subClass'");
-                            list.Add(sub.InnerText);
-                        }
-                        SubClassesNames = list.ToArray();
                         break;
 
                     case "inherits":

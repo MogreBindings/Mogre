@@ -222,15 +222,6 @@
 	<!-- cursor on doxygen/compounddef -->
 	<xsl:template name="derivation">
 		<xsl:param name="refid"/>
-		<xsl:if test="derivedcompoundref">
-			<xsl:element name="derives">
-				<xsl:for-each select="derivedcompoundref">
-					<xsl:element name="subClass">
-						<xsl:value-of select="substring-after(@refid,'_1_1')"/>
-					</xsl:element>
-				</xsl:for-each>
-			</xsl:element>
-		</xsl:if>
 		<xsl:if test="basecompoundref">
 			<xsl:element name="inherits">
                                 
@@ -243,35 +234,21 @@
 				<xsl:for-each select="inheritancegraph/node[link/@refid=$refid]">
 					<xsl:for-each select="childnode">
 						<xsl:variable name="childid" select="@refid"/>
+						<xsl:variable name="baseClass" select="substring-after(../../node[@id=$childid]/label,'::')"/>
 						<!-- non templates first -->
-						<xsl:if test="not(contains(substring-after(../../node[@id=$childid]/label,'::'),'&lt;'))">
+						<xsl:if test="not(contains($baseClass,'&lt;'))">
 							<xsl:element name="baseClass">
-								<xsl:variable name="baseClass" select="substring-after(../../node[@id=$childid]/label,'::')"/>
-								<xsl:choose>
-									<xsl:when test="contains($baseClass,'::')">
-										<xsl:value-of select="$baseClass"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$baseClass"/>
-									</xsl:otherwise>
-								</xsl:choose>
+								<xsl:value-of select="$baseClass"/>
 							</xsl:element>
 						</xsl:if>
 					</xsl:for-each>
 					<xsl:for-each select="childnode">
 						<xsl:variable name="childid" select="@refid"/>
+						<xsl:variable name="baseClass" select="substring-after(../../node[@id=$childid]/label,'::')"/>
 						<!-- templates -->
-						<xsl:if test="contains(substring-after(../../node[@id=$childid]/label,'::'),'&lt;')">
+						<xsl:if test="contains($baseClass,'&lt;')">
 							<xsl:element name="baseClass">
-								<xsl:variable name="baseClass" select="substring-after(../../node[@id=$childid]/label,'::')"/>
-								<xsl:choose>
-									<xsl:when test="contains($baseClass,'::')">
-										<xsl:value-of select="$baseClass"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$baseClass"/>
-									</xsl:otherwise>
-								</xsl:choose>
+								<xsl:value-of select="$baseClass"/>
 							</xsl:element>
 						</xsl:if>
 					</xsl:for-each>
