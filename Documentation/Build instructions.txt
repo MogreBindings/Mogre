@@ -1,4 +1,3 @@
-
 Recommended way to build Mogre:
 =======================================================================
 
@@ -37,7 +36,8 @@ Required software:
   "Visual C# 2010 Express".
 - patch.exe (http://gnuwin32.sourceforge.net/packages/patch.htm)
   Used to apply the Mogre patch against Ogre.
-
+- DirectX SDK (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
+  Ogre3D dependency
   
 Instructions (all commands are to be run on the command line)
 1.  Create target directory and "cd" into it.
