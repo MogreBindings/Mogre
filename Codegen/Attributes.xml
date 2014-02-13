@@ -654,6 +654,7 @@ void Camera::ForwardIntersect(Mogre::Plane worldPlane, array&lt;Mogre::Vector4>^
 }
         </_CustomCppDeclaration>
       </function>
+      <function name="getWorldSpaceCorners" ArrayType="8" />
       <function name="addListener" Ignore="" />
       <function name="removeListener" Ignore="" />
     </class>

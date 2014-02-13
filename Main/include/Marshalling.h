@@ -355,7 +355,7 @@ namespace Mogre
 	template <typename MElem, typename NElem>
 	array<MElem>^ GetValueArrayFromNativeArray(const NElem* src, int len)
 	{
-		STATIC_ASSERT( sizeof(MElem) == sizeof(NElem) )
+		//STATIC_ASSERT( sizeof(MElem) == sizeof(NElem) )
 
 		array<MElem>^ arr = gcnew array<MElem>(len);
 		pin_ptr<MElem> p_arr = &arr[0];
