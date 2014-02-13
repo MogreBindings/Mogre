@@ -27,10 +27,13 @@ public:
 	CLRHandle() : _handle(0)
 	{
 	}
-	CLRHandle(const CLRHandle& clrHandle)
+	// Don't let the GC handle get copied by value, otherwise it may get freed multiple times, leading to crashes.
+	CLRHandle(const CLRHandle& clrHandle) : _handle(0)
 	{
-		// Don't let the GC handle get copied by value, otherwise it may get freed multiple times, leading to crashes.
-		_handle = 0;
+	}
+	CLRHandle& operator=(const CLRHandle& clrHandle)
+	{
+		return *this;
 	}
 	~CLRHandle()
 	{

@@ -44,10 +44,13 @@ public:
 	CLRObject() : _handle(0)
 	{
 	}
-	CLRObject(const CLRObject& clrObject)
+	// Don't let the GC handle get copied by value, otherwise it may get freed multiple times, leading to crashes.
+	CLRObject(const CLRObject& clrObject) : _handle(0)
 	{
-		// Don't let the GC handle get copied by value, otherwise it may get freed multiple times, leading to crashes.
-		_handle = 0;
+	}
+	CLRObject& operator=(const CLRObject& clrObject)
+	{
+		return *this;
 	}
 	virtual ~CLRObject()
 	{
