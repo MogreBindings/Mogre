@@ -1082,13 +1082,13 @@ namespace AutoWrap.Meta
                 {
                     case "function":
                         MemberMethodDefinition func = new MemberMethodDefinition(child, this);
-                        if (func.NativeName != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && !func.NativeName.StartsWith("OGRE_"))
+                        if (func.NativeName != "DECLARE_INIT_CLROBJECT_METHOD_OVERRIDE" && func.NativeName != "_Init_CLRObject" && !func.NativeName.StartsWith("OGRE_"))
                             AddNewFunction(func);
                         break;
 
                     case "variable":
                         MemberFieldDefinition field = new MemberFieldDefinition(child, this);
-                        if (field.NativeName != Name && !field.NativeName.StartsWith("OGRE_"))
+                        if (field.NativeName != Name && field.NativeName != "DECLARE_CLRHANDLE" && field.NativeName != "_CLRHandle" && !field.NativeName.StartsWith("OGRE_"))
                         {
                             Members.Add(field);
                         }
