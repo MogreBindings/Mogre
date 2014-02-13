@@ -64,12 +64,30 @@ namespace Mogre
         */
         enum class Side
         {
-			NO_SIDE = Ogre::Plane::NO_SIDE,
+            NO_SIDE = Ogre::Plane::NO_SIDE,
             POSITIVE_SIDE = Ogre::Plane::POSITIVE_SIDE,
-            NEGATIVE_SIDE = Ogre::Plane::NEGATIVE_SIDE
+            NEGATIVE_SIDE = Ogre::Plane::NEGATIVE_SIDE,
+            BOTH_SIDE = Ogre::Plane::BOTH_SIDE
         };
 
         Side GetSide (Vector3 rkPoint);
+
+        /**
+        Returns the side where the alignedBox is. The flag BOTH_SIDE indicates an intersecting box.
+        One corner ON the plane is sufficient to consider the box and the plane intersecting.
+        */
+        Side GetSide (AxisAlignedBox^ rkBox);
+
+        /** Returns which side of the plane that the given box lies on.
+            The box is defined as centre/half-size pairs for effectively.
+        @param centre The centre of the box.
+        @param halfSize The half-size of the box.
+        @returns
+            POSITIVE_SIDE if the box complete lies on the "positive side" of the plane,
+            NEGATIVE_SIDE if the box complete lies on the "negative side" of the plane,
+            and BOTH_SIDE if the box intersects the plane.
+        */
+        Side GetSide (Vector3 centre, Vector3 halfSize);
 
         /** This is a pseudodistance. The sign of the return value is
             positive if the point is on the positive side of the plane,
@@ -85,6 +103,9 @@ namespace Mogre
         void Redefine(Vector3 rkPoint0, Vector3 rkPoint1,
             Vector3 rkPoint2);
 
+		/** Redefine this plane based on a normal and a point. */
+		void Redefine(Vector3 rkNormal, Vector3 rkPoint);
+
 		/** Project a vector onto the plane. 
 		@remarks This gives you the element of the input vector that is perpendicular 
 			to the normal of the plane. You can get the element which is parallel
@@ -93,6 +114,17 @@ namespace Mogre
 		@param v The input vector
 		*/
 		Vector3 ProjectVector(Vector3 v);
+
+        /** Normalises the plane.
+            @remarks
+                This method normalises the plane's normal and the length scale of d
+                is as well.
+            @note
+                This function will not crash for zero-sized vectors, but there
+                will be no changes made to their components.
+            @returns The previous length of the plane's normal.
+        */
+        Real Normalise();
 
 		Vector3 normal;
         Real d;

@@ -531,6 +531,81 @@ namespace Mogre {
 		return Radian(Mogre::Math::ASin(-2*(x*z - w*y)));
 	}
     //-----------------------------------------------------------------------
+	Radian Quaternion::GetRoll(bool reprojectAxis)
+	{
+		if (reprojectAxis)
+		{
+			// roll = atan2(localx.y, localx.x)
+			// pick parts of xAxis() implementation that we need
+//			Real fTx  = 2.0*x;
+			Real fTy  = 2.0f*y;
+			Real fTz  = 2.0f*z;
+			Real fTwz = fTz*w;
+			Real fTxy = fTy*x;
+			Real fTyy = fTy*y;
+			Real fTzz = fTz*z;
+
+			// Vector3(1.0-(fTyy+fTzz), fTxy+fTwz, fTxz-fTwy);
+
+			return Radian(Math::ATan2(fTxy+fTwz, 1.0f-(fTyy+fTzz)));
+
+		}
+		else
+		{
+			return Radian(Math::ATan2(2*(x*y + w*z), w*w + x*x - y*y - z*z));
+		}
+	}
+    //-----------------------------------------------------------------------
+	Radian Quaternion::GetPitch(bool reprojectAxis)
+	{
+		if (reprojectAxis)
+		{
+			// pitch = atan2(localy.z, localy.y)
+			// pick parts of yAxis() implementation that we need
+			Real fTx  = 2.0f*x;
+//			Real fTy  = 2.0f*y;
+			Real fTz  = 2.0f*z;
+			Real fTwx = fTx*w;
+			Real fTxx = fTx*x;
+			Real fTyz = fTz*y;
+			Real fTzz = fTz*z;
+
+			// Vector3(fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx);
+			return Radian(Math::ATan2(fTyz+fTwx, 1.0f-(fTxx+fTzz)));
+		}
+		else
+		{
+			// internal version
+			return Radian(Math::ATan2(2*(y*z + w*x), w*w - x*x - y*y + z*z));
+		}
+	}
+    //-----------------------------------------------------------------------
+	Radian Quaternion::GetYaw(bool reprojectAxis)
+	{
+		if (reprojectAxis)
+		{
+			// yaw = atan2(localz.x, localz.z)
+			// pick parts of zAxis() implementation that we need
+			Real fTx  = 2.0f*x;
+			Real fTy  = 2.0f*y;
+			Real fTz  = 2.0f*z;
+			Real fTwy = fTy*w;
+			Real fTxx = fTx*x;
+			Real fTxz = fTz*x;
+			Real fTyy = fTy*y;
+
+			// Vector3(fTxz+fTwy, fTyz-fTwx, 1.0-(fTxx+fTyy));
+
+			return Radian(Math::ATan2(fTxz+fTwy, 1.0f-(fTxx+fTyy)));
+
+		}
+		else
+		{
+			// internal version
+			return Radian(Math::ASin(-2*(x*z - w*y)));
+		}
+	}
+    //-----------------------------------------------------------------------
     Quaternion Quaternion::Nlerp(Real fT, Quaternion rkP,
         Quaternion rkQ, bool shortestPath)
     {

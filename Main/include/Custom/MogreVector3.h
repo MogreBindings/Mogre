@@ -257,6 +257,33 @@ namespace Mogre
 			}
 		}
 
+        /** Returns the distance to another vector.
+            @warning
+                This operation requires a square root and is expensive in
+                terms of CPU operations. If you don't need to know the exact
+                distance (e.g. for just comparing distances) use squaredDistance()
+                instead.
+        */
+        inline Real Distance(Vector3 rhs)
+        {
+            return (*this - rhs).Length;
+        }
+
+        /** Returns the square of the distance to another vector.
+            @remarks
+                This method is for efficiency - calculating the actual
+                distance to another vector requires a square root, which is
+                expensive in terms of the operations required. This method
+                returns the square of the distance to another vector, i.e.
+                the same as the distance but before the square root is taken.
+                Use this if you want to find the longest / shortest distance
+                without incurring the square root.
+        */
+        inline Real SquaredDistance(Vector3 rhs)
+        {
+            return (*this - rhs).SquaredLength;
+        }
+
         /** Calculates the dot (scalar) product of this vector with another.
             @remarks
                 The dot product can be used to calculate the angle between 2
@@ -274,6 +301,21 @@ namespace Mogre
         inline Real DotProduct(Vector3 vec)
         {
             return x * vec.x + y * vec.y + z * vec.z;
+        }
+
+        /** Calculates the absolute dot (scalar) product of this vector with another.
+            @remarks
+                This function work similar dotProduct, except it use absolute value
+                of each component of the vector to computing.
+            @param
+                vec Vector with which to calculate the absolute dot product (together
+                with this one).
+            @returns
+                A Real representing the absolute dot product value.
+        */
+        inline Real AbsDotProduct(Vector3 vec)
+        {
+            return System::Math::Abs(x * vec.x) + System::Math::Abs(y * vec.y) + System::Math::Abs(z * vec.z);
         }
 
         /** Normalises the vector.
@@ -454,6 +496,25 @@ namespace Mogre
             Radian angle,
             Vector3 up );
 
+		/** Gets the angle between 2 vectors.
+		@remarks
+			Vectors do not have to be unit-length but must represent directions.
+		*/
+		inline Radian AngleBetween(Vector3 dest)
+		{
+			Real lenProduct = Length * dest.Length;
+
+			// Divide by zero check
+			if(lenProduct < 1e-6f)
+				lenProduct = 1e-6f;
+
+			Real f = DotProduct(dest) / lenProduct;
+
+			f = Math::Clamp(f, (Real)-1.0, (Real)1.0);
+			return Math::ACos(f);
+
+		}
+
         /** Gets the shortest arc quaternion to rotate this vector to the destination
             vector.
         @remarks
@@ -515,6 +576,23 @@ namespace Mogre
 		{
 			return PositionEquals(rhs, 1e-03);
 		}
+
+		/** Returns whether this vector is within a positional tolerance
+			of another vector, also take scale of the vectors into account.
+		@param rhs The vector to compare with
+		@param tolerance The amount (related to the scale of vectors) that distance
+            of the vector may vary by and still be considered close
+		*/
+		inline bool PositionCloses(Vector3 rhs, Real tolerance)
+		{
+			return SquaredDistance(rhs) <=
+                (SquaredLength + rhs.SquaredLength) * tolerance;
+		}
+		inline bool PositionCloses(Vector3 rhs)
+		{
+			return PositionCloses(rhs, 1e-03f);
+		}
+
 		/** Returns whether this vector is within a directional tolerance
 			of another vector.
 		@param rhs The vector to compare with
@@ -529,15 +607,24 @@ namespace Mogre
 			return Math::Abs(angle.ValueRadians) <= tolerance.ValueRadians;
 		}
 
+		/// Check whether this vector contains valid values
+		property bool IsNaN
+		{
+			inline bool get()
+			{
+				return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z);
+			}
+		}
+
         // special points
-        static Vector3 ZERO = Vector3( 0, 0, 0 );
-        static Vector3 UNIT_X = Vector3( 1, 0, 0 );
-        static Vector3 UNIT_Y = Vector3( 0, 1, 0 );
-        static Vector3 UNIT_Z = Vector3( 0, 0, 1 );
-        static Vector3 NEGATIVE_UNIT_X = Vector3( -1,  0,  0 );
-        static Vector3 NEGATIVE_UNIT_Y = Vector3(  0, -1,  0 );
-        static Vector3 NEGATIVE_UNIT_Z = Vector3(  0,  0, -1 );
-        static Vector3 UNIT_SCALE = Vector3(1, 1, 1);
+        static initonly Vector3 ZERO = Vector3( 0, 0, 0 );
+        static initonly Vector3 UNIT_X = Vector3( 1, 0, 0 );
+        static initonly Vector3 UNIT_Y = Vector3( 0, 1, 0 );
+        static initonly Vector3 UNIT_Z = Vector3( 0, 0, 1 );
+        static initonly Vector3 NEGATIVE_UNIT_X = Vector3( -1,  0,  0 );
+        static initonly Vector3 NEGATIVE_UNIT_Y = Vector3(  0, -1,  0 );
+        static initonly Vector3 NEGATIVE_UNIT_Z = Vector3(  0,  0, -1 );
+        static initonly Vector3 UNIT_SCALE = Vector3(1, 1, 1);
 
         /** Function for writing to a stream.
         */

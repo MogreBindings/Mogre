@@ -65,6 +65,34 @@ namespace Mogre
 
 		return Plane::Side::NO_SIDE;
     }
+	//-----------------------------------------------------------------------
+	Plane::Side Plane::GetSide (AxisAlignedBox^ box)
+	{
+		if (box->IsNull) 
+			return Plane::Side::NO_SIDE;
+		if (box->IsInfinite)
+			return Plane::Side::BOTH_SIDE;
+
+        return GetSide(box->Center, box->HalfSize);
+	}
+    //-----------------------------------------------------------------------
+    Plane::Side Plane::GetSide (Vector3 centre, Vector3 halfSize)
+    {
+        // Calculate the distance between box centre and the plane
+        Real dist = GetDistance(centre);
+
+        // Calculate the maximise allows absolute distance for
+        // the distance between box centre and plane
+        Real maxAbsDist = normal.AbsDotProduct(halfSize);
+
+        if (dist < -maxAbsDist)
+            return Plane::Side::NEGATIVE_SIDE;
+
+        if (dist > +maxAbsDist)
+            return Plane::Side::POSITIVE_SIDE;
+
+        return Plane::Side::BOTH_SIDE;
+    }
     //-----------------------------------------------------------------------
     void Plane::Redefine(Vector3 rkPoint0, Vector3 rkPoint1,
         Vector3 rkPoint2)
@@ -75,6 +103,12 @@ namespace Mogre
         normal.Normalise();
         d = -normal.DotProduct(rkPoint0);
     }
+	//-----------------------------------------------------------------------
+	void Plane::Redefine(Vector3 rkNormal, Vector3 rkPoint)
+	{
+		normal = rkNormal;
+		d = -rkNormal.DotProduct(rkPoint);
+	}
 	//-----------------------------------------------------------------------
 	Vector3 Plane::ProjectVector(Vector3 p)
 	{
@@ -92,6 +126,21 @@ namespace Mogre
 		return xform * p;
 
 	}
+	//-----------------------------------------------------------------------
+    Real Plane::Normalise()
+    {
+        Real fLength = normal.Length;
+
+        // Will also work for zero-sized vectors, but will change nothing
+        if (fLength > 1e-08f)
+        {
+            Real fInvLength = 1.0f / fLength;
+            normal *= fInvLength;
+            d *= fInvLength;
+        }
+
+        return fLength;
+    }
     //-----------------------------------------------------------------------
 	String^ Plane::ToString()
     {

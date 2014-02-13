@@ -253,6 +253,14 @@ namespace Mogre
         {
             return x * vec.x + y * vec.y + z * vec.z + w * vec.w;
         }
+		/// Check whether this vector contains valid values
+		property bool IsNaN
+		{
+			inline bool get()
+			{
+				return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
+			}
+		}
         /** Function for writing to a stream.
         */
 		virtual System::String^ ToString() override
@@ -260,6 +268,6 @@ namespace Mogre
 			return System::String::Format("Vector4({0}, {1}, {2}, {3})", x, y, z, w);
         }
         // special
-        static const Vector4 ZERO = Vector4(0, 0, 0, 0);
+        static initonly Vector4 ZERO = Vector4(0, 0, 0, 0);
     };
 }

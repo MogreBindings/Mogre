@@ -40,7 +40,7 @@ namespace Mogre
 	value class Vector2;
 	value class Vector3;
 	value class Vector4;
-
+	value class Quaternion;
 	value class Degree;
 
     /** Wrapper class which indicates a given angle value is in Radians.
@@ -270,6 +270,18 @@ namespace Mogre
 			return Real(System::Math::Cos(fValue));
 		}
 
+		static inline Real Exp (Real fValue) { return Real(System::Math::Exp(fValue)); }
+
+		static inline Real Floor (Real fValue) { return Real(System::Math::Floor(fValue)); }
+
+		static inline Real Log (Real fValue) { return Real(System::Math::Log(fValue)); }
+
+		static inline Real Log2 (Real fValue) { return Real(System::Math::Log(fValue,2.0f)); }
+
+		static inline Real LogN (Real base, Real fValue) { return Real(System::Math::Log(fValue,base)); }
+
+		static inline Real Pow (Real fBase, Real fExponent) { return Real(System::Math::Pow(fBase,fExponent)); }
+
         static Real Sign (Real fValue);
 		static inline Radian Sign ( Radian rValue )
 		{
@@ -325,6 +337,33 @@ namespace Mogre
         static Real RangeRandom (Real fLow, Real fHigh);  // in [fLow,fHigh]
 
         static Real SymmetricRandom ();  // in [-1,1]
+
+        /** Tangent function. IMPORTANT: Create an instance of the Math class before you use tables.
+            @param
+                fValue Angle in radians
+            @param
+                useTables If true, uses lookup tables rather than
+                calculation - faster but less accurate.
+        */
+		static inline Real Tan (Radian fValue, bool useTables) {
+			return (!useTables) ? Real(System::Math::Tan(fValue.ValueRadians)) : TanTable(fValue.ValueRadians);
+		}
+		static inline Real Tan (Radian fValue) {
+			return Real(System::Math::Tan(fValue.ValueRadians));
+		}
+        /** Tangent function.
+            @param
+                fValue Angle in radians
+            @param
+                useTables If true, uses lookup tables rather than
+                calculation - faster but less accurate.
+        */
+		static inline Real Tan (Real fValue, bool useTables) {
+			return (!useTables) ? Real(System::Math::Tan(fValue)) : TanTable(fValue);
+		}
+		static inline Real Tan (Real fValue) {
+			return Real(System::Math::Tan(fValue));
+		}
 
 		static inline Real DegreesToRadians(Real degrees) { return degrees * fDeg2Rad; }
         static inline Real RadiansToDegrees(Real radians) { return radians * fRad2Deg; }
@@ -564,6 +603,20 @@ namespace Mogre
 		{
 			return GaussianDistribution(x, 0.0f, 1.0f);
 		}
+
+		/** Clamp a value within an inclusive range. */
+		static Real Clamp(Real val, Real minval, Real maxval)
+		{
+			assert (minval < maxval && "Invalid clamp range");
+			return System::Math::Max(System::Math::Min(val, maxval), minval);
+		}
+
+		static Matrix4^ MakeViewMatrix(Vector3 position, Quaternion orientation, 
+			Matrix4^ reflectMatrix);
+		static Matrix4^ MakeViewMatrix(Vector3 position, Quaternion orientation);
+
+		/** Get a bounding radius value from a bounding box. */
+		static Real BoundingRadiusFromAABB(AxisAlignedBox^ aabb);
 
 		literal Real POS_INFINITY = Real::PositiveInfinity;
 		literal Real NEG_INFINITY = Real::NegativeInfinity;

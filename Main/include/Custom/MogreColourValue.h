@@ -43,12 +43,12 @@ namespace Mogre
 	public:
 		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( ColourValue )
 
-		static const ColourValue ZERO = ColourValue(0.0,0.0,0.0,0.0);
-        static const ColourValue Black = ColourValue(0.0,0.0,0.0);
-        static const ColourValue White = ColourValue(1.0,1.0,1.0);
-        static const ColourValue Red = ColourValue(1.0,0.0,0.0);
-        static const ColourValue Green = ColourValue(0.0,1.0,0.0);
-        static const ColourValue Blue = ColourValue(0.0,0.0,1.0);
+        static initonly ColourValue ZERO = ColourValue(0.0,0.0,0.0,0.0);
+        static initonly ColourValue Black = ColourValue(0.0,0.0,0.0);
+        static initonly ColourValue White = ColourValue(1.0,1.0,1.0);
+        static initonly ColourValue Red = ColourValue(1.0,0.0,0.0);
+        static initonly ColourValue Green = ColourValue(0.0,1.0,0.0);
+        static initonly ColourValue Blue = ColourValue(0.0,0.0,1.0);
 
 	    explicit ColourValue( float red,
 				    float green,
@@ -227,6 +227,12 @@ namespace Mogre
 		*/
 		void SetHSB(Real hue, Real saturation, Real brightness);
 
+		/** Convert the current colour to Hue, Saturation and Brightness values. 
+		@param hue Output hue value, scaled to the [0,1] range as opposed to the 0-360
+		@param saturation Output saturation level, [0,1]
+		@param brightness Output brightness level, [0,1]
+		*/
+		void GetHSB([Out] Real% hue, [Out] Real% saturation, [Out] Real% brightness);
 
 		/** Function for writing to a stream.
 		*/

@@ -167,6 +167,16 @@ namespace Mogre
             return kDiv;
         }
 
+        inline static Vector2 operator / ( Vector2 lhs, Vector2 rhs)
+        {
+            Vector2 kDiv;
+
+            kDiv.x = lhs.x / rhs.x;
+            kDiv.y = lhs.y / rhs.y;
+
+            return kDiv;
+        }
+
         inline static Vector2 operator - (Vector2 vec)
         {
             Vector2 kNeg;
@@ -232,6 +242,32 @@ namespace Mogre
 				return x * x + y * y;
 			}
 		}
+        /** Returns the distance to another vector.
+            @warning
+                This operation requires a square root and is expensive in
+                terms of CPU operations. If you don't need to know the exact
+                distance (e.g. for just comparing distances) use squaredDistance()
+                instead.
+        */
+        inline Real Distance(Vector2 rhs)
+        {
+            return (*this - rhs).Length;
+        }
+
+        /** Returns the square of the distance to another vector.
+            @remarks
+                This method is for efficiency - calculating the actual
+                distance to another vector requires a square root, which is
+                expensive in terms of the operations required. This method
+                returns the square of the distance to another vector, i.e.
+                the same as the distance but before the square root is taken.
+                Use this if you want to find the longest / shortest distance
+                without incurring the square root.
+        */
+        inline Real SquaredDistance(Vector2 rhs)
+        {
+            return (*this - rhs).SquaredLength;
+        }
 
         /** Calculates the dot (scalar) product of this vector with another.
             @remarks
@@ -415,14 +451,22 @@ namespace Mogre
         {
             return Vector2( *this - ( 2 * this->DotProduct(normal) * normal ) );
         }
+		/// Check whether this vector contains valid values
+		property bool IsNaN
+		{
+			inline bool get()
+			{
+				return Real::IsNaN(x) || Real::IsNaN(y);
+			}
+		}
 
         // special points
-        static const Vector2 ZERO = Vector2( 0, 0);
-        static const Vector2 UNIT_X = Vector2( 1, 0);
-        static const Vector2 UNIT_Y = Vector2( 0, 1);
-        static const Vector2 NEGATIVE_UNIT_X = Vector2( -1,  0);
-        static const Vector2 NEGATIVE_UNIT_Y = Vector2(  0, -1);
-        static const Vector2 UNIT_SCALE = Vector2(1, 1);
+        static initonly Vector2 ZERO = Vector2( 0, 0);
+        static initonly Vector2 UNIT_X = Vector2( 1, 0);
+        static initonly Vector2 UNIT_Y = Vector2( 0, 1);
+        static initonly Vector2 NEGATIVE_UNIT_X = Vector2( -1,  0);
+        static initonly Vector2 NEGATIVE_UNIT_Y = Vector2(  0, -1);
+        static initonly Vector2 UNIT_SCALE = Vector2(1, 1);
 
         /** Function for writing to a stream.
         */

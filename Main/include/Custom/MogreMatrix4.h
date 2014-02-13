@@ -553,6 +553,35 @@ namespace Mogre
 			return m3x3;
         }
 
+		/** Determines if this matrix involves a scaling. */
+		property bool HasScale
+		{
+			inline bool get()
+			{
+				// check magnitude of column vectors (==local axes)
+				Real t = m00 * m00 + m10 * m10 + m20 * m20;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+				t = m01 * m01 + m11 * m11 + m21 * m21;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+				t = m02 * m02 + m12 * m12 + m22 * m22;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+
+				return false;
+			}
+		}
+
+		/** Determines if this matrix involves a negative scaling. */
+		property bool HasNegativeScale
+		{
+			inline bool get()
+			{
+				return Determinant < 0;
+			}
+		}
+
         /** Extracts the rotation / scaling part as a quaternion from the Matrix.
          */
         inline Quaternion ExtractQuaternion()
@@ -561,19 +590,19 @@ namespace Mogre
           return Quaternion(m3x3);
         }
 
-        static Matrix4^ ZERO = gcnew Matrix4 (
+        static initonly Matrix4^ ZERO = gcnew Matrix4 (
 					0, 0, 0, 0,
 					0, 0, 0, 0,
 					0, 0, 0, 0,
 					0, 0, 0, 0 );
-        static Matrix4^ IDENTITY = gcnew Matrix4 (
+        static initonly Matrix4^ IDENTITY = gcnew Matrix4 (
 					1, 0, 0, 0,
 					0, 1, 0, 0,
 					0, 0, 1, 0,
 					0, 0, 0, 1 );
         /** Useful little matrix which takes 2D clipspace {-1, 1} to {0,1}
             and inverts the Y. */
-        static Matrix4^ CLIPSPACE2DTOIMAGESPACE = gcnew Matrix4 (
+        static initonly Matrix4^ CLIPSPACE2DTOIMAGESPACE = gcnew Matrix4 (
 					0.5,    0,  0, 0.5, 
 					  0, -0.5,  0, 0.5, 
 					  0,    0,  1,   0,
@@ -627,6 +656,10 @@ namespace Mogre
             performing -translation, -rotate, 1/scale in that order.
         */
         void MakeInverseTransform(Vector3 position, Vector3 scale, Quaternion orientation);
+
+        /** Decompose a Matrix4 to orientation / scale / position.
+        */
+        void Decomposition([Out] Vector3% position, [Out] Vector3% scale, [Out] Quaternion% orientation);
 
         /** Check whether or not the matrix is affine matrix.
             @remarks

@@ -259,9 +259,29 @@ namespace Mogre
         static void TensorProduct (Vector3 rkU, Vector3 rkV,
             [Out] Matrix3^% rkProduct);
 
-        static const Real EPSILON = 1e-06;
-        static Matrix3^ ZERO = gcnew Matrix3(0,0,0,0,0,0,0,0,0);
-        static Matrix3^ IDENTITY = gcnew Matrix3(1,0,0,0,1,0,0,0,1);
+		/** Determines if this matrix involves a scaling. */
+		property bool HasScale
+		{
+			inline bool get()
+			{
+				// check magnitude of column vectors (==local axes)
+				Real t = m00 * m00 + m10 * m10 + m20 * m20;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+				t = m01 * m01 + m11 * m11 + m21 * m21;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+				t = m02 * m02 + m12 * m12 + m22 * m22;
+				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+					return true;
+
+				return false;
+			}
+		}
+
+        static initonly Real EPSILON = 1e-06;
+        static initonly Matrix3^ ZERO = gcnew Matrix3(0,0,0,0,0,0,0,0,0);
+        static initonly Matrix3^ IDENTITY = gcnew Matrix3(1,0,0,0,1,0,0,0,1);
 
 		[FieldOffset(0)]
 		NativeValue value;

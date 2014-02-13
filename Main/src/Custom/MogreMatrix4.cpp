@@ -124,6 +124,20 @@ namespace Mogre
         m30 = 0; m31 = 0; m32 = 0; m33 = 1;
     }
     //-----------------------------------------------------------------------
+	void Matrix4::Decomposition([Out] Vector3% position, [Out] Vector3% scale, [Out] Quaternion% orientation)
+	{
+		assert(IsAffine);
+
+		Matrix3^ m3x3 = Extract3x3Matrix();
+
+		Matrix3^ matQ;
+		Vector3 vecU;
+		m3x3->QDUDecomposition( matQ, scale, vecU ); 
+
+		orientation = Quaternion( matQ );
+		position = Vector3( m03, m13, m23 );
+	}
+    //-----------------------------------------------------------------------
     Matrix4^ Matrix4::InverseAffine()
     {
 		if (!IsAffine)

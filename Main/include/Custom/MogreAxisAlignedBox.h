@@ -69,7 +69,6 @@ namespace Mogre {
 			return o_box;
 		}
 
-	protected:
 		enum class Extent
 		{
 			EXTENT_NULL,
@@ -77,6 +76,7 @@ namespace Mogre {
 			EXTENT_INFINITE
 		};
 
+	protected:
 		Vector3 mMinimum;
 		Vector3 mMaximum;
 		Extent mExtent;
@@ -105,7 +105,7 @@ namespace Mogre {
 			NEAR_LEFT_TOP = Ogre::AxisAlignedBox::NEAR_LEFT_TOP,
 			NEAR_RIGHT_TOP = Ogre::AxisAlignedBox::NEAR_RIGHT_TOP
 		};
-		AxisAlignedBox()
+		inline AxisAlignedBox()
 		{
 			// Default to a null box 
 			SetMinimum( -0.5, -0.5, -0.5 );
@@ -113,7 +113,14 @@ namespace Mogre {
 			mExtent = Extent::EXTENT_NULL;
 		}
 
-		AxisAlignedBox(AxisAlignedBox^ rkBox)
+		inline AxisAlignedBox(Extent e)
+		{
+			SetMinimum( -0.5, -0.5, -0.5 );
+			SetMaximum( 0.5, 0.5, 0.5 );
+			mExtent = e;
+		}
+
+		inline AxisAlignedBox(AxisAlignedBox^ rkBox)
 		{
 			if (rkBox->IsNull)
 				SetNull();
@@ -123,12 +130,12 @@ namespace Mogre {
 				SetExtents( rkBox->mMinimum, rkBox->mMaximum );
 		}
 
-		AxisAlignedBox( Vector3 min, Vector3 max )
+		inline AxisAlignedBox( Vector3 min, Vector3 max )
 		{
 			SetExtents( min, max );
 		}
 
-		AxisAlignedBox(
+		inline AxisAlignedBox(
 			Real mx, Real my, Real mz,
 			Real Mx, Real My, Real Mz )
 		{
@@ -140,14 +147,14 @@ namespace Mogre {
 		*/
 		property Vector3 Minimum
 		{
-			Vector3 get() { return mMinimum; }
+			inline Vector3 get() { return mMinimum; }
 		}
 
 		/** Gets the maximum corner of the box.
 		*/
 		property Vector3 Maximum
 		{ 
-			Vector3 get() { return mMaximum; }
+			inline Vector3 get() { return mMaximum; }
 		}
 
 		/** Sets the minimum corner of the box.
@@ -267,7 +274,7 @@ namespace Mogre {
 		</pre>
 		@remarks as this implementation uses a static member, make sure to use your own copy !
 		*/
-		array<Vector3>^ GetAllCorners()
+		inline array<Vector3>^ GetAllCorners()
 		{
 			if (mExtent != Extent::EXTENT_FINITE)
 				throw gcnew System::Exception("Can't get corners of a null or infinite AAB");
@@ -499,7 +506,7 @@ namespace Mogre {
 		*/
 		property bool IsNull
 		{
-			bool get() { return (mExtent == Extent::EXTENT_NULL); }
+			inline bool get() { return (mExtent == Extent::EXTENT_NULL); }
 		}
 
 		/** Returns true if the box is finite.

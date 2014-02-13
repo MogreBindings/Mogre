@@ -180,6 +180,35 @@ namespace Mogre
 		{
 			Radian get();
 		}
+
+   		/** Calculate the local roll element of this quaternion.
+		@param reprojectAxis By default the method returns the 'intuitive' result
+			that is, if you projected the local Y of the quaternion onto the X and
+			Y axes, the angle between them is returned. If set to false though, the
+			result is the actual yaw that will be used to implement the quaternion,
+			which is the shortest possible path to get to the same orientation and 
+			may involve less axial rotation. 
+		*/
+		Radian GetRoll(bool reprojectAxis);
+   		/** Calculate the local pitch element of this quaternion
+		@param reprojectAxis By default the method returns the 'intuitive' result
+			that is, if you projected the local Z of the quaternion onto the X and
+			Y axes, the angle between them is returned. If set to true though, the
+			result is the actual yaw that will be used to implement the quaternion,
+			which is the shortest possible path to get to the same orientation and 
+			may involve less axial rotation. 
+		*/
+		Radian GetPitch(bool reprojectAxis);
+   		/** Calculate the local yaw element of this quaternion
+		@param reprojectAxis By default the method returns the 'intuitive' result
+			that is, if you projected the local Z of the quaternion onto the X and
+			Z axes, the angle between them is returned. If set to true though, the
+			result is the actual yaw that will be used to implement the quaternion,
+			which is the shortest possible path to get to the same orientation and 
+			may involve less axial rotation. 
+		*/
+		Radian GetYaw(bool reprojectAxis);
+
 		/// Equality with tolerance (tolerance is max angle difference)
 		bool Equals(Quaternion rhs, Radian tolerance);
 		
@@ -222,13 +251,22 @@ namespace Mogre
 		}
 
         // cutoff for sine near zero
-        static const Real ms_fEpsilon = 1e-03;
+        static initonly Real ms_fEpsilon = 1e-03;
 
         // special values
-        static const Quaternion ZERO = Quaternion(0.0,0.0,0.0,0.0);
-        static const Quaternion IDENTITY = Quaternion(1.0,0.0,0.0,0.0);
+        static initonly Quaternion ZERO = Quaternion(0.0,0.0,0.0,0.0);
+        static initonly Quaternion IDENTITY = Quaternion(1.0,0.0,0.0,0.0);
 
 		Real w, x, y, z;
+
+		/// Check whether this quaternion contains valid values
+		property bool IsNaN
+		{
+			inline bool get()
+			{
+				return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
+			}
+		}
 
         /** Function for writing to a stream. Outputs "Quaternion(w, x, y, z)" with w,x,y,z
             being the member values of the quaternion.
