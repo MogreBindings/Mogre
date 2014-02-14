@@ -227,6 +227,9 @@
     <ClCompile Include="src\auto\MogreConfigOptionMap.cpp">
       <Filter>OgreMain\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\auto\MogreCustomCompositionPass.cpp">
+      <Filter>OgreMain\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\auto\MogreDataStream.cpp">
       <Filter>OgreMain\Source Files</Filter>
     </ClCompile>
@@ -888,6 +891,9 @@
       <Filter>OgreMain\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\auto\MogreConfigOptionMap.h">
+      <Filter>OgreMain\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\auto\MogreCustomCompositionPass.h">
       <Filter>OgreMain\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\auto\MogreDataStream.h">

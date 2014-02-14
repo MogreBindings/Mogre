@@ -3,7 +3,5 @@ mkdir build\doxyxml 2>nul
 
 doxygen.exe ogre.doxygen
 
-copy /y fixedDoxygen\*.xml build\doxyxml
-
 %WinDir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe transform.msbuild
 

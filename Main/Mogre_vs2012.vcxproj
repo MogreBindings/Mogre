@@ -200,6 +200,7 @@
     <ClCompile Include="src\auto\MogreCompositorManager.cpp" />
     <ClCompile Include="src\auto\MogreConfigFile.cpp" />
     <ClCompile Include="src\auto\MogreConfigOptionMap.cpp" />
+    <ClCompile Include="src\auto\MogreCustomCompositionPass.cpp" />
     <ClCompile Include="src\auto\MogreDataStream.cpp" />
     <ClCompile Include="src\auto\MogreDDSCodec.cpp" />
     <ClCompile Include="src\auto\MogreDefaultHardwareBufferManager.cpp" />
@@ -401,6 +402,7 @@
     <ClInclude Include="include\auto\MogreCompositorManager.h" />
     <ClInclude Include="include\auto\MogreConfigFile.h" />
     <ClInclude Include="include\auto\MogreConfigOptionMap.h" />
+    <ClInclude Include="include\auto\MogreCustomCompositionPass.h" />
     <ClInclude Include="include\auto\MogreDataStream.h" />
     <ClInclude Include="include\auto\MogreDDSCodec.h" />
     <ClInclude Include="include\auto\MogreDefaultHardwareBufferManager.h" />

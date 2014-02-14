@@ -258,9 +258,8 @@ property bool IsThrown
       <function name="createImpl" Ignore=""/>
       <function name="registerCompositorLogic" Ignore=""/>
       <function name="getCompositorLogic" Ignore=""/>
-      <function name="registerCustomCompositionPass" Ignore=""/>
-      <function name="getCustomCompositionPass" Ignore=""/>
     </class>
+    <class name="CustomCompositionPass" WrapType="Interface" />
     <class name="Image" WrapType="CLRHandle">
       <function name="loadDynamicImage">
         <param name="pData" RawPointerParam=""/>
@@ -341,6 +340,21 @@ property bool IsThrown
     <class name="BillboardChain">
       <class name="Element" WrapType="NativePtrValueType"/>
     </class>
+    <class name="HardwareBuffer">
+      <_CustomIncDeclaration>
+public:
+generic&lt;typename T> where T : value class
+void WriteData(int offset, int length, array&lt;T>^ source, bool discardWholeBuffer);
+      </_CustomIncDeclaration>
+      <_CustomCppDeclaration>
+generic&lt;typename T> where T : value class
+void HardwareBuffer::WriteData(int offset, int length, array&lt;T>^ source, bool discardWholeBuffer)
+{
+  pin_ptr&lt;T> pin = &amp;source[0];
+  static_cast&lt;Ogre::HardwareBuffer*>(_native)->writeData( offset * sizeof(T), length * sizeof(T), pin, discardWholeBuffer );
+}
+      </_CustomCppDeclaration>
+    </class>
     <class name="HardwareBufferManager">
       <function name="_forceReleaseBufferCopies" Ignore=""/>
       <function name="HardwareBufferManager" Ignore=""/>
@@ -368,7 +382,7 @@ public: static property HardwareBufferManager^ Singleton
       </_CustomIncDeclaration>
     </class>
     <class name="CompositorInstance">
-      <class name="RenderSystemOperation" Ignore=""/>
+      <class name="RenderSystemOperation" WrapType="Interface"/>
       <class name="TargetOperation" Ignore=""/>
     </class>
 
@@ -602,6 +616,10 @@ System::GC::Collect();
       <function name="setAutoUpdated" property="" Rename="setIsAutoUpdated"/>
     </class>
 
+    <class name="RenderWindow">
+      <function name="setDeactivateOnFocusChange" property="" Rename="setIsDeactivatedOnFocusChange"/>
+    </class>
+
     <class name="Overlay">
       <function name="_getWorldTransforms" Ignore=""/>
     </class>
@@ -803,6 +821,16 @@ bool GetOption(String^ strKey, [Out] Mogre::Quaternion% value)
 {
     pin_ptr&lt;Mogre::Quaternion> p = &amp;value;
     return GetOption(strKey, p);
+}
+
+IntPtr _pauseRendering( )
+{
+    return IntPtr(static_cast&lt;Ogre::SceneManager*>(_native)->_pauseRendering( ));
+}
+
+void _resumeRendering( IntPtr context )
+{
+    static_cast&lt;Ogre::SceneManager*>(_native)->_resumeRendering( reinterpret_cast&lt;Ogre::SceneManager::RenderContext*>(context.ToPointer()) );
 }
       </_CustomIncDeclaration>
     </class>
