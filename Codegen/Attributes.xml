@@ -186,6 +186,18 @@ public: virtual System::String^ ToString() override
 
     <class name="BillboardSet">
       <variable name="mRadixSorter" Ignore=""/>
+      <function name="setTextureCoords">
+        <_CustomIncDeclaration>
+          void SetTextureCoords( array&lt;Mogre::FloatRect>^ coords );
+        </_CustomIncDeclaration>
+        <_CustomCppDeclaration>
+          void BillboardSet::SetTextureCoords( array&lt;Mogre::FloatRect>^ coords )
+          {
+            pin_ptr&lt;Mogre::FloatRect> pin = &amp;coords[0];
+            static_cast&lt;Ogre::BillboardSet*>(_native)->setTextureCoords( (Ogre::FloatRect*) pin, coords->Length );
+          }
+        </_CustomCppDeclaration>
+      </function>
     </class>
     <class name="ParticleSystem">
       <variable name="mRadixSorter" Ignore=""/>
