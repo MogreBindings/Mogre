@@ -63,8 +63,6 @@ void SetOptimalAdjustFactor(int idx, Mogre::Real factor)
       <variable name="message" Rename="Message" />
     </class>
 
-    <!-- Wrap this class is not necesary for Unicode Support-->
-    <class name="UTFString" Ignore=""/>
     <class name="Pass">
       <!-- Must handle "operator()" function first -->
       <!-- For some reason, this is no longer in the meta for 1.6? It still exists, but I believe it was made private -->
@@ -104,12 +102,15 @@ void SetOptimalAdjustFactor(int idx, Mogre::Real factor)
       <function name="softwareVertexBlend" Ignore=""/>
       <function name="softwareVertexPoseBlend">
         <_CustomCppDeclaration>
-void Mesh::SoftwareVertexPoseBlend(Mogre::Real weight, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ vertexOffsetMap, Mogre::VertexData^ targetVertexData)
+void Mesh::SoftwareVertexPoseBlend( Mogre::Real weight, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ vertexOffsetMap, Collections::Generic::SortedList&lt;size_t, Mogre::Vector3>^ normalsMap, Mogre::VertexData^ targetVertexData )
 {
     Ogre::map&lt;size_t,Ogre::Vector3>::type o_vertexOffsetMap;
     FillMapFromSortedList&lt;Ogre::map&lt;size_t,Ogre::Vector3>::type, size_t, Mogre::Vector3>(o_vertexOffsetMap, vertexOffsetMap);
 
-    Ogre::Mesh::softwareVertexPoseBlend(weight, o_vertexOffsetMap, targetVertexData);
+    Ogre::map&lt;size_t,Ogre::Vector3>::type o_normalsMap;
+    FillMapFromSortedList&lt;Ogre::map&lt;size_t,Ogre::Vector3>::type, size_t, Mogre::Vector3>(o_normalsMap, normalsMap);
+
+    Ogre::Mesh::softwareVertexPoseBlend( weight, o_vertexOffsetMap, o_normalsMap, targetVertexData );
 }
         </_CustomCppDeclaration>
       </function>
@@ -172,8 +173,6 @@ public: virtual System::String^ ToString() override
       <variable name="mMgr" Ignore="" />
     </class>
     <class name="FreeImageCodec" Ignore=""/>
-    <!-- ILImageCodec is not used any more -->
-    <class name="ILImageCodec" Ignore=""/>
     <class name="Font">
       <struct name="GlyphInfo" WrapType="ValueType"/>
     </class>
@@ -274,7 +273,7 @@ property bool IsThrown
     <class name="CustomCompositionPass" WrapType="Interface" />
     <class name="Image" WrapType="CLRHandle">
       <function name="loadDynamicImage">
-        <param name="pData" RawPointerParam=""/>
+        <param name="data" RawPointerParam=""/>
       </function>
     </class>
     <class name="VertexBoneAssignment_s" WrapType="ValueType" Rename="VertexBoneAssignment"/>
@@ -663,6 +662,7 @@ System::GC::Collect();
     <class name="ResourceLoadingListener" WrapType="Interface" />
     <class name="FrameListener" WrapType="NativeDirector" StopDelegationForReturn="false"/>
     <class name="RenderTargetListener" WrapType="NativeDirector"/>
+    <class name="RenderObjectListener" WrapType="NativeDirector"/>
     <class name="CompositorInstance">
       <class name="Listener" WrapType="NativeDirector"/>
     </class>
@@ -896,6 +896,51 @@ public: typedef Ogre::WorkQueue::RequestID RequestID;
       </class>
     </class>
     <class name="DefaultWorkQueueBase" Ignore="" />
+
+    <class name="AnimationContainer" WrapType="Interface" />
+    <class name="SkeletonInstance">
+      <function name="getAnimation" Ignore="" />
+    </class>
+    <class name="AnimableValue">
+      <variable name="mBaseValueInt" Ignore="" />
+      <variable name="mBaseValueReal" Ignore="" />
+    </class>
+    <typedef name="DepthBufferMap" Ignore="" />
+    <typedef name="DepthBufferVec" Ignore="" />
+    <struct name="HardwareBufferLockGuard" Ignore="" />
+    <typedef name="VertexBufferLockGuard" Ignore="" />
+    <typedef name="IndexBufferLockGuard" Ignore="" />
+    <class name="GpuProgramManager">
+      <typedef name="Microcode" Ignore="" />
+    </class>
+    <class name="InstanceManager">
+      <typedef name="InstanceBatchMapIterator" Ignore="" />
+      <typedef name="InstanceBatchIterator" Ignore="" />
+    </class>
+    <class name="BaseInstanceBatchVTF" Ignore="" />
+    <class name="InstanceBatchHW" Ignore="" />
+    <class name="InstanceBatchShader" Ignore="" />
+    <class name="Viewport">
+      <class name="Listener" WrapType="NativeDirector" />
+    </class>
+    <class name="RenderSystemCapabilitiesManager">
+      <function name="getCapabilities" Ignore="" />
+    </class>
+    <class name="Entity">
+      <typedef name="SchemeHardwareAnimMap" Ignore="" />
+    </class>
+    <class name="SubMesh">
+      <typedef name="LODFaceList" Ignore="" />
+    </class>
+    <class name="FileSystemArchive">
+      <variable name="msIgnoreHidden" Ignore="" />
+    </class>
+    <class name="ZipArchive">
+      <function name="ZipArchive" HideParamsWithDefaultValues="" />
+    </class>
+    <typedef name="BinaryOptionList" Ignore="" />
+    <typedef name="UnaryOptionList" Ignore="" />
+    <typedef name="RenderWindowList" Ignore="" />
 
   </namespace>
 </meta>
