@@ -10,6 +10,5 @@ regexp:^Main/OgreSrc/build
 regexp:^Main/OgreSrc/ogre
 regexp:^Main/lib
 regexp:^Main/obj
-regexp:^Main/include/auto
-regexp:^Main/src/auto
+regexp:^Main/auto
 regexp:^bin/

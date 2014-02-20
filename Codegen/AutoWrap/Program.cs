@@ -14,8 +14,8 @@ namespace AutoWrap
         private const string META_XML_FILE = BASE_DIR + @"Codegen\cpp2java\build\meta.xml";
         private const string ATTRIBUTES_FILE = BASE_DIR + @"Codegen\Attributes.xml";
         
-        private const string INCLUDES_DEST_DIR = BASE_DIR + @"Main\include\auto";
-        private const string SRC_DEST_DIR = BASE_DIR + @"Main\src\auto";
+        private const string INCLUDES_DEST_DIR = BASE_DIR + @"Main\auto\include";
+        private const string SRC_DEST_DIR = BASE_DIR + @"Main\auto\src";
 
         /// <summary>
         /// The main entry point for the application.

@@ -12,7 +12,7 @@ class CLRObject;
 
 #define CLROBJECT(T) \
   void _OgreExport __Init_CLRObject_##T(CLRObject *pObj);
-#include "../include/auto/CLRObjects.inc"
+#include "../auto/include/CLRObjects.inc"
 #undef CLROBJECT
 
 //for subclasses of CLRObject

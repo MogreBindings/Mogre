@@ -12,7 +12,7 @@
 namespace Mogre {
 #define CLROBJECT(T) \
   __declspec(dllimport) void _Init_CLRObject_##T(CLRObject *pObj);
-#include "../include/auto/CLRObjects.inc"
+#include "../auto/include/CLRObjects.inc"
 #undef CLROBJECT
 }
 
@@ -41,5 +41,5 @@ void _FreeCLRObject(void* handle) { }
 
 #endif
 
-#include "../include/auto/CLRObjects.inc"
+#include "../auto/include/CLRObjects.inc"
 #undef CLROBJECT
