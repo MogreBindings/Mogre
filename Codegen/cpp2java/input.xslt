@@ -379,6 +379,11 @@
 								<xsl:value-of select="normalize-space(substring-after($basetype,'&#xA;'))"/>
 							</xsl:attribute>
 						</xsl:if>
+						<xsl:if test="contains($basetype,'struct ')">
+							<xsl:attribute name="basetype">
+								<xsl:value-of select="normalize-space(substring-after($basetype,'struct '))"/>
+							</xsl:attribute>
+						</xsl:if>
 						<xsl:choose>
 							<xsl:when test="type/ref[@kindref='member']">
 								<xsl:choose>
@@ -804,24 +809,26 @@
 	<!-- cursor on doxygen/compounddef/sectiondef -->
 	<xsl:template name="variable">
 		<xsl:for-each select="memberdef">
-			<xsl:element name="variable">
-				<xsl:attribute name="protection">
-					<xsl:value-of select="@prot"/>
-				</xsl:attribute>
-				<xsl:attribute name="static">
-					<xsl:value-of select="@static"/>
-				</xsl:attribute>
-				
-				<xsl:if test="type and type!='virtual'">
-					<xsl:call-template name="type"/>
-				</xsl:if>
-				<xsl:element name="definition">
-					<xsl:value-of select="definition"/>
+			<xsl:if test="not(starts-with(type,'union'))">
+				<xsl:element name="variable">
+					<xsl:attribute name="protection">
+						<xsl:value-of select="@prot"/>
+					</xsl:attribute>
+					<xsl:attribute name="static">
+						<xsl:value-of select="@static"/>
+					</xsl:attribute>
+					
+					<xsl:if test="type and type!='virtual'">
+						<xsl:call-template name="type"/>
+					</xsl:if>
+					<xsl:element name="definition">
+						<xsl:value-of select="definition"/>
+					</xsl:element>
+					<xsl:element name="name">
+						<xsl:value-of select="name"/>
+					</xsl:element>
 				</xsl:element>
-				<xsl:element name="name">
-					<xsl:value-of select="name"/>
-				</xsl:element>
-			</xsl:element>
+			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
 </xsl:stylesheet>
