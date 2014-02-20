@@ -404,7 +404,7 @@ namespace AutoWrap.Meta
             }
 
             // NOTE: Most checks done in "CheckForGetAccessor()" are represented in "method.IsPropertyGetAccessor".
-            return (method != null && method.IsPropertyGetAccessor && method.MemberTypeName == methodDef.Parameters[0].TypeName
+            return (method != null && method.IsPropertyGetAccessor && method.MemberTypeCLRName == methodDef.Parameters[0].MemberTypeCLRName
                 && (!methodDef.ContainingClass.AllowVirtuals
                 || (method.IsVirtual == methodDef.IsVirtual && method.IsOverriding == methodDef.IsOverriding)));
         }
