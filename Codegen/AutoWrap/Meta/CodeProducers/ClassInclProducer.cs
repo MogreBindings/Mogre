@@ -552,8 +552,8 @@ namespace AutoWrap.Meta
                 {
                     AbstractTypeDefinition expl = _classDefinition.DetermineType<AbstractTypeDefinition>(nested.Name);
 
-                    if (expl.IsSTLContainer
-                        || (!nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface && Wrapper.IsTypeWrappable(nested)))
+                    if ((expl.IsSTLContainer
+                        || (!nested.IsValueType && nested is ClassDefinition && !(nested as ClassDefinition).IsInterface)) && Wrapper.IsTypeWrappable(nested))
                     {
                         _codeBuilder.AppendLine(nested.ProtectionLevel.GetCLRProtectionName() + ": ref class " + nested.CLRName + ";");
                     }
