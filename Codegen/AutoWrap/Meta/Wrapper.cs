@@ -288,8 +288,6 @@ namespace AutoWrap.Meta
                 // Header file
                 builder.Clear();
                 builder.Append(GenerateIncludeFileCodeForIncludeFile(includeFile));
-                if (includeFile == "OgrePrerequisites.h")
-                    builder.Append("#include \"MogrePagingPrerequisites.h\"");
                 WriteToFile(incFile, builder.ToString(), true);
 
                 // Source file
