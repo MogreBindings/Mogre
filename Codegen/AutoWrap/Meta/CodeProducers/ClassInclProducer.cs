@@ -86,9 +86,9 @@ namespace AutoWrap.Meta
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
             string baseclass = GetBaseAndInterfaces();
             if (baseclass != "")
-                _codeBuilder.Append("ref class {0}{1} : {2}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
+                _codeBuilder.AppendLine("ref class {0}{1} : {2}", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
             else
-                _codeBuilder.Append("ref class {0}{1}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "");
+                _codeBuilder.AppendLine("ref class {0}{1}", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "");
         }
 
         protected override void GenerateCodeInterfaceMethod(MemberMethodDefinition f)
@@ -352,7 +352,7 @@ namespace AutoWrap.Meta
 
                     _codeBuilder.Append(className);
                     AddMethodParameters(function, function.Parameters.Count - dc);
-                    _codeBuilder.Append(";\n");
+                    _codeBuilder.AppendLine(";");
                 }
             }
         }
@@ -371,7 +371,7 @@ namespace AutoWrap.Meta
                     {
                         _codeBuilder.Append("virtual " + GetCLRTypeName(f) + " On" + f.CLRName);
                         AddMethodParameters(f);
-                        _codeBuilder.Append(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName + "\n");
+                        _codeBuilder.AppendLine(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName);
                         _codeBuilder.BeginBlock();
                         if (f.MemberTypeName != "void")
                             _codeBuilder.Append("return ");
@@ -383,7 +383,7 @@ namespace AutoWrap.Meta
                             if (i < f.Parameters.Count - 1)
                                 _codeBuilder.Append(",");
                         }
-                        _codeBuilder.Append(" );\n");
+                        _codeBuilder.AppendLine(" );");
                         _codeBuilder.EndBlock();
                         _codeBuilder.AppendEmptyLine();
                     }
@@ -473,7 +473,7 @@ namespace AutoWrap.Meta
                                 if (i < f.Parameters.Count - 1)
                                     _codeBuilder.Append(",");
                             }
-                            _codeBuilder.Append(" );\n");
+                            _codeBuilder.AppendLine(" );");
                             _codeBuilder.AppendLine("if (mp_return == " + stopret + ") break;");
                             _codeBuilder.EndBlock();
                             _codeBuilder.AppendLine("return mp_return;");
@@ -493,7 +493,7 @@ namespace AutoWrap.Meta
                                 if (i < f.Parameters.Count - 1)
                                     _codeBuilder.Append(",");
                             }
-                            _codeBuilder.Append(" );\n");
+                            _codeBuilder.AppendLine(" );");
                         }
 
                         _codeBuilder.EndBlock();
@@ -584,7 +584,7 @@ namespace AutoWrap.Meta
                         _wrapper.AddUsedType(m.MemberType);
                     }
 
-                    _codeBuilder.Append(m.MemberTypeCLRName + " " + NameToPrivate(m) + ";\n");
+                    _codeBuilder.AppendLine(m.MemberTypeCLRName + " " + NameToPrivate(m) + ";");
                 }
             }
         }
@@ -670,7 +670,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.Append(" abstract");
             }
 
-            _codeBuilder.Append(";\n");
+            _codeBuilder.AppendLine(";");
 
             if (AllowMethodOverloads)
             {
@@ -685,7 +685,7 @@ namespace AutoWrap.Meta
                         _codeBuilder.Append("static ");
                     _codeBuilder.Append(GetCLRTypeName(f) + " " + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count - dc);
-                    _codeBuilder.Append(";\n");
+                    _codeBuilder.AppendLine(";");
                 }
             }
         }
@@ -720,7 +720,7 @@ namespace AutoWrap.Meta
             //TODO comments for properties
             //AddComments(p);
             string ptype = GetCLRTypeName(p);
-            _codeBuilder.Append("property {0} {1}\n", ptype, p.Name);
+            _codeBuilder.AppendLine("property {0} {1}", ptype, p.Name);
             _codeBuilder.BeginBlock();
             if (p.CanRead)
             {
@@ -751,7 +751,7 @@ namespace AutoWrap.Meta
                     {
                         _codeBuilder.Append(" abstract");
                     }
-                    _codeBuilder.Append(";\n");
+                    _codeBuilder.AppendLine(";");
                 }
             }
             if (p.CanWrite)
@@ -783,7 +783,7 @@ namespace AutoWrap.Meta
                     {
                         _codeBuilder.Append(" abstract");
                     }
-                    _codeBuilder.Append(";\n");
+                    _codeBuilder.AppendLine(";");
                 }
             }
             _codeBuilder.EndBlock();
@@ -817,7 +817,7 @@ namespace AutoWrap.Meta
                     ptype = tmpParam.MemberTypeCLRName;
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
-                    _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
+                    _codeBuilder.AppendLine("property {0} {1}", ptype, field.NativeName);
                     _codeBuilder.BeginBlock();
 
                     _codeBuilder.DecreaseIndent();
@@ -832,7 +832,7 @@ namespace AutoWrap.Meta
                     ptype = field.MemberTypeCLRName;
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
-                    _codeBuilder.Append("property {0} {1}[int]\n", ptype, field.NativeName);
+                    _codeBuilder.AppendLine("property {0} {1}[int]", ptype, field.NativeName);
                     _codeBuilder.BeginBlock();
 
                     _codeBuilder.DecreaseIndent();
@@ -849,7 +849,7 @@ namespace AutoWrap.Meta
                 ptype = field.MemberTypeCLRName;
                 if (field.IsStatic)
                     _codeBuilder.Append("static ");
-                _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
+                _codeBuilder.AppendLine("property {0} {1}", ptype, field.NativeName);
                 _codeBuilder.BeginBlock();
 
                 _codeBuilder.DecreaseIndent();
@@ -866,11 +866,11 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append("static ");
                 if (field.HasAttribute<RenameAttribute>())
                 {
-                    _codeBuilder.Append("property {0} {1}\n", ptype, field.GetAttribute<RenameAttribute>().Name);
+                    _codeBuilder.AppendLine("property {0} {1}", ptype, field.GetAttribute<RenameAttribute>().Name);
                 }
                 else
                 {
-                    _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
+                    _codeBuilder.AppendLine("property {0} {1}", ptype, field.NativeName);
                 }
                 _codeBuilder.BeginBlock();
 

@@ -519,7 +519,7 @@ namespace AutoWrap.Meta
 
             IncAddIncludeFiles(includeFile, _usedTypes, sb);
 
-            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.AppendLine("namespace {0}", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
@@ -574,7 +574,7 @@ namespace AutoWrap.Meta
 
             CppAddIncludeFiles(includeFileName, _usedTypes, contentsb);
 
-            contentsb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
+            contentsb.AppendLine("namespace {0}", _metaDef.ManagedNamespace);
 
             contentsb.BeginBlock();
             contentsb.AppendLine(content);
@@ -620,7 +620,7 @@ namespace AutoWrap.Meta
             SourceCodeStringBuilder sb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
-            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.AppendLine("namespace {0}", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
@@ -636,7 +636,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
 
-            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.AppendLine("namespace {0}", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
 
@@ -838,7 +838,7 @@ namespace AutoWrap.Meta
             //if (inProtectedTypesProxy)
             //sb.Append("enum " + enm.Name + "\n");
             //else
-            sb.Append("enum class " + enm.CLRName + "\n");
+            sb.AppendLine("enum class " + enm.CLRName);
 
             sb.AppendLine("{");
             sb.IncreaseIndent();
@@ -892,7 +892,7 @@ namespace AutoWrap.Meta
                 sb.Append(type.ProtectionLevel.GetCLRProtectionName() + ": ");
             }
 
-            sb.Append("ref class " + type.Name + " : public " + baseClass + "\n");
+            sb.AppendLine("ref class " + type.Name + " : public " + baseClass);
             sb.AppendLine("{");
             sb.AppendLine("public protected:");
             sb.IncreaseIndent();
@@ -1128,9 +1128,9 @@ namespace AutoWrap.Meta
             sb.Append("( " + t.CLRName);
 
             if (t is DefTemplateOneType)
-                sb.Append(", STLDECL_MANAGEDTYPE, STLDECL_NATIVETYPE, " + publicprot + ", " + privateprot + " )\n");
+                sb.AppendLine(", STLDECL_MANAGEDTYPE, STLDECL_NATIVETYPE, " + publicprot + ", " + privateprot + " )");
             else if (t is DefTemplateTwoTypes)
-                sb.Append(", STLDECL_MANAGEDKEY, STLDECL_MANAGEDVALUE, STLDECL_NATIVEKEY, STLDECL_NATIVEVALUE, " + publicprot + ", " + privateprot + " )\n");
+                sb.AppendLine(", STLDECL_MANAGEDKEY, STLDECL_MANAGEDVALUE, STLDECL_NATIVEKEY, STLDECL_NATIVEVALUE, " + publicprot + ", " + privateprot + " )");
             else
                 throw new Exception("Unexpected");
 
@@ -1209,9 +1209,9 @@ namespace AutoWrap.Meta
             sb.Append("( " + prefix + ", " + t.CLRName);
 
             if (t is DefTemplateOneType)
-                sb.Append(", STLDECL_MANAGEDTYPE, STLDECL_NATIVETYPE )\n");
+                sb.AppendLine(", STLDECL_MANAGEDTYPE, STLDECL_NATIVETYPE )");
             else if (t is DefTemplateTwoTypes)
-                sb.Append(", STLDECL_MANAGEDKEY, STLDECL_MANAGEDVALUE, STLDECL_NATIVEKEY, STLDECL_NATIVEVALUE )\n");
+                sb.AppendLine(", STLDECL_MANAGEDKEY, STLDECL_MANAGEDVALUE, STLDECL_NATIVEKEY, STLDECL_NATIVEVALUE )");
             else
                 throw new Exception("Unexpected");
 
@@ -1266,9 +1266,9 @@ namespace AutoWrap.Meta
             }
 
             if (t.IsMapIterator)
-                sb.Append("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeParams[0].ParamType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName + " )\n");
+                sb.AppendLine("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeParams[0].ParamType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + ", " + t.IterationKeyTypeMember.MemberTypeCLRName + ", " + t.IterationKeyTypeMember.MemberTypeNativeName + " )");
             else
-                sb.Append("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeParams[0].ParamType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )\n");
+                sb.AppendLine("( " + t.CLRName + ", " + t.FullyQualifiedNativeName + ", " + t.TypeParams[0].ParamType.FullyQualifiedCLRName + ", " + t.IterationElementTypeMember.MemberTypeCLRName + ", " + t.IterationElementTypeMember.MemberTypeNativeName + " )");
 
             sb.AppendEmptyLine();
         }
@@ -1317,7 +1317,7 @@ namespace AutoWrap.Meta
                     sb.Append(", ");
             }
 
-            sb.Append(" )\n");
+            sb.AppendLine(" )");
 
             AddTypeDependancy(t.TypeParams[0].ParamType);
 
@@ -1340,9 +1340,9 @@ namespace AutoWrap.Meta
 
         private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
-            sb.Append("#pragma managed(push, off)\n", include);
-            sb.Append("#include \"{0}\"\n", include);
-            sb.Append("#pragma managed(pop)\n", include);
+            sb.AppendLine("#pragma managed(push, off)");
+            sb.AppendLine("#include \"{0}\"", include);
+            sb.AppendLine("#pragma managed(pop)");
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)
@@ -1363,7 +1363,7 @@ namespace AutoWrap.Meta
         private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
-            sb.Append("#include \"{0}\"\n", GetCLRIncludeFileName(include));
+            sb.AppendLine("#include \"{0}\"", GetCLRIncludeFileName(include));
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)

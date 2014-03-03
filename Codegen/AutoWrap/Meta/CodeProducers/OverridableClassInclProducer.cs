@@ -131,11 +131,12 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append(", " + param.MemberTypeNativeName + " " + param.Name);
             }
 
-            _codeBuilder.Append(" ) :\n");
+            _codeBuilder.AppendLine(" ) :");
+            _codeBuilder.IncreaseIndent();
 
             if (f != null)
             {
-                _codeBuilder.Append("\t" + _classDefinition.FullyQualifiedNativeName + "(");
+                _codeBuilder.Append(_classDefinition.FullyQualifiedNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -143,16 +144,17 @@ namespace AutoWrap.Meta
                     if (i < f.Parameters.Count - 1)
                         _codeBuilder.Append(",");
                 }
-                _codeBuilder.Append(" ),\n");
+                _codeBuilder.AppendLine(" ),");
             }
 
-            _codeBuilder.Append("\t_managed(managedObj)");
+            _codeBuilder.Append("_managed(managedObj)");
 
             //foreach (DefField field in _protectedFields)
             //{
             //    _sb.Append(",\n");
             //    _sb.AppendIndent("\tref_" + field.Name + "(" + field.Name + ")");
             //}
+            _codeBuilder.DecreaseIndent();
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("{");
             _codeBuilder.AppendLine("}");
@@ -167,7 +169,7 @@ namespace AutoWrap.Meta
             _codeBuilder.Append(" ) ");
             if (f.IsConstMethod)
                 _codeBuilder.Append("const ");
-            _codeBuilder.Append("override;\n");
+            _codeBuilder.AppendLine("override;");
         }
 
         //protected override void AddProtectedFunction(DefFunction f)
@@ -221,9 +223,9 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
-                    _codeBuilder.Append("ref class {0}{1} : {2}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
+                    _codeBuilder.AppendLine("ref class {0}{1} : {2}", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
                 else
-                    _codeBuilder.Append("ref class {0}{1}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "");
+                    _codeBuilder.AppendLine("ref class {0}{1}", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "");
             }
             else
                 base.AddDefinition();

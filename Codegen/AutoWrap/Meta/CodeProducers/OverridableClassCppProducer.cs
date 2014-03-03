@@ -179,7 +179,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _codeBuilder.Append(");\n");
+            _codeBuilder.AppendLine(");");
 
             _codeBuilder.AppendLine("proxy->_overriden = Implementation::SubclassingManager::Instance->GetOverridenMethodsArrayPointer(thisType, " + _classDefinition.Name + "::typeid, " + _methodIndicesCount + ");");
             _codeBuilder.AppendLine("_native = proxy;");
@@ -203,7 +203,7 @@ namespace AutoWrap.Meta
                     }
                 }
 
-                _codeBuilder.Append(");\n");
+                _codeBuilder.AppendLine(");");
             }
 
             if (!String.IsNullOrEmpty(postCall))

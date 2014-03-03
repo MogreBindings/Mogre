@@ -56,7 +56,7 @@ namespace AutoWrap.Meta
                         sb.Append(conv);
                         if (i < f.Parameters.Count - 1) sb.Append(",");
                     }
-                    sb.Append(" );\n");
+                    sb.AppendLine(" );");
                     managedCall = "mp_return";
 
                     if (!String.IsNullOrEmpty(fullPostConv))
@@ -177,7 +177,7 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append(" " + param.Name);
                     if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
                 }
-                _codeBuilder.Append(" );\n");
+                _codeBuilder.AppendLine(" );");
             }
 
             _codeBuilder.EndBlock();

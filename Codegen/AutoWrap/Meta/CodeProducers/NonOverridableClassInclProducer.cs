@@ -43,13 +43,13 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            _codeBuilder.Append("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )\n", GetClassName());
+            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )", GetClassName());
         }
 
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _codeBuilder.Append("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _classDefinition.Name);
+            _codeBuilder.AppendLine("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)", _classDefinition.Name);
             _codeBuilder.BeginBlock();
             base.GenerateCodeConstructorBody();
             _codeBuilder.EndBlock();
@@ -70,7 +70,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine("{");
                 _codeBuilder.AppendLine("public protected:");
                 _codeBuilder.IncreaseIndent();
-                _codeBuilder.Append("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _classDefinition.CLRName);
+                _codeBuilder.AppendLine("{0}_Default( CLRObject* obj ) : {0}(obj)", _classDefinition.CLRName);
                 _codeBuilder.AppendLine("{");
                 _codeBuilder.AppendLine("}\n");
                 _codeBuilder.DecreaseIndent();
@@ -82,13 +82,13 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append("virtual ");
                     _codeBuilder.Append(GetCLRTypeName(f) + " " + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
-                    _codeBuilder.Append(" override;\n");
+                    _codeBuilder.AppendLine(" override;");
                 }
 
                 foreach (MemberPropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
-                    _codeBuilder.Append("property {0} {1}\n", ptype, p.Name);
+                    _codeBuilder.AppendLine("property {0} {1}", ptype, p.Name);
                     _codeBuilder.BeginBlock();
                     if (p.CanRead)
                     {

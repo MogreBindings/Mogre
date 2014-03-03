@@ -136,7 +136,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _codeBuilder.Append(");\n");
+            _codeBuilder.AppendLine(");");
 
             if (!String.IsNullOrEmpty(postCall))
             {

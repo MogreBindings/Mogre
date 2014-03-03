@@ -40,7 +40,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _codeBuilder.Append("value class {0}\n", _classDefinition.CLRName);
+            _codeBuilder.AppendLine("value class {0}", _classDefinition.CLRName);
         }
 
         protected override void AddPreDeclarations()
@@ -132,7 +132,7 @@ namespace AutoWrap.Meta
 
                     _codeBuilder.Append("static " + _classDefinition.CLRName + " Create");
                     AddMethodParameters(f, f.Parameters.Count - dc);
-                    _codeBuilder.Append(";\n");
+                    _codeBuilder.AppendLine(";");
                 }
 
             }

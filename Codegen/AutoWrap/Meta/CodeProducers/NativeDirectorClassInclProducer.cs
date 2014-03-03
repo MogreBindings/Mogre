@@ -102,7 +102,7 @@ namespace AutoWrap.Meta
             else
                 sb.Append("public ");
 
-            sb.Append("ref class " + type.Name + " abstract sealed\n");
+            sb.AppendLine("ref class " + type.Name + " abstract sealed");
             sb.AppendLine("{");
             sb.AppendLine("public:");
             sb.IncreaseIndent();
@@ -123,7 +123,7 @@ namespace AutoWrap.Meta
                         sb.Append(" " + param.Type.GetCLRParamTypeName(param) + " " + param.Name);
                         if (i < f.Parameters.Count - 1) sb.Append(",");
                     }
-                    sb.Append(" );\n");
+                    sb.AppendLine(" );");
                 }
             }
 
@@ -204,7 +204,7 @@ namespace AutoWrap.Meta
                 AddNativeMethodParam(param);
                 if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
-            _codeBuilder.Append(" ) override;\n");
+            _codeBuilder.AppendLine(" ) override;");
         }
 
         protected virtual void AddNativeMethodParam(ParamDefinition param)

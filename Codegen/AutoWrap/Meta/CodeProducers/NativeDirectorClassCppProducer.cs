@@ -82,7 +82,7 @@ namespace AutoWrap.Meta
                 AddNativeMethodParam(param);
                 if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
-            _codeBuilder.Append(" )\n");
+            _codeBuilder.AppendLine(" )");
             _codeBuilder.BeginBlock();
 
             _codeBuilder.AppendLine("if (doCallFor" + f.CLRName + ")");

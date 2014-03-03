@@ -191,7 +191,7 @@ namespace AutoWrap.Meta
                 }
             }
 
-            _codeBuilder.Append(");\n");
+            _codeBuilder.AppendLine(");");
 
             if (!String.IsNullOrEmpty(postCall))
             {
@@ -221,12 +221,12 @@ namespace AutoWrap.Meta
                     if (m.ProtectionLevel == ProtectionLevel.Protected)
                     {
                         _codeBuilder.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.ContainingClass));
-                        _codeBuilder.Append("::" + m.NativeName + ";\n");
+                        _codeBuilder.AppendLine("::" + m.NativeName + ";");
                     }
                     else
                     {
                         _codeBuilder.Append(m.ContainingClass.FullyQualifiedNativeName);
-                        _codeBuilder.Append("::" + m.NativeName + ";\n");
+                        _codeBuilder.AppendLine("::" + m.NativeName + ";");
                     }
                 }
             }
@@ -364,7 +364,7 @@ namespace AutoWrap.Meta
                         }
                         if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
                     }
-                    _codeBuilder.Append(" );\n");
+                    _codeBuilder.AppendLine(" );");
 
                     for (int i = f.Parameters.Count - dc; i < f.Parameters.Count; i++)
                     {

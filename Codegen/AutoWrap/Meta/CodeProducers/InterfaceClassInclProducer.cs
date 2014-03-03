@@ -81,7 +81,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _codeBuilder.Append("interface class " + _classDefinition.CLRName + "\n");
+            _codeBuilder.AppendLine("interface class " + _classDefinition.CLRName);
         }
 
         protected override void GenerateCodeProtectedDeclarations()
