@@ -177,7 +177,7 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append(", doCallFor" + f.CLRName + "(false)");
                 }
             }
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("{");
             _codeBuilder.AppendLine("}");
         }

@@ -133,7 +133,7 @@ namespace AutoWrap.Meta
             else
                 AddMethodParameters(f);
             _codeBuilder.Append(" : " + GetBaseClassName() + "( (CLRObject*)0 )");
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
             _codeBuilder.BeginBlock();
 
             _codeBuilder.AppendLine("_createdByCLR = true;");

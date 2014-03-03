@@ -252,7 +252,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine("if (" + name + " != 0)");
                 _codeBuilder.BeginBlock();
                 _codeBuilder.AppendLine("if (_native != 0) " + GetNativeInvokationTarget(removerFunc) + "(" + name + ");");
-                _codeBuilder.AppendLine("delete "+name+"; "+name+" = 0;");
+                _codeBuilder.AppendLine("delete " + name + "; " + name + " = 0;");
                 _codeBuilder.EndBlock();
             }
         }
@@ -455,7 +455,7 @@ namespace AutoWrap.Meta
                         _codeBuilder.IncreaseIndent();
                         _codeBuilder.AppendIndent(GetCLRTypeName(f) + " raise");
                         AddMethodParameters(f);
-                        _codeBuilder.Append("\n");
+                        _codeBuilder.AppendEmptyLine();
                         _codeBuilder.BeginBlock();
 
                         if (cls.HasAttribute<StopDelegationForReturnAttribute>())

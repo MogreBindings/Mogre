@@ -107,7 +107,7 @@ namespace AutoWrap.Meta
             else
                 AddMethodParameters(f, count);
 
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
             _codeBuilder.BeginBlock();
 
             string preCall = null, postCall = null;

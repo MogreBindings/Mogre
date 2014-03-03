@@ -856,7 +856,7 @@ namespace AutoWrap.Meta
                 sb.Append(enm.CLREnumValues[i] + " = " + value);
                 if (i < enm.CLREnumValues.Length - 1)
                     sb.Append(",");
-                sb.Append("\n");
+                sb.AppendEmptyLine();
             }
             sb.DecreaseIndent();
             sb.AppendLine("};\n");

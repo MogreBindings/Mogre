@@ -309,7 +309,7 @@ namespace AutoWrap.Meta
 
                 _codeBuilder.AppendIndent(GetCLRTypeName(f) + " " + GetClassName() + "::" + f.CLRName);
                 AddMethodParameters(f, f.Parameters.Count - dc);
-                _codeBuilder.Append("\n");
+                _codeBuilder.AppendEmptyLine();
                 _codeBuilder.BeginBlock();
 
                 bool isVirtualOverload = dc > 0 && methodIsVirtual && AllowVirtualMethods;

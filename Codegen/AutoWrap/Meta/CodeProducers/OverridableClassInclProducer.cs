@@ -40,7 +40,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendIndent("class " + ProxyName + " : public " + _classDefinition.FullyQualifiedNativeName);
             if (_classDefinition.IsInterface)
                 _codeBuilder.Append(", public CLRObject");
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected override void GenerateCodePreBody()
@@ -81,7 +81,7 @@ namespace AutoWrap.Meta
             //with 'friend' specifier
             foreach (MemberPropertyDefinition prop in _overridableProperties)
             {
-                if (   (prop.CanRead  && prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected)
+                if ((prop.CanRead && prop.GetterFunction.ProtectionLevel == ProtectionLevel.Protected)
                     || (prop.CanWrite && prop.SetterFunction.ProtectionLevel == ProtectionLevel.Protected))
                     _codeBuilder.AppendLine("friend ref class " + className + "::" + prop.Name + ";");
             }
@@ -153,7 +153,7 @@ namespace AutoWrap.Meta
             //    _sb.Append(",\n");
             //    _sb.AppendIndent("\tref_" + field.Name + "(" + field.Name + ")");
             //}
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("{");
             _codeBuilder.AppendLine("}");
         }

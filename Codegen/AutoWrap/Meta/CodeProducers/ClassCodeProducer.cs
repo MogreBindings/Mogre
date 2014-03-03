@@ -50,59 +50,60 @@ namespace AutoWrap.Meta
         protected readonly List<MemberDefinitionBase> _cachedMembers = new List<MemberDefinitionBase>();
 
         private bool _initCalled;
-    
+
         public virtual string ClassFullNativeName
         {
             get { return _classDefinition.FullyQualifiedNativeName; }
         }
-    
+
         public virtual bool IsNativeClass
         {
             get { return false; }
         }
-    
+
         private bool _isAbstractClass;
         public bool IsAbstractClass
         {
             get { return _isAbstractClass; }
         }
-    
+
         protected virtual bool AllowVirtualMethods
         {
             get { return _classDefinition.AllowSubClassing; }
         }
-    
+
         protected virtual bool AllowProtectedMembers
         {
             get { return false; }
         }
-    
+
         protected virtual bool AllowSubclassing
         {
             get { return _classDefinition.AllowSubClassing; }
         }
-    
+
         protected virtual bool AllowMethodOverloads
         {
             get { return true; }
         }
-    
+
         protected virtual bool AllowMethodIndexAttributes
         {
             get { return false; }
         }
-    
+
         protected virtual bool AllowCachedMemberFields
         {
             get { return !_classDefinition.HasWrapType(WrapTypes.NativePtrValueType) && !_classDefinition.HasWrapType(WrapTypes.ValueType); }
         }
-    
+
         protected virtual bool IsReadOnly
         {
             get { return _classDefinition.HasAttribute<ReadOnlyAttribute>(); }
         }
-    
-        public ClassCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb) : base(metaDef)
+
+        public ClassCodeProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)
+            : base(metaDef)
         {
             this._wrapper = wrapper;
             _classDefinition = t;
@@ -163,7 +164,7 @@ namespace AutoWrap.Meta
                 if (!field.IsIgnored && field.MemberType.IsSTLContainer)
                 {
                     if (field.ProtectionLevel == ProtectionLevel.Public
-                        || ( (AllowSubclassing || AllowProtectedMembers) && field.ProtectionLevel == ProtectionLevel.Protected))
+                        || ((AllowSubclassing || AllowProtectedMembers) && field.ProtectionLevel == ProtectionLevel.Protected))
                         MarkCachedMember(field);
                 }
             }
@@ -585,14 +586,15 @@ namespace AutoWrap.Meta
             foreach (AbstractTypeDefinition nested in _classDefinition.NestedTypes)
             {
                 if (nested.ProtectionLevel == ProtectionLevel.Public
-                    || ((AllowProtectedMembers || AllowSubclassing) 
+                    || ((AllowProtectedMembers || AllowSubclassing)
                     && nested.ProtectionLevel == ProtectionLevel.Protected))
                 {
                     if (nested is EnumDefinition)
                         enums.Add(nested);
                     else if (Wrapper.IsTypeWrappable(nested))
                     {
-                        if (nested.HasWrapType(WrapTypes.NativePtrValueType)) {
+                        if (nested.HasWrapType(WrapTypes.NativePtrValueType))
+                        {
                             if (nested.HasAttribute<DefinitionIndexAttribute>())
                                 nativePtrClasses.Insert(nested.GetAttribute<DefinitionIndexAttribute>().Index, nested);
                             else
@@ -666,8 +668,8 @@ namespace AutoWrap.Meta
             {
                 if ((m is MemberFieldDefinition || (m is MemberMethodDefinition && (m as MemberMethodDefinition).IsDeclarableFunction))
                     && !m.IsIgnored
-                    && ( m.ProtectionLevel == ProtectionLevel.Public
-                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionLevel == ProtectionLevel.Protected)) )
+                    && (m.ProtectionLevel == ProtectionLevel.Public
+                        || ((AllowSubclassing || AllowProtectedMembers) && m.ProtectionLevel == ProtectionLevel.Protected)))
                 {
                     if (m.MemberType.IsUnnamedSTLContainer
                         && !stls.Contains(m.MemberType.CLRName))
@@ -719,14 +721,14 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendEmptyLine();
             }
         }
-        
+
         /// <summary>
         /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>internal</c>.
         /// </summary>
         protected virtual void GenerateCodeInternalDeclarations()
         {
         }
-        
+
         /// <summary>
         /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>protected</c>.
         /// </summary>
@@ -742,22 +744,22 @@ namespace AutoWrap.Meta
                         //    AddMethodsForField(field);
                         //else
                         GenerateCodePropertyField(field);
-        
+
                         _codeBuilder.AppendEmptyLine();
                     }
                 }
-        
+
                 foreach (MemberMethodDefinition f in _classDefinition.ProtectedMethods)
                 {
                     if (f.IsDeclarableFunction && (AllowProtectedMembers || f.IsStatic || !f.IsVirtual))
                     {
                         GenerateCodeMethod(f);
-                        _codeBuilder.Append("\n");
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
             }
         }
-        
+
         /// <summary>
         /// Generates the code for declarations (fields, methods, property) with CLR protection level <c>public</c>.
         /// </summary>
@@ -772,19 +774,19 @@ namespace AutoWrap.Meta
                     //else
                     GenerateCodePropertyField(field);
 
-                        _codeBuilder.AppendEmptyLine();
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
 
             foreach (MemberPropertyDefinition p in _classDefinition.GetProperties())
             {
                 if (IsPropertyAllowed(p) &&
-                    ( p.ProtectionLevel == ProtectionLevel.Public
-                     || ( AllowSubclassing && (p.IsStatic || !p.IsVirtual) )
-                     || (AllowProtectedMembers && p.ProtectionLevel == ProtectionLevel.Protected) ) )
+                    (p.ProtectionLevel == ProtectionLevel.Public
+                     || (AllowSubclassing && (p.IsStatic || !p.IsVirtual))
+                     || (AllowProtectedMembers && p.ProtectionLevel == ProtectionLevel.Protected)))
                 {
                     GenerateCodeProperty(EnhanceProperty(p));
-                    _codeBuilder.Append("\n");
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
 
@@ -794,21 +796,21 @@ namespace AutoWrap.Meta
                 {
                     if (f.NativeName.EndsWith("=="))
                     {
-                      if( !f.IsIgnored )
-                          GenerateCodePredefinedMethods(PredefinedMethods.Equals);
-                      _codeBuilder.AppendEmptyLine();
+                        if (!f.IsIgnored)
+                            GenerateCodePredefinedMethods(PredefinedMethods.Equals);
+                        _codeBuilder.AppendEmptyLine();
                     }
                     else if (f.NativeName.EndsWith("="))
                     {
-                      if(!f.IsIgnored)
-                          GenerateCodePredefinedMethods(PredefinedMethods.CopyTo);
-                      _codeBuilder.AppendEmptyLine();
+                        if (!f.IsIgnored)
+                            GenerateCodePredefinedMethods(PredefinedMethods.CopyTo);
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
                 else if (f.IsDeclarableFunction)
                 {
                     GenerateCodeMethod(f);
-                    _codeBuilder.Append("\n");
+                    _codeBuilder.AppendEmptyLine();
                 }
             }
 
@@ -845,7 +847,7 @@ namespace AutoWrap.Meta
                     if (!ip.IsContainedIn(_classDefinition, true))
                     {
                         GenerateCodeInterfaceProperty(ip);
-                        _codeBuilder.Append("\n");
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
             }
@@ -862,7 +864,7 @@ namespace AutoWrap.Meta
                     if (!_classDefinition.ContainsFunctionSignature(inf.Signature, false))
                     {
                         GenerateCodeInterfaceMethod(inf);
-                        _codeBuilder.Append("\n");
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
             }

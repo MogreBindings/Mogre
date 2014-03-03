@@ -57,7 +57,7 @@ namespace AutoWrap.Meta
                 {
                     _codeBuilder.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
-                    _codeBuilder.Append("\n");
+                    _codeBuilder.AppendEmptyLine();
                     _codeBuilder.BeginBlock();
                     AddMethodBody(f, f.Parameters.Count);
                     _codeBuilder.EndBlock();

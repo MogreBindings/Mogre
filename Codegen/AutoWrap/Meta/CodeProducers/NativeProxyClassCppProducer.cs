@@ -145,7 +145,7 @@ namespace AutoWrap.Meta
             _codeBuilder.Append(" )");
             if (f.IsConstMethod)
                 _codeBuilder.Append(" const");
-            _codeBuilder.Append("\n");
+            _codeBuilder.AppendEmptyLine();
             _codeBuilder.BeginBlock();
 
             if (!f.IsAbstract)
@@ -192,7 +192,7 @@ namespace AutoWrap.Meta
         //    _sb.Append(" )");
         //    if (f.IsConstFunctionCall)
         //        _sb.Append(" const");
-        //    _sb.Append("\n");
+        //    _sb.AppendEmptyLine();
         //    _sb.AppendLine("{");
         //    _sb.IncreaseIndent();
 
