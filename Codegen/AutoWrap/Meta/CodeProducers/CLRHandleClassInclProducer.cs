@@ -45,9 +45,9 @@ namespace AutoWrap.Meta
             base.GenerateCodePrivateDeclarations();
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("virtual void ClearNativePtr() = INativePointer::ClearNativePtr");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.AppendLine("\t_native = 0;");
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("_native = 0;");
+            _codeBuilder.EndBlock();
         }
 
         protected override void AddManagedNativeConversionsDefinition()

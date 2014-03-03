@@ -83,17 +83,14 @@ namespace AutoWrap.Meta
                 if (i < f.Parameters.Count - 1) _codeBuilder.Append(",");
             }
             _codeBuilder.Append(" )\n");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
 
             _codeBuilder.AppendLine("if (doCallFor" + f.CLRName + ")");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
 
             NativeProxyClassCppProducer.AddNativeProxyMethodBody(f, "_receiver", _codeBuilder);
 
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
             if (!f.HasReturnValue)
             {
                 if (!f.HasAttribute<DefaultReturnValueAttribute>())
@@ -103,8 +100,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine("\treturn " + f.GetAttribute<DefaultReturnValueAttribute>().Name + ";");
             }
 
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
         }
 
         protected virtual void AddNativeMethodParam(ParamDefinition param)

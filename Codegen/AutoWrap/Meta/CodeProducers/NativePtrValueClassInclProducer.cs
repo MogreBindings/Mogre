@@ -68,9 +68,9 @@ namespace AutoWrap.Meta
 
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("property IntPtr NativePtr");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.AppendLine("\tIntPtr get() { return (IntPtr)_native; }");
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("IntPtr get() { return (IntPtr)_native; }");
+            _codeBuilder.EndBlock();
 
             if (!IsReadOnly)
             {
@@ -79,16 +79,16 @@ namespace AutoWrap.Meta
 
                 _codeBuilder.AppendEmptyLine();
                 _codeBuilder.AppendLine("void DestroyNativePtr()");
-                _codeBuilder.AppendLine("{");
-                _codeBuilder.AppendLine("\tif (_native)  { delete _native; _native = 0; }");
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("if (_native)  { delete _native; _native = 0; }");
+                _codeBuilder.EndBlock();
             }
 
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("property bool IsNull");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.AppendLine("\tbool get() { return (_native == 0); }");
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("bool get() { return (_native == 0); }");
+            _codeBuilder.EndBlock();
         }
 
         protected override void AddPublicConstructors()

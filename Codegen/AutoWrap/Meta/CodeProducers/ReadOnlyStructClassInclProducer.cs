@@ -52,11 +52,10 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
             _codeBuilder.AppendLine(_classDefinition.CLRName + "()");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             base.GenerateCodeConstructorBody();
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}\n");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected override void GenerateCodeInternalDeclarations()
@@ -70,8 +69,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendEmptyLine();
 
             _codeBuilder.AppendLine("static operator " + _classDefinition.CLRName + "^ (const " + _classDefinition.FullyQualifiedNativeName + "& obj)");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine(_classDefinition.CLRName + "^ clr = gcnew " + _classDefinition.CLRName + ";");
             foreach (MemberFieldDefinition field in _classDefinition.PublicFields)
             {
@@ -83,14 +81,13 @@ namespace AutoWrap.Meta
             }
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("return clr;");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
 
             _codeBuilder.AppendEmptyLine();
             _codeBuilder.AppendLine("static operator " + _classDefinition.CLRName + "^ (const " + _classDefinition.FullyQualifiedNativeName + "* pObj)");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.AppendLine("\treturn *pObj;");
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return *pObj;");
+            _codeBuilder.EndBlock();
         }
 
         protected override void GenerateCodePropertyField(MemberFieldDefinition field)
@@ -98,13 +95,13 @@ namespace AutoWrap.Meta
             //TODO comments for fields
             //AddComments(field);
             string ptype = GetCLRTypeName(field);
-            _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
-            _codeBuilder.IncreaseIndent();
-            _codeBuilder.AppendLine(ptype + " get()\n{");
-            _codeBuilder.AppendLine("\treturn " + NameToPrivate(field) + ";");
-            _codeBuilder.AppendLine("}");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine(ptype + " get()");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return " + NameToPrivate(field) + ";");
+            _codeBuilder.EndBlock();
+            _codeBuilder.EndBlock();
         }
 
         public ReadOnlyStructClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

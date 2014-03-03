@@ -50,11 +50,10 @@ namespace AutoWrap.Meta
         {
             base.AddInternalConstructors();
             _codeBuilder.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _classDefinition.Name);
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             base.GenerateCodeConstructorBody();
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}\n");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected override void GenerateCodePostBody()
@@ -89,18 +88,23 @@ namespace AutoWrap.Meta
                 foreach (MemberPropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
-                    _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
+                    _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, p.Name);
+                    _codeBuilder.BeginBlock();
                     if (p.CanRead)
                     {
+                        _codeBuilder.DecreaseIndent();
                         _codeBuilder.AppendLine(p.GetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
-                        _codeBuilder.AppendLine("\tvirtual " + ptype + " get() override;");
+                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.AppendLine("virtual " + ptype + " get() override;");
                     }
                     if (p.CanWrite)
                     {
+                        _codeBuilder.DecreaseIndent();
                         _codeBuilder.AppendLine(p.SetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
-                        _codeBuilder.AppendLine("\tvirtual void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ") override;");
+                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.AppendLine("virtual void set(" + ptype + " " + p.SetterFunction.Parameters[0].Name + ") override;");
                     }
-                    _codeBuilder.AppendLine("}");
+                    _codeBuilder.EndBlock();
                 }
 
                 _codeBuilder.DecreaseIndent();

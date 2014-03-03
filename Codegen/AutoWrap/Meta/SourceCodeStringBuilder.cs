@@ -8,15 +8,6 @@ namespace AutoWrap.Meta
     /// </summary>
     public class SourceCodeStringBuilder
     {
-        /// <summary>
-        /// The string to be used to indent a line by one level.
-        /// </summary>
-        public const string INDENT_STRING = "  ";
-        /// <summary>
-        /// The line ending used for all lines in the file.
-        /// </summary>
-        public const string NEWLINE_STRING = "\r\n";
-
         private readonly StringBuilder _builder = new StringBuilder();
         private readonly CodeStyleDefinition _codeStyleDef;
         private string _curIndention = "";
@@ -50,6 +41,24 @@ namespace AutoWrap.Meta
         {
             // Strip one indention level
             _curIndention = _curIndention.Substring(_codeStyleDef.IndentionLevelString.Length);
+        }
+
+        /// <summary>
+        /// Appends the begining of a code block while automatically managing indentation.
+        /// </summary>
+        public void BeginBlock()
+        {
+            AppendLine("{");
+            IncreaseIndent();
+        }
+
+        /// <summary>
+        /// Appends the end of a code block while automatically managing indentation.
+        /// </summary>
+        public void EndBlock()
+        {
+            DecreaseIndent();
+            AppendLine("}");
         }
 
         public void InsertAt(uint pos, string str, bool indent = true)
@@ -88,7 +97,7 @@ namespace AutoWrap.Meta
         {
             _builder.Append(_codeStyleDef.NewLineCharacters);
         }
-    
+
         /// <summary>
         /// Appends the specified string and adds a new line at the end of the string.
         /// </summary>
@@ -100,13 +109,13 @@ namespace AutoWrap.Meta
         /// <param name="otherLinesIndent">if this is true (default), all lines
         /// of <paramref name="str"/> (except for the first one) will be indented.</param>
         /// <see cref="AppendIndent"/>
-        public SourceCodeStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true) 
+        public SourceCodeStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
         {
             _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(_codeStyleDef.NewLineCharacters);
             return this;
         }
 
-        public SourceCodeStringBuilder AppendFormat(string str, params object[] args) 
+        public SourceCodeStringBuilder AppendFormat(string str, params object[] args)
         {
             _builder.AppendFormat(CreateAppendableString(str, false, true), args);
             return this;
@@ -117,15 +126,16 @@ namespace AutoWrap.Meta
             _builder.AppendFormat(CreateAppendableString(str, true, true), args);
             return this;
         }
-    
+
         public override string ToString()
         {
             return _builder.ToString();
         }
-    
+
         private string CreateAppendableString(string str, bool firstLineIndent, bool otherLinesIndent)
         {
-            if (_codeStyleDef.IndentionLevelString != "\t") {
+            if (_codeStyleDef.IndentionLevelString != "\t")
+            {
                 // Replace remaining tabs with the correct indention style
                 str = str.Replace("\t", _codeStyleDef.IndentionLevelString);
             }
@@ -149,9 +159,10 @@ namespace AutoWrap.Meta
                 // original string ended with an empty line.
                 if (result.EndsWith(_curIndention))
                     result = result.Substring(0, result.Length - _curIndention.Length);
-            } else
+            }
+            else
                 result += String.Join(_codeStyleDef.NewLineCharacters, lines);
-    
+
             return result;
         }
     }

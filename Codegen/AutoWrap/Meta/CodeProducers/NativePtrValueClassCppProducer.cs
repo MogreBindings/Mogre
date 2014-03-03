@@ -108,8 +108,7 @@ namespace AutoWrap.Meta
                 AddMethodParameters(f, count);
 
             _codeBuilder.Append("\n");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
 
             string preCall = null, postCall = null;
 
@@ -148,8 +147,7 @@ namespace AutoWrap.Meta
 
             _codeBuilder.AppendLine("return ptr;");
 
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
         }
 
         public NativePtrValueClassCppProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

@@ -92,42 +92,33 @@ namespace AutoWrap.Meta
             else
                 _codeBuilder.AppendLine(_classDefinition.CLRName + "( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : " + _classDefinition.BaseClass.CLRName + "(obj)");
 
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             base.GenerateCodeConstructorBody();
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}\n");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected override void AddPublicFields()
         {
             _codeBuilder.AppendLine("static property " + _classDefinition.CLRName + "^ Singleton");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine(_classDefinition.CLRName + "^ get()");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
-                
+            _codeBuilder.BeginBlock();
+
             _codeBuilder.AppendLine(_classDefinition.FullyQualifiedNativeName + "* ptr = " + _classDefinition.FullyQualifiedNativeName + "::getSingletonPtr();");
             _codeBuilder.AppendLine("if (_singleton == CLR_NULL || _singleton->_native != ptr)");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine("if (_singleton != CLR_NULL)");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine("_singleton->_native = 0;");
             _codeBuilder.AppendLine("_singleton = nullptr;");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
 
             _codeBuilder.AppendLine("if ( ptr ) _singleton = gcnew " + _classDefinition.CLRName + "( ptr );");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
             _codeBuilder.AppendLine("return _singleton;");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
+            _codeBuilder.EndBlock();
 
             base.AddPublicFields();
         }

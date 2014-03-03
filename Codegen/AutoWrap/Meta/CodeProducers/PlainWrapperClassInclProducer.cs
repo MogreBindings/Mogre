@@ -88,26 +88,25 @@ namespace AutoWrap.Meta
                 ClassDefinition topclass = GetTopClass(_classDefinition);
                 _codeBuilder.AppendFormatIndent("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _classDefinition.CLRName);
             }
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
 
             //NOTE: SuppressFinalize should not be called when the class is 'wrapped' by a SharedPtr class, (i.e DataStreamPtr -> DataStream)
             //so that the SharedPtr class gets a chance to clean up. Look for a way to have SuppressFinalize without this kind of problems.
             //_sb.AppendLine("System::GC::SuppressFinalize(this);");
 
             base.GenerateCodeConstructorBody();
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}\n");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendEmptyLine();
         }
 
         protected override void AddDisposerBody()
         {
             base.AddDisposerBody();
             _codeBuilder.AppendLine("if (_createdByCLR &&_native)");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.AppendLine("\tdelete _native;");
-            _codeBuilder.AppendLine("\t_native = 0;");
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("delete _native;");
+            _codeBuilder.AppendLine("_native = 0;");
+            _codeBuilder.EndBlock();
         }
 
         public PlainWrapperClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

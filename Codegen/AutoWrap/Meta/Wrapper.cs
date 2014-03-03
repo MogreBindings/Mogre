@@ -48,7 +48,7 @@ namespace AutoWrap.Meta
         /// 3. everything else (mostly classes)
         /// </summary>
         internal readonly SortedList<string, WrappedFile> IncludeFiles = new SortedList<string, WrappedFile>();
-    
+
         /// <summary>
         /// This event is fired whenever a native .h files has been wrapped (i.e. when the corresponding
         /// CLR .cpp and .h files were generated).
@@ -189,7 +189,7 @@ namespace AutoWrap.Meta
                 type.AddAttribute(new WrapTypeAttribute(WrapTypes.SharedPtr));
                 return true;
             }
-            
+
             if (type is ClassDefinition)
             {
                 //
@@ -212,7 +212,7 @@ namespace AutoWrap.Meta
 
                 return false;
             }
-            
+
             if (type is TypedefDefinition)
             {
                 //
@@ -229,7 +229,7 @@ namespace AutoWrap.Meta
 
                     return true;
                 }
-                
+
                 if (type is DefIterator)
                 {
                     //
@@ -249,19 +249,19 @@ namespace AutoWrap.Meta
                                 return true;
                             }
                         }
-                        
+
                         return true;
                     }
-                    
+
                     return false;
                 }
-                
+
                 if (((TypedefDefinition)type).BaseType is DefInternal || ((TypedefDefinition)type).BaseType.HasAttribute<ValueTypeAttribute>())
                     return true;
-                
+
                 return IsTypeWrappable((type as TypedefDefinition).BaseType);
             }
-            
+
             return false;
         }
 
@@ -345,7 +345,7 @@ namespace AutoWrap.Meta
                     builder.Append("struct ");
                 else
                     builder.Append("class ");
-                
+
                 builder.AppendLine(type.Name + ";");
             }
 
@@ -480,7 +480,7 @@ namespace AutoWrap.Meta
             // Native files from subdirectories (e.g. "WIN32") will go directly in the CLR directory
             // with their directory names being part of the file name (e.g. "WIN32_MyFileName.h").
             nativeIncludeFileName = nativeIncludeFileName.Replace('/', '_').Replace('\\', '_');
-      
+
             if (nativeIncludeFileName.StartsWith(_metaDef.NativeNamespace))
                 return _metaDef.ManagedNamespace + nativeIncludeFileName.Substring(_metaDef.NativeNamespace.Length);
 
@@ -519,13 +519,11 @@ namespace AutoWrap.Meta
 
             IncAddIncludeFiles(includeFile, _usedTypes, sb);
 
-            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
 
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
-            sb.DecreaseIndent();
-
-            sb.AppendLine("}");
+            sb.EndBlock();
 
             return sb.ToString();
         }
@@ -543,7 +541,7 @@ namespace AutoWrap.Meta
             _postClassProducers.Clear();
 
             SourceCodeStringBuilder contentsb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
-         
+
             //
             // Generate content
             //
@@ -576,14 +574,12 @@ namespace AutoWrap.Meta
 
             CppAddIncludeFiles(includeFileName, _usedTypes, contentsb);
 
-            contentsb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
+            contentsb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
 
-            contentsb.IncreaseIndent();
+            contentsb.BeginBlock();
             contentsb.AppendLine(content);
 
-            contentsb.DecreaseIndent();
-
-            contentsb.AppendLine("}");
+            contentsb.EndBlock();
 
             return contentsb.ToString();
         }
@@ -624,13 +620,11 @@ namespace AutoWrap.Meta
             SourceCodeStringBuilder sb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
-            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
 
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
-            sb.DecreaseIndent();
-
-            sb.AppendLine("}");
+            sb.EndBlock();
 
             return sb.ToString();
         }
@@ -642,9 +636,9 @@ namespace AutoWrap.Meta
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
 
-            sb.AppendFormat("namespace {0}\n{{\n", _metaDef.ManagedNamespace);
+            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
 
-            sb.IncreaseIndent();
+            sb.BeginBlock();
 
             _preClassProducers.Clear();
             _postClassProducers.Clear();
@@ -666,16 +660,14 @@ namespace AutoWrap.Meta
                     producer.GenerateCode();
             }
 
-            foreach (ClassCodeProducer producer in _preClassProducers) 
+            foreach (ClassCodeProducer producer in _preClassProducers)
             {
                 if (!(producer is NativeProtectedTypesProxy)
                     && !(producer is NativeProtectedStaticsProxy))
                     producer.GenerateCodeAtBeginning();
             }
 
-            sb.DecreaseIndent();
-
-            sb.AppendLine("}");
+            sb.EndBlock();
 
             return sb.ToString();
         }
@@ -909,25 +901,23 @@ namespace AutoWrap.Meta
             sb.AppendLine("\t" + type.FullyQualifiedNativeName + "* _sharedPtr;");
             sb.AppendEmptyLine();
             sb.AppendLine(type.Name + "(" + type.FullyQualifiedNativeName + "& sharedPtr) : " + baseClass + "( sharedPtr.getPointer() )");
-            sb.AppendLine("{");
-            sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "(sharedPtr);");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("_sharedPtr = new " + type.FullyQualifiedNativeName + "(sharedPtr);");
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("!" + type.Name + "()");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine("if (_sharedPtr != 0)");
-            sb.AppendLine("{");
-            sb.AppendLine("\tdelete _sharedPtr;");
-            sb.AppendLine("\t_sharedPtr = 0;");
-            sb.AppendLine("}");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("delete _sharedPtr;");
+            sb.AppendLine("_sharedPtr = 0;");
+            sb.EndBlock();
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("~" + type.Name + "()");
-            sb.AppendLine("{");
-            sb.AppendLine("\tthis->!" + type.Name + "();");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("this->!" + type.Name + "();");
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.DecreaseIndent();
             sb.AppendLine("public:");
@@ -946,20 +936,18 @@ namespace AutoWrap.Meta
                     AddTypeDependancy(realType.BaseClass);
 
                     sb.AppendLine("static " + type.Name + "^ FromResourcePtr( ResourcePtr^ ptr )");
-                    sb.AppendLine("{");
-                    sb.AppendLine("\treturn (" + type.Name + "^) ptr;");
-                    sb.AppendLine("}");
+                    sb.BeginBlock();
+                    sb.AppendLine("return (" + type.Name + "^) ptr;");
+                    sb.EndBlock();
                     sb.AppendEmptyLine();
 
                     sb.AppendLine("static operator " + type.Name + "^ ( ResourcePtr^ ptr )");
-                    sb.AppendLine("{");
-                    sb.IncreaseIndent();
+                    sb.BeginBlock();
                     sb.AppendLine("if (CLR_NULL == ptr) return nullptr;");
                     sb.AppendLine("void* castptr = dynamic_cast<" + nativeClass + "*>(ptr->_native);");
                     sb.AppendLine("if (castptr == 0) throw gcnew InvalidCastException(\"The underlying type of the ResourcePtr object is not of type " + baseClass + ".\");");
                     sb.AppendLine("return gcnew " + type.Name + "( (" + type.FullyQualifiedNativeName + ") *(ptr->_sharedPtr) );");
-                    sb.DecreaseIndent();
-                    sb.AppendLine("}");
+                    sb.EndBlock();
                     sb.AppendEmptyLine();
                 }
             }
@@ -973,17 +961,17 @@ namespace AutoWrap.Meta
             {
                 string proxyName = NativeProxyClassProducer.GetProxyName(baseType as ClassDefinition);
                 sb.AppendLine(type.Name + "(" + baseType.CLRName + "^ obj) : " + baseClass + "( static_cast<" + proxyName + "*>( (" + nativeClass + "*)obj ) )");
-                sb.AppendLine("{");
-                sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
-                sb.AppendLine("}");
+                sb.BeginBlock();
+                sb.AppendLine("_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + proxyName + "*>(obj->_native) );");
+                sb.EndBlock();
                 sb.AppendEmptyLine();
             }
             else
             {
                 sb.AppendLine(type.Name + "(" + baseClass + "^ obj) : " + baseClass + "( obj->_native )");
-                sb.AppendLine("{");
-                sb.AppendLine("\t_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + nativeClass + "*>(obj->_native) );");
-                sb.AppendLine("}");
+                sb.BeginBlock();
+                sb.AppendLine("_sharedPtr = new " + type.FullyQualifiedNativeName + "( static_cast<" + nativeClass + "*>(obj->_native) );");
+                sb.EndBlock();
                 sb.AppendEmptyLine();
             }
             //sb.AppendLine("void Bind(" + baseClass + "^ obj)");
@@ -993,76 +981,66 @@ namespace AutoWrap.Meta
             //sb.AppendLine();
 
             sb.AppendLine("virtual bool Equals(Object^ obj) override");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine(type.Name + "^ clr = dynamic_cast<" + type.Name + "^>(obj);");
             sb.AppendLine("if (clr == CLR_NULL)");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn false;");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return false;");
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("return (_native == clr->_native);");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.EndBlock();
             sb.AppendLine("bool Equals(" + type.Name + "^ obj)");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine("if (obj == CLR_NULL)");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn false;");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return false;");
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("return (_native == obj->_native);");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.EndBlock();
             sb.AppendEmptyLine();
 
             sb.AppendLine("static bool operator == (" + type.Name + "^ val1, " + type.Name + "^ val2)");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine("if ((Object^)val1 == (Object^)val2) return true;");
             sb.AppendLine("if ((Object^)val1 == nullptr || (Object^)val2 == nullptr) return false;");
             sb.AppendLine("return (val1->_native == val2->_native);");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("static bool operator != (" + type.Name + "^ val1, " + type.Name + "^ val2)");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn !(val1 == val2);");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return !(val1 == val2);");
+            sb.EndBlock();
             sb.AppendEmptyLine();
 
             sb.AppendLine("virtual int GetHashCode() override");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn reinterpret_cast<int>( _native );");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return reinterpret_cast<int>( _native );");
+            sb.EndBlock();
             sb.AppendEmptyLine();
 
             sb.AppendLine("property IntPtr NativePtr");
-            sb.AppendLine("{");
-            sb.AppendLine("\tIntPtr get() { return (IntPtr)_sharedPtr; }");
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("IntPtr get() { return (IntPtr)_sharedPtr; }");
+            sb.EndBlock();
             sb.AppendEmptyLine();
 
             sb.AppendLine("property bool Unique");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine("bool get()");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn (*_sharedPtr).unique();");
-            sb.AppendLine("}");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return (*_sharedPtr).unique();");
+            sb.EndBlock();
+            sb.EndBlock();
             sb.AppendEmptyLine();
             sb.AppendLine("property int UseCount");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine("int get()");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn (*_sharedPtr).useCount();");
-            sb.AppendLine("}");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return (*_sharedPtr).useCount();");
+            sb.EndBlock();
+            sb.EndBlock();
             sb.AppendEmptyLine();
             //sb.AppendLine("void SetNull()");
             //sb.AppendLine("{");
@@ -1081,14 +1059,12 @@ namespace AutoWrap.Meta
             //sb.AppendLine("}");
             //sb.AppendLine();
             sb.AppendLine("property " + baseClass + "^ Target");
-            sb.AppendLine("{");
-            sb.IncreaseIndent();
+            sb.BeginBlock();
             sb.AppendLine(baseClass + "^ get()");
-            sb.AppendLine("{");
-            sb.AppendLine("\treturn static_cast<" + nativeClass + "*>(_native);");
-            sb.AppendLine("}");
-            sb.DecreaseIndent();
-            sb.AppendLine("}");
+            sb.BeginBlock();
+            sb.AppendLine("return static_cast<" + nativeClass + "*>(_native);");
+            sb.EndBlock();
+            sb.EndBlock();
             sb.DecreaseIndent();
             sb.AppendLine("};\n\n");
         }

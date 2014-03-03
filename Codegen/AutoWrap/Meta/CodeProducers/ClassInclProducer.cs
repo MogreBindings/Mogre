@@ -196,17 +196,18 @@ namespace AutoWrap.Meta
             {
                 if (DoCleanupInFinalizer)
                 {
-                    _codeBuilder.AppendLine("~" + _classDefinition.CLRName + "()\n{");
-                    _codeBuilder.AppendLine("\tthis->!" + _classDefinition.CLRName + "();");
-                    _codeBuilder.AppendLine("}");
-                    _codeBuilder.AppendLine("!" + _classDefinition.CLRName + "()\n{");
+                    _codeBuilder.AppendLine("~" + _classDefinition.CLRName + "()");
+                    _codeBuilder.BeginBlock();
+                    _codeBuilder.AppendLine("this->!" + _classDefinition.CLRName + "();");
+                    _codeBuilder.EndBlock();
+                    _codeBuilder.AppendLine("!" + _classDefinition.CLRName + "()");
                 }
                 else
-                    _codeBuilder.AppendLine("~" + _classDefinition.CLRName + "()\n{");
-                _codeBuilder.IncreaseIndent();
+                    _codeBuilder.AppendLine("~" + _classDefinition.CLRName + "()");
+                _codeBuilder.BeginBlock();
                 AddDisposerBody();
-                _codeBuilder.DecreaseIndent();
-                _codeBuilder.AppendLine("}\n");
+                _codeBuilder.EndBlock();
+                _codeBuilder.AppendEmptyLine();
             }
 
             foreach (ClassDefinition cls in _interfaces)
@@ -247,8 +248,12 @@ namespace AutoWrap.Meta
                 if (removerFunc == null)
                     throw new Exception("Unexpected");
 
-                string native = "_native";
-                _codeBuilder.AppendLine(String.Format("if ({0} != 0)\n{{\n\tif (" + native + " != 0) " + GetNativeInvokationTarget(removerFunc) + "({0});\n\tdelete {0}; {0} = 0;\n}}", NameToPrivate(cls.Name)));
+                string name = NameToPrivate(cls.Name);
+                _codeBuilder.AppendLine("if (" + name + " != 0)");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("if (_native != 0) " + GetNativeInvokationTarget(removerFunc) + "(" + name + ");");
+                _codeBuilder.AppendLine("delete "+name+"; "+name+" = 0;");
+                _codeBuilder.EndBlock();
             }
         }
 
@@ -302,8 +307,8 @@ namespace AutoWrap.Meta
             if (_classDefinition.IsNativeAbstractClass && !_classDefinition.IsInterface)
                 return;
 
-           if (_classDefinition.Constructors.Length > 0)
-           {
+            if (_classDefinition.Constructors.Length > 0)
+            {
                 foreach (MemberMethodDefinition func in _classDefinition.Constructors)
                 {
                     if (func.ProtectionLevel == ProtectionLevel.Public &&
@@ -368,8 +373,8 @@ namespace AutoWrap.Meta
                         _codeBuilder.AppendIndent("virtual " + GetCLRTypeName(f) + " On" + f.CLRName);
                         AddMethodParameters(f);
                         _codeBuilder.Append(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName + "\n");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.AppendIndent("\t");
+                        _codeBuilder.BeginBlock();
+                        _codeBuilder.AppendIndent("");
                         if (f.MemberTypeName != "void")
                             _codeBuilder.Append("return ");
                         _codeBuilder.Append(f.CLRName + "(");
@@ -381,7 +386,8 @@ namespace AutoWrap.Meta
                                 _codeBuilder.Append(",");
                         }
                         _codeBuilder.Append(" );\n");
-                        _codeBuilder.AppendLine("}\n");
+                        _codeBuilder.EndBlock();
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
 
@@ -413,22 +419,18 @@ namespace AutoWrap.Meta
                         string privField = NameToPrivate(f.NativeName);
                         string listener = NameToPrivate(cls.Name);
                         _codeBuilder.AppendLine("event " + handler + " " + f.CLRName);
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.BeginBlock();
                         _codeBuilder.AppendLine("void add(" + handler + " hnd)");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.BeginBlock();
                         _codeBuilder.AppendLine("if (" + privField + " == CLR_NULL)");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.BeginBlock();
                         _codeBuilder.AppendLine("if (" + listener + " == 0)");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.AppendLine("\t" + listener + " = new " + GetNativeDirectorName(cls) + "(this);");
-                        _codeBuilder.AppendLine("\t" + GetNativeInvokationTarget(adderFunc) + "(" + listener + ");");
-                        _codeBuilder.AppendLine("}");
+                        _codeBuilder.BeginBlock();
+                        _codeBuilder.AppendLine(listener + " = new " + GetNativeDirectorName(cls) + "(this);");
+                        _codeBuilder.AppendLine(GetNativeInvokationTarget(adderFunc) + "(" + listener + ");");
+                        _codeBuilder.EndBlock();
                         _codeBuilder.AppendLine(listener + "->doCallFor" + f.CLRName + " = true;");
-                        _codeBuilder.DecreaseIndent();
-                        _codeBuilder.AppendLine("}");
+                        _codeBuilder.EndBlock();
                         _codeBuilder.AppendLine(privField + " += hnd;");
 
                         if (cls.HasAttribute<StopDelegationForReturnAttribute>())
@@ -436,39 +438,35 @@ namespace AutoWrap.Meta
                             _codeBuilder.AppendLine(privField + "Delegates = " + privField + "->GetInvocationList();");
                         }
 
-                        _codeBuilder.DecreaseIndent();
-                        _codeBuilder.AppendLine("}");
+                        _codeBuilder.EndBlock();
                         _codeBuilder.AppendLine("void remove(" + handler + " hnd)");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.AppendLine("\t" + privField + " -= hnd;");
-                        _codeBuilder.AppendLine("\tif (" + privField + " == CLR_NULL) " + listener + "->doCallFor" + f.CLRName + " = false;");
+                        _codeBuilder.BeginBlock();
+                        _codeBuilder.AppendLine(privField + " -= hnd;");
+                        _codeBuilder.AppendLine("if (" + privField + " == CLR_NULL) " + listener + "->doCallFor" + f.CLRName + " = false;");
 
                         if (cls.HasAttribute<StopDelegationForReturnAttribute>())
                         {
-                            _codeBuilder.AppendLine("\tif (" + privField + " == CLR_NULL) " + privField + "Delegates = nullptr; else " + privField + "Delegates = " + privField + "->GetInvocationList();");
+                            _codeBuilder.AppendLine("if (" + privField + " == CLR_NULL) " + privField + "Delegates = nullptr; else " + privField + "Delegates = " + privField + "->GetInvocationList();");
                         }
 
-                        _codeBuilder.AppendLine("}");
+                        _codeBuilder.EndBlock();
                         _codeBuilder.DecreaseIndent();
                         _codeBuilder.AppendLine("private:");
                         _codeBuilder.IncreaseIndent();
                         _codeBuilder.AppendIndent(GetCLRTypeName(f) + " raise");
                         AddMethodParameters(f);
                         _codeBuilder.Append("\n");
-                        _codeBuilder.AppendLine("{");
+                        _codeBuilder.BeginBlock();
 
                         if (cls.HasAttribute<StopDelegationForReturnAttribute>())
                         {
-                            _codeBuilder.IncreaseIndent();
                             _codeBuilder.AppendLine("if (" + privField + ")");
-                            _codeBuilder.AppendLine("{");
-                            _codeBuilder.IncreaseIndent();
+                            _codeBuilder.BeginBlock();
                             string list = privField + "Delegates";
                             string stopret = cls.GetAttribute<StopDelegationForReturnAttribute>().Return;
                             _codeBuilder.AppendLine(f.MemberType.FullyQualifiedCLRName + " mp_return;");
                             _codeBuilder.AppendLine("for (int i=0; i < " + list + "->Length; i++)");
-                            _codeBuilder.AppendLine("{");
-                            _codeBuilder.IncreaseIndent();
+                            _codeBuilder.BeginBlock();
                             _codeBuilder.AppendIndent("mp_return = " + "static_cast<" + handler + ">(" + list + "[i])(");
                             for (int i = 0; i < f.Parameters.Count; i++)
                             {
@@ -479,17 +477,14 @@ namespace AutoWrap.Meta
                             }
                             _codeBuilder.Append(" );\n");
                             _codeBuilder.AppendLine("if (mp_return == " + stopret + ") break;");
-                            _codeBuilder.DecreaseIndent();
-                            _codeBuilder.AppendLine("}");
+                            _codeBuilder.EndBlock();
                             _codeBuilder.AppendLine("return mp_return;");
-                            _codeBuilder.DecreaseIndent();
-                            _codeBuilder.AppendLine("}");
-                            _codeBuilder.DecreaseIndent();
+                            _codeBuilder.EndBlock();
                         }
                         else
                         {
-                            _codeBuilder.AppendLine("\tif (" + privField + ")");
-                            _codeBuilder.AppendIndent("\t\t");
+                            _codeBuilder.AppendLine("if (" + privField + ")");
+                            _codeBuilder.AppendIndent("\t");
                             if (f.MemberTypeName != "void")
                                 _codeBuilder.Append("return ");
                             _codeBuilder.Append(privField + "->Invoke(");
@@ -503,9 +498,9 @@ namespace AutoWrap.Meta
                             _codeBuilder.Append(" );\n");
                         }
 
-                        _codeBuilder.AppendLine("}");
-                        _codeBuilder.DecreaseIndent();
-                        _codeBuilder.AppendLine("}\n");
+                        _codeBuilder.EndBlock();
+                        _codeBuilder.EndBlock();
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
                 _codeBuilder.AppendEmptyLine();
@@ -731,7 +726,8 @@ namespace AutoWrap.Meta
             //TODO comments for properties
             //AddComments(p);
             string ptype = GetCLRTypeName(p);
-            _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, p.Name);
+            _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, p.Name);
+            _codeBuilder.BeginBlock();
             if (p.CanRead)
             {
                 MemberMethodDefinition f = p.GetterFunction;
@@ -739,15 +735,16 @@ namespace AutoWrap.Meta
 
                 if (p.GetterFunction.ProtectionLevel == ProtectionLevel.Public || (AllowProtectedMembers && p.GetterFunction.ProtectionLevel == ProtectionLevel.Protected))
                 {
+                    _codeBuilder.DecreaseIndent();
                     _codeBuilder.AppendLine(p.GetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
+                    _codeBuilder.IncreaseIndent();
 
                     if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                     {
-                        _codeBuilder.Append("\t");
                         AddMethodIndexAttribute(f);
                     }
 
-                    _codeBuilder.AppendIndent("\t");
+                    _codeBuilder.AppendIndent("");
                     if (p.GetterFunction.IsStatic)
                         _codeBuilder.Append("static ");
                     if (methodIsVirtual)
@@ -771,15 +768,16 @@ namespace AutoWrap.Meta
 
                 if (p.SetterFunction.ProtectionLevel == ProtectionLevel.Public || (AllowProtectedMembers && p.SetterFunction.ProtectionLevel == ProtectionLevel.Protected))
                 {
+                    _codeBuilder.DecreaseIndent();
                     _codeBuilder.AppendLine(p.SetterFunction.ProtectionLevel.GetCLRProtectionName() + ":");
+                    _codeBuilder.IncreaseIndent();
 
                     if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                     {
-                        _codeBuilder.Append("\t");
                         AddMethodIndexAttribute(f);
                     }
 
-                    _codeBuilder.AppendIndent("\t");
+                    _codeBuilder.AppendIndent("");
                     if (p.SetterFunction.IsStatic)
                         _codeBuilder.Append("static ");
                     if (methodIsVirtual)
@@ -796,7 +794,7 @@ namespace AutoWrap.Meta
                     _codeBuilder.Append(";\n");
                 }
             }
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
         }
 
         protected override void GenerateCodePropertyField(MemberFieldDefinition field)
@@ -829,12 +827,14 @@ namespace AutoWrap.Meta
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
                     _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
-                    _codeBuilder.AppendLine("{");
+                    _codeBuilder.BeginBlock();
 
+                    _codeBuilder.DecreaseIndent();
                     _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
-                    _codeBuilder.AppendLine("\t" + ptype + " get();");
+                    _codeBuilder.IncreaseIndent();
+                    _codeBuilder.AppendLine(ptype + " get();");
 
-                    _codeBuilder.AppendLine("}");
+                    _codeBuilder.EndBlock();
                 }
                 else
                 {
@@ -843,13 +843,15 @@ namespace AutoWrap.Meta
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
                     _codeBuilder.AppendFormat("property {0} {1}[int]\n", ptype, field.NativeName);
-                    _codeBuilder.AppendLine("{");
+                    _codeBuilder.BeginBlock();
 
+                    _codeBuilder.DecreaseIndent();
                     _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
-                    _codeBuilder.AppendLine("\t" + ptype + " get(int index);");
-                    _codeBuilder.AppendLine("\tvoid set(int index, " + ptype + " value);");
+                    _codeBuilder.IncreaseIndent();
+                    _codeBuilder.AppendLine(ptype + " get(int index);");
+                    _codeBuilder.AppendLine("void set(int index, " + ptype + " value);");
 
-                    _codeBuilder.AppendLine("}");
+                    _codeBuilder.EndBlock();
                 }
             }
             else if (_cachedMembers.Contains(field))
@@ -859,12 +861,14 @@ namespace AutoWrap.Meta
                 if (field.IsStatic)
                     _codeBuilder.Append("static ");
                 _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
-                _codeBuilder.AppendLine("{");
+                _codeBuilder.BeginBlock();
 
+                _codeBuilder.DecreaseIndent();
                 _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
-                _codeBuilder.AppendLine("\t" + ptype + " get();");
+                _codeBuilder.IncreaseIndent();
+                _codeBuilder.AppendLine(ptype + " get();");
 
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.EndBlock();
             }
             else
             {
@@ -880,20 +884,24 @@ namespace AutoWrap.Meta
                 {
                     _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
                 }
-                _codeBuilder.AppendLine("{");
+                _codeBuilder.BeginBlock();
 
+                _codeBuilder.DecreaseIndent();
                 _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
-                _codeBuilder.AppendLine("\t" + ptype + " get();");
+                _codeBuilder.IncreaseIndent();
+                _codeBuilder.AppendLine(ptype + " get();");
 
                 if ( // SharedPtrs can be copied by value. Let all be copied by value just to be sure (field.PassedByType == PassedByType.Pointer || field.Type.IsValueType)
                    !IsReadOnly && !field.MemberType.HasAttribute<ReadOnlyForFieldsAttribute>()
                     && !field.IsConst)
                 {
+                    _codeBuilder.DecreaseIndent();
                     _codeBuilder.AppendLine(field.ProtectionLevel.GetCLRProtectionName() + ":");
-                    _codeBuilder.AppendLine("\tvoid set(" + ptype + " value);");
+                    _codeBuilder.IncreaseIndent();
+                    _codeBuilder.AppendLine("void set(" + ptype + " value);");
                 }
 
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.EndBlock();
             }
         }
 
@@ -931,14 +939,12 @@ namespace AutoWrap.Meta
             if ((PredefinedMethods.CopyTo & pm) != 0)
             {
                 _codeBuilder.AppendLine("void CopyTo(" + clrType + " dest)");
-                _codeBuilder.AppendLine("{");
-                _codeBuilder.IncreaseIndent();
+                _codeBuilder.BeginBlock();
                 _codeBuilder.AppendLine("if (_native == NULL) throw gcnew Exception(\"The underlying native object for the caller is null.\");");
                 _codeBuilder.AppendLine("if (dest" + (_classDefinition.IsValueType ? "." : "->") + "_native == NULL) throw gcnew ArgumentException(\"The underlying native object for parameter 'dest' is null.\");");
                 _codeBuilder.AppendEmptyLine();
                 _codeBuilder.AppendLine("*(dest" + (_classDefinition.IsValueType ? "." : "->") + "_native) = *_native;");
-                _codeBuilder.DecreaseIndent();
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.EndBlock();
             }
         }
     }

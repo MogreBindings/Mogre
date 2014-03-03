@@ -58,11 +58,10 @@ namespace AutoWrap.Meta
                     _codeBuilder.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
                     _codeBuilder.Append("\n");
-                    _codeBuilder.AppendLine("{");
-                    _codeBuilder.IncreaseIndent();
+                    _codeBuilder.BeginBlock();
                     AddMethodBody(f, f.Parameters.Count);
-                    _codeBuilder.DecreaseIndent();
-                    _codeBuilder.AppendLine("}\n");
+                    _codeBuilder.EndBlock();
+                    _codeBuilder.AppendEmptyLine();
                 }
 
                 foreach (MemberPropertyDefinition p in _abstractProperties)
@@ -74,29 +73,29 @@ namespace AutoWrap.Meta
                         string managedType = GetMethodNativeCall(p.GetterFunction, 0);
 
                         _codeBuilder.AppendLine(ptype + " " + pname + "::get()");
-                        _codeBuilder.AppendLine("{");
+                        _codeBuilder.BeginBlock();
                         if (_cachedMembers.Contains(p.GetterFunction))
                         {
                             string priv = NameToPrivate(p.Name);
-                            _codeBuilder.AppendLine("\treturn ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
+                            _codeBuilder.AppendLine("return ( CLR_NULL == " + priv + " ) ? (" + priv + " = " + managedType + ") : " + priv + ";");
                         }
                         else
                         {
-                            _codeBuilder.AppendLine("\treturn " + managedType + ";");
+                            _codeBuilder.AppendLine("return " + managedType + ";");
                         }
-                        _codeBuilder.AppendLine("}\n");
+                        _codeBuilder.EndBlock();
+                        _codeBuilder.AppendEmptyLine();
                     }
 
                     if (p.CanWrite)
                     {
                         _codeBuilder.AppendLine("void " + pname + "::set( " + ptype + " " + p.SetterFunction.Parameters[0].Name + " )");
-                        _codeBuilder.AppendLine("{");
-                        _codeBuilder.IncreaseIndent();
+                        _codeBuilder.BeginBlock();
 
                         AddMethodBody(p.SetterFunction, 1);
 
-                        _codeBuilder.DecreaseIndent();
-                        _codeBuilder.AppendLine("}\n");
+                        _codeBuilder.EndBlock();
+                        _codeBuilder.AppendEmptyLine();
                     }
                 }
 

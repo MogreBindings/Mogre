@@ -88,13 +88,13 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _codeBuilder.AppendFormatIndent("property {0} {1}\n{{\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
-                _codeBuilder.IncreaseIndent();
-                _codeBuilder.AppendLine(ptype + " get()\n{");
-                _codeBuilder.AppendLine("\treturn " + NameToPrivate(field) + ";");
-                _codeBuilder.AppendLine("}");
-                _codeBuilder.DecreaseIndent();
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine(ptype + " get()");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return " + NameToPrivate(field) + ";");
+                _codeBuilder.EndBlock();
+                _codeBuilder.EndBlock();
             }
             else
             {

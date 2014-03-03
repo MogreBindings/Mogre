@@ -134,8 +134,7 @@ namespace AutoWrap.Meta
                 AddMethodParameters(f);
             _codeBuilder.Append(" : " + GetBaseClassName() + "( (CLRObject*)0 )");
             _codeBuilder.Append("\n");
-            _codeBuilder.AppendLine("{");
-            _codeBuilder.IncreaseIndent();
+            _codeBuilder.BeginBlock();
 
             _codeBuilder.AppendLine("_createdByCLR = true;");
             _codeBuilder.AppendLine("Type^ thisType = this->GetType();");
@@ -161,8 +160,7 @@ namespace AutoWrap.Meta
             if (!IsAbstractClass && !_classDefinition.IsInterface)
             {
                 _codeBuilder.AppendLine("if (_isOverriden)");
-                _codeBuilder.AppendLine("{");
-                _codeBuilder.IncreaseIndent();
+                _codeBuilder.BeginBlock();
             }
 
             string proxyName = NativeProxyClassProducer.GetProxyName(_classDefinition);
@@ -188,8 +186,7 @@ namespace AutoWrap.Meta
 
             if (!IsAbstractClass && !_classDefinition.IsInterface)
             {
-                _codeBuilder.DecreaseIndent();
-                _codeBuilder.AppendLine("}");
+                _codeBuilder.EndBlock();
                 _codeBuilder.AppendLine("else");
                 _codeBuilder.AppendIndent("\t_native = new " + _classDefinition.FullyQualifiedNativeName + "(");
 
@@ -219,8 +216,7 @@ namespace AutoWrap.Meta
             _codeBuilder.AppendEmptyLine();
             GenerateCodeConstructorBody();
 
-            _codeBuilder.DecreaseIndent();
-            _codeBuilder.AppendLine("}");
+            _codeBuilder.EndBlock();
         }
     }
 
