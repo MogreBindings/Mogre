@@ -921,7 +921,23 @@ namespace AutoWrap.Meta
             sb.AppendLine("public:");
             sb.IncreaseIndent();
 
-            sb.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_SHAREDPTR( " + className + " )");
+            sb.AppendLine("static operator {0}^ (const Ogre::{0}& ptr)", className);
+            sb.BeginBlock();
+            sb.AppendLine("if (ptr.isNull()) return nullptr;");
+            sb.AppendLine("return gcnew {0}(const_cast<Ogre::{0}&>(ptr));", className);
+            sb.EndBlock();
+            sb.AppendEmptyLine();
+            sb.AppendLine("static operator Ogre::{0}& ({0}^ t)", className);
+            sb.BeginBlock();
+            sb.AppendLine("if (CLR_NULL == t) return *((gcnew {0}(Ogre::{0}()))->_sharedPtr);", className);
+            sb.AppendLine("return *(t->_sharedPtr);");
+            sb.EndBlock();
+            sb.AppendEmptyLine();
+            sb.AppendLine("static operator Ogre::{0}* ({0}^ t)", className);
+            sb.BeginBlock();
+            sb.AppendLine("if (CLR_NULL == t) return (gcnew {0}(Ogre::{0}()))->_sharedPtr;", className);
+            sb.AppendLine("return t->_sharedPtr;");
+            sb.EndBlock();
             sb.AppendEmptyLine();
 
             if (type is ClassDefinition)

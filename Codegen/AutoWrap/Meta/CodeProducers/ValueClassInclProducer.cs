@@ -71,7 +71,21 @@ namespace AutoWrap.Meta
         protected override void GenerateCodePublicDeclarations()
         {
             base.GenerateCodePublicDeclarations();
-            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( " + GetClassName() + " )");
+            string name = GetClassName();
+            _codeBuilder.AppendLine("inline static operator Ogre::{0}& ({0}& obj)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return reinterpret_cast<Ogre::{0}&>(obj);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator const {0}& ( const Ogre::{0}& obj)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return reinterpret_cast<const {0}&>(obj);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator const {0}& ( const Ogre::{0}* pobj)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return reinterpret_cast<const {0}&>(*pobj);", name);
+            _codeBuilder.EndBlock();
         }
 
         protected override void AddPublicConstructors()

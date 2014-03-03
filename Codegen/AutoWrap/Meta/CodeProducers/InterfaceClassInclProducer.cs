@@ -58,7 +58,28 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodePublicDeclarations()
         {
-            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_INTERFACE( " + _classDefinition.CLRName + ", " + _classDefinition.FullyQualifiedNativeName + " )\n");
+            _codeBuilder.AppendLine("static operator {0}^ (const {1}* t)", _classDefinition.CLRName, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("if (0 == (const_cast<{0}*>(t))) return nullptr;", _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.AppendLine("CLRObject* clr_obj = dynamic_cast<CLRObject*>((const_cast<{0}*>(t)));", _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.AppendLine("if (0 == clr_obj)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("throw gcnew System::Exception(\"The native class that implements {0} isn't a subclass of CLRObject. Cannot create the CLR wrapper object.\");", _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("Object^ clr = *clr_obj;");
+            _codeBuilder.AppendLine("if (nullptr == clr)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("clr_obj->_Init_CLRObject();");
+            _codeBuilder.AppendLine("clr = *clr_obj;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("return static_cast<{0}^>(clr);", _classDefinition.CLRName);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator {1}* ({0}^ t)", _classDefinition.CLRName, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return (t == CLR_NULL) ? 0 : t->_GetNativePtr();");
+            _codeBuilder.EndBlock();
+
             _codeBuilder.AppendLine("virtual " + _classDefinition.FullyQualifiedNativeName + "* _GetNativePtr();\n");
             base.GenerateCodePublicDeclarations();
         }

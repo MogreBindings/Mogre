@@ -66,12 +66,66 @@ namespace AutoWrap.Meta
         protected virtual void AddManagedNativeConversionsDefinition()
         {
             if (_classDefinition.Name == _classDefinition.CLRName)
-                _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )", GetClassName());
+            {
+                string name = GetClassName();
+                _codeBuilder.AppendLine("inline static operator {0}^ (const Ogre::{0}* t)", name);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("if (t)");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return gcnew {0}(const_cast<Ogre::{0}*>(t));", name);
+                _codeBuilder.EndBlock();
+                _codeBuilder.AppendLine("else");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return nullptr;");
+                _codeBuilder.EndBlock();
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator {0}^ (const Ogre::{0}& t)", name);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return gcnew {0}(&const_cast<Ogre::{0}&>(t));", name);
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator Ogre::{0}* ({0}^ t)", name);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return (t == CLR_NULL) ? 0 : static_cast<Ogre::{0}*>(t->_native);", name);
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator Ogre::{0}& ({0}^ t)", name);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return *static_cast<Ogre::{0}*>(t->_native);", name);
+                _codeBuilder.EndBlock();
+            }
             else
             {
                 string clrName = _classDefinition.FullyQualifiedCLRName.Substring(_classDefinition.FullyQualifiedCLRName.IndexOf("::") + 2);
                 string nativeName = _classDefinition.FullyQualifiedNativeName.Substring(_classDefinition.FullyQualifiedNativeName.IndexOf("::") + 2);
-                _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )", clrName, nativeName);
+
+                _codeBuilder.AppendLine("inline static operator {0}^ (const Ogre::{1}* t)", clrName, nativeName);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("if (t)");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return gcnew {0}(const_cast<Ogre::{1}*>(t));", clrName, nativeName);
+                _codeBuilder.EndBlock();
+                _codeBuilder.AppendLine("else");
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return nullptr;");
+                _codeBuilder.EndBlock();
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator {0}^ (const Ogre::{1}& t)", clrName, nativeName);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return gcnew {0}(&const_cast<Ogre::{1}&>(t));", clrName, nativeName);
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator Ogre::{1}* ({0}^ t)", clrName, nativeName);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return (t == CLR_NULL) ? 0 : static_cast<Ogre::{1}*>(t->_native);", clrName, nativeName);
+                _codeBuilder.EndBlock();
+
+                _codeBuilder.AppendLine("inline static operator Ogre::{1}& ({0}^ t)", clrName, nativeName);
+                _codeBuilder.BeginBlock();
+                _codeBuilder.AppendLine("return *static_cast<Ogre::{1}*>(t->_native);", clrName, nativeName);
+                _codeBuilder.EndBlock();
             }
         }
 

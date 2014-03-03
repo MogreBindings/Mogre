@@ -52,7 +52,47 @@ namespace AutoWrap.Meta
 
         protected override void AddManagedNativeConversionsDefinition()
         {
-            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )", GetClassName());
+            string name = GetClassName();
+            _codeBuilder.AppendLine("static operator {0}^ (const Ogre::{0}* ct)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("Ogre::{0}* t = const_cast<Ogre::{0}*>(ct);", name);
+            _codeBuilder.AppendLine("if (t)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("Object^ clr = t->_CLRHandle;");
+            _codeBuilder.AppendLine("if (CLR_NULL == clr)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("clr = gcnew {0}(t);", name);
+            _codeBuilder.AppendLine("t->_CLRHandle = clr;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("return static_cast<{0}^>(clr);", name);
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("else");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return nullptr;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("static operator {0}^ (const Ogre::{0}& ct)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("Ogre::{0}* t = &const_cast<Ogre::{0}&>(ct);", name);
+            _codeBuilder.AppendLine("Object^ clr = t->_CLRHandle;");
+            _codeBuilder.AppendLine("if (CLR_NULL == clr)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("clr = gcnew {0}(t);", name);
+            _codeBuilder.AppendLine("t->_CLRHandle = clr;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("return static_cast<{0}^>(clr);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator Ogre::{0}* ({0}^ t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return (t == CLR_NULL) ? 0 : t->_native;");
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator Ogre::{0}& ({0}^ t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return *t->_native;");
+            _codeBuilder.EndBlock();
         }
 
         public CLRHandleClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

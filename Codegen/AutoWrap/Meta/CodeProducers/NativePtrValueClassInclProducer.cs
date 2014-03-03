@@ -62,7 +62,27 @@ namespace AutoWrap.Meta
         {
             base.GenerateCodePublicDeclarations();
 
-            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_NATIVEPTRVALUECLASS( " + GetClassName() + ", " + _classDefinition.FullyQualifiedNativeName + " )");
+            string name = GetClassName();
+            _codeBuilder.AppendLine("inline static operator {1}& ({0} mobj)", name, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return *mobj._native;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("inline static operator {1}* ({0} mobj)", name, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return mobj._native;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("inline static operator {0} ( const {1}& obj)", name, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("{0} clrobj;", name);
+            _codeBuilder.AppendLine("clrobj._native = const_cast<{0}*>(&obj);", _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.AppendLine("return clrobj;");
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("inline static operator {0} ( const {1}* pobj)", name, _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("{0} clrobj;", name);
+            _codeBuilder.AppendLine("clrobj._native = const_cast<{0}*>(pobj);", _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.AppendLine("return clrobj;");
+            _codeBuilder.EndBlock();
             _codeBuilder.AppendEmptyLine();
 
             _codeBuilder.AppendEmptyLine();

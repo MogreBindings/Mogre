@@ -43,7 +43,40 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            _codeBuilder.AppendLine("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )", GetClassName());
+            string name = GetClassName();
+            _codeBuilder.AppendLine("static operator {0}^ (const Ogre::{0}* t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("if ((const_cast<Ogre::{0}*>(t)) == 0) return nullptr;", name);
+            _codeBuilder.AppendLine("Object^ clr = *(const_cast<Ogre::{0}*>(t));", name);
+            _codeBuilder.AppendLine("if (nullptr == clr)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("(const_cast<Ogre::{0}*>(t))->_Init_CLRObject();", name);
+            _codeBuilder.AppendLine("clr = *(const_cast<Ogre::{0}*>(t));", name);
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("return static_cast<{0}^>(clr);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("static operator {0}^ (const Ogre::{0}& t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("if ((&const_cast<Ogre::{0}&>(t)) == 0) return nullptr;", name);
+            _codeBuilder.AppendLine("Object^ clr = *(&const_cast<Ogre::{0}&>(t));", name);
+            _codeBuilder.AppendLine("if (nullptr == clr)");
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("(&const_cast<Ogre::{0}&>(t))->_Init_CLRObject();", name);
+            _codeBuilder.AppendLine("clr = *(&const_cast<Ogre::{0}&>(t));", name);
+            _codeBuilder.EndBlock();
+            _codeBuilder.AppendLine("return static_cast<{0}^>(clr);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator Ogre::{0}* ({0}^ t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return (t == CLR_NULL) ? 0 : static_cast<Ogre::{0}*>(t->_native);", name);
+            _codeBuilder.EndBlock();
+
+            _codeBuilder.AppendLine("inline static operator Ogre::{0}& ({0}^ t)", name);
+            _codeBuilder.BeginBlock();
+            _codeBuilder.AppendLine("return *static_cast<Ogre::{0}*>(t->_native);", name);
+            _codeBuilder.EndBlock();
         }
 
         protected override void AddInternalConstructors()
