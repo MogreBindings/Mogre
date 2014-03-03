@@ -905,17 +905,27 @@ namespace AutoWrap.Meta
             if (!String.IsNullOrEmpty(summary))
             {
                 _codeBuilder.AppendLine("/**");
-                _codeBuilder.AppendLine("<summary>{0}</summary>", summary);
+                _codeBuilder.AppendLine("<summary>{0}</summary>", CodeStyleDefinition.ToCamelCase(summary));
                 _codeBuilder.AppendLine("*/");
             }
         }
 
         protected virtual void AddComments(MemberMethodDefinition f, int count)
         {
-            if (!String.IsNullOrEmpty(f.Summary))
+            string summary = f.Summary;
+            if (String.IsNullOrEmpty(summary) || f.Summary.StartsWith("overrid", StringComparison.OrdinalIgnoreCase)) //catches both overrides and overridden
+            {
+                MemberMethodDefinition m = f;
+                while (m.BaseMethod != null)
+                {
+                    m = m.BaseMethod;
+                }
+                summary = m.Summary;
+            }
+            if (!String.IsNullOrEmpty(summary))
             {
                 _codeBuilder.AppendLine("/**");
-                _codeBuilder.AppendLine("<summary>{0}</summary>", f.Summary);
+                _codeBuilder.AppendLine("<summary>{0}</summary>", CodeStyleDefinition.ToCamelCase(summary));
                 for (int i = 0; i < count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -932,9 +942,19 @@ namespace AutoWrap.Meta
         {
             if (p.CanRead && !String.IsNullOrEmpty(p.GetterFunction.Summary))
             {
+                string getsummary = p.GetterFunction.Summary;
+                if (p.GetterFunction.Summary.StartsWith("overrid", StringComparison.OrdinalIgnoreCase)) //catches both overrides and overridden
+                {
+                    MemberMethodDefinition m = p.GetterFunction;
+                    while (m.BaseMethod != null)
+                    {
+                        m = m.BaseMethod;
+                    }
+                    getsummary = m.Summary;
+                }
+
                 _codeBuilder.AppendLine("/**");
                 _codeBuilder.Append("<summary>");
-                string getsummary = p.GetterFunction.Summary;
                 if (p.CanWrite)
                 {
                     string setsummary = p.SetterFunction.Summary;
@@ -963,12 +983,12 @@ namespace AutoWrap.Meta
                     }
                     else
                     {
-                        _codeBuilder.Append(getsummary);
+                        _codeBuilder.Append(CodeStyleDefinition.ToCamelCase(getsummary));
                     }
                 }
                 else
                 {
-                    _codeBuilder.Append(getsummary);
+                    _codeBuilder.Append(CodeStyleDefinition.ToCamelCase(getsummary));
                 }
                 _codeBuilder.AppendLine("</summary>");
                 _codeBuilder.AppendLine("*/");
@@ -980,7 +1000,7 @@ namespace AutoWrap.Meta
             if (!String.IsNullOrEmpty(f.Summary))
             {
                 _codeBuilder.AppendLine("/**");
-                _codeBuilder.AppendLine("<summary>{0}</summary>", f.Summary);
+                _codeBuilder.AppendLine("<summary>{0}</summary>", CodeStyleDefinition.ToCamelCase(f.Summary));
                 _codeBuilder.AppendLine("*/");
             }
         }

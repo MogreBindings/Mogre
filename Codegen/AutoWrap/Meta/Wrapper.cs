@@ -830,7 +830,7 @@ namespace AutoWrap.Meta
             if (!String.IsNullOrEmpty(summary))
             {
                 sb.AppendLine("/**");
-                sb.AppendLine("<summary>{0}</summary>", summary);
+                sb.AppendLine("<summary>{0}</summary>", CodeStyleDefinition.ToCamelCase(summary));
                 sb.AppendLine("*/");
             }
 
@@ -853,7 +853,7 @@ namespace AutoWrap.Meta
             {
                 if (!String.IsNullOrEmpty(enm.CLREnumSummaries[i]))
                 {
-                    sb.AppendLine("///<summary>{0}</summary>", enm.CLREnumSummaries[i]);
+                    sb.AppendLine("///<summary>{0}</summary>", CodeStyleDefinition.ToCamelCase(enm.CLREnumSummaries[i]));
                 }
 
                 string value = enm.NativeEnumValues[i];
