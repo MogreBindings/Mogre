@@ -36,18 +36,16 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            if (_classDefinition.HasAttribute<SequentialLayoutAttribute> ())
+            if (_classDefinition.HasAttribute<SequentialLayoutAttribute>())
             {
-                _codeBuilder.AppendIndent ("");
-                _codeBuilder.Append ("[StructLayout(LayoutKind::Sequential)]\n");
+                _codeBuilder.Append("[StructLayout(LayoutKind::Sequential)]\n");
             }
 
-            _codeBuilder.AppendIndent("");
             if (!_classDefinition.IsNested)
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _codeBuilder.AppendFormat("value class {0}\n", _classDefinition.CLRName);
+            _codeBuilder.Append("value class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPreDeclarations()
@@ -88,7 +86,7 @@ namespace AutoWrap.Meta
             if (IsReadOnly)
             {
                 string ptype = GetCLRTypeName(field);
-                _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+                _codeBuilder.Append("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
                 _codeBuilder.BeginBlock();
                 _codeBuilder.AppendLine(ptype + " get()");
                 _codeBuilder.BeginBlock();

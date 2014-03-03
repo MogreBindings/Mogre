@@ -127,7 +127,7 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicConstructor(MemberMethodDefinition f)
         {
-            _codeBuilder.AppendIndent(GetClassName() + "::" + _classDefinition.Name);
+            _codeBuilder.Append(GetClassName() + "::" + _classDefinition.Name);
             if (f == null)
                 _codeBuilder.Append("()");
             else
@@ -164,7 +164,7 @@ namespace AutoWrap.Meta
             }
 
             string proxyName = NativeProxyClassProducer.GetProxyName(_classDefinition);
-            _codeBuilder.AppendIndent(proxyName + "* proxy = new " + proxyName + "(this");
+            _codeBuilder.Append(proxyName + "* proxy = new " + proxyName + "(this");
 
             if (count > 0)
             {
@@ -188,7 +188,7 @@ namespace AutoWrap.Meta
             {
                 _codeBuilder.EndBlock();
                 _codeBuilder.AppendLine("else");
-                _codeBuilder.AppendIndent("\t_native = new " + _classDefinition.FullyQualifiedNativeName + "(");
+                _codeBuilder.Append("\t_native = new " + _classDefinition.FullyQualifiedNativeName + "(");
 
                 if (count > 0)
                 {

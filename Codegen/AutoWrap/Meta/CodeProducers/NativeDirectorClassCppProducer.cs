@@ -74,7 +74,7 @@ namespace AutoWrap.Meta
             string def = f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName, GetClassName()) + "(";
             if (def.StartsWith("virtual "))
                 def = def.Substring("virtual ".Length);
-            _codeBuilder.AppendIndent(def);
+            _codeBuilder.Append(def);
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];

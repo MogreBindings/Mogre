@@ -36,12 +36,11 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _codeBuilder.AppendIndent("");
             if (!_classDefinition.IsNested)
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _codeBuilder.AppendFormat("value class {0}\n", _classDefinition.CLRName);
+            _codeBuilder.Append("value class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPreDeclarations()
@@ -131,7 +130,7 @@ namespace AutoWrap.Meta
                     if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                         continue;
 
-                    _codeBuilder.AppendIndent("static " + _classDefinition.CLRName + " Create");
+                    _codeBuilder.Append("static " + _classDefinition.CLRName + " Create");
                     AddMethodParameters(f, f.Parameters.Count - dc);
                     _codeBuilder.Append(";\n");
                 }

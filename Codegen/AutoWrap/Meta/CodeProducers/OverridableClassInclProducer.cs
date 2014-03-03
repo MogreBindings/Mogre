@@ -37,7 +37,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _codeBuilder.AppendIndent("class " + ProxyName + " : public " + _classDefinition.FullyQualifiedNativeName);
+            _codeBuilder.Append("class " + ProxyName + " : public " + _classDefinition.FullyQualifiedNativeName);
             if (_classDefinition.IsInterface)
                 _codeBuilder.Append(", public CLRObject");
             _codeBuilder.AppendEmptyLine();
@@ -124,7 +124,7 @@ namespace AutoWrap.Meta
             {
                 className = this.MetaDef.ManagedNamespace + "::" + _classDefinition.Name;
             }
-            _codeBuilder.AppendIndent(ProxyName + "( " + className + "^ managedObj");
+            _codeBuilder.Append(ProxyName + "( " + className + "^ managedObj");
             if (f != null)
             {
                 foreach (ParamDefinition param in f.Parameters)
@@ -135,7 +135,7 @@ namespace AutoWrap.Meta
 
             if (f != null)
             {
-                _codeBuilder.AppendIndent("\t" + _classDefinition.FullyQualifiedNativeName + "(");
+                _codeBuilder.Append("\t" + _classDefinition.FullyQualifiedNativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)
                 {
                     ParamDefinition param = f.Parameters[i];
@@ -146,7 +146,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.Append(" ),\n");
             }
 
-            _codeBuilder.AppendIndent("\t_managed(managedObj)");
+            _codeBuilder.Append("\t_managed(managedObj)");
 
             //foreach (DefField field in _protectedFields)
             //{
@@ -160,7 +160,6 @@ namespace AutoWrap.Meta
 
         protected override void AddOverridableFunction(MemberMethodDefinition f)
         {
-            _codeBuilder.AppendIndent("");
             if (f.IsVirtual)
                 _codeBuilder.Append("virtual ");
             _codeBuilder.Append(f.MemberTypeNativeName + " " + f.NativeName + "(");
@@ -216,16 +215,15 @@ namespace AutoWrap.Meta
             if (_classDefinition.IsInterface)
             {
                 //put _t.Name instead of _t.CLRName
-                _codeBuilder.AppendIndent("");
                 if (!_classDefinition.IsNested)
                     _codeBuilder.Append("public ");
                 else
                     _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
                 string baseclass = GetBaseAndInterfaces();
                 if (baseclass != "")
-                    _codeBuilder.AppendFormat("ref class {0}{1} : {2}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
+                    _codeBuilder.Append("ref class {0}{1} : {2}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "", baseclass);
                 else
-                    _codeBuilder.AppendFormat("ref class {0}{1}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "");
+                    _codeBuilder.Append("ref class {0}{1}\n", _classDefinition.Name, (IsAbstractClass) ? " abstract" : "");
             }
             else
                 base.AddDefinition();

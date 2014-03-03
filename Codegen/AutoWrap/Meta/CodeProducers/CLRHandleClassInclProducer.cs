@@ -52,7 +52,7 @@ namespace AutoWrap.Meta
 
         protected override void AddManagedNativeConversionsDefinition()
         {
-            _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
+            _codeBuilder.Append("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_CLRHANDLE( {0} )\n", GetClassName());
         }
 
         public CLRHandleClassInclProducer(MetaDefinition metaDef, Wrapper wrapper, ClassDefinition t, SourceCodeStringBuilder sb)

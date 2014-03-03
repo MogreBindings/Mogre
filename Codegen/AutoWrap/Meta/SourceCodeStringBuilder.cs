@@ -11,6 +11,7 @@ namespace AutoWrap.Meta
         private readonly StringBuilder _builder = new StringBuilder();
         private readonly CodeStyleDefinition _codeStyleDef;
         private string _curIndention = "";
+        private bool _isOnNewLine = true;
 
         public SourceCodeStringBuilder(CodeStyleDefinition codeStyleDef)
         {
@@ -67,66 +68,74 @@ namespace AutoWrap.Meta
         }
 
         /// <summary>
-        /// Appends the specified string with no indention of the first line.
+        /// Appends the specified string adhering to the current indentation level. If <paramref name="args"/> is specified the string will be formatted.
         /// </summary>
-        /// <param name="otherLinesIndent">if this is true (default), all lines
-        /// of <paramref name="str"/> (except for the first one) will be indented.</param>
-        /// <see cref="AppendIndent"/>
-        public SourceCodeStringBuilder Append(string str, bool otherLinesIndent = true)
+        /// <param name="str">A string or composite format string to append.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <see cref="AppendLine"/>
+        public SourceCodeStringBuilder Append(string str, params object[] args)
         {
-            _builder.Append(CreateAppendableString(str, false, otherLinesIndent));
+            if (_codeStyleDef.IndentionLevelString != "\t")
+            {
+                // Replace remaining tabs with the correct indention style
+                str = str.Replace("\t", _codeStyleDef.IndentionLevelString);
+            }
+
+            if (args.Length > 0)
+            {
+                str = String.Format(str, args);
+            }
+
+            string[] lines = str.Replace("\r\n", "\n").Split('\n');
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (_isOnNewLine && lines[i].Length > 0)
+                {
+                    _builder.Append(_curIndention);
+                }
+
+                _builder.Append(lines[i]);
+
+                if (i < lines.Length - 1)
+                {
+                    _builder.Append(_codeStyleDef.NewLineCharacters);
+                    _isOnNewLine = true;
+                }
+                else
+                {
+                    _isOnNewLine = lines[i].Length == 0;
+                }
+            }
+
             return this;
         }
 
         /// <summary>
-        /// Appends the specified string with indention added to the first line.
-        /// </summary>
-        /// <param name="otherLinesIndent">if this is true (default), all lines
-        /// of <paramref name="str"/> will be indented. If it is false, only the
-        /// first line will be indented.</param>
-        public SourceCodeStringBuilder AppendIndent(string str, bool otherLinesIndent = true)
-        {
-            _builder.Append(CreateAppendableString(str, true, otherLinesIndent));
-            return this;
-        }
-
-        /// <summary>
-        /// Adds an empty line.
+        /// Appends an empty line.
         /// </summary>
         public void AppendEmptyLine()
         {
             _builder.Append(_codeStyleDef.NewLineCharacters);
+            _isOnNewLine = true;
         }
 
         /// <summary>
-        /// Appends the specified string and adds a new line at the end of the string.
+        /// Appends the specified string adhering to the current indentation level followed by a new line. If <paramref name="args"/> is specified the string will be formatted.
         /// </summary>
-        /// <param name="otherLinesIndent">if this is true (default), all lines
-        /// of <paramref name="str"/> will be indented. If it is false, only the
-        /// first line will be indented.</param>
-        /// <param name="firstLineIndent">if this is true (default) the first line will
-        /// be indented</param>
-        /// <param name="otherLinesIndent">if this is true (default), all lines
-        /// of <paramref name="str"/> (except for the first one) will be indented.</param>
-        /// <see cref="AppendIndent"/>
-        public SourceCodeStringBuilder AppendLine(string str, bool firstLineIndent = true, bool otherLinesIndent = true)
+        /// <param name="str">A string or composite format string to append.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <see cref="Append"/>
+        public SourceCodeStringBuilder AppendLine(string str, params object[] args)
         {
-            _builder.Append(CreateAppendableString(str, firstLineIndent, otherLinesIndent)).Append(_codeStyleDef.NewLineCharacters);
+            Append(str, args);
+            AppendEmptyLine();
             return this;
         }
 
-        public SourceCodeStringBuilder AppendFormat(string str, params object[] args)
-        {
-            _builder.AppendFormat(CreateAppendableString(str, false, true), args);
-            return this;
-        }
-
-        public SourceCodeStringBuilder AppendFormatIndent(string str, params object[] args)
-        {
-            _builder.AppendFormat(CreateAppendableString(str, true, true), args);
-            return this;
-        }
-
+        /// <summary>
+        /// Converts the value of this instance to a <see cref="System.String"/>.
+        /// </summary>
         public override string ToString()
         {
             return _builder.ToString();

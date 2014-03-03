@@ -36,12 +36,11 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _codeBuilder.AppendIndent("");
             if (!_classDefinition.IsNested)
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
-            _codeBuilder.AppendFormat("ref class {0}\n", _classDefinition.CLRName);
+            _codeBuilder.Append("ref class {0}\n", _classDefinition.CLRName);
         }
 
         protected override void AddPublicConstructors()
@@ -95,7 +94,7 @@ namespace AutoWrap.Meta
             //TODO comments for fields
             //AddComments(field);
             string ptype = GetCLRTypeName(field);
-            _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
+            _codeBuilder.Append("property {0} {1}\n", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
             _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine(ptype + " get()");
             _codeBuilder.BeginBlock();

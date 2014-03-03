@@ -43,13 +43,13 @@ namespace AutoWrap.Meta
 
         protected virtual void AddManagedNativeConversionsDefinition()
         {
-            _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )\n", GetClassName());
+            _codeBuilder.Append("DEFINE_MANAGED_NATIVE_CONVERSIONS( {0} )\n", GetClassName());
         }
 
         protected override void AddInternalConstructors()
         {
             base.AddInternalConstructors();
-            _codeBuilder.AppendFormatIndent("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _classDefinition.Name);
+            _codeBuilder.Append("{0}( CLRObject* obj ) : " + GetBaseClassName() + "(obj)\n", _classDefinition.Name);
             _codeBuilder.BeginBlock();
             base.GenerateCodeConstructorBody();
             _codeBuilder.EndBlock();
@@ -70,7 +70,7 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine("{");
                 _codeBuilder.AppendLine("public protected:");
                 _codeBuilder.IncreaseIndent();
-                _codeBuilder.AppendFormatIndent("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _classDefinition.CLRName);
+                _codeBuilder.Append("{0}_Default( CLRObject* obj ) : {0}(obj)\n", _classDefinition.CLRName);
                 _codeBuilder.AppendLine("{");
                 _codeBuilder.AppendLine("}\n");
                 _codeBuilder.DecreaseIndent();
@@ -79,7 +79,7 @@ namespace AutoWrap.Meta
 
                 foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
-                    _codeBuilder.AppendIndent("virtual ");
+                    _codeBuilder.Append("virtual ");
                     _codeBuilder.Append(GetCLRTypeName(f) + " " + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
                     _codeBuilder.Append(" override;\n");
@@ -88,7 +88,7 @@ namespace AutoWrap.Meta
                 foreach (MemberPropertyDefinition p in _abstractProperties)
                 {
                     string ptype = GetCLRTypeName(p);
-                    _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, p.Name);
+                    _codeBuilder.Append("property {0} {1}\n", ptype, p.Name);
                     _codeBuilder.BeginBlock();
                     if (p.CanRead)
                     {

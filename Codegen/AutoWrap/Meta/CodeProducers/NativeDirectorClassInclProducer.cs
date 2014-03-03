@@ -98,9 +98,9 @@ namespace AutoWrap.Meta
                 throw new Exception("Unexpected");
 
             if (type.IsNested)
-                sb.AppendIndent("public: ");
+                sb.Append("public: ");
             else
-                sb.AppendIndent("public ");
+                sb.Append("public ");
 
             sb.Append("ref class " + type.Name + " abstract sealed\n");
             sb.AppendLine("{");
@@ -116,7 +116,7 @@ namespace AutoWrap.Meta
                     //    AddEventArgsClass(f, sb);
                     //}
 
-                    sb.AppendIndent("delegate static " + f.MemberTypeCLRName + " " + f.CLRName + "Handler(");
+                    sb.Append("delegate static " + f.MemberTypeCLRName + " " + f.CLRName + "Handler(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         ParamDefinition param = f.Parameters[i];
@@ -169,7 +169,7 @@ namespace AutoWrap.Meta
         protected override void AddPublicConstructors()
         {
             _codeBuilder.AppendLine(DirectorName + "( " + ReceiverInterfaceName + "^ recv )");
-            _codeBuilder.AppendIndent("\t: _receiver(recv)");
+            _codeBuilder.Append("\t: _receiver(recv)");
             foreach (MemberMethodDefinition f in _classDefinition.PublicMethods)
             {
                 if (f.IsDeclarableFunction && f.IsVirtual)
@@ -196,7 +196,7 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodeMethod(MemberMethodDefinition f)
         {
-            _codeBuilder.AppendIndent(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
+            _codeBuilder.Append(f.Definition.Replace(f.ContainingClass.FullyQualifiedNativeName + "::", "") + "(");
             for (int i = 0; i < f.Parameters.Count; i++)
             {
                 ParamDefinition param = f.Parameters[i];

@@ -46,7 +46,7 @@ namespace AutoWrap.Meta
 
                 if (!f.HasReturnValue)
                 {
-                    sb.AppendIndent(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
+                    sb.Append(f.MemberTypeCLRName + " mp_return = " + managedTarget + "->" + f.CLRName + "(");
                     for (int i = 0; i < f.Parameters.Count; i++)
                     {
                         ParamDefinition param = f.Parameters[i];
@@ -139,7 +139,6 @@ namespace AutoWrap.Meta
             foreach (ParamDefinition param in f.Parameters)
                 _wrapper.CppCheckTypeForDependancy(param.Type);
 
-            _codeBuilder.AppendIndent("");
             _codeBuilder.Append(f.MemberTypeNativeName + " " + ProxyName + "::" + f.NativeName + "(");
             AddNativeMethodParams(f);
             _codeBuilder.Append(" )");
@@ -169,7 +168,7 @@ namespace AutoWrap.Meta
             {
                 _codeBuilder.EndBlock();
                 _codeBuilder.AppendLine("else");
-                _codeBuilder.AppendIndent("\t");
+                _codeBuilder.Append("\t");
                 if (!f.HasReturnValue) _codeBuilder.Append("return ");
                 _codeBuilder.Append(f.ContainingClass.Name + "::" + f.NativeName + "(");
                 for (int i = 0; i < f.Parameters.Count; i++)

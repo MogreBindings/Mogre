@@ -147,7 +147,7 @@ namespace AutoWrap.Meta
 
         protected virtual void AddPublicConstructorOverload(MemberMethodDefinition f, int count)
         {
-            _codeBuilder.AppendIndent(GetClassName() + "::" + _classDefinition.CLRName);
+            _codeBuilder.Append(GetClassName() + "::" + _classDefinition.CLRName);
             if (f == null)
                 _codeBuilder.Append("()");
             else
@@ -177,7 +177,7 @@ namespace AutoWrap.Meta
                     _codeBuilder.AppendLine(preCall);
             }
 
-            _codeBuilder.AppendIndent("_native = new " + _classDefinition.FullyQualifiedNativeName + "(");
+            _codeBuilder.Append("_native = new " + _classDefinition.FullyQualifiedNativeName + "(");
 
             if (count > 0)
             {
@@ -217,7 +217,7 @@ namespace AutoWrap.Meta
             {
                 if (m.IsStatic)
                 {
-                    _codeBuilder.AppendIndent(NameToPrivate(m) + " = ");
+                    _codeBuilder.Append(NameToPrivate(m) + " = ");
                     if (m.ProtectionLevel == ProtectionLevel.Protected)
                     {
                         _codeBuilder.Append(NativeProtectedTypesProxy.GetProtectedTypesProxyName(m.ContainingClass));
@@ -307,7 +307,7 @@ namespace AutoWrap.Meta
                 if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                     continue;
 
-                _codeBuilder.AppendIndent(GetCLRTypeName(f) + " " + GetClassName() + "::" + f.CLRName);
+                _codeBuilder.Append(GetCLRTypeName(f) + " " + GetClassName() + "::" + f.CLRName);
                 AddMethodParameters(f, f.Parameters.Count - dc);
                 _codeBuilder.AppendEmptyLine();
                 _codeBuilder.BeginBlock();
@@ -339,7 +339,6 @@ namespace AutoWrap.Meta
                             AddTypeDependancy(dependancy);
                     }
 
-                    _codeBuilder.AppendIndent("");
                     if (!f.HasReturnValue)
                     {
                         if (hasPostConversions)

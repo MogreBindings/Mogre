@@ -80,16 +80,15 @@ namespace AutoWrap.Meta
 
         protected virtual void AddDefinition()
         {
-            _codeBuilder.AppendIndent("");
             if (!_classDefinition.IsNested)
                 _codeBuilder.Append("public ");
             else
                 _codeBuilder.Append(_classDefinition.ProtectionLevel.GetCLRProtectionName() + ": ");
             string baseclass = GetBaseAndInterfaces();
             if (baseclass != "")
-                _codeBuilder.AppendFormat("ref class {0}{1} : {2}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
+                _codeBuilder.Append("ref class {0}{1} : {2}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "", baseclass);
             else
-                _codeBuilder.AppendFormat("ref class {0}{1}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "");
+                _codeBuilder.Append("ref class {0}{1}\n", _classDefinition.CLRName, (IsAbstractClass) ? " abstract" : "");
         }
 
         protected override void GenerateCodeInterfaceMethod(MemberMethodDefinition f)
@@ -351,7 +350,7 @@ namespace AutoWrap.Meta
                         continue;
 
 
-                    _codeBuilder.AppendIndent(className);
+                    _codeBuilder.Append(className);
                     AddMethodParameters(function, function.Parameters.Count - dc);
                     _codeBuilder.Append(";\n");
                 }
@@ -370,11 +369,10 @@ namespace AutoWrap.Meta
                 {
                     if (f.IsDeclarableFunction)
                     {
-                        _codeBuilder.AppendIndent("virtual " + GetCLRTypeName(f) + " On" + f.CLRName);
+                        _codeBuilder.Append("virtual " + GetCLRTypeName(f) + " On" + f.CLRName);
                         AddMethodParameters(f);
                         _codeBuilder.Append(" = " + GetNativeDirectorReceiverInterfaceName(cls) + "::" + f.CLRName + "\n");
                         _codeBuilder.BeginBlock();
-                        _codeBuilder.AppendIndent("");
                         if (f.MemberTypeName != "void")
                             _codeBuilder.Append("return ");
                         _codeBuilder.Append(f.CLRName + "(");
@@ -453,7 +451,7 @@ namespace AutoWrap.Meta
                         _codeBuilder.DecreaseIndent();
                         _codeBuilder.AppendLine("private:");
                         _codeBuilder.IncreaseIndent();
-                        _codeBuilder.AppendIndent(GetCLRTypeName(f) + " raise");
+                        _codeBuilder.Append(GetCLRTypeName(f) + " raise");
                         AddMethodParameters(f);
                         _codeBuilder.AppendEmptyLine();
                         _codeBuilder.BeginBlock();
@@ -467,7 +465,7 @@ namespace AutoWrap.Meta
                             _codeBuilder.AppendLine(f.MemberType.FullyQualifiedCLRName + " mp_return;");
                             _codeBuilder.AppendLine("for (int i=0; i < " + list + "->Length; i++)");
                             _codeBuilder.BeginBlock();
-                            _codeBuilder.AppendIndent("mp_return = " + "static_cast<" + handler + ">(" + list + "[i])(");
+                            _codeBuilder.Append("mp_return = " + "static_cast<" + handler + ">(" + list + "[i])(");
                             for (int i = 0; i < f.Parameters.Count; i++)
                             {
                                 ParamDefinition param = f.Parameters[i];
@@ -484,7 +482,7 @@ namespace AutoWrap.Meta
                         else
                         {
                             _codeBuilder.AppendLine("if (" + privField + ")");
-                            _codeBuilder.AppendIndent("\t");
+                            _codeBuilder.Append("\t");
                             if (f.MemberTypeName != "void")
                                 _codeBuilder.Append("return ");
                             _codeBuilder.Append(privField + "->Invoke(");
@@ -523,7 +521,6 @@ namespace AutoWrap.Meta
         protected override void GenerateCodeStaticField(MemberFieldDefinition field)
         {
             base.GenerateCodeStaticField(field);
-            _codeBuilder.AppendIndent("");
             if (field.IsConst)
                 _codeBuilder.Append("const ");
             if (field.IsStatic)
@@ -581,7 +578,6 @@ namespace AutoWrap.Meta
                 _codeBuilder.AppendLine("//Cached fields");
                 foreach (MemberDefinitionBase m in _cachedMembers)
                 {
-                    _codeBuilder.AppendIndent("");
                     if (m.IsStatic)
                     {
                         _codeBuilder.Append("static ");
@@ -659,7 +655,6 @@ namespace AutoWrap.Meta
             if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                 AddMethodIndexAttribute(f);
 
-            _codeBuilder.AppendIndent("");
             if (f.IsStatic)
                 _codeBuilder.Append("static ");
             if (methodIsVirtual)
@@ -686,7 +681,6 @@ namespace AutoWrap.Meta
                         continue;
 
                     AddComments(f);
-                    _codeBuilder.AppendIndent("");
                     if (f.IsStatic)
                         _codeBuilder.Append("static ");
                     _codeBuilder.Append(GetCLRTypeName(f) + " " + f.CLRName);
@@ -726,7 +720,7 @@ namespace AutoWrap.Meta
             //TODO comments for properties
             //AddComments(p);
             string ptype = GetCLRTypeName(p);
-            _codeBuilder.AppendFormatIndent("property {0} {1}\n", ptype, p.Name);
+            _codeBuilder.Append("property {0} {1}\n", ptype, p.Name);
             _codeBuilder.BeginBlock();
             if (p.CanRead)
             {
@@ -744,7 +738,6 @@ namespace AutoWrap.Meta
                         AddMethodIndexAttribute(f);
                     }
 
-                    _codeBuilder.AppendIndent("");
                     if (p.GetterFunction.IsStatic)
                         _codeBuilder.Append("static ");
                     if (methodIsVirtual)
@@ -777,7 +770,6 @@ namespace AutoWrap.Meta
                         AddMethodIndexAttribute(f);
                     }
 
-                    _codeBuilder.AppendIndent("");
                     if (p.SetterFunction.IsStatic)
                         _codeBuilder.Append("static ");
                     if (methodIsVirtual)
@@ -823,10 +815,9 @@ namespace AutoWrap.Meta
                     }
 
                     ptype = tmpParam.MemberTypeCLRName;
-                    _codeBuilder.AppendIndent("");
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
-                    _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
+                    _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
                     _codeBuilder.BeginBlock();
 
                     _codeBuilder.DecreaseIndent();
@@ -839,10 +830,9 @@ namespace AutoWrap.Meta
                 else
                 {
                     ptype = field.MemberTypeCLRName;
-                    _codeBuilder.AppendIndent("");
                     if (field.IsStatic)
                         _codeBuilder.Append("static ");
-                    _codeBuilder.AppendFormat("property {0} {1}[int]\n", ptype, field.NativeName);
+                    _codeBuilder.Append("property {0} {1}[int]\n", ptype, field.NativeName);
                     _codeBuilder.BeginBlock();
 
                     _codeBuilder.DecreaseIndent();
@@ -857,10 +847,9 @@ namespace AutoWrap.Meta
             else if (_cachedMembers.Contains(field))
             {
                 ptype = field.MemberTypeCLRName;
-                _codeBuilder.AppendIndent("");
                 if (field.IsStatic)
                     _codeBuilder.Append("static ");
-                _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
+                _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
                 _codeBuilder.BeginBlock();
 
                 _codeBuilder.DecreaseIndent();
@@ -873,16 +862,15 @@ namespace AutoWrap.Meta
             else
             {
                 ptype = GetCLRTypeName(field);
-                _codeBuilder.AppendIndent("");
                 if (field.IsStatic)
                     _codeBuilder.Append("static ");
                 if (field.HasAttribute<RenameAttribute>())
                 {
-                    _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.GetAttribute<RenameAttribute>().Name);
+                    _codeBuilder.Append("property {0} {1}\n", ptype, field.GetAttribute<RenameAttribute>().Name);
                 }
                 else
                 {
-                    _codeBuilder.AppendFormat("property {0} {1}\n", ptype, field.NativeName);
+                    _codeBuilder.Append("property {0} {1}\n", ptype, field.NativeName);
                 }
                 _codeBuilder.BeginBlock();
 

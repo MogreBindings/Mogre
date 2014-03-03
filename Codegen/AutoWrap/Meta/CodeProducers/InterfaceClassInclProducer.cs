@@ -77,7 +77,6 @@ namespace AutoWrap.Meta
 
         protected override void AddDefinition()
         {
-            _codeBuilder.AppendIndent("");
             if (!_classDefinition.IsNested)
                 _codeBuilder.Append("public ");
             else

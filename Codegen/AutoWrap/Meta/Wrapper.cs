@@ -519,7 +519,7 @@ namespace AutoWrap.Meta
 
             IncAddIncludeFiles(includeFile, _usedTypes, sb);
 
-            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
@@ -574,7 +574,7 @@ namespace AutoWrap.Meta
 
             CppAddIncludeFiles(includeFileName, _usedTypes, contentsb);
 
-            contentsb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
+            contentsb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
 
             contentsb.BeginBlock();
             contentsb.AppendLine(content);
@@ -620,7 +620,7 @@ namespace AutoWrap.Meta
             SourceCodeStringBuilder sb = new SourceCodeStringBuilder(_metaDef.CodeStyleDef);
             sb.AppendLine("#pragma once\n");
 
-            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
             sb.AppendLine(sbTypes.ToString());
@@ -636,7 +636,7 @@ namespace AutoWrap.Meta
             sb.AppendLine("#include \"MogreStableHeaders.h\"");
             sb.AppendLine("#include \"Subclass" + type.Name + ".h\"\n");
 
-            sb.AppendFormat("namespace {0}\n", _metaDef.ManagedNamespace);
+            sb.Append("namespace {0}\n", _metaDef.ManagedNamespace);
 
             sb.BeginBlock();
 
@@ -830,7 +830,6 @@ namespace AutoWrap.Meta
             if (enm.HasAttribute<FlagsEnumAttribute>())
                 sb.AppendLine("[Flags]");
 
-            sb.AppendIndent("");
             if (!enm.IsNested)
                 sb.Append("public ");
             else
@@ -846,7 +845,6 @@ namespace AutoWrap.Meta
             for (int i = 0; i < enm.CLREnumValues.Length; i++)
             {
                 string value = enm.NativeEnumValues[i];
-                sb.AppendIndent("");
                 //if (inProtectedTypesProxy)
                 //{
                 //    value = enm.ParentFullNativeName + "::" + enm.CLREnumValues[i];
@@ -887,11 +885,11 @@ namespace AutoWrap.Meta
             if (!type.IsNested)
             {
                 _preDeclarations.Add("ref class " + type.Name + ";");
-                sb.AppendIndent("public ");
+                sb.Append("public ");
             }
             else
             {
-                sb.AppendIndent(type.ProtectionLevel.GetCLRProtectionName() + ": ");
+                sb.Append(type.ProtectionLevel.GetCLRProtectionName() + ": ");
             }
 
             sb.Append("ref class " + type.Name + " : public " + baseClass + "\n");
@@ -1109,7 +1107,6 @@ namespace AutoWrap.Meta
                 CheckTypeForDependancy(t.TypeParams[1].ParamType);
             }
 
-            sb.AppendIndent("");
             string publicprot, privateprot;
             if (!t.IsNested)
             {
@@ -1188,7 +1185,7 @@ namespace AutoWrap.Meta
                 CppCheckTypeForDependancy(t.TypeParams[1].ParamType);
             }
 
-            sb.AppendIndent("CPP_DECLARE_STL" + t.STLContainer.ToUpper());
+            sb.Append("CPP_DECLARE_STL" + t.STLContainer.ToUpper());
 
             if (t.IsReadOnly)
                 sb.Append("_READONLY");
@@ -1251,7 +1248,7 @@ namespace AutoWrap.Meta
             if (t.IsMapIterator)
                 CheckTypeForDependancy(t.IterationKeyTypeMember.MemberType);
 
-            sb.AppendIndent(t.ProtectionLevel.GetCLRProtectionName());
+            sb.Append(t.ProtectionLevel.GetCLRProtectionName());
             if (t.IsNested)
                 sb.Append(":");
 
@@ -1329,7 +1326,6 @@ namespace AutoWrap.Meta
 
         public void IncAddInternalTypeDef(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
-            sb.AppendIndent("");
             if (t.IsNested)
                 sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.FullyQualifiedNativeName + " " + t.CLRName + ";\n\n");
@@ -1337,7 +1333,6 @@ namespace AutoWrap.Meta
 
         public void IncAddValueTypeTypeDef(TypedefDefinition t, SourceCodeStringBuilder sb)
         {
-            sb.AppendIndent("");
             if (t.IsNested)
                 sb.Append(t.ProtectionLevel.GetCLRProtectionName() + ": ");
             sb.Append("typedef " + t.BaseType.FullyQualifiedCLRName + " " + t.CLRName + ";\n\n");
@@ -1345,9 +1340,9 @@ namespace AutoWrap.Meta
 
         private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
-            sb.AppendFormat("#pragma managed(push, off)\n", include);
-            sb.AppendFormat("#include \"{0}\"\n", include);
-            sb.AppendFormat("#pragma managed(pop)\n", include);
+            sb.Append("#pragma managed(push, off)\n", include);
+            sb.Append("#include \"{0}\"\n", include);
+            sb.Append("#pragma managed(pop)\n", include);
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)
@@ -1368,7 +1363,7 @@ namespace AutoWrap.Meta
         private void CppAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
             sb.AppendLine("#include \"MogreStableHeaders.h\"\n");
-            sb.AppendFormat("#include \"{0}\"\n", GetCLRIncludeFileName(include));
+            sb.Append("#include \"{0}\"\n", GetCLRIncludeFileName(include));
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)

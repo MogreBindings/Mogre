@@ -66,12 +66,12 @@ namespace AutoWrap.Meta
         protected virtual void AddManagedNativeConversionsDefinition()
         {
             if (_classDefinition.Name == _classDefinition.CLRName)
-                _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
+                _codeBuilder.Append("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER( {0} )\n", GetClassName());
             else
             {
                 string clrName = _classDefinition.FullyQualifiedCLRName.Substring(_classDefinition.FullyQualifiedCLRName.IndexOf("::") + 2);
                 string nativeName = _classDefinition.FullyQualifiedNativeName.Substring(_classDefinition.FullyQualifiedNativeName.IndexOf("::") + 2);
-                _codeBuilder.AppendFormatIndent("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
+                _codeBuilder.Append("DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_PLAINWRAPPER_EXPLICIT( {0}, {1} )\n", clrName, nativeName);
             }
         }
 
@@ -81,12 +81,12 @@ namespace AutoWrap.Meta
 
             if (_classDefinition.BaseClass == null)
             {
-                _codeBuilder.AppendFormatIndent("{0}( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _classDefinition.CLRName);
+                _codeBuilder.Append("{0}( " + _classDefinition.FullyQualifiedNativeName + "* obj ) : _native(obj), _createdByCLR(false)\n", _classDefinition.CLRName);
             }
             else
             {
                 ClassDefinition topclass = GetTopClass(_classDefinition);
-                _codeBuilder.AppendFormatIndent("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _classDefinition.CLRName);
+                _codeBuilder.Append("{0}( " + topclass.FullyQualifiedNativeName + "* obj ) : " + topclass.CLRName + "(obj)\n", _classDefinition.CLRName);
             }
             _codeBuilder.BeginBlock();
 

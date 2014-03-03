@@ -55,7 +55,7 @@ namespace AutoWrap.Meta
                 string className = GetClassName() + "_Default";
                 foreach (MemberMethodDefinition f in _abstractFunctions)
                 {
-                    _codeBuilder.AppendIndent(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
+                    _codeBuilder.Append(GetCLRTypeName(f) + " " + className + "::" + f.CLRName);
                     AddMethodParameters(f, f.Parameters.Count);
                     _codeBuilder.AppendEmptyLine();
                     _codeBuilder.BeginBlock();
