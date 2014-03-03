@@ -286,9 +286,8 @@ namespace AutoWrap.Meta
                 string cppFile = _sourcePath + "\\" + baseFileName + ".cpp";
 
                 // Header file
-                builder.Clear();
-                builder.Append(GenerateIncludeFileCodeForIncludeFile(includeFile));
-                WriteToFile(incFile, builder.ToString(), true);
+                string header = GenerateIncludeFileCodeForIncludeFile(includeFile);
+                WriteToFile(incFile, header, true);
 
                 // Source file
                 string content = GenerateCppFileCodeForIncludeFile(includeFile);
