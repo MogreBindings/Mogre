@@ -1368,9 +1368,11 @@ namespace AutoWrap.Meta
 
         private void IncAddIncludeFiles(string include, List<AbstractTypeDefinition> usedTypes, SourceCodeStringBuilder sb)
         {
+            sb.AppendLine("#pragma warning(push, 0)");
             sb.AppendLine("#pragma managed(push, off)");
             sb.AppendLine("#include \"{0}\"", include);
             sb.AppendLine("#pragma managed(pop)");
+            sb.AppendLine("#pragma warning(pop)");
             List<string> added = new List<string>();
 
             foreach (AbstractTypeDefinition type in usedTypes)
