@@ -94,6 +94,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -110,6 +111,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -125,6 +127,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -140,6 +143,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>MogreStableHeaders.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -147,6 +151,31 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <Target Name="XdcPrune" BeforeTargets="XdcMake">
+    <PropertyGroup>
+      <XslPrune>
+        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+          <xsl:output method="xml" indent="yes" />
+          <xsl:strip-space elements="*" />
+          <xsl:template match="@*|node()" name="identity">
+            <xsl:copy>
+              <xsl:apply-templates select="@*|node()" />
+            </xsl:copy>
+          </xsl:template>
+          <xsl:template match="member">
+            <xsl:if test="substring(@name,2,6)=':Mogre'">
+              <xsl:copy>
+                <xsl:apply-templates select="@*|node()" />
+              </xsl:copy>
+            </xsl:if>
+          </xsl:template>
+          <xsl:template match="comment()" />
+        </xsl:stylesheet>
+      </XslPrune>
+    </PropertyGroup>
+    <XslTransformation XmlInputPaths="@(XdcMake)" OutputPaths="@(XdcMake->'%(FullPath).tmp')" XslContent="$(XslPrune)" />
+    <Move SourceFiles="@(XdcMake->'%(FullPath).tmp')" DestinationFiles="@(XdcMake)" />
+  </Target>
   <ItemGroup>
     <Reference Include="System">
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
