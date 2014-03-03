@@ -140,6 +140,19 @@ namespace AutoWrap.Meta
             }
         }
 
+        public virtual string Summary
+        {
+            get
+            {
+                XmlNode node = DefiningXmlElement["summary"];
+                if (node != null)
+                {
+                    return node.InnerXml.Trim();
+                }
+                return null;
+            }
+        }
+
         /// <summary>
         /// The namespace this type is defined in. Is never <c>null</c>.
         /// </summary>

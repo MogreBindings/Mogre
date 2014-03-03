@@ -1114,6 +1114,10 @@ namespace AutoWrap.Meta
                         BaseClassesNames = ilist.ToArray();
                         break;
 
+                    case "summary":
+                        //This is interpreted in the base.
+                        break;
+
                     default:
                         AbstractTypeDefinition type = MetaDef.Factory.CreateType(Namespace, this, child);
                         NestedTypes.Add(type);

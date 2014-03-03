@@ -129,21 +129,48 @@ namespace AutoWrap.Meta
             }
         }
 
+        private string[] _CLREnumSummaries;
+
+        public string[] CLREnumSummaries
+        {
+            get
+            {
+                if (_CLREnumSummaries == null)
+                    FillEnumValues();
+
+                return _CLREnumSummaries;
+            }
+        }
+
         private void FillEnumValues()
         {
-            _nativeEnumValues = new string[DefiningXmlElement.ChildNodes.Count];
-            _CLREnumValues = new string[DefiningXmlElement.ChildNodes.Count];
-
-            for (int i = 0; i < DefiningXmlElement.ChildNodes.Count; i++)
+            int count = DefiningXmlElement.ChildNodes.Count;
+            XmlNode node = DefiningXmlElement["summary"];
+            if (node != null)
             {
+                count--;
+            }
+            _nativeEnumValues = new string[count];
+            _CLREnumValues = new string[count];
+            _CLREnumSummaries = new string[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                XmlElement element = DefiningXmlElement.ChildNodes[i] as XmlElement;
                 string parentName = FullyQualifiedNativeName;
                 parentName = parentName.Substring(0, parentName.LastIndexOf("::"));
-                string nativeName = (DefiningXmlElement.ChildNodes[i] as XmlElement).GetAttribute("name");
+                string nativeName = element.GetAttribute("name");
                 //if (ProtectionType == ProtectionType.Protected)
                 //    nativeName = "PUBLIC_" + nativeName;
 
                 _nativeEnumValues[i] = parentName + "::" + nativeName;
-                _CLREnumValues[i] = (DefiningXmlElement.ChildNodes[i] as XmlElement).GetAttribute("name");
+                _CLREnumValues[i] = element.GetAttribute("name");
+
+                node = element["summary"];
+                if (node != null)
+                {
+                    _CLREnumSummaries[i] = node.InnerXml.Trim();
+                }
             }
         }
 

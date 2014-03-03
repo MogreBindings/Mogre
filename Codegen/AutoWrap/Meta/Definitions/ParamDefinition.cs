@@ -174,8 +174,9 @@ namespace AutoWrap.Meta
             {
                 if (_name == null)
                 {
-                    if (_elem.ChildNodes.Count > 1)
-                        _name = _elem.ChildNodes[1].InnerText;
+                    XmlNode node = _elem["name"];
+                    if (node != null)
+                        _name = node.InnerText;
                 }
 
                 return _name;
@@ -187,10 +188,23 @@ namespace AutoWrap.Meta
         {
             get
             {
-                if (_elem.ChildNodes.Count < 3)
+                XmlNode node = _elem["defval"];
+                if (node == null)
                     return null;
 
-                return _elem.ChildNodes[2].InnerText.Replace("\n", "").Trim();
+                return node.InnerText.Replace("\n", "").Trim();
+            }
+        }
+
+        public string Summary
+        {
+            get
+            {
+                XmlNode node = _elem["summary"];
+                if (node == null)
+                    return null;
+
+                return node.InnerXml.Trim();
             }
         }
 

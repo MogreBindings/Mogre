@@ -826,6 +826,14 @@ namespace AutoWrap.Meta
             if (enm.Name[0] == '@')
                 return;
 
+            string summary = enm.Summary;
+            if (!String.IsNullOrEmpty(summary))
+            {
+                sb.AppendLine("/**");
+                sb.AppendLine("<summary>{0}</summary>", summary);
+                sb.AppendLine("*/");
+            }
+
             if (enm.HasAttribute<FlagsEnumAttribute>())
                 sb.AppendLine("[Flags]");
 
@@ -843,6 +851,11 @@ namespace AutoWrap.Meta
             sb.IncreaseIndent();
             for (int i = 0; i < enm.CLREnumValues.Length; i++)
             {
+                if (!String.IsNullOrEmpty(enm.CLREnumSummaries[i]))
+                {
+                    sb.AppendLine("///<summary>{0}</summary>", enm.CLREnumSummaries[i]);
+                }
+
                 string value = enm.NativeEnumValues[i];
                 //if (inProtectedTypesProxy)
                 //{

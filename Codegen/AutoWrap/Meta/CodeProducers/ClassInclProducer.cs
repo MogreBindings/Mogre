@@ -349,7 +349,7 @@ namespace AutoWrap.Meta
                     if (dc < defcount && hideParams)
                         continue;
 
-
+                    AddComments(function, function.Parameters.Count - dc);
                     _codeBuilder.Append(className);
                     AddMethodParameters(function, function.Parameters.Count - dc);
                     _codeBuilder.AppendLine(";");
@@ -413,6 +413,7 @@ namespace AutoWrap.Meta
                 {
                     if (f.IsDeclarableFunction)
                     {
+                        AddComments(f, 0);
                         string handler = cls.FullyQualifiedCLRName + "::" + f.CLRName + "Handler^";
                         string privField = NameToPrivate(f.NativeName);
                         string listener = NameToPrivate(cls.Name);
@@ -650,7 +651,7 @@ namespace AutoWrap.Meta
             bool methodIsVirtual = DeclareAsVirtual(f);
 
             // The main method
-            AddComments(f);
+            AddComments(f, f.Parameters.Count);
 
             if (AllowMethodIndexAttributes && f.IsVirtual && !f.IsAbstract)
                 AddMethodIndexAttribute(f);
@@ -680,7 +681,7 @@ namespace AutoWrap.Meta
                     if (dc < defcount && f.HasAttribute<HideParamsWithDefaultValuesAttribute>())
                         continue;
 
-                    AddComments(f);
+                    AddComments(f, f.Parameters.Count - dc);
                     if (f.IsStatic)
                         _codeBuilder.Append("static ");
                     _codeBuilder.Append(GetCLRTypeName(f) + " " + f.CLRName);
@@ -717,8 +718,7 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodeProperty(MemberPropertyDefinition p)
         {
-            //TODO comments for properties
-            //AddComments(p);
+            AddComments(p);
             string ptype = GetCLRTypeName(p);
             _codeBuilder.AppendLine("property {0} {1}", ptype, p.Name);
             _codeBuilder.BeginBlock();
@@ -791,8 +791,7 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
-            //TODO comments for fields
-            //AddComments(field);
+            AddComments(field);
 
             string ptype;
 
@@ -902,12 +901,88 @@ namespace AutoWrap.Meta
 
         protected virtual void AddComments()
         {
-            //TODO
+            string summary = _classDefinition.Summary;
+            if (!String.IsNullOrEmpty(summary))
+            {
+                _codeBuilder.AppendLine("/**");
+                _codeBuilder.AppendLine("<summary>{0}</summary>", summary);
+                _codeBuilder.AppendLine("*/");
+            }
         }
 
-        protected virtual void AddComments(MemberMethodDefinition f)
+        protected virtual void AddComments(MemberMethodDefinition f, int count)
         {
-            //TODO
+            if (!String.IsNullOrEmpty(f.Summary))
+            {
+                _codeBuilder.AppendLine("/**");
+                _codeBuilder.AppendLine("<summary>{0}</summary>", f.Summary);
+                for (int i = 0; i < count; i++)
+                {
+                    ParamDefinition param = f.Parameters[i];
+                    if (!String.IsNullOrEmpty(param.Summary))
+                    {
+                        _codeBuilder.AppendLine("<param name=\"{0}\">{1}</param>", param.Name, param.Summary);
+                    }
+                }
+                _codeBuilder.AppendLine("*/");
+            }
+        }
+
+        protected virtual void AddComments(MemberPropertyDefinition p)
+        {
+            if (p.CanRead && !String.IsNullOrEmpty(p.GetterFunction.Summary))
+            {
+                _codeBuilder.AppendLine("/**");
+                _codeBuilder.Append("<summary>");
+                string getsummary = p.GetterFunction.Summary;
+                if (p.CanWrite)
+                {
+                    string setsummary = p.SetterFunction.Summary;
+
+                    if (getsummary.StartsWith("Get", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _codeBuilder.Append("Gets or Sets");
+                        _codeBuilder.Append(getsummary.Substring(getsummary.IndexOf(' ')));
+                    }
+                    else if (setsummary != null && setsummary.StartsWith("Set", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _codeBuilder.Append("Gets or Sets");
+                        _codeBuilder.Append(setsummary.Substring(setsummary.IndexOf(' ')));
+                    }
+                    else if (getsummary.StartsWith("Returns true ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _codeBuilder.Append("Gets or Sets");
+                        _codeBuilder.Append(getsummary.Substring(12));
+                    }
+                    else if (getsummary.StartsWith("Retrieve", StringComparison.OrdinalIgnoreCase) ||
+                        getsummary.StartsWith("Return", StringComparison.OrdinalIgnoreCase) ||
+                        getsummary.StartsWith("Determine", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _codeBuilder.Append("Gets or Sets");
+                        _codeBuilder.Append(getsummary.Substring(getsummary.IndexOf(' ')));
+                    }
+                    else
+                    {
+                        _codeBuilder.Append(getsummary);
+                    }
+                }
+                else
+                {
+                    _codeBuilder.Append(getsummary);
+                }
+                _codeBuilder.AppendLine("</summary>");
+                _codeBuilder.AppendLine("*/");
+            }
+        }
+
+        protected virtual void AddComments(MemberFieldDefinition f)
+        {
+            if (!String.IsNullOrEmpty(f.Summary))
+            {
+                _codeBuilder.AppendLine("/**");
+                _codeBuilder.AppendLine("<summary>{0}</summary>", f.Summary);
+                _codeBuilder.AppendLine("*/");
+            }
         }
 
         protected override void GenerateCodePredefinedMethods(PredefinedMethods pm)

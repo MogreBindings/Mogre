@@ -94,8 +94,7 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
-            //TODO comments for fields
-            //AddComments(field);
+            AddComments(field);
 
             if (IsReadOnly)
             {

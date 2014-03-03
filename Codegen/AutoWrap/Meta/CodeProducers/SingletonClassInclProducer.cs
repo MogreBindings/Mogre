@@ -100,6 +100,10 @@ namespace AutoWrap.Meta
 
         protected override void AddPublicFields()
         {
+            _codeBuilder.AppendLine("/**");
+            _codeBuilder.AppendLine("<summary>Gets the global instance of {0}.</summary>", _classDefinition.CLRName);
+            _codeBuilder.AppendLine("*/");
+
             _codeBuilder.AppendLine("static property " + _classDefinition.CLRName + "^ Singleton");
             _codeBuilder.BeginBlock();
             _codeBuilder.AppendLine(_classDefinition.CLRName + "^ get()");

@@ -52,6 +52,15 @@ namespace AutoWrap.Meta
             get { return this.GetRenameName(); }
         }
 
+        private readonly string _summary;
+        public virtual string Summary
+        {
+            get
+            {
+                return _summary;
+            }
+        }
+
         public virtual bool IsIgnored
         {
             get
@@ -173,6 +182,10 @@ namespace AutoWrap.Meta
 
                     case "definition":
                         Definition = child.InnerText;
+                        break;
+
+                    case "summary":
+                        _summary = child.InnerXml.Trim();
                         break;
 
                     default:

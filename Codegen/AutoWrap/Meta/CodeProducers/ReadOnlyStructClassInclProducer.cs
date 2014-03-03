@@ -91,8 +91,7 @@ namespace AutoWrap.Meta
 
         protected override void GenerateCodePropertyField(MemberFieldDefinition field)
         {
-            //TODO comments for fields
-            //AddComments(field);
+            AddComments(field);
             string ptype = GetCLRTypeName(field);
             _codeBuilder.AppendLine("property {0} {1}", ptype, CodeStyleDefinition.ToCamelCase(field.NativeName));
             _codeBuilder.BeginBlock();

@@ -108,6 +108,9 @@
 				<xsl:attribute name="name">
 					<xsl:value-of select="$name"/>
 				</xsl:attribute>
+				<xsl:element name="summary">
+					<xsl:value-of select="normalize-space(briefdescription)"/>
+				</xsl:element>
 				<!-- cursor on doxygen/compounddef[@kind="class"] -->
 				<!-- derivation -->
 				<xsl:call-template name="derivation">
@@ -277,8 +280,18 @@
 						<xsl:attribute name="name">
 							<xsl:value-of select="name"/>
 						</xsl:attribute>
+						<xsl:if test="normalize-space(briefdescription)!=''">
+							<xsl:element name="summary">
+								<xsl:value-of select="normalize-space(briefdescription)"/>
+							</xsl:element>
+						</xsl:if>
 					</xsl:element>
 				</xsl:for-each>
+				<xsl:if test="normalize-space(briefdescription)!=''">
+					<xsl:element name="summary">
+						<xsl:value-of select="normalize-space(briefdescription)"/>
+					</xsl:element>
+				</xsl:if>
 			</xsl:element>
 		</xsl:for-each>
 	</xsl:template>
@@ -465,6 +478,9 @@
 				<xsl:value-of select="../includes"/>
 			</xsl:attribute>
 			
+			<xsl:element name="summary">
+				<xsl:value-of select="normalize-space(briefdescription)"/>
+			</xsl:element>
 			
 			<!-- struct attributes -->
 			<xsl:for-each select="memberdef[@kind='variable']">
@@ -566,6 +582,11 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:element>
+							<xsl:if test="normalize-space(briefdescription)!=''">
+								<xsl:element name="summary">
+									<xsl:value-of select="normalize-space(briefdescription)"/>
+								</xsl:element>
+							</xsl:if>
 							<!-- parameter of the function -->
 							<xsl:if test="param/type!='' or param/declname!=''">
 								<xsl:element name="parameters">
@@ -578,7 +599,13 @@
 													<xsl:value-of select="defval"/>
 												</xsl:element>
 											</xsl:if>
-											
+											<xsl:variable name="paramname" select="declname"/>
+											<xsl:variable name="paramsummary" select="normalize-space(../detaileddescription//parameteritem[parameternamelist/parametername=$paramname]/parameterdescription)"/>
+											<xsl:if test="$paramsummary!=''">
+												<xsl:element name="summary">
+													<xsl:value-of select="$paramsummary"/>
+												</xsl:element>
+											</xsl:if>
 										</xsl:element>
 									</xsl:for-each>
 								</xsl:element>
@@ -827,6 +854,11 @@
 					<xsl:element name="name">
 						<xsl:value-of select="name"/>
 					</xsl:element>
+					<xsl:if test="normalize-space(briefdescription)!=''">
+						<xsl:element name="summary">
+							<xsl:value-of select="normalize-space(briefdescription)"/>
+						</xsl:element>
+					</xsl:if>					
 				</xsl:element>
 			</xsl:if>
 		</xsl:for-each>
