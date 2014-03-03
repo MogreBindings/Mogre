@@ -37,66 +37,65 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-    /** A sphere primitive, mostly used for bounds checking. 
-    @remarks
-        A sphere in math texts is normally represented by the function
-        x^2 + y^2 + z^2 = r^2 (for sphere's centered on the origin). Ogre stores spheres
-        simply as a center point and a radius.
+    /** <summary>A sphere primitive, mostly used for bounds checking.</summary>
+    <remarks>
+    A sphere in math texts is normally represented by the function
+    x^2 + y^2 + z^2 = r^2 (for sphere's centered on the origin). Ogre stores spheres
+    simply as a center point and a radius.
+    </remarks>
     */
-	[Serializable]
+    [Serializable]
     public value class Sphere
     {
     protected:
         Real mRadius;
         Vector3 mCenter;
     public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Sphere )
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Sphere )
 
-        /** Constructor allowing arbitrary spheres. 
-            @param center The center point of the sphere.
-            @param radius The radius of the sphere.
+        /** <summary>Constructor allowing arbitrary spheres.</summary>
+        <param name="center">The center point of the sphere.</param>
+        <param name="radius">The radius of the sphere.</param>
         */
         Sphere(Vector3 center, Real radius)
-            : mRadius(radius), mCenter(center) {}
+        : mRadius(radius), mCenter(center) {}
 
-        /** Returns the radius of the sphere. */
-		property Real Radius
-		{
-			Real get() { return mRadius; }
-			void set(Real radius) { mRadius = radius; }
-		}
+        /** <summary>Gets or Sets the radius of the sphere.</summary> */
+        property Real Radius
+        {
+            Real get() { return mRadius; }
+            void set(Real radius) { mRadius = radius; }
+        }
 
-		property Vector3 Center
-		{
-			/** Returns the center point of the sphere. */
-			Vector3 get() { return mCenter; }
+        /** <summary>Gets or Sets the center point of the sphere.</summary> */
+        property Vector3 Center
+        {
+            Vector3 get() { return mCenter; }
+            void set(Vector3 center) { mCenter = center; }
+        }
 
-			/** Sets the center point of the sphere. */
-			void set(Vector3 center) { mCenter = center; }
-		}
+        /** <summary>Returns whether or not this sphere interects another sphere.</summary> */
+        bool Intersects(Sphere s)
+        {
+            return (s.mCenter - mCenter).Length <=
+                (s.mRadius + mRadius);
+        }
+        /** <summary>Returns whether or not this sphere interects a box.</summary> */
+        bool Intersects(AxisAlignedBox^ box)
+        {
+            return Math::Intersects(*this, box);
+        }
+        /** <summary>Returns whether or not this sphere interects a plane.</summary> */
+        bool Intersects(Plane plane)
+        {
+            return Math::Intersects(*this, plane);
+        }
+        /** <summary>Returns whether or not this sphere interects a point.</summary> */
+        bool Intersects(Vector3 v)
+        {
+            return ((v - mCenter).Length <= mRadius);
+        }
 
-		/** Returns whether or not this sphere interects another sphere. */
-		bool Intersects(Sphere s)
-		{
-			return (s.mCenter - mCenter).Length <=
-				(s.mRadius + mRadius);
-		}
-		/** Returns whether or not this sphere interects a box. */
-		bool Intersects(AxisAlignedBox^ box)
-		{
-			return Math::Intersects(*this, box);
-		}
-		/** Returns whether or not this sphere interects a plane. */
-		bool Intersects(Plane plane)
-		{
-			return Math::Intersects(*this, plane);
-		}
-		/** Returns whether or not this sphere interects a point. */
-		bool Intersects(Vector3 v)
-		{
-			return ((v - mCenter).Length <= mRadius);
-		}
-        
 
     };
 }

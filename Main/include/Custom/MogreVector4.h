@@ -27,22 +27,24 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreVector4.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Custom\MogreVector3.h"
 
 namespace Mogre
 {
-    /** 4-dimensional homogenous vector.
+    /** <summary>4-dimensional homogenous vector.</summary>
     */
-	[Serializable]
-	public value class Vector4 : IEquatable<Vector4>
+    [Serializable]
+    public value class Vector4 : IEquatable<Vector4>
     {
     public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Vector4 )
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Vector4 )
 
-		Real x, y, z, w;
+        Real x, y, z, w;
 
         inline Vector4( Real fX, Real fY, Real fZ, Real fW )
             : x( fX ), y( fY ), z( fZ ), w( fW)
@@ -78,22 +80,22 @@ namespace Mogre
         {
         }
 
-		property Real default[int]
-		{
-			inline Real get(int i)
-			{
-				assert( i < 4 );
+        property Real default[int]
+        {
+            inline Real get(int i)
+            {
+                assert( i < 4 );
 
-				return *(&x+i);
-			}
+                return *(&x+i);
+            }
 
-			inline void set(int i, Real value)
-			{
-				assert( i < 4 );
+            inline void set(int i, Real value)
+            {
+                assert( i < 4 );
 
-				*(&x+i) = value;
-			}
-		}
+                *(&x+i) = value;
+            }
+        }
 
         inline static bool operator == ( Vector4 lvec, Vector4 rkVector )
         {
@@ -111,11 +113,11 @@ namespace Mogre
                 lvec.w != rkVector.w );
         }
 
-		virtual bool Equals(Vector4 other) { return *this == other; }
+        virtual bool Equals(Vector4 other) { return *this == other; }
 
         inline static operator Vector4 (Vector3 rhs)
         {
-			Vector4 vec;
+            Vector4 vec;
 
             vec.x = rhs.x;
             vec.y = rhs.y;
@@ -212,7 +214,6 @@ namespace Mogre
             return kDiv;
         }
 
-
         inline static Vector4 operator - (Vector4 vec)
         {
             Vector4 kNeg;
@@ -245,30 +246,27 @@ namespace Mogre
             return Vector4(lhs) - rhs;
         }
 
-        /** Calculates the dot (scalar) product of this vector with another.
-            @param
-                vec Vector with which to calculate the dot product (together
-                with this one).
-            @returns
-                A float representing the dot product value.
+        /** <summary>Calculates the dot (scalar) product of this vector with another.</summary>
+        <param name="vec">Vector with which to calculate the dot product (together
+        with this one).</param>
+        <returns>A float representing the dot product value.</returns>
         */
         inline Real DotProduct(Vector4 vec)
         {
             return x * vec.x + y * vec.y + z * vec.z + w * vec.w;
         }
-		/// Check whether this vector contains valid values
-		property bool IsNaN
-		{
-			inline bool get()
-			{
-				return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
-			}
-		}
-        /** Function for writing to a stream.
-        */
-		virtual System::String^ ToString() override
+        /// <summary>Check whether this vector contains valid values</summary>
+        property bool IsNaN
         {
-			return System::String::Format("Vector4({0}, {1}, {2}, {3})", x, y, z, w);
+            inline bool get()
+            {
+                return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
+            }
+        }
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
+        {
+            return System::String::Format("Vector4({0}, {1}, {2}, {3})", x, y, z, w);
         }
         // special
         static initonly Vector4 ZERO = Vector4(0, 0, 0, 0);

@@ -27,27 +27,30 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreVector2.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Custom\MogreMath.h"
 
 namespace Mogre
 {
-    /** Standard 2-dimensional vector.
-        @remarks
-            A direction in 2D space represented as distances along the 2
-            orthoganal axes (x, y). Note that positions, directions and
-            scaling factors can be represented by a vector, depending on how
-            you interpret the values.
+    /** <summary>Standard 2-dimensional vector.</summary>
+    <remarks>
+    A direction in 2D space represented as distances along the 2
+    orthoganal axes (x, y). Note that positions, directions and
+    scaling factors can be represented by a vector, depending on how
+    you interpret the values.
+    </remarks>
     */
-	[Serializable]
-	public value class Vector2 : IEquatable<Vector2>
+    [Serializable]
+    public value class Vector2 : IEquatable<Vector2>
     {
     public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Vector2 )
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Vector2 )
 
-		Real x, y;
+        Real x, y;
 
     public:
         inline Vector2(Real fX, Real fY )
@@ -77,22 +80,22 @@ namespace Mogre
         {
         }
 
-		property Real default[int]
-		{
-			inline Real get(int i)
-			{
-				assert( i < 2 );
+        property Real default[int]
+        {
+            inline Real get(int i)
+            {
+                assert( i < 2 );
 
-				return *(&x+i);
-			}
+                return *(&x+i);
+            }
 
-			inline void set(int i, Real value)
-			{
-				assert( i < 2 );
+            inline void set(int i, Real value)
+            {
+                assert( i < 2 );
 
-				*(&x+i) = value;
-			}
-		}
+                *(&x+i) = value;
+            }
+        }
 
         inline static bool operator == ( Vector2 lvec, Vector2 rkVector )
         {
@@ -104,9 +107,9 @@ namespace Mogre
             return ( lvec.x != rkVector.x || lvec.y != rkVector.y  );
         }
 
-		virtual bool Equals(Vector2 other) { return *this == other; }
+        virtual bool Equals(Vector2 other) { return *this == other; }
 
-		// arithmetic operations
+        // arithmetic operations
         inline static Vector2 operator + ( Vector2 lvec, Vector2 rkVector )
         {
             Vector2 kSum;
@@ -213,92 +216,101 @@ namespace Mogre
             return ret -= rhs;
         }
 
-        /** Returns the length (magnitude) of the vector.
-            @warning
-                This operation requires a square root and is expensive in
-                terms of CPU operations. If you don't need to know the exact
-                length (e.g. for just comparing lengths) use squaredLength()
-                instead.
+        /** <summary>Returns the length (magnitude) of the vector.</summary>
+        <remarks>
+        <note type="warning">
+        This operation requires a square root and is expensive in
+        terms of CPU operations. If you don't need to know the exact
+        length (e.g. for just comparing lengths) use squaredLength()
+        instead.
+        </note>
+        </remarks>
         */
-		property Real Length
-		{
-			inline Real get()
-			{
-				return System::Math::Sqrt( x * x + y * y );
-			}
-		}
+        property Real Length
+        {
+            inline Real get()
+            {
+                return System::Math::Sqrt( x * x + y * y );
+            }
+        }
 
-        /** Returns the square of the length(magnitude) of the vector.
-            @remarks
-                This  method is for efficiency - calculating the actual
-                length of a vector requires a square root, which is expensive
-                in terms of the operations required. This method returns the
-                square of the length of the vector, i.e. the same as the
-                length but before the square root is taken. Use this if you
-                want to find the longest / shortest vector without incurring
-                the square root.
+        /** <summary>Returns the square of the length(magnitude) of the vector.</summary>
+        <remarks>
+        This  method is for efficiency - calculating the actual
+        length of a vector requires a square root, which is expensive
+        in terms of the operations required. This method returns the
+        square of the length of the vector, i.e. the same as the
+        length but before the square root is taken. Use this if you
+        want to find the longest / shortest vector without incurring
+        the square root.
+        </remarks>
         */
-		property Real SquaredLength
-		{
-			inline Real get()
-			{
-				return x * x + y * y;
-			}
-		}
-        /** Returns the distance to another vector.
-            @warning
-                This operation requires a square root and is expensive in
-                terms of CPU operations. If you don't need to know the exact
-                distance (e.g. for just comparing distances) use squaredDistance()
-                instead.
+        property Real SquaredLength
+        {
+            inline Real get()
+            {
+                return x * x + y * y;
+            }
+        }
+        /** <summary>Returns the distance to another vector.</summary>
+        <remarks>
+        <note type="warning">
+        This operation requires a square root and is expensive in
+        terms of CPU operations. If you don't need to know the exact
+        distance (e.g. for just comparing distances) use squaredDistance()
+        instead.
+        </note>
+        </remarks>
         */
         inline Real Distance(Vector2 rhs)
         {
             return (*this - rhs).Length;
         }
 
-        /** Returns the square of the distance to another vector.
-            @remarks
-                This method is for efficiency - calculating the actual
-                distance to another vector requires a square root, which is
-                expensive in terms of the operations required. This method
-                returns the square of the distance to another vector, i.e.
-                the same as the distance but before the square root is taken.
-                Use this if you want to find the longest / shortest distance
-                without incurring the square root.
+        /** <summary>Returns the square of the distance to another vector.</summary>
+        <remarks>
+        This method is for efficiency - calculating the actual
+        distance to another vector requires a square root, which is
+        expensive in terms of the operations required. This method
+        returns the square of the distance to another vector, i.e.
+        the same as the distance but before the square root is taken.
+        Use this if you want to find the longest / shortest distance
+        without incurring the square root.
+        </remarks>
         */
         inline Real SquaredDistance(Vector2 rhs)
         {
             return (*this - rhs).SquaredLength;
         }
 
-        /** Calculates the dot (scalar) product of this vector with another.
-            @remarks
-                The dot product can be used to calculate the angle between 2
-                vectors. If both are unit vectors, the dot product is the
-                cosine of the angle; otherwise the dot product must be
-                divided by the product of the lengths of both vectors to get
-                the cosine of the angle. This result can further be used to
-                calculate the distance of a point from a plane.
-            @param
-                vec Vector with which to calculate the dot product (together
-                with this one).
-            @returns
-                A float representing the dot product value.
+        /** <summary>Calculates the dot (scalar) product of this vector with another.</summary>
+        <remarks>
+        The dot product can be used to calculate the angle between 2
+        vectors. If both are unit vectors, the dot product is the
+        cosine of the angle; otherwise the dot product must be
+        divided by the product of the lengths of both vectors to get
+        the cosine of the angle. This result can further be used to
+        calculate the distance of a point from a plane.
+        </remarks>
+        <param name="vec">Vector with which to calculate the dot product (together
+        with this one).</param>
+        <returns>A float representing the dot product value.</returns>
         */
         inline Real DotProduct(Vector2 vec)
         {
             return x * vec.x + y * vec.y;
         }
 
-        /** Normalises the vector.
-            @remarks
-                This method normalises the vector such that it's
-                length / magnitude is 1. The result is called a unit vector.
-            @note
-                This function will not crash for zero-sized vectors, but there
-                will be no changes made to their components.
-            @returns The previous length of the vector.
+        /** <summary>Normalises the vector.</summary>
+        <remarks>
+        This method normalises the vector such that it's
+        length / magnitude is 1. The result is called a unit vector.
+        <note>
+        This function will not crash for zero-sized vectors, but there
+        will be no changes made to their components.
+        </note>
+        </remarks>
+        <returns>The previous length of the vector.</returns>
         */
         inline Real Normalise()
         {
@@ -317,8 +329,8 @@ namespace Mogre
 
 
 
-        /** Returns a vector at a point half way between this and the passed
-            in vector.
+        /** <summary>Returns a vector at a point half way between this and the passed
+        in vector.</summary>
         */
         inline Vector2 MidPoint( Vector2 vec )
         {
@@ -327,8 +339,8 @@ namespace Mogre
                 ( y + vec.y ) * 0.5 );
         }
 
-        /** Returns true if the vector's scalar components are all greater
-            that the ones of the vector it is compared against.
+        /** <summary>Returns true if the vector's scalar components are all greater
+        that the ones of the vector it is compared against.</summary>
         */
         inline static bool operator < ( Vector2 lhs, Vector2 rhs )
         {
@@ -337,8 +349,8 @@ namespace Mogre
             return false;
         }
 
-        /** Returns true if the vector's scalar components are all smaller
-            that the ones of the vector it is compared against.
+        /** <summary>Returns true if the vector's scalar components are all smaller
+        that the ones of the vector it is compared against.</summary>
         */
         inline static bool operator > ( Vector2 lhs, Vector2 rhs )
         {
@@ -347,12 +359,13 @@ namespace Mogre
             return false;
         }
 
-        /** Sets this vector's components to the minimum of its own and the
-            ones of the passed in vector.
-            @remarks
-                'Minimum' in this case means the combination of the lowest
-                value of x, y and z from both vectors. Lowest is taken just
-                numerically, not magnitude, so -1 < 0.
+        /** <summary>Sets this vector's components to the minimum of its own and the
+        ones of the passed in vector.</summary>
+        <remarks>
+        'Minimum' in this case means the combination of the lowest
+        value of x, y and z from both vectors. Lowest is taken just
+        numerically, not magnitude, so -1 &lt; 0.
+        </remarks>
         */
         inline void MakeFloor( Vector2 cmp )
         {
@@ -360,12 +373,13 @@ namespace Mogre
             if( cmp.y < y ) y = cmp.y;
         }
 
-        /** Sets this vector's components to the maximum of its own and the
-            ones of the passed in vector.
-            @remarks
-                'Maximum' in this case means the combination of the highest
-                value of x, y and z from both vectors. Highest is taken just
-                numerically, not magnitude, so 1 > -3.
+        /** <summary>Sets this vector's components to the maximum of its own and the
+        ones of the passed in vector.</summary>
+        <remarks>
+        'Maximum' in this case means the combination of the highest
+        value of x, y and z from both vectors. Highest is taken just
+        numerically, not magnitude, so 1 &gt; -3.
+        </remarks>
         */
         inline void MakeCeil( Vector2 cmp )
         {
@@ -373,95 +387,90 @@ namespace Mogre
             if( cmp.y > y ) y = cmp.y;
         }
 
-        /** Generates a vector perpendicular to this vector (eg an 'up' vector).
-            @remarks
-                This method will return a vector which is perpendicular to this
-                vector. There are an infinite number of possibilities but this
-                method will guarantee to generate one of them. If you need more
-                control you should use the Quaternion class.
+        /** <summary>Generates a vector perpendicular to this vector (eg an 'up' vector).</summary>
+        <remarks>
+        This method will return a vector which is perpendicular to this
+        vector. There are an infinite number of possibilities but this
+        method will guarantee to generate one of them. If you need more
+        control you should use the Quaternion class.
+        </remarks>
         */
-		property Vector2 Perpendicular
-		{
-			inline Vector2 get()
-			{
-				return Vector2 (-y, x);
-			}
-		}
-        /** Calculates the 2 dimensional cross-product of 2 vectors, which results
-			in a single floating point value which is 2 times the area of the triangle.
+        property Vector2 Perpendicular
+        {
+            inline Vector2 get()
+            {
+                return Vector2 (-y, x);
+            }
+        }
+        /** <summary>Calculates the 2 dimensional cross-product of 2 vectors, which results
+        in a single floating point value which is 2 times the area of the triangle.</summary>
         */
         inline Real CrossProduct( Vector2 rkVector )
         {
             return x * rkVector.y - y * rkVector.x;
         }
-        /** Generates a new random vector which deviates from this vector by a
-            given angle in a random direction.
-            @remarks
-                This method assumes that the random number generator has already
-                been seeded appropriately.
-            @param
-                angle The angle at which to deviate in radians
-            @param
-                up Any vector perpendicular to this one (which could generated
-                by cross-product of this vector and any other non-colinear
-                vector). If you choose not to provide this the function will
-                derive one on it's own, however if you provide one yourself the
-                function will be faster (this allows you to reuse up vectors if
-                you call this method more than once)
-            @returns
-                A random vector which deviates from this vector by angle. This
-                vector will not be normalised, normalise it if you wish
-                afterwards.
+        /** <summary>Generates a new random vector which deviates from this vector by a
+        given angle in a random direction.</summary>
+        <remarks>
+        This method assumes that the random number generator has already
+        been seeded appropriately.
+        </remarks>
+        <param name="angle">The angle at which to deviate in radians</param>
+        <returns>
+        A random vector which deviates from this vector by angle. This
+        vector will not be normalised, normalise it if you wish
+        afterwards.
+        </returns>
         */
         inline Vector2 RandomDeviant(
             Real angle)
         {
 
             angle *=  Math::UnitRandom() * Math::TWO_PI;
-			Real cosa = System::Math::Cos(angle);
-			Real sina = System::Math::Sin(angle);
+            Real cosa = System::Math::Cos(angle);
+            Real sina = System::Math::Sin(angle);
             return  Vector2(cosa * x - sina * y,
-                            sina * x + cosa * y);
+                sina * x + cosa * y);
         }
 
-        /** Returns true if this vector is zero length. */
-		property bool IsZeroLength
-		{
-			inline bool get()
-			{
-				Real sqlen = (x * x) + (y * y);
-				return (sqlen < (1e-06 * 1e-06));
+        /** <summary>Returns true if this vector is zero length.</summary> */
+        property bool IsZeroLength
+        {
+            inline bool get()
+            {
+                Real sqlen = (x * x) + (y * y);
+                return (sqlen < (1e-06 * 1e-06));
 
-			}
-		}
+            }
+        }
 
-        /** As normalise, except that this vector is unaffected and the
-            normalised vector is returned as a copy. */
-		property Vector2 NormalisedCopy
-		{
-			inline Vector2 get()
-			{
-				Vector2 ret = *this;
-				ret.Normalise();
-				return ret;
-			}
-		}
+        /** <summary>As normalise, except that this vector is unaffected and the
+        normalised vector is returned as a copy.</summary> */
+        property Vector2 NormalisedCopy
+        {
+            inline Vector2 get()
+            {
+                Vector2 ret = *this;
+                ret.Normalise();
+                return ret;
+            }
+        }
 
-        /** Calculates a reflection vector to the plane with the given normal .
-        @remarks NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.
+        /** <summary>Calculates a reflection vector to the plane with the given normal .</summary>
+        <remarks> NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.</remarks>
         */
         inline Vector2 Reflect(Vector2 normal)
         {
             return Vector2( *this - ( 2 * this->DotProduct(normal) * normal ) );
         }
-		/// Check whether this vector contains valid values
-		property bool IsNaN
-		{
-			inline bool get()
-			{
-				return Real::IsNaN(x) || Real::IsNaN(y);
-			}
-		}
+        /// <summary>Check whether this vector contains valid values</summary>
+        property bool IsNaN
+        {
+            inline bool get()
+            {
+                return Real::IsNaN(x) || Real::IsNaN(y);
+            }
+        }
 
         // special points
         static initonly Vector2 ZERO = Vector2( 0, 0);
@@ -471,11 +480,10 @@ namespace Mogre
         static initonly Vector2 NEGATIVE_UNIT_Y = Vector2(  0, -1);
         static initonly Vector2 UNIT_SCALE = Vector2(1, 1);
 
-        /** Function for writing to a stream.
-        */
-		virtual System::String^ ToString() override
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
         {
-			return System::String::Format("Vector2({0}, {1})", x, y);
+            return System::String::Format("Vector2({0}, {1})", x, y);
         }
     };
 }

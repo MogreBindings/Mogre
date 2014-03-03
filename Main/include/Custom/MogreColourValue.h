@@ -27,24 +27,26 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreColourValue.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Prerequisites.h"
 
 namespace Mogre
 {
-	typedef Ogre::RGBA RGBA;
+    typedef Ogre::RGBA RGBA;
     typedef Ogre::ARGB ARGB;
     typedef Ogre::ABGR ABGR;
-	typedef Ogre::BGRA BGRA;
+    typedef Ogre::BGRA BGRA;
 
-	[Serializable]
-	[StructLayout(LayoutKind::Sequential)]
-	public value class ColourValue : IEquatable<ColourValue>
-	{
-	public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( ColourValue )
+    [Serializable]
+    [StructLayout(LayoutKind::Sequential)]
+    public value class ColourValue : IEquatable<ColourValue>
+    {
+    public:
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( ColourValue )
 
         static initonly ColourValue ZERO = ColourValue(0.0,0.0,0.0,0.0);
         static initonly ColourValue Black = ColourValue(0.0,0.0,0.0);
@@ -53,55 +55,55 @@ namespace Mogre
         static initonly ColourValue Green = ColourValue(0.0,1.0,0.0);
         static initonly ColourValue Blue = ColourValue(0.0,0.0,1.0);
 
-	    explicit ColourValue( float red,
-				    float green,
-				    float blue,
-				    float alpha ) : r(red), g(green), b(blue), a(alpha)
+        explicit ColourValue( float red,
+            float green,
+            float blue,
+            float alpha ) : r(red), g(green), b(blue), a(alpha)
         { }
-	    explicit ColourValue( float red,
-				    float green,
-				    float blue ) : r(red), g(green), b(blue), a(1.0f)
+        explicit ColourValue( float red,
+            float green,
+            float blue ) : r(red), g(green), b(blue), a(1.0f)
         { }
 
-	    static bool operator==(ColourValue lhs, ColourValue rhs);
-	    static bool operator!=(ColourValue lhs, ColourValue rhs);
+        static bool operator==(ColourValue lhs, ColourValue rhs);
+        static bool operator!=(ColourValue lhs, ColourValue rhs);
 
-		virtual bool Equals(ColourValue other) { return *this == other; }
+        virtual bool Equals(ColourValue other) { return *this == other; }
 
         float r,g,b,a;
 
-	    /** Retrieves colour as RGBA.
-	    */
-	    RGBA GetAsRGBA(void);
+        /** <summary>Retrieves colour as RGBA.</summary>
+        */
+        RGBA GetAsRGBA(void);
 
-	    /** Retrieves colour as ARGB.
-	    */
-	    ARGB GetAsARGB(void);
+        /** <summary>Retrieves colour as ARGB.</summary>
+        */
+        ARGB GetAsARGB(void);
 
-		/** Retrieves colour as BGRA.
-		*/
-		BGRA GetAsBGRA(void);
+        /** <summary>Retrieves colour as BGRA.</summary>
+        */
+        BGRA GetAsBGRA(void);
 
-		/** Retrieves colours as ABGR */
-	    ABGR GetAsABGR(void);
+        /** <summary>Retrieves colours as ABGR</summary> */
+        ABGR GetAsABGR(void);
 
-	    /** Sets colour as RGBA.
-	    */
+        /** <summary>Sets colour as RGBA.</summary>
+        */
         void SetAsRGBA(const RGBA val);
 
-	    /** Sets colour as ARGB.
-	    */
+        /** <summary>Sets colour as ARGB.</summary>
+        */
         void SetAsARGB(const ARGB val);
 
-		/** Sets colour as BGRA.
-		*/
-		void SetAsBGRA(const BGRA val);
+        /** <summary>Sets colour as BGRA.</summary>
+        */
+        void SetAsBGRA(const BGRA val);
 
-	    /** Sets colour as ABGR.
-	    */
+        /** <summary>Sets colour as ABGR.</summary>
+        */
         void SetAsABGR(const ABGR val);
 
-        /** Clamps colour value to the range [0, 1].
+        /** <summary>Clamps colour value to the range [0, 1].</summary>
         */
         void Saturate(void)
         {
@@ -126,8 +128,8 @@ namespace Mogre
                 a = 1;
         }
 
-        /** As saturate, except that this colour value is unaffected and
-            the saturated colour value is returned as a copy. */
+        /** <summary>As saturate, except that this colour value is unaffected and
+        the saturated colour value is returned as a copy.</summary> */
         ColourValue SaturateCopy(void)
         {
             ColourValue ret = *this;
@@ -223,25 +225,24 @@ namespace Mogre
             return kProd;
         }
 
-		/** Set a colour value from Hue, Saturation and Brightness.
-		@param hue Hue value, scaled to the [0,1] range as opposed to the 0-360
-		@param saturation Saturation level, [0,1]
-		@param brightness Brightness level, [0,1]
-		*/
-		void SetHSB(Real hue, Real saturation, Real brightness);
+        /** <summary>Set a colour value from Hue, Saturation and Brightness.</summary>
+        <param name="hue">Hue value, scaled to the [0,1] range as opposed to the 0-360</param>
+        <param name="saturation">Saturation level, [0,1]</param>
+        <param name="brightness">Brightness level, [0,1]</param>
+        */
+        void SetHSB(Real hue, Real saturation, Real brightness);
 
-		/** Convert the current colour to Hue, Saturation and Brightness values. 
-		@param hue Output hue value, scaled to the [0,1] range as opposed to the 0-360
-		@param saturation Output saturation level, [0,1]
-		@param brightness Output brightness level, [0,1]
-		*/
-		void GetHSB([Out] Real% hue, [Out] Real% saturation, [Out] Real% brightness);
+        /** <summary>Convert the current colour to Hue, Saturation and Brightness values.</summary>
+        <param name="hue">Output hue value, scaled to the [0,1] range as opposed to the 0-360</param>
+        <param name="saturation">Output saturation level, [0,1]</param>
+        <param name="brightness">Output brightness level, [0,1]</param>
+        */
+        void GetHSB([Out] Real% hue, [Out] Real% saturation, [Out] Real% brightness);
 
-		/** Function for writing to a stream.
-		*/
-		virtual System::String^ ToString() override
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
         {
-			return System::String::Format("ColourValue({0}, {1}, {2}, {3})", r, g, b, a);
+            return System::String::Format("ColourValue({0}, {1}, {2}, {3})", r, g, b, a);
         }
-	};
+    };
 }

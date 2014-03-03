@@ -53,123 +53,127 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-    /** A 3x3 matrix which can represent rotations around axes.
-        @note
-            <b>All the code is adapted from the Wild Magic 0.2 Matrix
-            library (http://www.geometrictools.com/).</b>
-        @par
-            The coordinate system is assumed to be <b>right-handed</b>.
+    /** <summary>A 3x3 matrix which can represent rotations around axes.</summary>
+    <remarks>
+    <note>
+    <b>All the code is adapted from the Wild Magic 0.2 Matrix
+    library (http://www.geometrictools.com/).</b>
+    </note>
+    <para>
+    The coordinate system is assumed to be <b>right-handed</b>.
+    </para>
+    </remarks>
     */
-	[Serializable]
-	[StructLayout(LayoutKind::Explicit)]
+    [Serializable]
+    [StructLayout(LayoutKind::Explicit)]
     public ref class Matrix3
     {
-	public:
-		[Serializable]
-		[StructLayout(LayoutKind::Sequential)]
-		value struct NativeValue
-		{
-			Real m00, m01, m02;
-			Real m10, m11, m12;
-			Real m20, m21, m22;
+    public:
+        [Serializable]
+        [StructLayout(LayoutKind::Sequential)]
+        value struct NativeValue
+        {
+            Real m00, m01, m02;
+            Real m10, m11, m12;
+            Real m20, m21, m22;
 
-			property Real default[int,int]
-			{
-				inline Real get(int row, int col)
-				{
-					return *(&m00 + ((3*row) + col)); 
-				}
+            property Real default[int,int]
+            {
+                inline Real get(int row, int col)
+                {
+                    return *(&m00 + ((3*row) + col)); 
+                }
 
-				inline void set (int row, int col, Real value)
-				{
-					*(&m00 + ((3*row) + col)) = value;
-				}
-			}
-		};
+                inline void set (int row, int col, Real value)
+                {
+                    *(&m00 + ((3*row) + col)) = value;
+                }
+            }
+        };
 
-		static operator Matrix3^ (const Ogre::Matrix3& matrix)
-		{
-			Matrix3^ mat = gcnew Matrix3;
-			pin_ptr<Real> pdest = &mat->m00;
-			memcpy(pdest,matrix[0],9*sizeof(Real));
-			return mat;
-		}
+        static operator Matrix3^ (const Ogre::Matrix3& matrix)
+        {
+            Matrix3^ mat = gcnew Matrix3;
+            pin_ptr<Real> pdest = &mat->m00;
+            memcpy(pdest,matrix[0],9*sizeof(Real));
+            return mat;
+        }
 
     public:
-		inline Matrix3 () {};
+        inline Matrix3 () {};
         inline explicit Matrix3 (array<Real,2>^ arr)
-		{
-			pin_ptr<Real> pdest = &m00;
-			pin_ptr<Real> psrc = &arr[0,0];
-			memcpy(pdest,psrc,9*sizeof(Real));
-		}
+        {
+            pin_ptr<Real> pdest = &m00;
+            pin_ptr<Real> psrc = &arr[0,0];
+            memcpy(pdest,psrc,9*sizeof(Real));
+        }
         inline Matrix3 (Matrix3^ rkMatrix)
-		{
-			pin_ptr<Real> pdest = &m00;
-			pin_ptr<Real> psrc = &rkMatrix->m00;
-			memcpy(pdest,psrc,9*sizeof(Real));
-		}
+        {
+            pin_ptr<Real> pdest = &m00;
+            pin_ptr<Real> psrc = &rkMatrix->m00;
+            memcpy(pdest,psrc,9*sizeof(Real));
+        }
         Matrix3 (Real fEntry00, Real fEntry01, Real fEntry02,
-                    Real fEntry10, Real fEntry11, Real fEntry12,
-                    Real fEntry20, Real fEntry21, Real fEntry22)
-		{
-			m00 = fEntry00;
-			m01 = fEntry01;
-			m02 = fEntry02;
-			m10 = fEntry10;
-			m11 = fEntry11;
-			m12 = fEntry12;
-			m20 = fEntry20;
-			m21 = fEntry21;
-			m22 = fEntry22;
-		}
+            Real fEntry10, Real fEntry11, Real fEntry12,
+            Real fEntry20, Real fEntry21, Real fEntry22)
+        {
+            m00 = fEntry00;
+            m01 = fEntry01;
+            m02 = fEntry02;
+            m10 = fEntry10;
+            m11 = fEntry11;
+            m12 = fEntry12;
+            m20 = fEntry20;
+            m21 = fEntry21;
+            m22 = fEntry22;
+        }
 
-		property Real default[int,int]
-		{
-			inline Real get(int row, int col)
-			{
-				return *(&m00 + ((3*row) + col)); 
-			}
+        property Real default[int,int]
+        {
+            inline Real get(int row, int col)
+            {
+                return *(&m00 + ((3*row) + col)); 
+            }
 
-			inline void set (int row, int col, Real value)
-			{
-				*(&m00 + ((3*row) + col)) = value;
-			}
-		}
+            inline void set (int row, int col, Real value)
+            {
+                *(&m00 + ((3*row) + col)) = value;
+            }
+        }
 
-		Vector3 GetColumn (size_t iCol);
+        Vector3 GetColumn (size_t iCol);
         void SetColumn(size_t iCol, Vector3 vec);
         void FromAxes(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis);
 
         // assignment and comparison
         inline Matrix3^ operator= (Matrix3^ rkMatrix)
-		{
-			pin_ptr<Real> pdest = &m00;
-			pin_ptr<Real> psrc = &rkMatrix->m00;
-			memcpy(pdest,psrc,9*sizeof(Real));
-			return this;
-		}
+        {
+            pin_ptr<Real> pdest = &m00;
+            pin_ptr<Real> psrc = &rkMatrix->m00;
+            memcpy(pdest,psrc,9*sizeof(Real));
+            return this;
+        }
         static bool operator== (Matrix3^ lmat, Matrix3^ rkMatrix);
         inline static bool operator!= (Matrix3^ lmat, Matrix3^ rkMatrix)
-		{
-			return !(lmat == rkMatrix);
-		}
+        {
+            return !(lmat == rkMatrix);
+        }
 
-		virtual bool Equals(Object^ obj) override
-		{
-			Matrix3^ clr = dynamic_cast<Matrix3^>(obj);
-			if (clr == CLR_NULL)
-			{
-				return false;
-			}
+        virtual bool Equals(Object^ obj) override
+        {
+            Matrix3^ clr = dynamic_cast<Matrix3^>(obj);
+            if (clr == CLR_NULL)
+            {
+                return false;
+            }
 
-			return (this == clr);
-		}
-		
-		bool Equals(Matrix3^ obj)
-		{
-			return (this == obj);
-		}
+            return (this == clr);
+        }
+
+        bool Equals(Matrix3^ obj)
+        {
+            return (this == obj);
+        }
 
         // arithmetic operations
         static Matrix3^ operator+ (Matrix3^ lmat, Matrix3^ rkMatrix);
@@ -194,18 +198,18 @@ namespace Mogre
         Matrix3^ Transpose();
         bool Inverse ([Out] Matrix3^% rkInverse, Real fTolerance);
         bool Inverse ([Out] Matrix3^% rkInverse)
-		{
-			return Inverse(rkInverse, 1e-06);
-		}
+        {
+            return Inverse(rkInverse, 1e-06);
+        }
         Matrix3^ Inverse (Real fTolerance);
         Matrix3^ Inverse ()
-		{
-			return Inverse(1e-06);
-		}
-		property Real Determinant
-		{
-			Real get();
-		}
+        {
+            return Inverse(1e-06);
+        }
+        property Real Determinant
+        {
+            Real get();
+        }
 
         // singular value decomposition
         void SingularValueDecomposition ([Out] Matrix3^% rkL, [Out] Vector3% rkS,
@@ -220,18 +224,18 @@ namespace Mogre
         void QDUDecomposition ([Out] Matrix3^% rkQ, [Out] Vector3% rkD,
             [Out] Vector3% rkU);
 
-		property Real SpectralNorm
-		{
-			Real get();
-		}
+        property Real SpectralNorm
+        {
+            Real get();
+        }
 
         // matrix must be orthonormal
         void ToAxisAngle ([Out] Vector3% rkAxis, [Out] Radian% rfAngle);
-		inline void ToAxisAngle ([Out] Vector3% rkAxis, [Out] Degree% rfAngle) {
-			Radian r;
-			ToAxisAngle ( rkAxis, r );
-			rfAngle = r;
-		}
+        inline void ToAxisAngle ([Out] Vector3% rkAxis, [Out] Degree% rfAngle) {
+            Radian r;
+            ToAxisAngle ( rkAxis, r );
+            rfAngle = r;
+        }
         void FromAxisAngle (Vector3 rkAxis, Radian fRadians);
 
         // The matrix must be orthonormal.  The decomposition is yaw*pitch*roll
@@ -262,53 +266,53 @@ namespace Mogre
         static void TensorProduct (Vector3 rkU, Vector3 rkV,
             [Out] Matrix3^% rkProduct);
 
-		/** Determines if this matrix involves a scaling. */
-		property bool HasScale
-		{
-			inline bool get()
-			{
-				// check magnitude of column vectors (==local axes)
-				Real t = m00 * m00 + m10 * m10 + m20 * m20;
-				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-					return true;
-				t = m01 * m01 + m11 * m11 + m21 * m21;
-				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-					return true;
-				t = m02 * m02 + m12 * m12 + m22 * m22;
-				if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-					return true;
+        /** <summary>Determines if this matrix involves a scaling.</summary> */
+        property bool HasScale
+        {
+            inline bool get()
+            {
+                // check magnitude of column vectors (==local axes)
+                Real t = m00 * m00 + m10 * m10 + m20 * m20;
+                if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+                    return true;
+                t = m01 * m01 + m11 * m11 + m21 * m21;
+                if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+                    return true;
+                t = m02 * m02 + m12 * m12 + m22 * m22;
+                if (!Math::RealEqual(t, 1.0, (Real)1e-04))
+                    return true;
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
         static initonly Real EPSILON = 1e-06;
         static initonly Matrix3^ ZERO = gcnew Matrix3(0,0,0,0,0,0,0,0,0);
         static initonly Matrix3^ IDENTITY = gcnew Matrix3(1,0,0,0,1,0,0,0,1);
 
-		[FieldOffset(0)]
-		NativeValue value;
+        [FieldOffset(0)]
+        NativeValue value;
 
-		[FieldOffset(0)]
-		Real m00;
-		[FieldOffset(1*sizeof(Real))]
-		Real m01;
-		[FieldOffset(2*sizeof(Real))]
-		Real m02;
-		[FieldOffset(3*sizeof(Real))]
-		Real m10;
-		[FieldOffset(4*sizeof(Real))]
-		Real m11;
-		[FieldOffset(5*sizeof(Real))]
-		Real m12;
-		[FieldOffset(6*sizeof(Real))]
-		Real m20;
-		[FieldOffset(7*sizeof(Real))]
-		Real m21;
-		[FieldOffset(8*sizeof(Real))]
-		Real m22;
+        [FieldOffset(0)]
+        Real m00;
+        [FieldOffset(1*sizeof(Real))]
+        Real m01;
+        [FieldOffset(2*sizeof(Real))]
+        Real m02;
+        [FieldOffset(3*sizeof(Real))]
+        Real m10;
+        [FieldOffset(4*sizeof(Real))]
+        Real m11;
+        [FieldOffset(5*sizeof(Real))]
+        Real m12;
+        [FieldOffset(6*sizeof(Real))]
+        Real m20;
+        [FieldOffset(7*sizeof(Real))]
+        Real m21;
+        [FieldOffset(8*sizeof(Real))]
+        Real m22;
 
-	protected public:
+    protected public:
         // support for eigensolver
         void Tridiagonal (Real afDiag[3], Real afSubDiag[3]);
         bool QLAlgorithm (Real afDiag[3], Real afSubDiag[3]);

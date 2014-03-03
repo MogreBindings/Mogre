@@ -34,9 +34,11 @@ THE SOFTWARE.
 
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreQuaternion.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Marshalling.h"
 #include "Prerequisites.h"
 #include "Custom\MogreMath.h"
@@ -44,60 +46,60 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-	ref class Matrix3;
+    ref class Matrix3;
 
-    /** Implementation of a Quaternion, i.e. a rotation around an axis.
+    /** <summary>Implementation of a Quaternion, i.e. a rotation around an axis.</summary>
     */
-	[Serializable]
-	public value class Quaternion : IEquatable<Quaternion>
+    [Serializable]
+    public value class Quaternion : IEquatable<Quaternion>
     {
     public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Quaternion )
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Quaternion )
 
         inline Quaternion (
             Real fW,
             Real fX, Real fY, Real fZ)
-		{
-			w = fW;
-			x = fX;
-			y = fY;
-			z = fZ;
-		}
+        {
+            w = fW;
+            x = fX;
+            y = fY;
+            z = fZ;
+        }
         inline Quaternion ( Real fW )
-		{
-			w = fW;
-			x = 0;
-			y = 0;
-			z = 0;
-		}
-        /// Construct a quaternion from a rotation matrix
+        {
+            w = fW;
+            x = 0;
+            y = 0;
+            z = 0;
+        }
+        /// <summary>Construct a quaternion from a rotation matrix</summary>
         inline Quaternion(Matrix3^ rot)
         {
             this->FromRotationMatrix(rot);
         }
-        /// Construct a quaternion from an angle/axis
+        /// <summary>Construct a quaternion from an angle/axis</summary>
         inline Quaternion(Radian rfAngle, Vector3 rkAxis)
         {
             this->FromAngleAxis(rfAngle, rkAxis);
         }
-        /// Construct a quaternion from 3 orthonormal local axes
+        /// <summary>Construct a quaternion from 3 orthonormal local axes</summary>
         inline Quaternion(Vector3 xaxis, Vector3 yaxis, Vector3 zaxis)
         {
             this->FromAxes(xaxis, yaxis, zaxis);
         }
-        /// Construct a quaternion from 3 orthonormal local axes
+        /// <summary>Construct a quaternion from 3 orthonormal local axes</summary>
         inline Quaternion(array<Vector3>^ akAxis)
         {
             this->FromAxes(akAxis);
         }
-		/// Construct a quaternion from 4 manual w/x/y/z values
-		inline Quaternion(array<Real>^ valptr)
-		{
-			w = valptr[0];
-			x = valptr[1];
-			y = valptr[2];
-			z = valptr[3];
-		}
+        /// <summary>Construct a quaternion from 4 manual w/x/y/z values</summary>
+        inline Quaternion(array<Real>^ valptr)
+        {
+            w = valptr[0];
+            x = valptr[1];
+            y = valptr[2];
+            z = valptr[3];
+        }
 
         void FromRotationMatrix (Matrix3^ kRot);
         Matrix3^ ToRotationMatrix ();
@@ -112,111 +114,111 @@ namespace Mogre
         void FromAxes (Vector3 xAxis, Vector3 yAxis, Vector3 zAxis);
         void ToAxes ([Out] array<Vector3>^% akAxis);
         void ToAxes ([Out] Vector3% xAxis, [Out] Vector3% yAxis, [Out] Vector3% zAxis);
-        /// Get the local x-axis
-		property Vector3 XAxis
-		{
-			Vector3 get();
-		}
-        /// Get the local y-axis
-		property Vector3 YAxis
-		{
-			Vector3 get();
-		}
-        /// Get the local z-axis
-		property Vector3 ZAxis
-		{
-			Vector3 get();
-		}
+        /// <summary>Get the local x-axis</summary>
+        property Vector3 XAxis
+        {
+            Vector3 get();
+        }
+        /// <summary>Get the local y-axis</summary>
+        property Vector3 YAxis
+        {
+            Vector3 get();
+        }
+        /// <summary>Get the local z-axis</summary>
+        property Vector3 ZAxis
+        {
+            Vector3 get();
+        }
 
-		static Quaternion operator+ (Quaternion lkQ, Quaternion rkQ);
+        static Quaternion operator+ (Quaternion lkQ, Quaternion rkQ);
         static Quaternion operator- (Quaternion lkQ, Quaternion rkQ);
         static Quaternion operator* (Quaternion lkQ, Quaternion rkQ);
         static Quaternion operator* (Quaternion lkQ, Real fScalar);
         static Quaternion operator* (Real fScalar, Quaternion rkQ);
         static Quaternion operator- (Quaternion rkQ);
         inline static bool operator== (Quaternion lhs, Quaternion rhs)
-		{
-			return (rhs.x == lhs.x) && (rhs.y == lhs.y) &&
-				(rhs.z == lhs.z) && (rhs.w == lhs.w);
-		}
+        {
+            return (rhs.x == lhs.x) && (rhs.y == lhs.y) &&
+                (rhs.z == lhs.z) && (rhs.w == lhs.w);
+        }
         inline static bool operator!= (Quaternion lhs, Quaternion rhs)
-		{
-			return !(lhs == rhs);
-		}
+        {
+            return !(lhs == rhs);
+        }
 
-		virtual bool Equals(Quaternion other) { return *this == other; }
+        virtual bool Equals(Quaternion other) { return *this == other; }
 
-		// functions of a quaternion
+        // functions of a quaternion
         Real Dot (Quaternion rkQ);  // dot product
-		property Real Norm  // squared-length
-		{
-			Real get();
-		}
-        /// Normalises this quaternion, and returns the previous length
+        property Real Norm  // squared-length
+        {
+            Real get();
+        }
+        /// <summary>Normalises this quaternion, and returns the previous length</summary>
         Real Normalise(); 
-		Quaternion Inverse();  // apply to non-zero quaternion
-		Quaternion UnitInverse();  // apply to unit-length quaternion
-		Quaternion Exp();
-		Quaternion Log();
+        Quaternion Inverse();  // apply to non-zero quaternion
+        Quaternion UnitInverse();  // apply to unit-length quaternion
+        Quaternion Exp();
+        Quaternion Log();
 
         // rotation of a vector by a quaternion
         static Vector3 operator* (Quaternion lquat, Vector3 rkVector);
 
-   		/// Calculate the local roll element of this quaternion
-		property Radian Roll
-		{
-			Radian get();
-		}
-   		/// Calculate the local pitch element of this quaternion
-		property Radian Pitch
-		{
-			Radian get();
-		}
-   		/// Calculate the local yaw element of this quaternion
-		property Radian Yaw
-		{
-			Radian get();
-		}
+        /// <summary>Calculate the local roll element of this quaternion</summary>
+        property Radian Roll
+        {
+            Radian get();
+        }
+        /// <summary>Calculate the local pitch element of this quaternion</summary>
+        property Radian Pitch
+        {
+            Radian get();
+        }
+        /// <summary>Calculate the local yaw element of this quaternion</summary>
+        property Radian Yaw
+        {
+            Radian get();
+        }
 
-   		/** Calculate the local roll element of this quaternion.
-		@param reprojectAxis By default the method returns the 'intuitive' result
-			that is, if you projected the local Y of the quaternion onto the X and
-			Y axes, the angle between them is returned. If set to false though, the
-			result is the actual yaw that will be used to implement the quaternion,
-			which is the shortest possible path to get to the same orientation and 
-			may involve less axial rotation. 
-		*/
-		Radian GetRoll(bool reprojectAxis);
-   		/** Calculate the local pitch element of this quaternion
-		@param reprojectAxis By default the method returns the 'intuitive' result
-			that is, if you projected the local Z of the quaternion onto the X and
-			Y axes, the angle between them is returned. If set to true though, the
-			result is the actual yaw that will be used to implement the quaternion,
-			which is the shortest possible path to get to the same orientation and 
-			may involve less axial rotation. 
-		*/
-		Radian GetPitch(bool reprojectAxis);
-   		/** Calculate the local yaw element of this quaternion
-		@param reprojectAxis By default the method returns the 'intuitive' result
-			that is, if you projected the local Z of the quaternion onto the X and
-			Z axes, the angle between them is returned. If set to true though, the
-			result is the actual yaw that will be used to implement the quaternion,
-			which is the shortest possible path to get to the same orientation and 
-			may involve less axial rotation. 
-		*/
-		Radian GetYaw(bool reprojectAxis);
+        /** <summary>Calculate the local roll element of this quaternion.</summary>
+        <param name="reprojectAxis">By default the method returns the 'intuitive' result
+        that is, if you projected the local Y of the quaternion onto the X and
+        Y axes, the angle between them is returned. If set to false though, the
+        result is the actual yaw that will be used to implement the quaternion,
+        which is the shortest possible path to get to the same orientation and 
+        may involve less axial rotation.</param>
+        */
+        Radian GetRoll(bool reprojectAxis);
+        /** <summary>Calculate the local pitch element of this quaternion</summary>
+        <param name="reprojectAxis">By default the method returns the 'intuitive' result
+        that is, if you projected the local Z of the quaternion onto the X and
+        Y axes, the angle between them is returned. If set to true though, the
+        result is the actual yaw that will be used to implement the quaternion,
+        which is the shortest possible path to get to the same orientation and 
+        may involve less axial rotation.</param>
+        */
+        Radian GetPitch(bool reprojectAxis);
+        /** <summary>Calculate the local yaw element of this quaternion</summary>
+        <param name="reprojectAxis">By default the method returns the 'intuitive' result
+        that is, if you projected the local Z of the quaternion onto the X and
+        Z axes, the angle between them is returned. If set to true though, the
+        result is the actual yaw that will be used to implement the quaternion,
+        which is the shortest possible path to get to the same orientation and 
+        may involve less axial rotation.</param>
+        */
+        Radian GetYaw(bool reprojectAxis);
 
-		/// Equality with tolerance (tolerance is max angle difference)
-		bool Equals(Quaternion rhs, Radian tolerance);
-		
-	    // spherical linear interpolation
+        /// <summary>Equality with tolerance (tolerance is max angle difference)</summary>
+        bool Equals(Quaternion rhs, Radian tolerance);
+
+        // spherical linear interpolation
         static Quaternion Slerp (Real fT, Quaternion rkP,
             Quaternion rkQ, bool shortestPath);
         static Quaternion Slerp (Real fT, Quaternion rkP,
             Quaternion rkQ)
-		{
-			return Slerp(fT, rkP, rkQ, false);
-		}
+        {
+            return Slerp(fT, rkP, rkQ, false);
+        }
 
         static Quaternion SlerpExtraSpins (Real fT,
             Quaternion rkP, Quaternion rkQ,
@@ -234,18 +236,18 @@ namespace Mogre
         static Quaternion Squad (Real fT, Quaternion rkP,
             Quaternion rkA, Quaternion rkB,
             Quaternion rkQ)
-		{
-			return Squad(fT, rkP, rkA, rkB, rkQ, false);
-		}
+        {
+            return Squad(fT, rkP, rkA, rkB, rkQ, false);
+        }
 
         // normalised linear interpolation - faster but less accurate (non-constant rotation velocity)
         static Quaternion Nlerp(Real fT, Quaternion rkP, 
             Quaternion rkQ, bool shortestPath);
         static Quaternion Nlerp(Real fT, Quaternion rkP, 
             Quaternion rkQ)
-		{
-			return Nlerp(fT, rkP, rkQ, false);
-		}
+        {
+            return Nlerp(fT, rkP, rkQ, false);
+        }
 
         // cutoff for sine near zero
         static initonly Real ms_fEpsilon = 1e-03;
@@ -254,23 +256,20 @@ namespace Mogre
         static initonly Quaternion ZERO = Quaternion(0.0,0.0,0.0,0.0);
         static initonly Quaternion IDENTITY = Quaternion(1.0,0.0,0.0,0.0);
 
-		Real w, x, y, z;
+        Real w, x, y, z;
 
-		/// Check whether this quaternion contains valid values
-		property bool IsNaN
-		{
-			inline bool get()
-			{
-				return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
-			}
-		}
-
-        /** Function for writing to a stream. Outputs "Quaternion(w, x, y, z)" with w,x,y,z
-            being the member values of the quaternion.
-        */
-		virtual System::String^ ToString() override
+        /// <summary>Check whether this quaternion contains valid values</summary>
+        property bool IsNaN
         {
-			return System::String::Format("Quaternion({0}, {1}, {2}, {3})", w, x, y, z);
+            inline bool get()
+            {
+                return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z) || Real::IsNaN(w);
+            }
+        }
+
+        virtual System::String^ ToString() override
+        {
+            return System::String::Format("Quaternion({0}, {1}, {2}, {3})", w, x, y, z);
         }
     };
 }

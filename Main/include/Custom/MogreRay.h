@@ -39,85 +39,87 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-    /** Representation of a ray in space, ie a line with an origin and direction. */
-	[Serializable]
+    /** <summary>Representation of a ray in space, ie a line with an origin and direction.</summary> */
+    [Serializable]
     public value class Ray
     {
-	protected:
+    protected:
         Vector3 mOrigin;
         Vector3 mDirection;
     public:
-		DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Ray )
+        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Ray )
 
         Ray(Vector3 origin, Vector3 direction)
             :mOrigin(origin), mDirection(direction) {}
 
-		property Vector3 Origin
-		{
-			/** Sets the origin of the ray. */
-			void set(Vector3 origin) {mOrigin = origin;} 
-			/** Gets the origin of the ray. */
-			Vector3 get() {return mOrigin;} 
-		}
+        /** <summary>Gets or Sets the origin of the ray.</summary> */
+        property Vector3 Origin
+        {
+            void set(Vector3 origin) {mOrigin = origin;} 
+            Vector3 get() {return mOrigin;} 
+        }
 
-		property Vector3 Direction
-		{
-			/** Sets the direction of the ray. */
-			void set(Vector3 dir) {mDirection = dir;} 
-			/** Gets the direction of the ray. */
-			Vector3 get() {return mDirection;} 
-		}
+        /** <summary>Gets or Sets the direction of the ray.</summary> */
+        property Vector3 Direction
+        {
+            void set(Vector3 dir) {mDirection = dir;} 
+            Vector3 get() {return mDirection;} 
+        }
 
-		/** Gets the position of a point t units along the ray. */
-		Vector3 GetPoint(Real t) { 
-			return Vector3(mOrigin + (mDirection * t));
-		}
-		
-		/** Gets the position of a point t units along the ray. */
-		static Vector3 operator*(Ray r, Real t) { 
-			return r.GetPoint(t);
-		};
+        /** <summary>Gets the position of a point t units along the ray.</summary> */
+        Vector3 GetPoint(Real t) { 
+            return Vector3(mOrigin + (mDirection * t));
+        }
 
-		/** Tests whether this ray Intersects the given plane. 
-		@returns A pair structure where the first element indicates whether
-			an intersection occurs, and if true, the second element will
-			indicate the distance along the ray at which it Intersects. 
-			This can be converted to a point in space by calling getPoint().
-		*/
-		Pair<bool, Real> Intersects(Plane p)
-		{
-			return Math::Intersects(*this, p);
-		}
-        /** Tests whether this ray Intersects the given plane bounded volume. 
-        @returns A pair structure where the first element indicates whether
+        /** <summary>Gets the position of a point t units along the ray.</summary> */
+        static Vector3 operator*(Ray r, Real t) { 
+            return r.GetPoint(t);
+        };
+
+        /** <summary>Tests whether this ray Intersects the given plane.</summary>
+        <returns>A pair structure where the first element indicates whether
         an intersection occurs, and if true, the second element will
         indicate the distance along the ray at which it Intersects. 
         This can be converted to a point in space by calling getPoint().
+        </returns>
+        */
+        Pair<bool, Real> Intersects(Plane p)
+        {
+            return Math::Intersects(*this, p);
+        }
+        /** <summary>Tests whether this ray Intersects the given plane bounded volume.</summary>
+        <returns>A pair structure where the first element indicates whether
+        an intersection occurs, and if true, the second element will
+        indicate the distance along the ray at which it Intersects. 
+        This can be converted to a point in space by calling getPoint().
+        </returns>
         */
         Pair<bool, Real> Intersects(PlaneBoundedVolume^ p)
         {
-			return Math::Intersects(*this, p->planes, p->outside == Plane::Side::POSITIVE_SIDE);
+            return Math::Intersects(*this, p->planes, p->outside == Plane::Side::POSITIVE_SIDE);
         }
-		/** Tests whether this ray Intersects the given sphere. 
-		@returns A pair structure where the first element indicates whether
-			an intersection occurs, and if true, the second element will
-			indicate the distance along the ray at which it Intersects. 
-			This can be converted to a point in space by calling getPoint().
-		*/
-		Pair<bool, Real> Intersects(Sphere s)
-		{
-			return Math::Intersects(*this, s);
-		}
-		/** Tests whether this ray Intersects the given box. 
-		@returns A pair structure where the first element indicates whether
-			an intersection occurs, and if true, the second element will
-			indicate the distance along the ray at which it Intersects. 
-			This can be converted to a point in space by calling getPoint().
-		*/
-		Pair<bool, Real> Intersects(AxisAlignedBox^ box)
-		{
-			return Math::Intersects(*this, box);
-		}
+        /** <summary>Tests whether this ray Intersects the given sphere.</summary>
+        <returns> A pair structure where the first element indicates whether
+        an intersection occurs, and if true, the second element will
+        indicate the distance along the ray at which it Intersects. 
+        This can be converted to a point in space by calling getPoint().
+        </returns>
+        */
+        Pair<bool, Real> Intersects(Sphere s)
+        {
+            return Math::Intersects(*this, s);
+        }
+        /** <summary>Tests whether this ray Intersects the given box.</summary>
+        <returns>A pair structure where the first element indicates whether
+        an intersection occurs, and if true, the second element will
+        indicate the distance along the ray at which it Intersects. 
+        This can be converted to a point in space by calling getPoint().
+        </returns>
+        */
+        Pair<bool, Real> Intersects(AxisAlignedBox^ box)
+        {
+            return Math::Intersects(*this, box);
+        }
 
     };
 }
