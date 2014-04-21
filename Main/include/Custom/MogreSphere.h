@@ -27,9 +27,11 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreSphere.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreMath.h"
 #include "Custom\MogreVector3.h"
@@ -51,7 +53,18 @@ namespace Mogre
         Real mRadius;
         Vector3 mCenter;
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Sphere )
+        inline static operator Ogre::Sphere& (Sphere& obj)
+        {
+            return reinterpret_cast<Ogre::Sphere&>(obj);
+        }
+        inline static operator const Sphere& ( const Ogre::Sphere& obj)
+        {
+            return reinterpret_cast<const Sphere&>(obj);
+        }
+        inline static operator const Sphere& ( const Ogre::Sphere* pobj)
+        {
+            return reinterpret_cast<const Sphere&>(*pobj);
+        }
 
             /** <summary>Constructor allowing arbitrary spheres.</summary>
             <param name="center">The center point of the sphere.</param>

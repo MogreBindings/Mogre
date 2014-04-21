@@ -27,9 +27,11 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreRay.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreMath.h"
 #include "Custom\MogreVector3.h"
@@ -47,7 +49,18 @@ namespace Mogre
         Vector3 mOrigin;
         Vector3 mDirection;
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Ray )
+        inline static operator Ogre::Ray& (Ray& obj)
+        {
+            return reinterpret_cast<Ogre::Ray&>(obj);
+        }
+        inline static operator const Ray& ( const Ogre::Ray& obj)
+        {
+            return reinterpret_cast<const Ray&>(obj);
+        }
+        inline static operator const Ray& ( const Ogre::Ray* pobj)
+        {
+            return reinterpret_cast<const Ray&>(*pobj);
+        }
 
         Ray(Vector3 origin, Vector3 direction)
             :mOrigin(origin), mDirection(direction) {}

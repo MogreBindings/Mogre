@@ -42,7 +42,18 @@ namespace Mogre
     public value class Vector4 : IEquatable<Vector4>
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Vector4 )
+        inline static operator Ogre::Vector4& (Vector4& obj)
+        {
+            return reinterpret_cast<Ogre::Vector4&>(obj);
+        }
+        inline static operator const Vector4& ( const Ogre::Vector4& obj)
+        {
+            return reinterpret_cast<const Vector4&>(obj);
+        }
+        inline static operator const Vector4& ( const Ogre::Vector4* pobj)
+        {
+            return reinterpret_cast<const Vector4&>(*pobj);
+        }
 
         Real x, y, z, w;
 

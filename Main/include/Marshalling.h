@@ -42,19 +42,6 @@ namespace Mogre
 	// In order to use it, a rebuild of OgreMain, the renderers and the plugins is required.
 	// It doesn't interfere with the Ogre code; native applications that use Ogre will link to the
 	// new DLLs without problems.
-	#define DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS(T)			\
-			inline static operator Ogre::T& (T& obj)					\
-			{															\
-				return reinterpret_cast<Ogre::T&>(obj);					\
-			}															\
-			inline static operator const T& ( const Ogre::T& obj)		\
-			{															\
-				return reinterpret_cast<const T&>(obj);					\
-			}															\
-			inline static operator const T& ( const Ogre::T* pobj)		\
-			{															\
-				return reinterpret_cast<const T&>(*pobj);				\
-			}
 
 	// ToNative and ToManaged are used to simplify conversions inside templates
 

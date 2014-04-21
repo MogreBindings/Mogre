@@ -27,9 +27,11 @@ THE SOFTWARE.
 */
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreMatrix4.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreMatrix3.h"
 #include "Custom\MogreQuaternion.h"

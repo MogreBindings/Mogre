@@ -101,7 +101,18 @@ namespace Mogre
             return System::String::Format("Radian({0})", mRad);
         }
 
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Radian )
+        inline static operator Ogre::Radian& (Radian& obj)
+        {
+            return reinterpret_cast<Ogre::Radian&>(obj);
+        }
+        inline static operator const Radian& ( const Ogre::Radian& obj)
+        {
+            return reinterpret_cast<const Radian&>(obj);
+        }
+        inline static operator const Radian& ( const Ogre::Radian* pobj)
+        {
+            return reinterpret_cast<const Radian&>(*pobj);
+        }
     };
 
     /** <summary>Wrapper class which indicates a given angle value is in Degrees.</summary>
@@ -157,7 +168,18 @@ namespace Mogre
             return System::String::Format("Degree({0})", mDeg);
         }
 
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Degree )
+        inline static operator Ogre::Degree& (Degree& obj)
+        {
+            return reinterpret_cast<Ogre::Degree&>(obj);
+        }
+        inline static operator const Degree& ( const Ogre::Degree& obj)
+        {
+            return reinterpret_cast<const Degree&>(obj);
+        }
+        inline static operator const Degree& ( const Ogre::Degree* pobj)
+        {
+            return reinterpret_cast<const Degree&>(*pobj);
+        }
     };
 
     /** <summary>Wrapper class which identifies a value as the currently default angle

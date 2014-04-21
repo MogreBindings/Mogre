@@ -34,9 +34,11 @@ THE SOFTWARE.
 
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgrePlane.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Custom\MogreVector3.h"
 
 namespace Mogre
@@ -56,7 +58,18 @@ namespace Mogre
     public value class Plane : IEquatable<Plane>
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Plane )
+        inline static operator Ogre::Plane& (Plane& obj)
+        {
+            return reinterpret_cast<Ogre::Plane&>(obj);
+        }
+        inline static operator const Plane& ( const Ogre::Plane& obj)
+        {
+            return reinterpret_cast<const Plane&>(obj);
+        }
+        inline static operator const Plane& ( const Ogre::Plane* pobj)
+        {
+            return reinterpret_cast<const Plane&>(*pobj);
+        }
 
         /** <summary>Construct a plane through a normal, and a distance to move the plane along the normal.</summary>*/
         Plane (Vector3 rkNormal, Real fConstant);

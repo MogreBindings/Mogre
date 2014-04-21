@@ -58,7 +58,18 @@ namespace Mogre
     public value class ColourValue : IEquatable<ColourValue>
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( ColourValue )
+        inline static operator Ogre::ColourValue& (ColourValue& obj)
+        {
+            return reinterpret_cast<Ogre::ColourValue&>(obj);
+        }
+        inline static operator const ColourValue& ( const Ogre::ColourValue& obj)
+        {
+            return reinterpret_cast<const ColourValue&>(obj);
+        }
+        inline static operator const ColourValue& ( const Ogre::ColourValue* pobj)
+        {
+            return reinterpret_cast<const ColourValue&>(*pobj);
+        }
 
         static initonly ColourValue ZERO = ColourValue(0.0,0.0,0.0,0.0);
         static initonly ColourValue Black = ColourValue(0.0,0.0,0.0);

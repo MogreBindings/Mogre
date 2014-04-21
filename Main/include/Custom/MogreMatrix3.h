@@ -45,9 +45,11 @@ THE SOFTWARE.
 
 #pragma once
 
+#pragma warning(push, 0)
 #pragma managed(push, off)
 #include "OgreMatrix3.h"
 #pragma managed(pop)
+#pragma warning(pop)
 #include "Prerequisites.h"
 #include "Custom\MogreVector3.h"
 

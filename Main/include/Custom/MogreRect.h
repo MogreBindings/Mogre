@@ -13,7 +13,18 @@ namespace Mogre
     public value class FloatRect
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( FloatRect )
+        inline static operator Ogre::FloatRect& (FloatRect& obj)
+        {
+            return reinterpret_cast<Ogre::FloatRect&>(obj);
+        }
+        inline static operator const FloatRect& ( const Ogre::FloatRect& obj)
+        {
+            return reinterpret_cast<const FloatRect&>(obj);
+        }
+        inline static operator const FloatRect& ( const Ogre::FloatRect* pobj)
+        {
+            return reinterpret_cast<const FloatRect&>(*pobj);
+        }
 
         float left, top, right, bottom;
 
@@ -41,7 +52,18 @@ namespace Mogre
     public value class RealRect
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( RealRect )
+        inline static operator Ogre::RealRect& (RealRect& obj)
+        {
+            return reinterpret_cast<Ogre::RealRect&>(obj);
+        }
+        inline static operator const RealRect& ( const Ogre::RealRect& obj)
+        {
+            return reinterpret_cast<const RealRect&>(obj);
+        }
+        inline static operator const RealRect& ( const Ogre::RealRect* pobj)
+        {
+            return reinterpret_cast<const RealRect&>(*pobj);
+        }
 
         Mogre::Real left, top, right, bottom;
 
@@ -69,7 +91,18 @@ namespace Mogre
     public value class Rect
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Rect )
+        inline static operator Ogre::Rect& (Rect& obj)
+        {
+            return reinterpret_cast<Ogre::Rect&>(obj);
+        }
+        inline static operator const Rect& ( const Ogre::Rect& obj)
+        {
+            return reinterpret_cast<const Rect&>(obj);
+        }
+        inline static operator const Rect& ( const Ogre::Rect* pobj)
+        {
+            return reinterpret_cast<const Rect&>(*pobj);
+        }
 
         long left, top, right, bottom;
 

@@ -51,7 +51,18 @@ namespace Mogre
     public value class Box
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Box )
+        inline static operator Ogre::Box& (Box& obj)
+        {
+            return reinterpret_cast<Ogre::Box&>(obj);
+        }
+        inline static operator const Box& ( const Ogre::Box& obj)
+        {
+            return reinterpret_cast<const Box&>(obj);
+        }
+        inline static operator const Box& ( const Ogre::Box* pobj)
+        {
+            return reinterpret_cast<const Box&>(*pobj);
+        }
 
         size_t left, top, right, bottom, front, back;
         /** <summary>Define a box from left, top, right and bottom coordinates
@@ -136,7 +147,18 @@ namespace Mogre
     public value class PixelBox
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( PixelBox )
+        inline static operator Ogre::PixelBox& (PixelBox& obj)
+        {
+            return reinterpret_cast<Ogre::PixelBox&>(obj);
+        }
+        inline static operator const PixelBox& ( const Ogre::PixelBox& obj)
+        {
+            return reinterpret_cast<const PixelBox&>(obj);
+        }
+        inline static operator const PixelBox& ( const Ogre::PixelBox* pobj)
+        {
+            return reinterpret_cast<const PixelBox&>(*pobj);
+        }
 
         Box box;
 

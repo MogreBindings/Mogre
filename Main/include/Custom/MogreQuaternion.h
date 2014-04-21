@@ -54,7 +54,18 @@ namespace Mogre
     public value class Quaternion : IEquatable<Quaternion>
     {
     public:
-        DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Quaternion )
+        inline static operator Ogre::Quaternion& (Quaternion& obj)
+        {
+            return reinterpret_cast<Ogre::Quaternion&>(obj);
+        }
+        inline static operator const Quaternion& ( const Ogre::Quaternion& obj)
+        {
+            return reinterpret_cast<const Quaternion&>(obj);
+        }
+        inline static operator const Quaternion& ( const Ogre::Quaternion* pobj)
+        {
+            return reinterpret_cast<const Quaternion&>(*pobj);
+        }
 
         /// <summary>Construct from an explicit list of values</summary>
         inline Quaternion (
