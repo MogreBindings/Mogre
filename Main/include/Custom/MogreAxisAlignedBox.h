@@ -149,18 +149,28 @@ namespace Mogre {
         }
 
 
-        /** <summary>Gets the minimum corner of the box.</summary>
+        /** <summary>Gets or Sets the minimum corner of the box.</summary>
         */
         property Vector3 Minimum
         {
             inline Vector3 get() { return mMinimum; }
+            inline void set( Vector3 vec )
+            {
+                mExtent = Extent::EXTENT_FINITE;
+                mMinimum = vec;
+            }
         }
 
-        /** <summary>Gets the maximum corner of the box.</summary>
+        /** <summary>Gets or Sets the maximum corner of the box.</summary>
         */
         property Vector3 Maximum
         { 
             inline Vector3 get() { return mMaximum; }
+            inline void set( Vector3 vec )
+            {
+                mExtent = Extent::EXTENT_FINITE;
+                mMaximum = vec;
+            }
         }
 
         /** <summary>Sets the minimum corner of the box.</summary>
@@ -171,6 +181,8 @@ namespace Mogre {
             mMinimum = vec;
         }
 
+        /** <summary>Sets the minimum corner of the box.</summary>
+        */
         inline void SetMinimum( Real x, Real y, Real z )
         {
             mExtent = Extent::EXTENT_FINITE;
@@ -179,19 +191,22 @@ namespace Mogre {
             mMinimum.z = z;
         }
 
-        /** <summary>Changes one of the components of the minimum corner of the box
-        used to resize only one dimension of the box</summary>
+        /** <summary>Changes the X component of the minimum corner of the box</summary>
         */
         inline void SetMinimumX(Real x)
         {
             mMinimum.x = x;
         }
 
+        /** <summary>Changes the Y component of the minimum corner of the box</summary>
+        */
         inline void SetMinimumY(Real y)
         {
             mMinimum.y = y;
         }
 
+        /** <summary>Changes the Z component of the minimum corner of the box</summary>
+        */
         inline void SetMinimumZ(Real z)
         {
             mMinimum.z = z;
@@ -205,6 +220,8 @@ namespace Mogre {
             mMaximum = vec;
         }
 
+        /** <summary>Sets the maximum corner of the box.</summary>
+        */
         inline void SetMaximum( Real x, Real y, Real z )
         {
             mExtent = Extent::EXTENT_FINITE;
@@ -213,19 +230,22 @@ namespace Mogre {
             mMaximum.z = z;
         }
 
-        /** <summary>Changes one of the components of the maximum corner of the box
-        used to resize only one dimension of the box</summary>
+        /** <summary>Changes the X component of the maximum corner of the box</summary>
         */
         inline void SetMaximumX( Real x )
         {
             mMaximum.x = x;
         }
 
+        /** <summary>Changes the Y component of the maximum corner of the box</summary>
+        */
         inline void SetMaximumY( Real y )
         {
             mMaximum.y = y;
         }
 
+        /** <summary>Changes the Z component of the maximum corner of the box</summary>
+        */
         inline void SetMaximumZ( Real z )
         {
             mMaximum.z = z;
@@ -240,6 +260,8 @@ namespace Mogre {
             mMaximum = max;
         }
 
+        /** <summary>Sets both minimum and maximum extents at once.</summary>
+        */
         inline void SetExtents(
             Real mx, Real my, Real mz,
             Real Mx, Real My, Real Mz )
@@ -256,7 +278,7 @@ namespace Mogre {
 
         }
 
-        /** <summary>Returns a pointer to an array of 8 corner points, useful for
+        /** <summary>Returns an array of 8 corner points, useful for
         collision vs. non-aligned objects.</summary>
         <remarks>
         If the order of these corners is important, they are as
