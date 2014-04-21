@@ -233,7 +233,7 @@ namespace Mogre
     </note>
     </remarks>
     */
-    public ref class Math
+    public ref class Math abstract sealed
     {
     public:
 
@@ -257,7 +257,7 @@ namespace Mogre
 
         /** <summary>Private function to build trig tables.</summary>
         */
-        void buildTrigTables();
+        static void buildTrigTables();
 
         static Real SinTable (Real fValue);
         static Real TanTable (Real fValue);
@@ -265,13 +265,15 @@ namespace Mogre
         static System::Random^ mRandomizer = gcnew System::Random;
 
     public:
-        /** <summary>Default constructor.</summary>
-        <param name="trigTableSize">Optional parameter to set the size of the
-        tables used to implement Sin, Cos, Tan</param>
-        */
-        Math(unsigned int trigTableSize);
-        /** <summary>Default constructor.</summary> */
-        Math();
+        /** <summary>Static constructor.</summary> */
+        static Math();
+
+        /** <summary>Gets or Sets the size of the tables used to implement Sin, Cos, and Tan table lookups.</summary> */
+        static property int TrigTableSize
+        {
+            int get() { return mTrigTableSize; }
+            void set(int trigTableSize);
+        }
 
         static inline int IAbs (int iValue) { return ( iValue >= 0 ? iValue : -iValue ); }
         static inline int ICeil (float fValue) { return int(ceil(fValue)); }
@@ -320,7 +322,7 @@ namespace Mogre
         */
         static inline Real Ceil (Real fValue) { return Real(System::Math::Ceiling(fValue)); }
 
-        /** <summary>Cosine function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Cosine function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>
@@ -334,7 +336,7 @@ namespace Mogre
         static inline Real Cos (Radian fValue) {
             return Real(System::Math::Cos(fValue.ValueRadians));
         }
-        /** <summary>Cosine function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Cosine function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>
@@ -375,7 +377,7 @@ namespace Mogre
             return Degree(Sign(dValue.ValueDegrees));
         }
 
-        /** <summary>Sine function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Sine function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>
@@ -389,7 +391,7 @@ namespace Mogre
         static inline Real Sin (Radian fValue) {
             return Real(System::Math::Sin(fValue.ValueRadians));
         }
-        /** <summary>Sine function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Sine function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>
@@ -449,7 +451,7 @@ namespace Mogre
         */
         static Real SymmetricRandom ();
 
-        /** <summary>Tangent function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Tangent function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>
@@ -463,7 +465,7 @@ namespace Mogre
         static inline Real Tan (Radian fValue) {
             return Real(System::Math::Tan(fValue.ValueRadians));
         }
-        /** <summary>Tangent function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
+        /** <summary>Tangent function.</summary>
         <param name="fValue">Angle in radians</param>
         <param name="useTables">If true, uses lookup tables rather than
         calculation - faster but less accurate.</param>

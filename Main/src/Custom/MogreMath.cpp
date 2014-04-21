@@ -37,19 +37,6 @@ THE SOFTWARE.
 namespace Mogre
 {
     //-----------------------------------------------------------------------
-    Math::Math( unsigned int trigTableSize )
-    {
-        msAngleUnit = AngleUnit::AU_DEGREE;
-
-        mTrigTableSize = trigTableSize;
-        mTrigTableFactor = mTrigTableSize / Math::TWO_PI;
-
-        mSinTable = gcnew array<Real>(mTrigTableSize);
-        mTanTable = gcnew array<Real>(mTrigTableSize);
-
-        buildTrigTables();
-    }
-
     Math::Math()
     {
         msAngleUnit = AngleUnit::AU_DEGREE;
@@ -62,7 +49,17 @@ namespace Mogre
 
         buildTrigTables();
     }
+    //-----------------------------------------------------------------------
+    void Math::TrigTableSize::set( int trigTableSize )
+    {
+        mTrigTableSize = trigTableSize;
+        mTrigTableFactor = mTrigTableSize / Math::TWO_PI;
 
+        mSinTable = gcnew array<Real>(mTrigTableSize);
+        mTanTable = gcnew array<Real>(mTrigTableSize);
+
+        buildTrigTables();
+    }
     //-----------------------------------------------------------------------
     void Math::buildTrigTables(void)
     {
