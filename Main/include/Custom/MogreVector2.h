@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ namespace Mogre
     /** <summary>Standard 2-dimensional vector.</summary>
     <remarks>
     A direction in 2D space represented as distances along the 2
-    orthoganal axes (x, y). Note that positions, directions and
+    orthogonal axes (x, y). Note that positions, directions and
     scaling factors can be represented by a vector, depending on how
     you interpret the values.
     </remarks>
@@ -112,108 +112,95 @@ namespace Mogre
         // arithmetic operations
         inline static Vector2 operator + ( Vector2 lvec, Vector2 rkVector )
         {
-            Vector2 kSum;
-
-            kSum.x = lvec.x + rkVector.x;
-            kSum.y = lvec.y + rkVector.y;
-
-            return kSum;
+            return Vector2(
+                lvec.x + rkVector.x,
+                lvec.y + rkVector.y);
         }
 
         inline static Vector2 operator - ( Vector2 lvec, Vector2 rkVector )
         {
-            Vector2 kDiff;
-
-            kDiff.x = lvec.x - rkVector.x;
-            kDiff.y = lvec.y - rkVector.y;
-
-            return kDiff;
+            return Vector2(
+                lvec.x - rkVector.x,
+                lvec.y - rkVector.y);
         }
 
         inline static Vector2 operator * ( Vector2 lvec, Real fScalar )
         {
-            Vector2 kProd;
-
-            kProd.x = fScalar*lvec.x;
-            kProd.y = fScalar*lvec.y;
-
-            return kProd;
-        }
-
-        inline static Vector2 operator * ( Real fScalar, Vector2 rvec )
-        {
-            Vector2 kProd;
-
-            kProd.x = fScalar*rvec.x;
-            kProd.y = fScalar*rvec.y;
-
-            return kProd;
+            return Vector2(
+                lvec.x * fScalar,
+                lvec.y * fScalar);
         }
 
         inline static Vector2 operator * ( Vector2 lhs, Vector2 rhs)
         {
-            Vector2 kProd;
-
-            kProd.x = lhs.x * rhs.x;
-            kProd.y = lhs.y * rhs.y;
-
-            return kProd;
+            return Vector2(
+                lhs.x * rhs.x,
+                lhs.y * rhs.y);
         }
 
         inline static Vector2 operator / ( Vector2 lvec, Real fScalar )
         {
             assert( fScalar != 0.0 );
 
-            Vector2 kDiv;
+            Real fInv = 1.0f / fScalar;
 
-            Real fInv = 1.0 / fScalar;
-            kDiv.x = lvec.x * fInv;
-            kDiv.y = lvec.y * fInv;
-
-            return kDiv;
+            return Vector2(
+                lvec.x * fInv,
+                lvec.y * fInv);
         }
 
         inline static Vector2 operator / ( Vector2 lhs, Vector2 rhs)
         {
-            Vector2 kDiv;
-
-            kDiv.x = lhs.x / rhs.x;
-            kDiv.y = lhs.y / rhs.y;
-
-            return kDiv;
+            return Vector2(
+                lhs.x / rhs.x,
+                lhs.y / rhs.y);
         }
 
-        inline static Vector2 operator - (Vector2 vec)
+        inline static Vector2 operator - ( Vector2 vec )
         {
-            Vector2 kNeg;
+            return Vector2(-vec.x, -vec.y);
+        }
 
-            kNeg.x = -vec.x;
-            kNeg.y = -vec.y;
+        inline static Vector2 operator * ( Real fScalar, Vector2 rkVector )
+        {
+            return Vector2(
+                fScalar * rkVector.x,
+                fScalar * rkVector.y);
+        }
 
-            return kNeg;
+        inline static Vector2 operator / ( Real fScalar, Vector2 rkVector )
+        {
+            return Vector2(
+                fScalar / rkVector.x,
+                fScalar / rkVector.y);
         }
 
         inline static Vector2 operator + (Vector2 lhs, Real rhs)
         {
-            Vector2 ret(rhs);
-            return ret += lhs;
+            return Vector2(
+                lhs.x + rhs,
+                lhs.y + rhs);
         }
 
         inline static Vector2 operator + (Real lhs, Vector2 rhs)
         {
-            Vector2 ret(lhs);
-            return ret += rhs;
+            return Vector2(
+                lhs + rhs.x,
+                lhs + rhs.y);
         }
 
         inline static Vector2 operator - (Vector2 lhs, Real rhs)
         {
-            return lhs - Vector2(rhs);
+            return Vector2(
+                lhs.x - rhs,
+                lhs.y - rhs);
         }
 
         inline static Vector2 operator - (Real lhs, Vector2 rhs)
         {
-            Vector2 ret(lhs);
-            return ret -= rhs;
+            return Vector2(
+                lhs - rhs.x,
+                lhs - rhs.y);
         }
 
         /** <summary>Returns the length (magnitude) of the vector.</summary>
@@ -317,9 +304,11 @@ namespace Mogre
             Real fLength = System::Math::Sqrt( x * x + y * y);
 
             // Will also work for zero-sized vectors, but will change nothing
-            if ( fLength > 1e-08 )
+            // We're not using epsilons because we don't need to.
+            // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
+            if ( fLength > Real(0.0f) )
             {
-                Real fInvLength = 1.0 / fLength;
+                Real fInvLength = 1.0f / fLength;
                 x *= fInvLength;
                 y *= fInvLength;
             }
@@ -327,16 +316,14 @@ namespace Mogre
             return fLength;
         }
 
-
-
         /** <summary>Returns a vector at a point half way between this and the passed
         in vector.</summary>
         */
         inline Vector2 MidPoint( Vector2 vec )
         {
             return Vector2(
-                ( x + vec.x ) * 0.5,
-                ( y + vec.y ) * 0.5 );
+                ( x + vec.x ) * 0.5f,
+                ( y + vec.y ) * 0.5f );
         }
 
         /** <summary>Returns true if the vector's scalar components are all greater
@@ -409,6 +396,7 @@ namespace Mogre
         {
             return x * rkVector.y - y * rkVector.x;
         }
+
         /** <summary>Generates a new random vector which deviates from this vector by a
         given angle in a random direction.</summary>
         <remarks>
@@ -422,8 +410,7 @@ namespace Mogre
         afterwards.
         </returns>
         */
-        inline Vector2 RandomDeviant(
-            Real angle)
+        inline Vector2 RandomDeviant(Real angle)
         {
 
             angle *=  Math::UnitRandom() * Math::TWO_PI;
@@ -463,6 +450,7 @@ namespace Mogre
         {
             return Vector2( *this - ( 2 * this->DotProduct(normal) * normal ) );
         }
+
         /// <summary>Check whether this vector contains valid values</summary>
         property bool IsNaN
         {
@@ -470,6 +458,40 @@ namespace Mogre
             {
                 return Real::IsNaN(x) || Real::IsNaN(y);
             }
+        }
+
+        /** <summary>Gets the angle between 2 vectors.</summary>
+        <remarks>
+        Vectors do not have to be unit-length but must represent directions.
+        </remarks>
+        */
+        inline Radian AngleBetween(Vector2 other)
+        {
+            Real lenProduct = Length * other.Length;
+            // Divide by zero check
+            if(lenProduct < 1e-6f)
+                lenProduct = 1e-6f;
+
+            Real f = DotProduct(other) / lenProduct;
+
+            f = Math::Clamp(f, (Real)-1.0, (Real)1.0);
+            return Math::ACos(f);
+        }
+
+        /** <summary>Gets the oriented angle between 2 vectors.</summary>
+        <remarks>
+        Vectors do not have to be unit-length but must represent directions.
+        The angle is comprised between 0 and 2 PI.
+        </remarks>
+        */
+        inline Radian AngleTo(Vector2 other)
+        {
+            Radian angle = AngleBetween(other);
+
+            if (CrossProduct(other)<0)
+                angle = (Radian)Math::TWO_PI - angle;
+
+            return angle;
         }
 
         // special points

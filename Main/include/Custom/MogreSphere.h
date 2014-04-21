@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,12 +53,12 @@ namespace Mogre
     public:
         DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Sphere )
 
-        /** <summary>Constructor allowing arbitrary spheres.</summary>
-        <param name="center">The center point of the sphere.</param>
-        <param name="radius">The radius of the sphere.</param>
-        */
-        Sphere(Vector3 center, Real radius)
-        : mRadius(radius), mCenter(center) {}
+            /** <summary>Constructor allowing arbitrary spheres.</summary>
+            <param name="center">The center point of the sphere.</param>
+            <param name="radius">The radius of the sphere.</param>
+            */
+            Sphere(Vector3 center, Real radius)
+            : mRadius(radius), mCenter(center) {}
 
         /** <summary>Gets or Sets the radius of the sphere.</summary> */
         property Real Radius
@@ -74,28 +74,64 @@ namespace Mogre
             void set(Vector3 center) { mCenter = center; }
         }
 
-        /** <summary>Returns whether or not this sphere interects another sphere.</summary> */
+        /** <summary>Returns whether or not this sphere intersects another sphere.</summary> */
         bool Intersects(Sphere s)
         {
-            return (s.mCenter - mCenter).Length <=
-                (s.mRadius + mRadius);
+            return (s.mCenter - mCenter).SquaredLength <=
+                Math::Sqr(s.mRadius + mRadius);
         }
-        /** <summary>Returns whether or not this sphere interects a box.</summary> */
+        /** <summary>Returns whether or not this sphere intersects a box.</summary> */
         bool Intersects(AxisAlignedBox^ box)
         {
             return Math::Intersects(*this, box);
         }
-        /** <summary>Returns whether or not this sphere interects a plane.</summary> */
+        /** <summary>Returns whether or not this sphere intersects a plane.</summary> */
         bool Intersects(Plane plane)
         {
             return Math::Intersects(*this, plane);
         }
-        /** <summary>Returns whether or not this sphere interects a point.</summary> */
+        /** <summary>Returns whether or not this sphere intersects a point.</summary> */
         bool Intersects(Vector3 v)
         {
-            return ((v - mCenter).Length <= mRadius);
+            return ((v - mCenter).SquaredLength <= Math::Sqr(mRadius));
         }
+        /** <summary>Merges another Sphere into the current sphere</summary> */
+        void Merge(Sphere oth)
+        {
+            Vector3 diff =  oth.Center - mCenter;
+            Real lengthSq = diff.SquaredLength;
+            Real radiusDiff = oth.Radius - mRadius;
 
+            // Early-out
+            if (Math::Sqr(radiusDiff) >= lengthSq) 
+            {
+                // One fully contains the other
+                if (radiusDiff <= 0.0f) 
+                    return; // no change
+                else 
+                {
+                    mCenter = oth.Center;
+                    mRadius = oth.Radius;
+                    return;
+                }
+            }
+
+            Real length = Math::Sqrt(lengthSq);
+
+            Vector3 newCenter;
+            Real newRadius;
+            if ((length + oth.Radius) > mRadius) 
+            {
+                Real t = (length + radiusDiff) / (2.0f * length);
+                newCenter = mCenter + diff * t;
+            } 
+            // otherwise, we keep our existing center
+
+            newRadius = 0.5f * (length + mRadius + oth.Radius);
+
+            mCenter = newCenter;
+            mRadius = newRadius;
+        }
 
     };
 }

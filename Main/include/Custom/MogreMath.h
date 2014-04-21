@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,6 +95,12 @@ namespace Mogre
             return 0;
         }
 
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
+        {
+            return System::String::Format("Radian({0})", mRad);
+        }
+
         DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Radian )
     };
 
@@ -143,6 +149,12 @@ namespace Mogre
             if (mDeg < other.mDeg) return -1;
             if (mDeg > other.mDeg) return 1;
             return 0;
+        }
+
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
+        {
+            return System::String::Format("Degree({0})", mDeg);
         }
 
         DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Degree )
@@ -244,13 +256,46 @@ namespace Mogre
         static inline int IFloor (float fValue) { return int(floor(fValue)); }
         static int ISign (int iValue);
 
+        /** <summary>Absolute value function</summary>
+        <param name="fValue">The value whose absolute value will be returned.</param>
+        */
         static inline Real Abs (Real fValue) { return Real(System::Math::Abs(fValue)); }
+
+        /** <summary>Absolute value function</summary>
+        <param name="dValue">The value, in degrees, whose absolute value will be returned.</param>
+        */
         static inline Degree Abs (Degree dValue) { return Degree(System::Math::Abs(dValue.ValueDegrees)); }
+
+        /** <summary>Absolute value function</summary>
+        <param name="rValue">The value, in radians, whose absolute value will be returned.</param>
+        */
         static inline Radian Abs (Radian rValue) { return Radian(System::Math::Abs(rValue.ValueRadians)); }
+
+        /** <summary>Arc cosine function</summary>
+        <param name="fValue">The value whose arc cosine will be returned.</param>
+        */
         static Radian ACos (Real fValue);
+
+        /** <summary>Arc sine function</summary>
+        <param name="fValue">The value whose arc sine will be returned.</param>
+        */
         static Radian ASin (Real fValue);
+
+        /** <summary>Arc tangent function</summary>
+        <param name="fValue">The value whose arc tangent will be returned.</param>
+        */
         static inline Radian ATan (Real fValue) { return Radian(System::Math::Atan(fValue)); }
+
+        /** <summary>Arc tangent between two values function</summary>
+        <param name="fY">The first value to calculate the arc tangent with.</param>
+        <param name="fX">The second value to calculate the arc tangent with.</param>
+        */
         static inline Radian ATan2 (Real fY, Real fX) { return Radian(System::Math::Atan2(fY,fX)); }
+
+        /** <summary>Ceiling function</summary>
+        <param name="fValue">The value to round up to the nearest integer.</param>
+        <returns>Returns the smallest following integer.</returns>
+        */
         static inline Real Ceil (Real fValue) { return Real(System::Math::Ceiling(fValue)); }
 
         /** <summary>Cosine function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
@@ -284,6 +329,10 @@ namespace Mogre
 
         static inline Real Exp (Real fValue) { return Real(System::Math::Exp(fValue)); }
 
+        /** <summary>Floor function</summary>
+        <param name="fValue">The value to round down to the nearest integer.</param>
+        <returns>Returns the largest previous integer.</returns>
+        */
         static inline Real Floor (Real fValue) { return Real(System::Math::Floor(fValue)); }
 
         static inline Real Log (Real fValue) { return Real(System::Math::Log(fValue)); }
@@ -333,24 +382,50 @@ namespace Mogre
             return Real(System::Math::Sin(fValue));
         }
 
+        /** <summary>Square function.</summary>
+        <param name="fValue">The value to be squared.</param>
+        */
         static inline Real Sqr (Real fValue) { return fValue*fValue; }
 
+        /** <summary>Square root function.</summary>
+        <param name="fValue">The value whose square root will be calculated.</param>
+        */
         static inline Real Sqrt (Real fValue) { return Real(System::Math::Sqrt(fValue)); }
 
+        /** <summary>Square root function.</summary>
+        <param name="fValue">The value, in radians, whose square root will be calculated.</param>
+        <returns>The square root of the angle in radians.</returns>
+        */
         static inline Radian Sqrt (Radian fValue) { return Radian(System::Math::Sqrt(fValue.ValueRadians)); }
 
+        /** <summary>Square root function.</summary>
+        <param name="fValue">The value, in degrees, whose square root will be calculated.</param>
+        <returns>The square root of the angle in degrees.</returns>
+        */
         static inline Degree Sqrt (Degree fValue) { return Degree(System::Math::Sqrt(fValue.ValueDegrees)); }
 
         /** <summary>Inverse square root i.e. 1 / Sqrt(x), good for vector
         normalisation.</summary>
+        <param name="fValue">The value whose inverse square root will be calculated.</param>
         */
         static Real InvSqrt(Real fValue);
 
-        static Real UnitRandom ();  // in [0,1]
+        /** <summary>Generate a random number of unit length.</summary>
+        <returns>A random number in the range from [0,1].</returns>
+        */
+        static Real UnitRandom ();
 
-        static Real RangeRandom (Real fLow, Real fHigh);  // in [fLow,fHigh]
+        /** <summary>Generate a random number within the range provided.</summary>
+        <param name="fLow">The lower bound of the range.</param>
+        <param name="fHigh">The upper bound of the range.</param>
+        <returns>A random number in the range from [<paramref name="fLow" />,<paramref name="fHigh" />].</returns>
+        */
+        static Real RangeRandom (Real fLow, Real fHigh);
 
-        static Real SymmetricRandom ();  // in [-1,1]
+        /** <summary>Generate a random number in the range [-1,1].</summary>
+        <returns>A random number in the range from [-1,1].</returns>
+        */
+        static Real SymmetricRandom ();
 
         /** <summary>Tangent function. IMPORTANT: Create an instance of the Math class before you use tables.</summary>
         <param name="fValue">Angle in radians</param>
@@ -665,7 +740,7 @@ namespace Mogre
         /** <summary>Clamp a value within an inclusive range.</summary> */
         static Real Clamp(Real val, Real minval, Real maxval)
         {
-            assert (minval < maxval && "Invalid clamp range");
+            assert (minval <= maxval && "Invalid clamp range");
             return System::Math::Max(System::Math::Min(val, maxval), minval);
         }
 

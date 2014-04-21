@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,6 +60,8 @@ namespace Mogre
 
         /** <summary>Construct a plane through a normal, and a distance to move the plane along the normal.</summary>*/
         Plane (Vector3 rkNormal, Real fConstant);
+        /** <summary>Construct a plane using the 4 constants directly</summary> **/
+        Plane (Real a, Real b, Real c, Real d);
         Plane (Vector3 rkNormal, Vector3 rkPoint);
         Plane (Vector3 rkPoint0, Vector3 rkPoint1,
             Vector3 rkPoint2);

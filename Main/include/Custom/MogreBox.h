@@ -1,3 +1,30 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE
+    (Object-oriented Graphics Rendering Engine) ported to C++/CLI
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2012 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
 #pragma once
 
 #pragma warning(push, 0)
@@ -126,11 +153,18 @@ namespace Mogre
             setConsecutive();
         }
 
+        /** <summary>Constructor providing extents in the form of a Box object. This constructor
+        assumes the pixel data is laid out consecutively in memory. (this
+        means row after row, slice after slice, with no space in between)</summary>
+        <param name="extents">Extents of the region defined by data</param>
+        <param name="pixelFormat">Format of this buffer</param>
+        */
         PixelBox(Box extents, PixelFormat pixelFormat):
         box(extents), data(0), format(pixelFormat)
         {
             setConsecutive();
         }
+
         /** <summary>Constructor providing width, height and depth. This constructor
         assumes the pixel data is laid out consecutively in memory. (this
         means row after row, slice after slice, with no space in between)</summary>
@@ -147,6 +181,14 @@ namespace Mogre
             setConsecutive();
         }
 
+        /** <summary>Constructor providing width, height and depth. This constructor
+        assumes the pixel data is laid out consecutively in memory. (this
+        means row after row, slice after slice, with no space in between)</summary>
+        <param name="width">Width of the region</param>
+        <param name="height">Height of the region</param>
+        <param name="depth">Depth of the region</param>
+        <param name="pixelFormat">Format of this buffer</param>
+        */
         PixelBox(size_t width, size_t height, size_t depth, PixelFormat pixelFormat):
         box( Box(0, 0, 0, width, height, depth) ),
             data(0), format(pixelFormat)
@@ -172,7 +214,7 @@ namespace Mogre
 
         /** <summary>Set the rowPitch and slicePitch so that the buffer is laid out consecutive 
         in memory.</summary>
-        */        
+        */
         void setConsecutive()
         {
             rowPitch = box.Width;

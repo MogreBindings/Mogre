@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,18 @@ namespace Mogre
     typedef Ogre::ABGR ABGR;
     typedef Ogre::BGRA BGRA;
 
+    /** <summary>Class representing colour.</summary>
+    <remarks>
+    Colour is represented as 4 components, each of which is a
+    floating-point value from 0.0 to 1.0.
+    <para/>
+    The 3 'normal' colour components are red, green and blue, a higher
+    number indicating greater amounts of that component in the colour.
+    The forth component is the 'alpha' value, which represents
+    transparency. In this case, 0.0 is completely transparent and 1.0 is
+    fully opaque.
+    </remarks>
+    */
     [Serializable]
     [StructLayout(LayoutKind::Sequential)]
     public value class ColourValue : IEquatable<ColourValue>
@@ -137,6 +149,23 @@ namespace Mogre
             return ret;
         }
 
+        property float default[int]
+        {
+            inline float get(int i)
+            {
+                assert( i < 4 );
+
+                return *(&r+i);
+            }
+
+            inline void set(int i, float value)
+            {
+                assert( i < 4 );
+
+                *(&r+i) = value;
+            }
+        }
+
         // arithmetic operations
         inline static ColourValue operator + ( ColourValue lcol, ColourValue rkVector )
         {
@@ -190,10 +219,10 @@ namespace Mogre
         {
             ColourValue kProd;
 
-            kProd.r = rhs.r / lcol.r;
-            kProd.g = rhs.g / lcol.g;
-            kProd.b = rhs.b / lcol.b;
-            kProd.a = rhs.a / lcol.a;
+            kProd.r = lcol.r / rhs.r;
+            kProd.g = lcol.g / rhs.g;
+            kProd.b = lcol.b / rhs.b;
+            kProd.a = lcol.a / rhs.a;
 
             return kProd;
         }
@@ -204,7 +233,7 @@ namespace Mogre
 
             ColourValue kDiv;
 
-            float fInv = 1.0 / fScalar;
+            float fInv = 1.0f / fScalar;
             kDiv.r = lcol.r * fInv;
             kDiv.g = lcol.g * fInv;
             kDiv.b = lcol.b * fInv;

@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -56,21 +56,12 @@ namespace Mogre
     public:
         DEFINE_MANAGED_NATIVE_CONVERSIONS_FOR_VALUECLASS( Quaternion )
 
+        /// <summary>Construct from an explicit list of values</summary>
         inline Quaternion (
             Real fW,
             Real fX, Real fY, Real fZ)
+            : w(fW), x(fX), y(fY), z(fZ)
         {
-            w = fW;
-            x = fX;
-            y = fY;
-            z = fZ;
-        }
-        inline Quaternion ( Real fW )
-        {
-            w = fW;
-            x = 0;
-            y = 0;
-            z = 0;
         }
         /// <summary>Construct a quaternion from a rotation matrix</summary>
         inline Quaternion(Matrix3^ rot)
@@ -103,6 +94,9 @@ namespace Mogre
 
         void FromRotationMatrix (Matrix3^ kRot);
         Matrix3^ ToRotationMatrix ();
+        /** <summary>Setups the quaternion using the supplied vector, and "roll" around
+        that vector by the specified radians.</summary>
+        */
         void FromAngleAxis (Radian rfAngle, Vector3 rkAxis);
         void ToAngleAxis ([Out] Radian% rfAngle, [Out] Vector3% rkAxis);
         inline void ToAngleAxis ([Out] Degree% dAngle, [Out] Vector3% rkAxis) {
@@ -110,21 +104,33 @@ namespace Mogre
             ToAngleAxis ( rAngle, rkAxis );
             dAngle = rAngle;
         }
+        /** <summary>Constructs the quaternion using 3 axes, the axes are assumed to be orthonormal</summary>
+        */
         void FromAxes (array<Vector3>^ akAxis);
         void FromAxes (Vector3 xAxis, Vector3 yAxis, Vector3 zAxis);
+        /** <summary>Gets the 3 orthonormal axes defining the quaternion.</summary> */
         void ToAxes ([Out] array<Vector3>^% akAxis);
         void ToAxes ([Out] Vector3% xAxis, [Out] Vector3% yAxis, [Out] Vector3% zAxis);
-        /// <summary>Get the local x-axis</summary>
+
+        /** <summary>Returns the X orthonormal axis defining the quaternion. Same as doing
+        xAxis = Vector3.UNIT_X * this. Also called the local X-axis</summary>
+        */
         property Vector3 XAxis
         {
             Vector3 get();
         }
-        /// <summary>Get the local y-axis</summary>
+
+        /** <summary>Returns the Y orthonormal axis defining the quaternion. Same as doing
+        yAxis = Vector3.UNIT_Y * this. Also called the local Y-axis</summary>
+        */
         property Vector3 YAxis
         {
             Vector3 get();
         }
-        /// <summary>Get the local z-axis</summary>
+
+        /** <summary>Returns the Z orthonormal axis defining the quaternion. Same as doing
+        zAxis = Vector3.UNIT_Z * this. Also called the local Z-axis</summary>
+        */
         property Vector3 ZAxis
         {
             Vector3 get();
@@ -149,8 +155,14 @@ namespace Mogre
         virtual bool Equals(Quaternion other) { return *this == other; }
 
         // functions of a quaternion
-        Real Dot (Quaternion rkQ);  // dot product
-        property Real Norm  // squared-length
+        /// <summary>Returns the dot product of the quaternion</summary>
+        Real Dot (Quaternion rkQ);
+        /* <summary>Returns the normal length of this quaternion.</summary>
+        <remarks>
+        <note>This does <b>not</b> alter any values.</note>
+        </remarks>
+        */
+        property Real Norm
         {
             Real get();
         }
@@ -161,7 +173,7 @@ namespace Mogre
         Quaternion Exp();
         Quaternion Log();
 
-        // rotation of a vector by a quaternion
+        // Rotation of a vector by a quaternion
         static Vector3 operator* (Quaternion lquat, Vector3 rkVector);
 
         /// <summary>Calculate the local roll element of this quaternion</summary>
@@ -186,7 +198,8 @@ namespace Mogre
         Y axes, the angle between them is returned. If set to false though, the
         result is the actual yaw that will be used to implement the quaternion,
         which is the shortest possible path to get to the same orientation and 
-        may involve less axial rotation.</param>
+        may involve less axial rotation. The co-domain of the returned value is 
+        from -180 to 180 degrees.</param>
         */
         Radian GetRoll(bool reprojectAxis);
         /** <summary>Calculate the local pitch element of this quaternion</summary>
@@ -195,23 +208,37 @@ namespace Mogre
         Y axes, the angle between them is returned. If set to true though, the
         result is the actual yaw that will be used to implement the quaternion,
         which is the shortest possible path to get to the same orientation and 
-        may involve less axial rotation.</param>
+        may involve less axial rotation. The co-domain of the returned value is 
+        from -180 to 180 degrees.</param>
         */
         Radian GetPitch(bool reprojectAxis);
         /** <summary>Calculate the local yaw element of this quaternion</summary>
         <param name="reprojectAxis">By default the method returns the 'intuitive' result
-        that is, if you projected the local Z of the quaternion onto the X and
+        that is, if you projected the local Y of the quaternion onto the X and
         Z axes, the angle between them is returned. If set to true though, the
         result is the actual yaw that will be used to implement the quaternion,
         which is the shortest possible path to get to the same orientation and 
-        may involve less axial rotation.</param>
+        may involve less axial rotation. The co-domain of the returned value is 
+        from -180 to 180 degrees.</param>
         */
         Radian GetYaw(bool reprojectAxis);
 
         /// <summary>Equality with tolerance (tolerance is max angle difference)</summary>
         bool Equals(Quaternion rhs, Radian tolerance);
 
-        // spherical linear interpolation
+        /** <summary>Performs Spherical linear interpolation between two quaternions, and returns the result.
+        Slerp ( 0.0f, A, B ) = A
+        Slerp ( 1.0f, A, B ) = B</summary>
+        <returns>Interpolated quaternion</returns>
+        <remarks>
+        Slerp has the proprieties of performing the interpolation at constant
+        velocity, and being torque-minimal (unless shortestPath=false).
+        However, it's NOT commutative, which means
+        Slerp ( 0.75f, A, B ) != Slerp ( 0.25f, B, A );
+        therefore be careful if your code relies in the order of the operands.
+        This is specially important in IK animation.
+        </remarks>
+        */
         static Quaternion Slerp (Real fT, Quaternion rkP,
             Quaternion rkQ, bool shortestPath);
         static Quaternion Slerp (Real fT, Quaternion rkP,
@@ -220,6 +247,10 @@ namespace Mogre
             return Slerp(fT, rkP, rkQ, false);
         }
 
+        /** <summary><see cref="Slerp(Real,Quaternion,Quaternion,bool)"/>. It adds extra "spins" (i.e. rotates several times) specified
+        by parameter 'iExtraSpins' while interpolating before arriving to the
+        final values</summary>
+        */
         static Quaternion SlerpExtraSpins (Real fT,
             Quaternion rkP, Quaternion rkQ,
             int iExtraSpins);
@@ -240,7 +271,21 @@ namespace Mogre
             return Squad(fT, rkP, rkA, rkB, rkQ, false);
         }
 
-        // normalised linear interpolation - faster but less accurate (non-constant rotation velocity)
+        /** <summary>Performs Normalised linear interpolation between two quaternions, and returns the result.
+        nlerp ( 0.0f, A, B ) = A
+        nlerp ( 1.0f, A, B ) = B</summary>
+        <remarks>
+        Nlerp is faster than Slerp.
+        Nlerp has the proprieties of being commutative (<see cref="Slerp(Real,Quaternion,Quaternion,bool)"/>;
+        commutativity is desired in certain places, like IK animation), and
+        being torque-minimal (unless shortestPath=false). However, it's performing
+        the interpolation at non-constant velocity; sometimes this is desired,
+        sometimes it is not. Having a non-constant velocity can produce a more
+        natural rotation feeling without the need of tweaking the weights; however
+        if your scene relies on the timing of the rotation or assumes it will point
+        at a specific angle at a specific weight value, Slerp is a better choice.
+        </remarks>
+        */
         static Quaternion Nlerp(Real fT, Quaternion rkP, 
             Quaternion rkQ, bool shortestPath);
         static Quaternion Nlerp(Real fT, Quaternion rkP, 
@@ -249,8 +294,8 @@ namespace Mogre
             return Nlerp(fT, rkP, rkQ, false);
         }
 
-        // cutoff for sine near zero
-        static initonly Real ms_fEpsilon = 1e-03;
+        /// <summary>Cutoff for sine near zero</summary>
+        static initonly Real msEpsilon = 1e-03;
 
         // special values
         static initonly Quaternion ZERO = Quaternion(0.0,0.0,0.0,0.0);

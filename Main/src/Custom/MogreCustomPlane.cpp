@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,11 +38,15 @@ namespace Mogre
         normal = rkNormal;
         d = -fConstant;
     }
+    //---------------------------------------------------------------------
+    Plane::Plane (Real a, Real b, Real c, Real _d)
+        : normal(a, b, c), d(_d)
+    {
+    }
     //-----------------------------------------------------------------------
     Plane::Plane (Vector3 rkNormal, Vector3 rkPoint)
     {
-        normal = rkNormal;
-        d = -rkNormal.DotProduct(rkPoint);
+        Redefine(rkNormal, rkPoint);
     }
     //-----------------------------------------------------------------------
     Plane::Plane (Vector3 rkPoint0, Vector3 rkPoint1,
@@ -61,23 +65,23 @@ namespace Mogre
         Real fDistance = GetDistance(rkPoint);
 
         if ( fDistance < 0.0 )
-			return Plane::Side::NEGATIVE_SIDE;
+            return Plane::Side::NEGATIVE_SIDE;
 
         if ( fDistance > 0.0 )
-			return Plane::Side::POSITIVE_SIDE;
+            return Plane::Side::POSITIVE_SIDE;
 
-		return Plane::Side::NO_SIDE;
+        return Plane::Side::NO_SIDE;
     }
-	//-----------------------------------------------------------------------
-	Plane::Side Plane::GetSide (AxisAlignedBox^ box)
-	{
-		if (box->IsNull) 
-			return Plane::Side::NO_SIDE;
-		if (box->IsInfinite)
-			return Plane::Side::BOTH_SIDE;
+    //-----------------------------------------------------------------------
+    Plane::Side Plane::GetSide (AxisAlignedBox^ box)
+    {
+        if (box->IsNull) 
+            return Plane::Side::NO_SIDE;
+        if (box->IsInfinite)
+            return Plane::Side::BOTH_SIDE;
 
         return GetSide(box->Center, box->HalfSize);
-	}
+    }
     //-----------------------------------------------------------------------
     Plane::Side Plane::GetSide (Vector3 centre, Vector3 halfSize)
     {
@@ -106,36 +110,38 @@ namespace Mogre
         normal.Normalise();
         d = -normal.DotProduct(rkPoint0);
     }
-	//-----------------------------------------------------------------------
-	void Plane::Redefine(Vector3 rkNormal, Vector3 rkPoint)
-	{
-		normal = rkNormal;
-		d = -rkNormal.DotProduct(rkPoint);
-	}
-	//-----------------------------------------------------------------------
-	Vector3 Plane::ProjectVector(Vector3 p)
-	{
-		// We know plane normal is unit length, so use simple method
-		Matrix3^ xform = gcnew Matrix3;
-		xform->m00 = normal.x * normal.x - 1.0f;
-		xform->m01 = normal.x * normal.y;
-		xform->m02 = normal.x * normal.z;
-		xform->m10 = normal.y * normal.x;
-		xform->m11 = normal.y * normal.y - 1.0f;
-		xform->m12 = normal.y * normal.z;
-		xform->m20 = normal.z * normal.x;
-		xform->m21 = normal.z * normal.y;
-		xform->m22 = normal.z * normal.z - 1.0f;
-		return xform * p;
+    //-----------------------------------------------------------------------
+    void Plane::Redefine(Vector3 rkNormal, Vector3 rkPoint)
+    {
+        normal = rkNormal;
+        d = -rkNormal.DotProduct(rkPoint);
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Plane::ProjectVector(Vector3 p)
+    {
+        // We know plane normal is unit length, so use simple method
+        Matrix3^ xform = gcnew Matrix3;
+        xform->m00 = 1.0f - normal.x * normal.x;
+        xform->m01 = -normal.x * normal.y;
+        xform->m02 = -normal.x * normal.z;
+        xform->m10 = -normal.y * normal.x;
+        xform->m11 = 1.0f - normal.y * normal.y;
+        xform->m12 = -normal.y * normal.z;
+        xform->m20 = -normal.z * normal.x;
+        xform->m21 = -normal.z * normal.y;
+        xform->m22 = 1.0f - normal.z * normal.z;
+        return xform * p;
 
-	}
-	//-----------------------------------------------------------------------
+    }
+    //-----------------------------------------------------------------------
     Real Plane::Normalise()
     {
         Real fLength = normal.Length;
 
         // Will also work for zero-sized vectors, but will change nothing
-        if (fLength > 1e-08f)
+        // We're not using epsilons because we don't need to.
+        // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
+        if ( fLength > Real(0.0f) )
         {
             Real fInvLength = 1.0f / fLength;
             normal *= fInvLength;
@@ -145,8 +151,8 @@ namespace Mogre
         return fLength;
     }
     //-----------------------------------------------------------------------
-	String^ Plane::ToString()
+    String^ Plane::ToString()
     {
-		return String::Format("Plane(normal={0}, d={1})", normal, d);
+        return String::Format("Plane(normal={0}, d={1})", normal, d);
     }
 }

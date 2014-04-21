@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -88,7 +88,7 @@ namespace Mogre {
         Extent mExtent;
 
         [NonSerialized]
-        array<Vector3>^ mpCorners;
+        array<Vector3>^ mCorners;
 
     public:
         /*
@@ -292,23 +292,23 @@ namespace Mogre {
             // Maximum Z face, starting with Max(all), then anticlockwise
             //   around face (looking onto the face)
             // Only for optimization/compatibility.
-            if (!mpCorners)
-                mpCorners = gcnew array<Vector3>(8);
+            if (!mCorners)
+                mCorners = gcnew array<Vector3>(8);
 
-            mpCorners[0] = mMinimum;
-            mpCorners[1].x = mMinimum.x; mpCorners[1].y = mMaximum.y; mpCorners[1].z = mMinimum.z;
-            mpCorners[2].x = mMaximum.x; mpCorners[2].y = mMaximum.y; mpCorners[2].z = mMinimum.z;
-            mpCorners[3].x = mMaximum.x; mpCorners[3].y = mMinimum.y; mpCorners[3].z = mMinimum.z;            
+            mCorners[0] = mMinimum;
+            mCorners[1].x = mMinimum.x; mCorners[1].y = mMaximum.y; mCorners[1].z = mMinimum.z;
+            mCorners[2].x = mMaximum.x; mCorners[2].y = mMaximum.y; mCorners[2].z = mMinimum.z;
+            mCorners[3].x = mMaximum.x; mCorners[3].y = mMinimum.y; mCorners[3].z = mMinimum.z;
 
-            mpCorners[4] = mMaximum;
-            mpCorners[5].x = mMinimum.x; mpCorners[5].y = mMaximum.y; mpCorners[5].z = mMaximum.z;
-            mpCorners[6].x = mMinimum.x; mpCorners[6].y = mMinimum.y; mpCorners[6].z = mMaximum.z;
-            mpCorners[7].x = mMaximum.x; mpCorners[7].y = mMinimum.y; mpCorners[7].z = mMaximum.z;
+            mCorners[4] = mMaximum;
+            mCorners[5].x = mMinimum.x; mCorners[5].y = mMaximum.y; mCorners[5].z = mMaximum.z;
+            mCorners[6].x = mMinimum.x; mCorners[6].y = mMinimum.y; mCorners[6].z = mMaximum.z;
+            mCorners[7].x = mMaximum.x; mCorners[7].y = mMinimum.y; mCorners[7].z = mMaximum.z;
 
-            return mpCorners;
+            return mCorners;
         }
 
-        /** <summary>gets the position of one of the corners</summary>
+        /** <summary>Gets the position of one of the corners</summary>
         */
         Vector3 GetCorner(CornerEnum cornerToGet)
         {
@@ -429,6 +429,9 @@ namespace Mogre {
             // Getting the old values so that we can use the existing merge method.
             oldMin = mMinimum;
             oldMax = mMaximum;
+
+            // reset
+            SetNull();
 
             // We sequentially compute the corners in the following order :
             // 0, 6, 5, 1, 2, 4 ,7 , 3
@@ -678,9 +681,9 @@ namespace Mogre {
                     throw gcnew Exception("Can't get center of a null or infinite AAB");
 
                 return Vector3(
-                    (mMaximum.x + mMinimum.x) * 0.5,
-                    (mMaximum.y + mMinimum.y) * 0.5,
-                    (mMaximum.z + mMinimum.z) * 0.5);
+                    (mMaximum.x + mMinimum.x) * 0.5f,
+                    (mMaximum.y + mMinimum.y) * 0.5f,
+                    (mMaximum.z + mMinimum.z) * 0.5f);
             }
         }
         /// <summary>Gets the size of the box</summary>
@@ -746,6 +749,33 @@ namespace Mogre {
                 mMinimum.z <= v.z && v.z <= mMaximum.z;
         }
 
+        /** <summary>Returns the minimum distance between a given point and any part of the box.</summary> */
+        Real Distance(Vector3 v)
+        {
+            if (Contains(v))
+                return 0;
+            else
+            {
+                Real maxDist = Real::MinValue;
+
+                if (v.x < mMinimum.x)
+                    maxDist = System::Math::Max(maxDist, mMinimum.x - v.x);
+                if (v.y < mMinimum.y)
+                    maxDist = System::Math::Max(maxDist, mMinimum.y - v.y);
+                if (v.z < mMinimum.z)
+                    maxDist = System::Math::Max(maxDist, mMinimum.z - v.z);
+
+                if (v.x > mMaximum.x)
+                    maxDist = System::Math::Max(maxDist, v.x - mMaximum.x);
+                if (v.y > mMaximum.y)
+                    maxDist = System::Math::Max(maxDist, v.y - mMaximum.y);
+                if (v.z > mMaximum.z)
+                    maxDist = System::Math::Max(maxDist, v.z - mMaximum.z);
+
+                return maxDist;
+            }
+        }
+
         /** <summary>Tests whether another box contained by this box.</summary>
         */
         bool Contains(AxisAlignedBox^ other)
@@ -786,6 +816,11 @@ namespace Mogre {
             return this->mMinimum == rhs->mMinimum &&
                 this->mMaximum == rhs->mMaximum;
         }
+
+        // special values
+        static initonly AxisAlignedBox^ BOX_NULL = gcnew AxisAlignedBox( );
+        static initonly AxisAlignedBox^ BOX_INFINITE = gcnew AxisAlignedBox( Extent::EXTENT_INFINITE );
+
     };
 
 } // namespace Mogre

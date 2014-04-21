@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -217,10 +217,10 @@ namespace Mogre
         void SingularValueComposition (Matrix3^ rkL,
             Vector3 rkS, Matrix3^ rkR);
 
-        // Gram-Schmidt orthonormalization (applied to columns of rotation matrix)
+        /// <summary>Gram-Schmidt orthonormalization (applied to columns of rotation matrix)</summary>
         void Orthonormalize ();
 
-        // orthogonal Q, diagonal D, upper triangular U stored as (u01,u02,u12)
+        /// <summary>Orthogonal Q, diagonal D, upper triangular U stored as (u01,u02,u12)</summary>
         void QDUDecomposition ([Out] Matrix3^% rkQ, [Out] Vector3% rkD,
             [Out] Vector3% rkU);
 
@@ -230,13 +230,13 @@ namespace Mogre
         }
 
         // matrix must be orthonormal
-        void ToAxisAngle ([Out] Vector3% rkAxis, [Out] Radian% rfAngle);
-        inline void ToAxisAngle ([Out] Vector3% rkAxis, [Out] Degree% rfAngle) {
+        void ToAngleAxis ([Out] Vector3% rkAxis, [Out] Radian% rfAngle);
+        inline void ToAngleAxis ([Out] Vector3% rkAxis, [Out] Degree% rfAngle) {
             Radian r;
-            ToAxisAngle ( rkAxis, r );
+            ToAngleAxis ( rkAxis, r );
             rfAngle = r;
         }
-        void FromAxisAngle (Vector3 rkAxis, Radian fRadians);
+        void FromAngleAxis (Vector3 rkAxis, Radian fRadians);
 
         // The matrix must be orthonormal.  The decomposition is yaw*pitch*roll
         // where yaw is rotation about the Up vector, pitch is rotation about the
@@ -259,7 +259,7 @@ namespace Mogre
         void FromEulerAnglesYZX (Radian fYAngle, Radian fPAngle, Radian fRAngle);
         void FromEulerAnglesZXY (Radian fYAngle, Radian fPAngle, Radian fRAngle);
         void FromEulerAnglesZYX (Radian fYAngle, Radian fPAngle, Radian fRAngle);
-        // eigensolver, matrix must be symmetric
+        /// <summary>Eigensolver, matrix must be symmetric</summary>
         void EigenSolveSymmetric (array<Real>^ afEigenvalue,
             array<Vector3>^ akEigenvector);
 
@@ -284,6 +284,13 @@ namespace Mogre
 
                 return false;
             }
+        }
+
+        /// <inheritdoc />
+        virtual System::String^ ToString() override
+        {
+            return System::String::Format("Matrix3({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})",
+                m00, m01, m02, m10, m11, m12, m20, m21, m22);
         }
 
         static initonly Real EPSILON = 1e-06;
@@ -318,8 +325,8 @@ namespace Mogre
         bool QLAlgorithm (Real afDiag[3], Real afSubDiag[3]);
 
         // support for singular value decomposition
-        static const Real ms_fSvdEpsilon = 1e-04;
-        static const unsigned int ms_iSvdMaxIterations = 32;
+        static initonly Real msSvdEpsilon = 1e-04;
+        static initonly unsigned int msSvdMaxIterations = 32;
         static void Bidiagonalize (Matrix3^ kA, Matrix3^ kL,
             Matrix3^ kR);
         static void GolubKahanStep (Matrix3^ kA, Matrix3^ kL,

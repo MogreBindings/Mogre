@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ namespace Mogre
     /** <summary>Standard 3-dimensional vector.</summary>
     <remarks>
     A direction in 3D space represented as distances along the 3
-    orthoganal axes (x, y, z). Note that positions, directions and
+    orthogonal axes (x, y, z). Note that positions, directions and
     scaling factors can be represented by a vector, depending on how
     you interpret the values.
     </remarks>
@@ -116,118 +116,109 @@ namespace Mogre
         virtual bool Equals(Vector3 other) { return *this == other; }
 
         // arithmetic operations
-        inline static Vector3 operator + ( Vector3 lvec, Vector3 rvec)
+        inline static Vector3 operator + ( Vector3 lvec, Vector3 rkVector )
         {
-            Vector3 kSum;
-
-            kSum.x = lvec.x + rvec.x;
-            kSum.y = lvec.y + rvec.y;
-            kSum.z = lvec.z + rvec.z;
-
-            return kSum;
+            return Vector3(
+                lvec.x + rkVector.x,
+                lvec.y + rkVector.y,
+                lvec.z + rkVector.z);
         }
 
-        inline static Vector3 operator - ( Vector3 lvec, Vector3 rvec)
+        inline static Vector3 operator - ( Vector3 lvec, Vector3 rkVector )
         {
-            Vector3 kDiff;
-
-            kDiff.x = lvec.x - rvec.x;
-            kDiff.y = lvec.y - rvec.y;
-            kDiff.z = lvec.z - rvec.z;
-
-            return kDiff;
+            return Vector3(
+                lvec.x - rkVector.x,
+                lvec.y - rkVector.y,
+                lvec.z - rkVector.z);
         }
 
-        inline static Vector3 operator * ( Vector3 lvec, Real fScalar)
+        inline static Vector3 operator * ( Vector3 lvec, Real fScalar )
         {
-            Vector3 kProd;
-
-            kProd.x = fScalar*lvec.x;
-            kProd.y = fScalar*lvec.y;
-            kProd.z = fScalar*lvec.z;
-
-            return kProd;
+            return Vector3(
+                lvec.x * fScalar,
+                lvec.y * fScalar,
+                lvec.z * fScalar);
         }
 
-        inline static Vector3 operator * ( Real fScalar, Vector3 rvec)
+        inline static Vector3 operator * ( Vector3 lvec, Vector3 rhs)
         {
-            Vector3 kProd;
-
-            kProd.x = fScalar*rvec.x;
-            kProd.y = fScalar*rvec.y;
-            kProd.z = fScalar*rvec.z;
-
-            return kProd;
+            return Vector3(
+                lvec.x * rhs.x,
+                lvec.y * rhs.y,
+                lvec.z * rhs.z);
         }
 
-        inline static Vector3 operator * ( Vector3 lvec, Vector3 rvec)
-        {
-            Vector3 kProd;
-
-            kProd.x = lvec.x * rvec.x;
-            kProd.y = lvec.y * rvec.y;
-            kProd.z = lvec.z * rvec.z;
-
-            return kProd;
-        }
-
-        inline static Vector3 operator / ( Vector3 lvec, Real fScalar)
+        inline static Vector3 operator / ( Vector3 lvec, Real fScalar )
         {
             assert( fScalar != 0.0 );
 
-            Vector3 kDiv;
+            Real fInv = 1.0f / fScalar;
 
-            Real fInv = 1.0 / fScalar;
-            kDiv.x = lvec.x * fInv;
-            kDiv.y = lvec.y * fInv;
-            kDiv.z = lvec.z * fInv;
-
-            return kDiv;
+            return Vector3(
+                lvec.x * fInv,
+                lvec.y * fInv,
+                lvec.z * fInv);
         }
 
-        inline static Vector3 operator / ( Vector3 lvec, Vector3 rvec )
+        inline static Vector3 operator / ( Vector3 lvec, Vector3 rhs)
         {
-            Vector3 kDiv;
-
-            kDiv.x = lvec.x / rvec.x;
-            kDiv.y = lvec.y / rvec.y;
-            kDiv.z = lvec.z / rvec.z;
-
-            return kDiv;
+            return Vector3(
+                lvec.x / rhs.x,
+                lvec.y / rhs.y,
+                lvec.z / rhs.z);
         }
 
         inline static Vector3 operator - ( Vector3 vec )
         {
-            Vector3 kNeg;
-
-            kNeg.x = -vec.x;
-            kNeg.y = -vec.y;
-            kNeg.z = -vec.z;
-
-            return kNeg;
+            return Vector3(-vec.x, -vec.y, -vec.z);
         }
 
-        inline static Vector3 operator + ( Vector3 lvec, Real rhs )
+        inline static Vector3 operator * ( Real fScalar, Vector3 rkVector)
         {
-            Vector3 ret(rhs);
-            return ret += lvec;
+            return Vector3(
+                fScalar * rkVector.x,
+                fScalar * rkVector.y,
+                fScalar * rkVector.z);
         }
 
-        inline static Vector3 operator + ( Real lhs, Vector3 rvec )
+        inline static Vector3 operator / ( Real fScalar, Vector3 rkVector )
         {
-            Vector3 ret(lhs);
-            return ret += rvec;
+            return Vector3(
+                fScalar / rkVector.x,
+                fScalar / rkVector.y,
+                fScalar / rkVector.z);
         }
 
-        inline static Vector3 operator - ( Vector3 lvec, Real rhs )
+        inline static Vector3 operator + ( Vector3 lhs, Real rhs )
         {
-            return lvec - Vector3(rhs);
+            return Vector3(
+                lhs.x + rhs,
+                lhs.y + rhs,
+                lhs.z + rhs);
         }
 
-        inline static Vector3 operator - ( Real lhs, Vector3 rvec )
+        inline static Vector3 operator + ( Real lhs, Vector3 rhs )
         {
-            Vector3 ret(lhs);
-            return ret -= rvec;
+            return Vector3(
+                lhs + rhs.x,
+                lhs + rhs.y,
+                lhs + rhs.z);
+        }
+
+        inline static Vector3 operator - ( Vector3 lhs, Real rhs )
+        {
+            return Vector3(
+                lhs.x - rhs,
+                lhs.y - rhs,
+                lhs.z - rhs);
+        }
+
+        inline static Vector3 operator - ( Real lhs, Vector3 rhs )
+        {
+            return Vector3(
+                lhs - rhs.x,
+                lhs - rhs.y,
+                lhs - rhs.z);
         }
 
         /** <summary>Returns the length (magnitude) of the vector.</summary>
@@ -344,9 +335,11 @@ namespace Mogre
             Real fLength = System::Math::Sqrt( x * x + y * y + z * z );
 
             // Will also work for zero-sized vectors, but will change nothing
-            if ( fLength > 1e-08 )
+            // We're not using epsilons because we don't need to.
+            // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
+            if ( fLength > Real(0.0f) )
             {
-                Real fInvLength = 1.0 / fLength;
+                Real fInvLength = 1.0f / fLength;
                 x *= fInvLength;
                 y *= fInvLength;
                 z *= fInvLength;
@@ -388,13 +381,10 @@ namespace Mogre
         */
         inline Vector3 CrossProduct( Vector3 rkVector )
         {
-            Vector3 kCross;
-
-            kCross.x = y * rkVector.z - z * rkVector.y;
-            kCross.y = z * rkVector.x - x * rkVector.z;
-            kCross.z = x * rkVector.y - y * rkVector.x;
-
-            return kCross;
+            return Vector3(
+                y * rkVector.z - z * rkVector.y,
+                z * rkVector.x - x * rkVector.z,
+                x * rkVector.y - y * rkVector.x);
         }
 
         /** <summary>Returns a vector at a point half way between this and the passed
@@ -403,17 +393,17 @@ namespace Mogre
         inline Vector3 MidPoint( Vector3 vec )
         {
             return Vector3(
-                ( x + vec.x ) * 0.5,
-                ( y + vec.y ) * 0.5,
-                ( z + vec.z ) * 0.5 );
+                ( x + vec.x ) * 0.5f,
+                ( y + vec.y ) * 0.5f,
+                ( z + vec.z ) * 0.5f );
         }
 
         /** <summary>Returns true if the vector's scalar components are all greater
         that the ones of the vector it is compared against.</summary>
         */
-        inline static bool operator < ( Vector3 lvec, Vector3 rvec )
+        inline static bool operator < ( Vector3 lvec, Vector3 rhs )
         {
-            if( lvec.x < rvec.x && lvec.y < rvec.y && lvec.z < rvec.z )
+            if( lvec.x < rhs.x && lvec.y < rhs.y && lvec.z < rhs.z )
                 return true;
             return false;
         }
@@ -470,7 +460,7 @@ namespace Mogre
         {
             inline Vector3 get()
             {
-                static const Real fSquareZero = 1e-06 * 1e-06;
+                static const Real fSquareZero = (Real)(1e-06 * 1e-06);
 
                 Vector3 perp = this->CrossProduct( Vector3::UNIT_X );
 
@@ -482,6 +472,7 @@ namespace Mogre
                     */
                     perp = this->CrossProduct( Vector3::UNIT_Y );
                 }
+                perp.Normalise();
 
                 return perp;
             }
@@ -664,6 +655,27 @@ namespace Mogre
             inline bool get()
             {
                 return Real::IsNaN(x) || Real::IsNaN(y) || Real::IsNaN(z);
+            }
+        }
+
+        /// <summary>Extract the primary (dominant) axis from this direction vector</summary>
+        property Vector3 PrimaryAxis
+        {
+            inline Vector3 get()
+            {
+                Real absx = Math::Abs(x);
+                Real absy = Math::Abs(y);
+                Real absz = Math::Abs(z);
+                if (absx > absy)
+                    if (absx > absz)
+                        return x > 0 ? Vector3::UNIT_X : Vector3::NEGATIVE_UNIT_X;
+                    else
+                        return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
+                else // absx <= absy
+                    if (absy > absz)
+                        return y > 0 ? Vector3::UNIT_Y : Vector3::NEGATIVE_UNIT_Y;
+                    else
+                        return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
             }
         }
 

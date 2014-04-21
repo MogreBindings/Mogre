@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-    /** <summary>4-dimensional homogenous vector.</summary>
+    /** <summary>4-dimensional homogeneous vector.</summary>
     */
     [Serializable]
     public value class Vector4 : IEquatable<Vector4>
@@ -129,121 +129,119 @@ namespace Mogre
         // arithmetic operations
         inline static Vector4 operator + ( Vector4 lvec, Vector4 rkVector )
         {
-            Vector4 kSum;
-
-            kSum.x = lvec.x + rkVector.x;
-            kSum.y = lvec.y + rkVector.y;
-            kSum.z = lvec.z + rkVector.z;
-            kSum.w = lvec.w + rkVector.w;
-
-            return kSum;
+            return Vector4(
+                lvec.x + rkVector.x,
+                lvec.y + rkVector.y,
+                lvec.z + rkVector.z,
+                lvec.w + rkVector.w);
         }
 
         inline static Vector4 operator - ( Vector4 lvec, Vector4 rkVector )
         {
-            Vector4 kDiff;
-
-            kDiff.x = lvec.x - rkVector.x;
-            kDiff.y = lvec.y - rkVector.y;
-            kDiff.z = lvec.z - rkVector.z;
-            kDiff.w = lvec.w - rkVector.w;
-
-            return kDiff;
+            return Vector4(
+                lvec.x - rkVector.x,
+                lvec.y - rkVector.y,
+                lvec.z - rkVector.z,
+                lvec.w - rkVector.w);
         }
 
         inline static Vector4 operator * ( Vector4 lvec, Real fScalar )
         {
-            Vector4 kProd;
-
-            kProd.x = fScalar*lvec.x;
-            kProd.y = fScalar*lvec.y;
-            kProd.z = fScalar*lvec.z;
-            kProd.w = fScalar*lvec.w;
-
-            return kProd;
-        }
-
-        inline static Vector4 operator * ( Real fScalar, Vector4 rvec )
-        {
-            Vector4 kProd;
-
-            kProd.x = fScalar*rvec.x;
-            kProd.y = fScalar*rvec.y;
-            kProd.z = fScalar*rvec.z;
-            kProd.w = fScalar*rvec.w;
-
-            return kProd;
+            return Vector4(
+                lvec.x * fScalar,
+                lvec.y * fScalar,
+                lvec.z * fScalar,
+                lvec.w * fScalar);
         }
 
         inline static Vector4 operator * ( Vector4 lvec, Vector4 rhs)
         {
-            Vector4 kProd;
-
-            kProd.x = lvec.x * rhs.x;
-            kProd.y = lvec.y * rhs.y;
-            kProd.z = lvec.z * rhs.z;
-            kProd.w = lvec.w * rhs.w;
-
-            return kProd;
+            return Vector4(
+                rhs.x * lvec.x,
+                rhs.y * lvec.y,
+                rhs.z * lvec.z,
+                rhs.w * lvec.w);
         }
 
         inline static Vector4 operator / ( Vector4 lvec, Real fScalar )
         {
             assert( fScalar != 0.0 );
 
-            Vector4 kDiv;
+            Real fInv = 1.0f / fScalar;
 
-            Real fInv = 1.0 / fScalar;
-            kDiv.x = lvec.x * fInv;
-            kDiv.y = lvec.y * fInv;
-            kDiv.z = lvec.z * fInv;
-            kDiv.w = lvec.w * fInv;
-
-            return kDiv;
+            return Vector4(
+                lvec.x * fInv,
+                lvec.y * fInv,
+                lvec.z * fInv,
+                lvec.w * fInv);
         }
 
         inline static Vector4 operator / ( Vector4 lvec, Vector4 rhs)
         {
-            Vector4 kDiv;
-
-            kDiv.x = lvec.x / rhs.x;
-            kDiv.y = lvec.y / rhs.y;
-            kDiv.z = lvec.z / rhs.z;
-            kDiv.w = lvec.w / rhs.w;
-
-            return kDiv;
+            return Vector4(
+                lvec.x / rhs.x,
+                lvec.y / rhs.y,
+                lvec.z / rhs.z,
+                lvec.w / rhs.w);
         }
 
         inline static Vector4 operator - (Vector4 vec)
         {
-            Vector4 kNeg;
+            return Vector4(-vec.x, -vec.y, -vec.z, -vec.w);
+        }
 
-            kNeg.x = -vec.x;
-            kNeg.y = -vec.y;
-            kNeg.z = -vec.z;
-            kNeg.w = -vec.w;
+        inline static Vector4 operator * ( Real fScalar, Vector4 rkVector )
+        {
+            return Vector4(
+                fScalar * rkVector.x,
+                fScalar * rkVector.y,
+                fScalar * rkVector.z,
+                fScalar * rkVector.w);
+        }
 
-            return kNeg;
+        inline static Vector4 operator / ( Real fScalar, Vector4 rkVector )
+        {
+            return Vector4(
+                fScalar / rkVector.x,
+                fScalar / rkVector.y,
+                fScalar / rkVector.z,
+                fScalar / rkVector.w);
         }
 
         inline static Vector4 operator + (Vector4 lhs, Real rhs)
         {
-            return Vector4(rhs) + lhs;
+            return Vector4(
+                lhs.x + rhs,
+                lhs.y + rhs,
+                lhs.z + rhs,
+                lhs.w + rhs);
         }
 
         inline static Vector4 operator + (Real lhs, Vector4 rhs)
         {
-            return Vector4(lhs) + rhs;
+            return Vector4(
+                lhs + rhs.x,
+                lhs + rhs.y,
+                lhs + rhs.z,
+                lhs + rhs.w);
         }
 
         inline static Vector4 operator - (Vector4 lhs, Real rhs)
         {
-            return lhs - Vector4(rhs);
+            return Vector4(
+                lhs.x - rhs,
+                lhs.y - rhs,
+                lhs.z - rhs,
+                lhs.w - rhs);
         }
 
         inline static Vector4 operator - (Real lhs, Vector4 rhs)
         {
-            return Vector4(lhs) - rhs;
+            return Vector4(
+                lhs - rhs.x,
+                lhs - rhs.y,
+                lhs - rhs.z,
+                lhs - rhs.w);
         }
 
         /** <summary>Calculates the dot (scalar) product of this vector with another.</summary>

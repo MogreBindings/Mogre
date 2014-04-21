@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-	//-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     Math::Math( unsigned int trigTableSize )
     {
         msAngleUnit = AngleUnit::AU_DEGREE;
@@ -78,8 +78,8 @@ namespace Mogre
             mTanTable[i] = tan(angle);
         }
     }
-	//-----------------------------------------------------------------------	
-	Real Math::SinTable (Real fValue)
+    //-----------------------------------------------------------------------	
+    Real Math::SinTable (Real fValue)
     {
         // Convert range to index values, wrap if required
         int idx;
@@ -94,12 +94,12 @@ namespace Mogre
 
         return mSinTable[idx];
     }
-	//-----------------------------------------------------------------------
-	Real Math::TanTable (Real fValue)
+    //-----------------------------------------------------------------------
+    Real Math::TanTable (Real fValue)
     {
         // Convert range to index values, wrap if required
-		int idx = int(fValue *= mTrigTableFactor) % mTrigTableSize;
-		return mTanTable[idx];
+        int idx = int(fValue *= mTrigTableFactor) % mTrigTableSize;
+        return mTanTable[idx];
     }
     //-----------------------------------------------------------------------
     int Math::ISign (int iValue)
@@ -112,7 +112,7 @@ namespace Mogre
         if ( -1.0 < fValue )
         {
             if ( fValue < 1.0 )
-				return Radian(System::Math::Acos(fValue));
+                return Radian(System::Math::Acos(fValue));
             else
                 return Radian(0.0);
         }
@@ -147,18 +147,18 @@ namespace Mogre
 
         return 0.0;
     }
-	//-----------------------------------------------------------------------
-	Real Math::InvSqrt(Real fValue)
-	{
-		return (Real)(1 / System::Math::Sqrt(fValue));
-	}
+    //-----------------------------------------------------------------------
+    Real Math::InvSqrt(Real fValue)
+    {
+        return (Real)(1 / System::Math::Sqrt(fValue));
+    }
 
-	//-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     Real Math::UnitRandom ()
     {
         return (Real)mRandomizer->NextDouble();
     }
-    
+
     //-----------------------------------------------------------------------
     Real Math::RangeRandom (Real fLow, Real fHigh)
     {
@@ -168,151 +168,151 @@ namespace Mogre
     //-----------------------------------------------------------------------
     Real Math::SymmetricRandom ()
     {
-		return 2.0f * UnitRandom() - 1.0f;
+        return 2.0f * UnitRandom() - 1.0f;
     }
 
-   //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     void Math::SetAngleUnit(Math::AngleUnit unit)
-   {
-       msAngleUnit = unit;
-   }
-   //-----------------------------------------------------------------------
-   Math::AngleUnit Math::GetAngleUnit(void)
-   {
-       return msAngleUnit;
-   }
+    {
+        msAngleUnit = unit;
+    }
+    //-----------------------------------------------------------------------
+    Math::AngleUnit Math::GetAngleUnit(void)
+    {
+        return msAngleUnit;
+    }
     //-----------------------------------------------------------------------
     Real Math::AngleUnitsToRadians(Real angleunits)
     {
-       if (msAngleUnit == AngleUnit::AU_DEGREE)
-           return angleunits * fDeg2Rad;
-       else
-           return angleunits;
+        if (msAngleUnit == AngleUnit::AU_DEGREE)
+            return angleunits * fDeg2Rad;
+        else
+            return angleunits;
     }
 
     //-----------------------------------------------------------------------
     Real Math::RadiansToAngleUnits(Real radians)
     {
-       if (msAngleUnit == AngleUnit::AU_DEGREE)
-           return radians * fRad2Deg;
-       else
-           return radians;
+        if (msAngleUnit == AngleUnit::AU_DEGREE)
+            return radians * fRad2Deg;
+        else
+            return radians;
     }
 
     //-----------------------------------------------------------------------
     Real Math::AngleUnitsToDegrees(Real angleunits)
     {
-       if (msAngleUnit == AngleUnit::AU_RADIAN)
-           return angleunits * fRad2Deg;
-       else
-           return angleunits;
+        if (msAngleUnit == AngleUnit::AU_RADIAN)
+            return angleunits * fRad2Deg;
+        else
+            return angleunits;
     }
 
     //-----------------------------------------------------------------------
     Real Math::DegreesToAngleUnits(Real degrees)
     {
-       if (msAngleUnit == AngleUnit::AU_RADIAN)
-           return degrees * fDeg2Rad;
-       else
-           return degrees;
+        if (msAngleUnit == AngleUnit::AU_RADIAN)
+            return degrees * fDeg2Rad;
+        else
+            return degrees;
     }
 
     //-----------------------------------------------------------------------
-	bool Math::PointInTri2D(Vector2 p, Vector2 a, 
-		Vector2 b, Vector2 c)
+    bool Math::PointInTri2D(Vector2 p, Vector2 a, 
+        Vector2 b, Vector2 c)
     {
-		// Winding must be consistent from all edges for point to be inside
-		Vector2 v1, v2;
-		Real dot[3];
-		bool zeroDot[3];
-
-		v1 = b - a;
-		v2 = p - a;
-
-		// Note we don't care about normalisation here since sign is all we need
-		// It means we don't have to worry about magnitude of cross products either
-		dot[0] = v1.CrossProduct(v2);
-		zeroDot[0] = Math::RealEqual(dot[0], 0.0f, 1e-3);
-
-
-		v1 = c - b;
-		v2 = p - b;
-
-		dot[1] = v1.CrossProduct(v2);
-		zeroDot[1] = Math::RealEqual(dot[1], 0.0f, 1e-3);
-
-		// Compare signs (ignore colinear / coincident points)
-		if(!zeroDot[0] && !zeroDot[1] 
-		&& Math::Sign(dot[0]) != Math::Sign(dot[1]))
-		{
-			return false;
-		}
-
-		v1 = a - c;
-		v2 = p - c;
-
-		dot[2] = v1.CrossProduct(v2);
-		zeroDot[2] = Math::RealEqual(dot[2], 0.0f, 1e-3);
-		// Compare signs (ignore colinear / coincident points)
-		if((!zeroDot[0] && !zeroDot[2] 
-			&& Math::Sign(dot[0]) != Math::Sign(dot[2])) ||
-			(!zeroDot[1] && !zeroDot[2] 
-			&& Math::Sign(dot[1]) != Math::Sign(dot[2])))
-		{
-			return false;
-		}
-
-
-		return true;
-    }
-	//-----------------------------------------------------------------------
-	bool Math::PointInTri3D(Vector3 p, Vector3 a, 
-		Vector3 b, Vector3 c, Vector3 normal)
-	{
         // Winding must be consistent from all edges for point to be inside
-		Vector3 v1, v2;
-		Real dot[3];
-		bool zeroDot[3];
+        Vector2 v1, v2;
+        Real dot[3];
+        bool zeroDot[3];
 
         v1 = b - a;
         v2 = p - a;
 
-		// Note we don't care about normalisation here since sign is all we need
-		// It means we don't have to worry about magnitude of cross products either
-        dot[0] = v1.CrossProduct(v2).DotProduct(normal);
-		zeroDot[0] = Math::RealEqual(dot[0], 0.0f, 1e-3);
+        // Note we don't care about normalisation here since sign is all we need
+        // It means we don't have to worry about magnitude of cross products either
+        dot[0] = v1.CrossProduct(v2);
+        zeroDot[0] = Math::RealEqual(dot[0], 0.0f, 1e-3);
 
 
         v1 = c - b;
         v2 = p - b;
 
-		dot[1] = v1.CrossProduct(v2).DotProduct(normal);
-		zeroDot[1] = Math::RealEqual(dot[1], 0.0f, 1e-3);
+        dot[1] = v1.CrossProduct(v2);
+        zeroDot[1] = Math::RealEqual(dot[1], 0.0f, 1e-3);
 
-		// Compare signs (ignore colinear / coincident points)
-		if(!zeroDot[0] && !zeroDot[1] 
-			&& Math::Sign(dot[0]) != Math::Sign(dot[1]))
-		{
+        // Compare signs (ignore colinear / coincident points)
+        if(!zeroDot[0] && !zeroDot[1] 
+        && Math::Sign(dot[0]) != Math::Sign(dot[1]))
+        {
             return false;
-		}
+        }
 
         v1 = a - c;
         v2 = p - c;
 
-		dot[2] = v1.CrossProduct(v2).DotProduct(normal);
-		zeroDot[2] = Math::RealEqual(dot[2], 0.0f, 1e-3);
-		// Compare signs (ignore colinear / coincident points)
-		if((!zeroDot[0] && !zeroDot[2] 
-			&& Math::Sign(dot[0]) != Math::Sign(dot[2])) ||
-			(!zeroDot[1] && !zeroDot[2] 
-			&& Math::Sign(dot[1]) != Math::Sign(dot[2])))
-		{
-			return false;
-		}
+        dot[2] = v1.CrossProduct(v2);
+        zeroDot[2] = Math::RealEqual(dot[2], 0.0f, 1e-3);
+        // Compare signs (ignore colinear / coincident points)
+        if((!zeroDot[0] && !zeroDot[2] 
+        && Math::Sign(dot[0]) != Math::Sign(dot[2])) ||
+            (!zeroDot[1] && !zeroDot[2] 
+        && Math::Sign(dot[1]) != Math::Sign(dot[2])))
+        {
+            return false;
+        }
 
 
         return true;
-	}
+    }
+    //-----------------------------------------------------------------------
+    bool Math::PointInTri3D(Vector3 p, Vector3 a, 
+        Vector3 b, Vector3 c, Vector3 normal)
+    {
+        // Winding must be consistent from all edges for point to be inside
+        Vector3 v1, v2;
+        Real dot[3];
+        bool zeroDot[3];
+
+        v1 = b - a;
+        v2 = p - a;
+
+        // Note we don't care about normalisation here since sign is all we need
+        // It means we don't have to worry about magnitude of cross products either
+        dot[0] = v1.CrossProduct(v2).DotProduct(normal);
+        zeroDot[0] = Math::RealEqual(dot[0], 0.0f, 1e-3);
+
+
+        v1 = c - b;
+        v2 = p - b;
+
+        dot[1] = v1.CrossProduct(v2).DotProduct(normal);
+        zeroDot[1] = Math::RealEqual(dot[1], 0.0f, 1e-3);
+
+        // Compare signs (ignore colinear / coincident points)
+        if(!zeroDot[0] && !zeroDot[1] 
+        && Math::Sign(dot[0]) != Math::Sign(dot[1]))
+        {
+            return false;
+        }
+
+        v1 = a - c;
+        v2 = p - c;
+
+        dot[2] = v1.CrossProduct(v2).DotProduct(normal);
+        zeroDot[2] = Math::RealEqual(dot[2], 0.0f, 1e-3);
+        // Compare signs (ignore colinear / coincident points)
+        if((!zeroDot[0] && !zeroDot[2] 
+        && Math::Sign(dot[0]) != Math::Sign(dot[2])) ||
+            (!zeroDot[1] && !zeroDot[2] 
+        && Math::Sign(dot[1]) != Math::Sign(dot[2])))
+        {
+            return false;
+        }
+
+
+        return true;
+    }
     //-----------------------------------------------------------------------
     bool Math::RealEqual( Real a, Real b, Real tolerance )
     {
@@ -338,7 +338,7 @@ namespace Mogre
             Real t = -(nom/denom);
             return Pair<bool, Real>(t >= 0, t);
         }
-        
+
     }
     //-----------------------------------------------------------------------
     Pair<bool, Real> Math::Intersects(Ray ray, 
@@ -354,7 +354,7 @@ namespace Mogre
         // interface, which results in recursive includes since Math is so fundamental
         Plane::Side outside = normalIsOutside ? Plane::Side::POSITIVE_SIDE : Plane::Side::NEGATIVE_SIDE;
 
-		int count = planes->Count;
+        int count = planes->Count;
         for (int i=0; i < count; i++)
         {
             Plane plane = planes[i];
@@ -398,7 +398,7 @@ namespace Mogre
         // interface, which results in recursive includes since Math is so fundamental
         Plane::Side outside = normalIsOutside ? Plane::Side::POSITIVE_SIDE : Plane::Side::NEGATIVE_SIDE;
 
-		for each (Plane plane in planes)
+        for each (Plane plane in planes)
         {
             // is origin outside?
             if (plane.GetSide(ray.Origin) == outside)
@@ -469,10 +469,10 @@ namespace Mogre
 
     }
 
-	Pair<bool, Real> Math::Intersects(Ray ray, Sphere sphere)
-	{
-		return Intersects(ray, sphere, true);
-	}
+    Pair<bool, Real> Math::Intersects(Ray ray, Sphere sphere)
+    {
+        return Intersects(ray, sphere, true);
+    }
 
     //-----------------------------------------------------------------------
     Pair<bool, Real> Math::Intersects(Ray ray, AxisAlignedBox^ box)
@@ -640,12 +640,12 @@ namespace Mogre
 
 #define _CALC_AXIS(i)                                       \
     do {                                                    \
-		Real temp;											\
-        Real denom = 1 / raydir[i];                         \
-        Real newstart = (min[i] - rayorig[i]) * denom;      \
-        Real newend = (max[i] - rayorig[i]) * denom;        \
-		if (newstart > newend)								\
-			{ temp = newend; newend = newstart; newstart = temp; }	\
+    Real temp;											\
+    Real denom = 1 / raydir[i];                         \
+    Real newstart = (min[i] - rayorig[i]) * denom;      \
+    Real newend = (max[i] - rayorig[i]) * denom;        \
+    if (newstart > newend)								\
+        { temp = newend; newend = newstart; newstart = temp; }	\
         if (newstart > end || newend < start) return false; \
         if (newstart > start) start = newstart;             \
         if (newend < end) end = newend;                     \
@@ -778,20 +778,20 @@ namespace Mogre
         return Pair<bool, Real>(true, t);
     }
 
-	Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
+    Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
         Vector3 b, Vector3 c, Vector3 normal,
         bool positiveSide)
-	{
-		return Intersects(ray, a, b, c, normal, positiveSide, true);
-	}
+    {
+        return Intersects(ray, a, b, c, normal, positiveSide, true);
+    }
 
     Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
         Vector3 b, Vector3 c, Vector3 normal )
-	{
-		return Intersects(ray, a, b, c, normal, true, true);
-	}
+    {
+        return Intersects(ray, a, b, c, normal, true, true);
+    }
 
-	//-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
         Vector3 b, Vector3 c,
         bool positiveSide, bool negativeSide)
@@ -803,15 +803,15 @@ namespace Mogre
     Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
         Vector3 b, Vector3 c,
         bool positiveSide)
-	{
-		return Intersects(ray, a, b, c, positiveSide, true);
-	}
+    {
+        return Intersects(ray, a, b, c, positiveSide, true);
+    }
 
     Pair<bool, Real> Math::Intersects(Ray ray, Vector3 a,
         Vector3 b, Vector3 c )
-	{
-		return Intersects(ray, a, b, c, true, true);
-	}
+    {
+        return Intersects(ray, a, b, c, true, true);
+    }
 
     //-----------------------------------------------------------------------
     bool Math::Intersects(Sphere sphere, AxisAlignedBox^ box)
@@ -897,35 +897,35 @@ namespace Mogre
         Vector3 position1, Vector3 position2, Vector3 position3,
         Real u1, Real v1, Real u2, Real v2, Real u3, Real v3)
     {
-	    //side0 is the vector along one side of the triangle of vertices passed in, 
-	    //and side1 is the vector along another side. Taking the cross product of these returns the normal.
-	    Vector3 side0 = position1 - position2;
-	    Vector3 side1 = position3 - position1;
-	    //Calculate face normal
-	    Vector3 normal = side1.CrossProduct(side0);
-	    normal.Normalise();
-	    //Now we use a formula to calculate the tangent. 
-	    Real deltaV0 = v1 - v2;
-	    Real deltaV1 = v3 - v1;
-	    Vector3 tangent = deltaV1 * side0 - deltaV0 * side1;
-	    tangent.Normalise();
-	    //Calculate binormal
-	    Real deltaU0 = u1 - u2;
-	    Real deltaU1 = u3 - u1;
-	    Vector3 binormal = deltaU1 * side0 - deltaU0 * side1;
-	    binormal.Normalise();
-	    //Now, we take the cross product of the tangents to get a vector which 
-	    //should point in the same direction as our normal calculated above. 
-	    //If it points in the opposite direction (the dot product between the normals is less than zero), 
-	    //then we need to reverse the s and t tangents. 
-	    //This is because the triangle has been mirrored when going from tangent space to object space.
-	    //reverse tangents if necessary
-	    Vector3 tangentCross = tangent.CrossProduct(binormal);
-	    if (tangentCross.DotProduct(normal) < 0.0f)
-	    {
-		    tangent = -tangent;
-		    binormal = -binormal;
-	    }
+        //side0 is the vector along one side of the triangle of vertices passed in, 
+        //and side1 is the vector along another side. Taking the cross product of these returns the normal.
+        Vector3 side0 = position1 - position2;
+        Vector3 side1 = position3 - position1;
+        //Calculate face normal
+        Vector3 normal = side1.CrossProduct(side0);
+        normal.Normalise();
+        //Now we use a formula to calculate the tangent. 
+        Real deltaV0 = v1 - v2;
+        Real deltaV1 = v3 - v1;
+        Vector3 tangent = deltaV1 * side0 - deltaV0 * side1;
+        tangent.Normalise();
+        //Calculate binormal
+        Real deltaU0 = u1 - u2;
+        Real deltaU1 = u3 - u1;
+        Vector3 binormal = deltaU1 * side0 - deltaU0 * side1;
+        binormal.Normalise();
+        //Now, we take the cross product of the tangents to get a vector which 
+        //should point in the same direction as our normal calculated above. 
+        //If it points in the opposite direction (the dot product between the normals is less than zero), 
+        //then we need to reverse the s and t tangents. 
+        //This is because the triangle has been mirrored when going from tangent space to object space.
+        //reverse tangents if necessary
+        Vector3 tangentCross = tangent.CrossProduct(binormal);
+        if (tangentCross.DotProduct(normal) < 0.0f)
+        {
+            tangent = -tangent;
+            binormal = -binormal;
+        }
 
         return tangent;
 
@@ -966,69 +966,69 @@ namespace Mogre
         Vector3 normal = (v2 - v1).CrossProduct(v3 - v1);
         return normal;
     }
-	//-----------------------------------------------------------------------
-	Real Math::GaussianDistribution(Real x, Real offset, Real scale)
-	{
-		Real nom = System::Math::Exp(
-			-Math::Sqr(x - offset) / (2 * Math::Sqr(scale)));
-		Real denom = scale * Math::Sqrt(2 * Math::PI);
+    //-----------------------------------------------------------------------
+    Real Math::GaussianDistribution(Real x, Real offset, Real scale)
+    {
+        Real nom = System::Math::Exp(
+            -Math::Sqr(x - offset) / (2 * Math::Sqr(scale)));
+        Real denom = scale * Math::Sqrt(2 * Math::PI);
 
-		return nom / denom;
+        return nom / denom;
 
-	}
-	//---------------------------------------------------------------------
-	Matrix4^ Math::MakeViewMatrix(Vector3 position, Quaternion orientation, 
-		Matrix4^ reflectMatrix)
-	{
-		Matrix4^ viewMatrix;
+    }
+    //---------------------------------------------------------------------
+    Matrix4^ Math::MakeViewMatrix(Vector3 position, Quaternion orientation, 
+        Matrix4^ reflectMatrix)
+    {
+        Matrix4^ viewMatrix;
 
-		// View matrix is:
-		//
-		//  [ Lx  Uy  Dz  Tx  ]
-		//  [ Lx  Uy  Dz  Ty  ]
-		//  [ Lx  Uy  Dz  Tz  ]
-		//  [ 0   0   0   1   ]
-		//
-		// Where T = -(Transposed(Rot) * Pos)
+        // View matrix is:
+        //
+        //  [ Lx  Uy  Dz  Tx  ]
+        //  [ Lx  Uy  Dz  Ty  ]
+        //  [ Lx  Uy  Dz  Tz  ]
+        //  [ 0   0   0   1   ]
+        //
+        // Where T = -(Transposed(Rot) * Pos)
 
-		// This is most efficiently done using 3x3 Matrices
-		Matrix3^ rot = orientation.ToRotationMatrix();
+        // This is most efficiently done using 3x3 Matrices
+        Matrix3^ rot = orientation.ToRotationMatrix();
 
-		// Make the translation relative to new axes
-		Matrix3^ rotT = rot->Transpose();
-		Vector3 trans = -rotT * position;
+        // Make the translation relative to new axes
+        Matrix3^ rotT = rot->Transpose();
+        Vector3 trans = -rotT * position;
 
-		// Make final matrix
-		viewMatrix = gcnew Matrix4(rotT); // fills upper 3x3
-		viewMatrix[0,3] = trans.x;
-		viewMatrix[1,3] = trans.y;
-		viewMatrix[2,3] = trans.z;
+        // Make final matrix
+        viewMatrix = gcnew Matrix4(rotT); // fills upper 3x3
+        viewMatrix->m03 = trans.x;
+        viewMatrix->m13 = trans.y;
+        viewMatrix->m23 = trans.z;
 
-		// Deal with reflections
-		if (reflectMatrix)
-		{
-			viewMatrix = viewMatrix * reflectMatrix;
-		}
+        // Deal with reflections
+        if (reflectMatrix)
+        {
+            viewMatrix = viewMatrix * reflectMatrix;
+        }
 
-		return viewMatrix;
-	}
+        return viewMatrix;
+    }
 
-	Matrix4^ Math::MakeViewMatrix(Vector3 position, Quaternion orientation)
-	{
-		return MakeViewMatrix(position, orientation, nullptr);
-	}
+    Matrix4^ Math::MakeViewMatrix(Vector3 position, Quaternion orientation)
+    {
+        return MakeViewMatrix(position, orientation, nullptr);
+    }
 
-	//---------------------------------------------------------------------
-	Real Math::BoundingRadiusFromAABB(AxisAlignedBox^ aabb)
-	{
-		Vector3 max = aabb->Maximum;
-		Vector3 min = aabb->Minimum;
+    //---------------------------------------------------------------------
+    Real Math::BoundingRadiusFromAABB(AxisAlignedBox^ aabb)
+    {
+        Vector3 max = aabb->Maximum;
+        Vector3 min = aabb->Minimum;
 
-		Vector3 magnitude = max;
-		magnitude.MakeCeil(-max);
-		magnitude.MakeCeil(min);
-		magnitude.MakeCeil(-min);
+        Vector3 magnitude = max;
+        magnitude.MakeCeil(-max);
+        magnitude.MakeCeil(min);
+        magnitude.MakeCeil(-min);
 
-		return magnitude.Length;
-	}
+        return magnitude.Length;
+    }
 }

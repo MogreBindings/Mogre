@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-    /** <summary>Representation of a ray in space, ie a line with an origin and direction.</summary> */
+    /** <summary>Representation of a ray in space, i.e. a line with an origin and direction.</summary> */
     [Serializable]
     public value class Ray
     {
@@ -66,7 +66,7 @@ namespace Mogre
             Vector3 get() {return mDirection;} 
         }
 
-        /** <summary>Gets the position of a point t units along the ray.</summary> */
+        /** <summary>Gets the position of a point <paramref name="t"/> units along the ray.</summary> */
         Vector3 GetPoint(Real t) { 
             return Vector3(mOrigin + (mDirection * t));
         }
@@ -74,12 +74,12 @@ namespace Mogre
         /** <summary>Gets the position of a point t units along the ray.</summary> */
         static Vector3 operator*(Ray r, Real t) { 
             return r.GetPoint(t);
-        };
+        }
 
-        /** <summary>Tests whether this ray Intersects the given plane.</summary>
+        /** <summary>Tests whether this ray intersects the given plane.</summary>
         <returns>A pair structure where the first element indicates whether
         an intersection occurs, and if true, the second element will
-        indicate the distance along the ray at which it Intersects. 
+        indicate the distance along the ray at which it intersects. 
         This can be converted to a point in space by calling getPoint().
         </returns>
         */
@@ -87,10 +87,10 @@ namespace Mogre
         {
             return Math::Intersects(*this, p);
         }
-        /** <summary>Tests whether this ray Intersects the given plane bounded volume.</summary>
+        /** <summary>Tests whether this ray intersects the given plane bounded volume.</summary>
         <returns>A pair structure where the first element indicates whether
         an intersection occurs, and if true, the second element will
-        indicate the distance along the ray at which it Intersects. 
+        indicate the distance along the ray at which it intersects. 
         This can be converted to a point in space by calling getPoint().
         </returns>
         */
@@ -98,10 +98,10 @@ namespace Mogre
         {
             return Math::Intersects(*this, p->planes, p->outside == Plane::Side::POSITIVE_SIDE);
         }
-        /** <summary>Tests whether this ray Intersects the given sphere.</summary>
+        /** <summary>Tests whether this ray intersects the given sphere.</summary>
         <returns> A pair structure where the first element indicates whether
         an intersection occurs, and if true, the second element will
-        indicate the distance along the ray at which it Intersects. 
+        indicate the distance along the ray at which it intersects. 
         This can be converted to a point in space by calling getPoint().
         </returns>
         */
@@ -109,10 +109,10 @@ namespace Mogre
         {
             return Math::Intersects(*this, s);
         }
-        /** <summary>Tests whether this ray Intersects the given box.</summary>
+        /** <summary>Tests whether this ray intersects the given box.</summary>
         <returns>A pair structure where the first element indicates whether
         an intersection occurs, and if true, the second element will
-        indicate the distance along the ray at which it Intersects. 
+        indicate the distance along the ray at which it intersects. 
         This can be converted to a point in space by calling getPoint().
         </returns>
         */

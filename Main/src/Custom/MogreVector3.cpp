@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 namespace Mogre
 {
-	Vector3 Vector3::RandomDeviant(
+    Vector3 Vector3::RandomDeviant(
         Radian angle,
         Vector3 up )
     {
@@ -58,7 +58,7 @@ namespace Mogre
         return q * (*this);
     }
 
-	Quaternion Vector3::GetRotationTo(Vector3 dest, Vector3 fallbackAxis)
+    Quaternion Vector3::GetRotationTo(Vector3 dest, Vector3 fallbackAxis)
     {
         // Based on Stan Melax's article in Game Programming Gems
         Quaternion q;
@@ -74,47 +74,42 @@ namespace Mogre
         {
             return Quaternion::IDENTITY;
         }
-		
-		// sometimes the dot product yields -1.0000001
-		// floating point math does that to you
-		if (d < -1.0f)
-			d = -1.0f;
 
-        Real s = Math::Sqrt( (1+d)*2 );
-		if (s < 1e-6f)
-		{
-			if (fallbackAxis != Vector3::ZERO)
-			{
-				// rotate 180 degrees about the fallback axis
-				q.FromAngleAxis(Radian(Math::PI), fallbackAxis);
-			}
-			else
-			{
-				// Generate an axis
-				Vector3 axis = Vector3::UNIT_X.CrossProduct(*this);
-				if (axis.IsZeroLength) // pick another if colinear
-					axis = Vector3::UNIT_Y.CrossProduct(*this);
-				axis.Normalise();
-				q.FromAngleAxis(Radian(Math::PI), axis);
-			}
-		}
-		else
-		{
+        if (d < (1e-6f - 1.0f))
+        {
+            if (fallbackAxis != Vector3::ZERO)
+            {
+                // rotate 180 degrees about the fallback axis
+                q.FromAngleAxis(Radian(Math::PI), fallbackAxis);
+            }
+            else
+            {
+                // Generate an axis
+                Vector3 axis = Vector3::UNIT_X.CrossProduct(*this);
+                if (axis.IsZeroLength) // pick another if colinear
+                    axis = Vector3::UNIT_Y.CrossProduct(*this);
+                axis.Normalise();
+                q.FromAngleAxis(Radian(Math::PI), axis);
+            }
+        }
+        else
+        {
+            Real s = Math::Sqrt( (1+d)*2 );
             Real invs = 1 / s;
 
-			Vector3 c = v0.CrossProduct(v1);
+            Vector3 c = v0.CrossProduct(v1);
 
-	        q.x = c.x * invs;
-    	    q.y = c.y * invs;
-        	q.z = c.z * invs;
-        	q.w = s * 0.5;
-			q.Normalise();
-		}
+            q.x = c.x * invs;
+            q.y = c.y * invs;
+            q.z = c.z * invs;
+            q.w = s * 0.5f;
+            q.Normalise();
+        }
         return q;
     }
 
-	Quaternion Vector3::GetRotationTo(Vector3 dest)
-	{
-		return GetRotationTo(dest, Vector3::ZERO);
-	}
+    Quaternion Vector3::GetRotationTo(Vector3 dest)
+    {
+        return GetRotationTo(dest, Vector3::ZERO);
+    }
 }

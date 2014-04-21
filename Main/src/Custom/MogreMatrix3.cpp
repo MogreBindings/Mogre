@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,15 +34,15 @@ namespace Mogre
     //-----------------------------------------------------------------------
     Vector3 Matrix3::GetColumn (size_t iCol)
     {
-        assert( 0 <= iCol && iCol < 3 );
-		interior_ptr<Real> ptr = &m00;
+        assert( iCol < 3 );
+        interior_ptr<Real> ptr = &m00;
         return Vector3(*(ptr + iCol), *(ptr + 3 + iCol), *(ptr + 6 + iCol));
     }
     //-----------------------------------------------------------------------
     void Matrix3::SetColumn(size_t iCol, Vector3 vec)
     {
-        assert( 0 <= iCol && iCol < 3 );
-		interior_ptr<Real> ptr = &m00;
+        assert( iCol < 3 );
+        interior_ptr<Real> ptr = &m00;
         *(ptr + iCol) = vec.x;
         *(ptr + 3 + iCol) = vec.y;
         *(ptr + 6 + iCol) = vec.z;
@@ -60,15 +60,15 @@ namespace Mogre
     //-----------------------------------------------------------------------
     bool Matrix3::operator== (Matrix3^ left, Matrix3^ right)
     {
-		if ((Object^)left == (Object^)right) return true;
-		if ((Object^)left == nullptr || (Object^)right == nullptr) return false;
+        if ((Object^)left == (Object^)right) return true;
+        if ((Object^)left == nullptr || (Object^)right == nullptr) return false;
 
         if (
             left->m00 == right->m00 && left->m01 == right->m01 && left->m02 == right->m02 &&
             left->m10 == right->m10 && left->m11 == right->m11 && left->m12 == right->m12 &&
             left->m20 == right->m20 && left->m21 == right->m21 && left->m22 == right->m22) {
 
-            return true;
+                return true;
         }
 
         return false;
@@ -206,7 +206,7 @@ namespace Mogre
         // Invert a 3x3 using cofactors.  This is about 8 times faster than
         // the Numerical Recipes code which uses Gaussian elimination.
 
-		rkInverse = gcnew Matrix3;
+        rkInverse = gcnew Matrix3;
 
         rkInverse->m00 = m11*m22 -
             m12*m21;
@@ -235,7 +235,7 @@ namespace Mogre
         if ( System::Math::Abs(fDet) <= fTolerance )
             return false;
 
-        Real fInvDet = 1.0/fDet;
+        Real fInvDet = 1.0f/fDet;
         for (size_t iRow = 0; iRow < 3; iRow++)
         {
             for (size_t iCol = 0; iCol < 3; iCol++)
@@ -252,7 +252,7 @@ namespace Mogre
         return kInverse;
     }
     //-----------------------------------------------------------------------
-	Real Matrix3::Determinant::get()
+    Real Matrix3::Determinant::get()
     {
         Real fCofactor00 = m11*m22 -
             m12*m21;
@@ -281,13 +281,13 @@ namespace Mogre
             kA->m20*kA->m20);
         if ( fLength > 0.0 )
         {
-            fSign = (kA->m00 > 0.0 ? 1.0 : -1.0);
+            fSign = (kA->m00 > 0.0f ? 1.0f : -1.0f);
             fT1 = kA->m00 + fSign*fLength;
-            fInvT1 = 1.0/fT1;
+            fInvT1 = 1.0f/fT1;
             afV[1] = kA->m10*fInvT1;
             afV[2] = kA->m20*fInvT1;
 
-            fT2 = -2.0/(1.0+afV[1]*afV[1]+afV[2]*afV[2]);
+            fT2 = -2.0f/(1.0f+afV[1]*afV[1]+afV[2]*afV[2]);
             afW[0] = fT2*(kA->m00+kA->m10*afV[1]+kA->m20*afV[2]);
             afW[1] = fT2*(kA->m01+kA->m11*afV[1]+kA->m21*afV[2]);
             afW[2] = fT2*(kA->m02+kA->m12*afV[1]+kA->m22*afV[2]);
@@ -299,12 +299,12 @@ namespace Mogre
             kA->m21 += afV[2]*afW[1];
             kA->m22 += afV[2]*afW[2];
 
-            kL->m00 = 1.0+fT2;
+            kL->m00 = 1.0f+fT2;
             kL->m01 = kL->m10 = fT2*afV[1];
             kL->m02 = kL->m20 = fT2*afV[2];
-            kL->m11 = 1.0+fT2*afV[1]*afV[1];
+            kL->m11 = 1.0f+fT2*afV[1]*afV[1];
             kL->m12 = kL->m21 = fT2*afV[1]*afV[2];
-            kL->m22 = 1.0+fT2*afV[2]*afV[2];
+            kL->m22 = 1.0f+fT2*afV[2]*afV[2];
             bIdentity = false;
         }
         else
@@ -317,11 +317,11 @@ namespace Mogre
         fLength = System::Math::Sqrt(kA->m01*kA->m01+kA->m02*kA->m02);
         if ( fLength > 0.0 )
         {
-            fSign = (kA->m01 > 0.0 ? 1.0 : -1.0);
+            fSign = (kA->m01 > 0.0f ? 1.0f : -1.0f);
             fT1 = kA->m01 + fSign*fLength;
             afV[2] = kA->m02/fT1;
 
-            fT2 = -2.0/(1.0+afV[2]*afV[2]);
+            fT2 = -2.0f/(1.0f+afV[2]*afV[2]);
             afW[0] = fT2*(kA->m01+kA->m02*afV[2]);
             afW[1] = fT2*(kA->m11+kA->m12*afV[2]);
             afW[2] = fT2*(kA->m21+kA->m22*afV[2]);
@@ -334,9 +334,9 @@ namespace Mogre
             kR->m00 = 1.0;
             kR->m01 = kR->m10 = 0.0;
             kR->m02 = kR->m20 = 0.0;
-            kR->m11 = 1.0+fT2;
+            kR->m11 = 1.0f+fT2;
             kR->m12 = kR->m21 = fT2*afV[2];
-            kR->m22 = 1.0+fT2*afV[2]*afV[2];
+            kR->m22 = 1.0f+fT2*afV[2]*afV[2];
         }
         else
         {
@@ -347,20 +347,20 @@ namespace Mogre
         fLength = System::Math::Sqrt(kA->m11*kA->m11+kA->m21*kA->m21);
         if ( fLength > 0.0 )
         {
-            fSign = (kA->m11 > 0.0 ? 1.0 : -1.0);
+            fSign = (kA->m11 > 0.0f ? 1.0f : -1.0f);
             fT1 = kA->m11 + fSign*fLength;
             afV[2] = kA->m21/fT1;
 
-            fT2 = -2.0/(1.0+afV[2]*afV[2]);
+            fT2 = -2.0f/(1.0f+afV[2]*afV[2]);
             afW[1] = fT2*(kA->m11+kA->m21*afV[2]);
             afW[2] = fT2*(kA->m12+kA->m22*afV[2]);
             kA->m11 += afW[1];
             kA->m12 += afW[2];
             kA->m22 += afV[2]*afW[2];
 
-            Real fA = 1.0+fT2;
+            Real fA = 1.0f+fT2;
             Real fB = fT2*afV[2];
-            Real fC = 1.0+fB*afV[2];
+            Real fC = 1.0f+fB*afV[2];
 
             if ( bIdentity )
             {
@@ -392,15 +392,15 @@ namespace Mogre
         Real fT12 = kA->m11*kA->m12;
         Real fTrace = fT11+fT22;
         Real fDiff = fT11-fT22;
-        Real fDiscr = System::Math::Sqrt(fDiff*fDiff+4.0*fT12*fT12);
-        Real fRoot1 = 0.5*(fTrace+fDiscr);
-        Real fRoot2 = 0.5*(fTrace-fDiscr);
+        Real fDiscr = System::Math::Sqrt(fDiff*fDiff+4.0f*fT12*fT12);
+        Real fRoot1 = 0.5f*(fTrace+fDiscr);
+        Real fRoot2 = 0.5f*(fTrace-fDiscr);
 
         // adjust right
         Real fY = kA->m00 - (System::Math::Abs(fRoot1-fT22) <=
             System::Math::Abs(fRoot2-fT22) ? fRoot1 : fRoot2);
         Real fZ = kA->m01;
-		Real fInvLength = Math::InvSqrt(fY*fY+fZ*fZ);
+        Real fInvLength = Math::InvSqrt(fY*fY+fZ*fZ);
         Real fSin = fZ*fInvLength;
         Real fCos = -fY*fInvLength;
 
@@ -494,24 +494,24 @@ namespace Mogre
     {
         // temas: currently unused
         //const int iMax = 16;
-		size_t iRow, iCol;
+        size_t iRow, iCol;
 
-		kL = gcnew Matrix3;
-		kR = gcnew Matrix3;
+        kL = gcnew Matrix3;
+        kR = gcnew Matrix3;
 
         Matrix3^ kA = this;
         Bidiagonalize(kA,kL,kR);
 
-        for (unsigned int i = 0; i < ms_iSvdMaxIterations; i++)
+        for (unsigned int i = 0; i < msSvdMaxIterations; i++)
         {
             Real fTmp, fTmp0, fTmp1;
             Real fSin0, fCos0, fTan0;
             Real fSin1, fCos1, fTan1;
 
             bool bTest1 = (System::Math::Abs(kA->m01) <=
-                ms_fSvdEpsilon*(System::Math::Abs(kA->m00)+System::Math::Abs(kA->m11)));
+                msSvdEpsilon*(System::Math::Abs(kA->m00)+System::Math::Abs(kA->m11)));
             bool bTest2 = (System::Math::Abs(kA->m12) <=
-                ms_fSvdEpsilon*(System::Math::Abs(kA->m11)+System::Math::Abs(kA->m22)));
+                msSvdEpsilon*(System::Math::Abs(kA->m11)+System::Math::Abs(kA->m22)));
             if ( bTest1 )
             {
                 if ( bTest2 )
@@ -526,8 +526,8 @@ namespace Mogre
                     // 2x2 closed form factorization
                     fTmp = (kA->m11*kA->m11 - kA->m22*kA->m22 +
                         kA->m12*kA->m12)/(kA->m12*kA->m22);
-                    fTan0 = 0.5*(fTmp+System::Math::Sqrt(fTmp*fTmp + 4.0));
-                    fCos0 = Math::InvSqrt(1.0+fTan0*fTan0);
+                    fTan0 = 0.5f*(fTmp+System::Math::Sqrt(fTmp*fTmp + 4.0f));
+                    fCos0 = Math::InvSqrt(1.0f+fTan0*fTan0);
                     fSin0 = fTan0*fCos0;
 
                     for (iCol = 0; iCol < 3; iCol++)
@@ -539,7 +539,7 @@ namespace Mogre
                     }
 
                     fTan1 = (kA->m12-kA->m22*fTan0)/kA->m11;
-                    fCos1 = Math::InvSqrt(1.0+fTan1*fTan1);
+                    fCos1 = Math::InvSqrt(1.0f+fTan1*fTan1);
                     fSin1 = -fTan1*fCos1;
 
                     for (iRow = 0; iRow < 3; iRow++)
@@ -565,8 +565,8 @@ namespace Mogre
                     // 2x2 closed form factorization
                     fTmp = (kA->m00*kA->m00 + kA->m11*kA->m11 -
                         kA->m01*kA->m01)/(kA->m01*kA->m11);
-                    fTan0 = 0.5*(-fTmp+System::Math::Sqrt(fTmp*fTmp + 4.0));
-                    fCos0 = Math::InvSqrt(1.0+fTan0*fTan0);
+                    fTan0 = 0.5f*(-fTmp+System::Math::Sqrt(fTmp*fTmp + 4.0f));
+                    fCos0 = Math::InvSqrt(1.0f+fTan0*fTan0);
                     fSin0 = fTan0*fCos0;
 
                     for (iCol = 0; iCol < 3; iCol++)
@@ -578,7 +578,7 @@ namespace Mogre
                     }
 
                     fTan1 = (kA->m01-kA->m11*fTan0)/kA->m00;
-                    fCos1 = Math::InvSqrt(1.0+fTan1*fTan1);
+                    fCos1 = Math::InvSqrt(1.0f+fTan1*fTan1);
                     fSin1 = -fTan1*fCos1;
 
                     for (iRow = 0; iRow < 3; iRow++)
@@ -706,7 +706,7 @@ namespace Mogre
     void Matrix3::QDUDecomposition (Matrix3^% kQ,
         Vector3% kD, Vector3% kU)
     {
-		kQ = gcnew Matrix3;
+        kQ = gcnew Matrix3;
 
         // Factor M = QR = QDU where Q is orthogonal, D is diagonal,
         // and U is upper triangular with ones on its diagonal.  Algorithm uses
@@ -736,9 +736,9 @@ namespace Mogre
         // U stores the entries U[0] = u01, U[1] = u02, U[2] = u12
 
         // build orthogonal matrix Q
-        Real fInvLength = Math::InvSqrt(m00*m00
-            + m10*m10 +
-            m20*m20);
+        Real fInvLength = m00*m00 + m10*m10 + m20*m20;
+        if (!Math::RealEqual(fInvLength,0)) fInvLength = Math::InvSqrt(fInvLength);
+
         kQ->m00 = m00*fInvLength;
         kQ->m10 = m10*fInvLength;
         kQ->m20 = m20*fInvLength;
@@ -748,8 +748,9 @@ namespace Mogre
         kQ->m01 = m01-fDot*kQ->m00;
         kQ->m11 = m11-fDot*kQ->m10;
         kQ->m21 = m21-fDot*kQ->m20;
-        fInvLength = Math::InvSqrt(kQ->m01*kQ->m01 + kQ->m11*kQ->m11 +
-            kQ->m21*kQ->m21);
+        fInvLength = kQ->m01*kQ->m01 + kQ->m11*kQ->m11 + kQ->m21*kQ->m21;
+        if (!Math::RealEqual(fInvLength,0)) fInvLength = Math::InvSqrt(fInvLength);
+
         kQ->m01 *= fInvLength;
         kQ->m11 *= fInvLength;
         kQ->m21 *= fInvLength;
@@ -764,8 +765,9 @@ namespace Mogre
         kQ->m02 -= fDot*kQ->m01;
         kQ->m12 -= fDot*kQ->m11;
         kQ->m22 -= fDot*kQ->m21;
-        fInvLength = Math::InvSqrt(kQ->m02*kQ->m02 + kQ->m12*kQ->m12 +
-            kQ->m22*kQ->m22);
+        fInvLength = kQ->m02*kQ->m02 + kQ->m12*kQ->m12 + kQ->m22*kQ->m22;
+        if (!Math::RealEqual(fInvLength,0)) fInvLength = Math::InvSqrt(fInvLength);
+
         kQ->m02 *= fInvLength;
         kQ->m12 *= fInvLength;
         kQ->m22 *= fInvLength;
@@ -803,7 +805,7 @@ namespace Mogre
         kD[2] = kR->m22;
 
         // the shear component
-        Real fInvD0 = 1.0/kD[0];
+        Real fInvD0 = 1.0f/kD[0];
         kU[0] = kR->m01*fInvD0;
         kU[1] = kR->m02*fInvD0;
         kU[2] = kR->m12/kD[1];
@@ -818,7 +820,7 @@ namespace Mogre
         // quick out for uniform scale (triple root)
         const Real fOneThird = 1.0/3.0;
         const Real fEpsilon = 1e-06;
-        Real fDiscr = afCoeff[2]*afCoeff[2] - 3.0*afCoeff[1];
+        Real fDiscr = afCoeff[2]*afCoeff[2] - 3.0f*afCoeff[1];
         if ( fDiscr <= fEpsilon )
             return -fOneThird*afCoeff[2];
 
@@ -830,30 +832,30 @@ namespace Mogre
         {
             // uses a matrix norm to find an upper bound on maximum root
             fX = System::Math::Abs(afCoeff[0]);
-            Real fTmp = 1.0+System::Math::Abs(afCoeff[1]);
+            Real fTmp = 1.0f+System::Math::Abs(afCoeff[1]);
             if ( fTmp > fX )
                 fX = fTmp;
-            fTmp = 1.0+System::Math::Abs(afCoeff[2]);
+            fTmp = 1.0f+System::Math::Abs(afCoeff[2]);
             if ( fTmp > fX )
                 fX = fTmp;
         }
 
         // Newton's method to find root
-        Real fTwoC2 = 2.0*afCoeff[2];
+        Real fTwoC2 = 2.0f*afCoeff[2];
         for (int i = 0; i < 16; i++)
         {
             fPoly = afCoeff[0]+fX*(afCoeff[1]+fX*(afCoeff[2]+fX));
             if ( System::Math::Abs(fPoly) <= fEpsilon )
                 return fX;
 
-            Real fDeriv = afCoeff[1]+fX*(fTwoC2+3.0*fX);
+            Real fDeriv = afCoeff[1]+fX*(fTwoC2+3.0f*fX);
             fX -= fPoly/fDeriv;
         }
 
         return fX;
     }
     //-----------------------------------------------------------------------
-	Real Matrix3::SpectralNorm::get()
+    Real Matrix3::SpectralNorm::get()
     {
         Matrix3^ kP = gcnew Matrix3;
         size_t iRow, iCol;
@@ -873,7 +875,7 @@ namespace Mogre
             }
         }
 
-        Real fInvPmax = 1.0/fPmax;
+        Real fInvPmax = 1.0f/fPmax;
         for (iRow = 0; iRow < 3; iRow++)
         {
             for (iCol = 0; iCol < 3; iCol++)
@@ -894,7 +896,7 @@ namespace Mogre
         return fNorm;
     }
     //-----------------------------------------------------------------------
-    void Matrix3::ToAxisAngle (Vector3% rkAxis, Radian% rfRadians)
+    void Matrix3::ToAngleAxis (Vector3% rkAxis, Radian% rfRadians)
     {
         // Let (x,y,z) be the unit-length axis and let A be an angle of rotation.
         // The rotation matrix is R = I + sin(A)*P + (1-cos(A))*P^2 where
@@ -919,7 +921,7 @@ namespace Mogre
         // it does not matter which sign you choose on the square roots.
 
         Real fTrace = m00 + m11 + m22;
-        Real fCos = 0.5*(fTrace-1.0);
+        Real fCos = 0.5f*(fTrace-1.0f);
         rfRadians = Mogre::Math::ACos(fCos);  // in [0,PI]
 
         if ( rfRadians > Radian(0.0) )
@@ -941,18 +943,18 @@ namespace Mogre
                     if ( m00 >= m22 )
                     {
                         // r00 is maximum diagonal term
-                        rkAxis.x = 0.5*System::Math::Sqrt(m00 -
-                            m11 - m22 + 1.0);
-                        fHalfInverse = 0.5/rkAxis.x;
+                        rkAxis.x = 0.5f*System::Math::Sqrt(m00 -
+                            m11 - m22 + 1.0f);
+                        fHalfInverse = 0.5f/rkAxis.x;
                         rkAxis.y = fHalfInverse*m01;
                         rkAxis.z = fHalfInverse*m02;
                     }
                     else
                     {
                         // r22 is maximum diagonal term
-                        rkAxis.z = 0.5*System::Math::Sqrt(m22 -
-                            m00 - m11 + 1.0);
-                        fHalfInverse = 0.5/rkAxis.z;
+                        rkAxis.z = 0.5f*System::Math::Sqrt(m22 -
+                            m00 - m11 + 1.0f);
+                        fHalfInverse = 0.5f/rkAxis.z;
                         rkAxis.x = fHalfInverse*m02;
                         rkAxis.y = fHalfInverse*m12;
                     }
@@ -963,18 +965,18 @@ namespace Mogre
                     if ( m11 >= m22 )
                     {
                         // r11 is maximum diagonal term
-                        rkAxis.y = 0.5*System::Math::Sqrt(m11 -
-                            m00 - m22 + 1.0);
-                        fHalfInverse  = 0.5/rkAxis.y;
+                        rkAxis.y = 0.5f*System::Math::Sqrt(m11 -
+                            m00 - m22 + 1.0f);
+                        fHalfInverse  = 0.5f/rkAxis.y;
                         rkAxis.x = fHalfInverse*m01;
                         rkAxis.z = fHalfInverse*m12;
                     }
                     else
                     {
                         // r22 is maximum diagonal term
-                        rkAxis.z = 0.5*System::Math::Sqrt(m22 -
-                            m00 - m11 + 1.0);
-                        fHalfInverse = 0.5/rkAxis.z;
+                        rkAxis.z = 0.5f*System::Math::Sqrt(m22 -
+                            m00 - m11 + 1.0f);
+                        fHalfInverse = 0.5f/rkAxis.z;
                         rkAxis.x = fHalfInverse*m02;
                         rkAxis.y = fHalfInverse*m12;
                     }
@@ -991,11 +993,11 @@ namespace Mogre
         }
     }
     //-----------------------------------------------------------------------
-    void Matrix3::FromAxisAngle (Vector3 rkAxis, Radian fRadians)
+    void Matrix3::FromAngleAxis (Vector3 rkAxis, Radian fRadians)
     {
         Real fCos = Math::Cos(fRadians);
         Real fSin = Math::Sin(fRadians);
-        Real fOneMinusCos = 1.0-fCos;
+        Real fOneMinusCos = 1.0f-fCos;
         Real fX2 = rkAxis.x*rkAxis.x;
         Real fY2 = rkAxis.y*rkAxis.y;
         Real fZ2 = rkAxis.z*rkAxis.z;
@@ -1369,10 +1371,10 @@ namespace Mogre
         if ( System::Math::Abs(fC) >= EPSILON )
         {
             Real fLength = System::Math::Sqrt(fB*fB+fC*fC);
-            Real fInvLength = 1.0/fLength;
+            Real fInvLength = 1.0f/fLength;
             fB *= fInvLength;
             fC *= fInvLength;
-            Real fQ = 2.0*fB*fE+fC*(fF-fD);
+            Real fQ = 2.0f*fB*fE+fC*(fF-fD);
             afDiag[1] = fD+fC*fQ;
             afDiag[2] = fF-fC*fQ;
             afSubDiag[0] = fLength;
@@ -1427,8 +1429,8 @@ namespace Mogre
                 if ( i1 == i0 )
                     break;
 
-                Real fTmp0 = (afDiag[i0+1]-afDiag[i0])/(2.0*afSubDiag[i0]);
-                Real fTmp1 = System::Math::Sqrt(fTmp0*fTmp0+1.0);
+                Real fTmp0 = (afDiag[i0+1]-afDiag[i0])/(2.0f*afSubDiag[i0]);
+                Real fTmp1 = System::Math::Sqrt(fTmp0*fTmp0+1.0f);
                 if ( fTmp0 < 0.0 )
                     fTmp0 = afDiag[i1]-afDiag[i0]+afSubDiag[i0]/(fTmp0-fTmp1);
                 else
@@ -1443,21 +1445,21 @@ namespace Mogre
                     if ( System::Math::Abs(fTmp3) >= System::Math::Abs(fTmp0) )
                     {
                         fCos = fTmp0/fTmp3;
-                        fTmp1 = System::Math::Sqrt(fCos*fCos+1.0);
+                        fTmp1 = System::Math::Sqrt(fCos*fCos+1.0f);
                         afSubDiag[i2+1] = fTmp3*fTmp1;
-                        fSin = 1.0/fTmp1;
+                        fSin = 1.0f/fTmp1;
                         fCos *= fSin;
                     }
                     else
                     {
                         fSin = fTmp3/fTmp0;
-                        fTmp1 = System::Math::Sqrt(fSin*fSin+1.0);
+                        fTmp1 = System::Math::Sqrt(fSin*fSin+1.0f);
                         afSubDiag[i2+1] = fTmp0*fTmp1;
-                        fCos = 1.0/fTmp1;
+                        fCos = 1.0f/fTmp1;
                         fSin *= fCos;
                     }
                     fTmp0 = afDiag[i2+1]-fTmp2;
-                    fTmp1 = (afDiag[i2]-fTmp0)*fSin+2.0*fTmp4*fCos;
+                    fTmp1 = (afDiag[i2]-fTmp0)*fSin+2.0f*fTmp4*fCos;
                     fTmp2 = fSin*fTmp1;
                     afDiag[i2+1] = fTmp0+fTmp2;
                     fTmp0 = fCos*fTmp1-fTmp4;
@@ -1491,11 +1493,11 @@ namespace Mogre
     {
         Matrix3^ kMatrix = this;
         Real afSubDiag[3];
-		pin_ptr<Real> p_afEigenvalue = &afEigenvalue[0];
+        pin_ptr<Real> p_afEigenvalue = &afEigenvalue[0];
         kMatrix->Tridiagonal(p_afEigenvalue,afSubDiag);
         kMatrix->QLAlgorithm(p_afEigenvalue,afSubDiag);
 
-		p_afEigenvalue = nullptr;
+        p_afEigenvalue = nullptr;
 
         for (size_t i = 0; i < 3; i++)
         {
@@ -1518,7 +1520,7 @@ namespace Mogre
     void Matrix3::TensorProduct (Vector3 rkU, Vector3 rkV,
         Matrix3^% rkProduct)
     {
-		rkProduct = gcnew Matrix3;
+        rkProduct = gcnew Matrix3;
 
         for (size_t iRow = 0; iRow < 3; iRow++)
         {

@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine) ported to C++/CLI
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2011 Torus Knot Software Ltd
+Copyright (c) 2000-2012 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -269,7 +269,7 @@ namespace Mogre
         {
             Vector3 r;
 
-            Real fInvW = 1.0 / ( mat->m30 * v.x + mat->m31 * v.y + mat->m32 * v.z + mat->m33 );
+            Real fInvW = 1.0f / ( mat->m30 * v.x + mat->m31 * v.y + mat->m32 * v.z + mat->m33 );
 
             r.x = ( mat->m00 * v.x + mat->m01 * v.y + mat->m02 * v.z + mat->m03 ) * fInvW;
             r.y = ( mat->m10 * v.x + mat->m11 * v.y + mat->m12 * v.z + mat->m13 ) * fInvW;
@@ -464,6 +464,8 @@ namespace Mogre
             m30 = 0.0; m31 = 0.0; m32 = 0.0; m33 = 1.0;
         }
 
+        /** <summary>Builds a translation matrix</summary>
+        */
         inline void MakeTrans( Real tx, Real ty, Real tz )
         {
             m00 = 1.0; m01 = 0.0; m02 = 0.0; m03 = tx;
@@ -601,6 +603,11 @@ namespace Mogre
             0, 0, 0, 0,
             0, 0, 0, 0,
             0, 0, 0, 0 );
+        static initonly Matrix4^ ZEROAFFINE = gcnew Matrix4 (
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 1 );
         static initonly Matrix4^ IDENTITY = gcnew Matrix4 (
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -610,9 +617,9 @@ namespace Mogre
         and inverts the Y.</summary> */
         static initonly Matrix4^ CLIPSPACE2DTOIMAGESPACE = gcnew Matrix4 (
             0.5,    0,  0, 0.5, 
-            0, -0.5,  0, 0.5, 
-            0,    0,  1,   0,
-            0,    0,  0,   1);
+              0, -0.5,  0, 0.5, 
+              0,    0,  1,   0,
+              0,    0,  0,   1);
 
         inline static Matrix4^ operator*(Matrix4^ mat, Real scalar)
         {
@@ -756,19 +763,17 @@ namespace Mogre
                 m20 * v.x + m21 * v.y + m22 * v.z + m23 * v.w,
                 v.w);
         }
-    };
 
-    /* Removed from Vector4 and made a non-member here because otherwise
-    OgreMatrix4.h and OgreVector4.h have to try to include and inline each 
-    other, which frankly doesn't work ;)
-    */
-    inline static Vector4 operator * (Vector4 v, Matrix4^ mat)
-    {
-        return Vector4(
-            v.x*mat->m00 + v.y*mat->m10 + v.z*mat->m20 + v.w*mat->m30,
-            v.x*mat->m01 + v.y*mat->m11 + v.z*mat->m21 + v.w*mat->m31,
-            v.x*mat->m02 + v.y*mat->m12 + v.z*mat->m22 + v.w*mat->m32,
-            v.x*mat->m03 + v.y*mat->m13 + v.z*mat->m23 + v.w*mat->m33
-            );
-    }
+        /* operators need to be static members to get recognized by the CLR
+        */
+        inline static Vector4 operator * (Vector4 v, Matrix4^ mat)
+        {
+            return Vector4(
+                v.x*mat->m00 + v.y*mat->m10 + v.z*mat->m20 + v.w*mat->m30,
+                v.x*mat->m01 + v.y*mat->m11 + v.z*mat->m21 + v.w*mat->m31,
+                v.x*mat->m02 + v.y*mat->m12 + v.z*mat->m22 + v.w*mat->m32,
+                v.x*mat->m03 + v.y*mat->m13 + v.z*mat->m23 + v.w*mat->m33
+                );
+        }
+    };
 }
